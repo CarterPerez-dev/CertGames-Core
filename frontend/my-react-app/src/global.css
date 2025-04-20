@@ -13,13 +13,13 @@ input, textarea, select {
   input, textarea, select {
     transform: scale(1); /* Forces hardware acceleration */
     font-size: 16px !important;
-    min-height: 100vh;
   }
 }
 
 .main-content {
   transition: all 0.1s ease; /* for a little smoothness */
   background-color: var(--profile-bg-dark);
+  min-height: 100vh;
 }
 
 /* Hide scrollbars globally while preserving vertical scrolling and disabling horizontal scrolling */

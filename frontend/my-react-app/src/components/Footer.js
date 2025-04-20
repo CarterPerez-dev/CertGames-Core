@@ -12,7 +12,7 @@ const Footer = () => {
           <Link to="/privacy">Privacy Policy</Link>
           <Link to="/terms">Terms of Service</Link>
         </div>
-        <p className="footer-copyright">© {new Date().getFullYear()} Certgames.com. All rights reserved.</p>
+        <p className="footer-copyright">© {new Date().getFullYear()} CertGames.com ® AngelaMoss.</p>
       </div>
     </footer>
   );

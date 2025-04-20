@@ -4,13 +4,17 @@ import {
   FaEnvelope, 
   FaPaperPlane, 
   FaLinkedin, 
-  FaTwitter, 
   FaInstagram, 
   FaReddit, 
   FaFacebook,
   FaCheck,
   FaExclamationTriangle
 } from 'react-icons/fa';
+
+import { 
+  FaXTwitter,  
+} from 'react-icons/fa6';
+
 import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
 import SEOHelmet from '../../SEOHelmet';
@@ -275,7 +279,7 @@ const handleSubmit = async (e) => {
                     <FaLinkedin aria-hidden="true" />
                   </a>
                   <a href="https://x.com/CertsGamified" target="_blank" rel="noopener noreferrer" className="social-icon twitter" aria-label="CertGames on X (formerly Twitter)">
-                    <FaTwitter aria-hidden="true" />
+                    <FaXTwitter aria-hidden="true" />
                   </a>
                   <a href="https://www.instagram.com/certsgamified/" target="_blank" rel="noopener noreferrer" className="social-icon instagram" aria-label="CertGames on Instagram">
                     <FaInstagram aria-hidden="true" />

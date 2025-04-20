@@ -2,8 +2,13 @@
 import React from 'react';
 import { 
   FaTrophy, FaRedo, FaHome, FaCheck, FaTimes, 
-  FaClock, FaExclamationTriangle, FaTwitter, FaLinkedin 
+  FaClock, FaExclamationTriangle, FaLinkedin 
 } from 'react-icons/fa';
+
+import { 
+  FaXTwitter,  
+} from 'react-icons/fa6';
+
 import './ThreatHunter.css';
 
 const ThreatResultsModal = ({ results, scenario, onClose, onRestart }) => {
@@ -174,17 +179,26 @@ const ThreatResultsModal = ({ results, scenario, onClose, onRestart }) => {
           
           <div className="threathunter_resultsmodal_share_container">
             <span>Share your results:</span>
-            <button className="threathunter_resultsmodal_twitter_share">
-              <FaTwitter />
-            </button>
-            <button className="threathunter_resultsmodal_linkedin_share">
+            <a 
+              href="https://twitter.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="threathunter_resultsmodal_twitter_share"
+            >
+              <FaXTwitter />
+            </a>
+            <a 
+              href="https://linkedin.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="threathunter_resultsmodal_linkedin_share"
+            >
               <FaLinkedin />
-            </button>
+            </a>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
+};  
 export default ThreatResultsModal;

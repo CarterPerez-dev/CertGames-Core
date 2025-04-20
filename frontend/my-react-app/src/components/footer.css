@@ -3,13 +3,14 @@
 /* Footer Styles - Updated */
 .site-footer {
   width: 100%;
-  background-color: rgba(20, 20, 30, 0.7);
   backdrop-filter: blur(8px);
-  border-top: 1px solid rgba(128, 128, 255, 0.15);
+  border-top: 1px solid rgba(240, 240, 240, 0.3);
   padding: 0.8rem 0;
   margin-top: auto;
   position: relative;
   z-index: 10;
+  font-family: 'Avantgarde', sans-serif;
+  font-style: italic;
 }
 
 .footer-content {

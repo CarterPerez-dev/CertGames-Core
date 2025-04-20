@@ -52,14 +52,14 @@
 
 .info-navbar-toggle {
   display: none;
-  color: white;
-  font-size: 1.5rem;
+  color: #00d084;
+  font-size: 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .info-navbar-toggle:hover {
-  color: #00d084;
+  color: #01633f;
 }
 
 .info-navbar-links ul {
@@ -80,7 +80,7 @@
   padding: 10px 15px;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 500;
   border-radius: 8px;
   transition: all 0.3s ease;
@@ -100,6 +100,7 @@
 .nav-icon {
   margin-right: 8px;
   font-size: 1.1rem;
+  color: #00d084;
 }
 
 /* Animated background */
@@ -124,10 +125,12 @@
   opacity: 0.3;
 }
 
+
 /* Media queries for responsive design */
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
   .info-navbar-toggle {
     display: block;
+    z-index: 2;
   }
 
   .info-navbar-links {
@@ -135,19 +138,31 @@
     top: 0;
     right: -100%;
     width: 280px;
-    height: 100vh;
+    height: 99.9vh;
     background: rgba(15, 15, 30, 0.95);
     backdrop-filter: blur(10px);
-    transition: all 0.4s ease-in-out;
-    border-left: 1px solid rgba(100, 100, 255, 0.2);
+    transition: all 0.1s ease-in-out;
+    border-left: 1px solid rgba(0, 208, 132, 0.3);
+    border-top: 1px solid rgba(0, 208, 132, 0.3);
+    border-bottom: 1px solid rgba(0, 208, 132, 0.3);
     box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
-    padding-top: 80px;
+    padding-top: 115px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     z-index: 1;
+    font-size: 2rem;
+    font-style: italic;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    color: #FFFFFF;
   }
-
+  
+  .info-navbar-links li a {
+    font-size: 1.4rem;
+    color: #FFFFFF;
+  }
+  
   .info-navbar-links.active {
     right: 0;
   }
@@ -159,7 +174,7 @@
   }
 
   .info-navbar-links li {
-    margin: 10px 0;
+    margin: 12px 0;
   }
   
   .info-navbar-links li a {
@@ -172,6 +187,29 @@
 @media (max-width: 576px) {
   .info-navbar-container {
     padding: 0 1rem;
+  }
+  .info-navbar-links li a {
+    font-size: 0.8rem;
+  }
+    
+  .info-navbar-links {
+    width: 190px;  
+  }
+  
+  .logo-text {
+    font-size: 1.5rem;
+  }
+}
+@media (max-width: 480px) {
+  .info-navbar-container {
+    padding: 0 1rem;
+  }
+  .info-navbar-links li a {
+    font-size: 0.65rem;
+  }
+    
+  .info-navbar-links {
+    width: 165px;  
   }
   
   .logo-text {

@@ -263,8 +263,7 @@
 
 /* Log viewer gets full width and appropriate height */
 .log-viewer {
-  height: 500px;
-  max-height: calc(65vh - 200px);
+  height: 800px;
   min-height: 350px;
 }
 
@@ -497,23 +496,696 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.85rem;
-  color: var(--threathunter-text-secondary);
+  color: #f2f2f2;
 }
 
 .threathunter_logviewer_log_lines,
 .log-lines {
-  font-family: 'Courier New', monospace;
+  font-family: 'Arial', sans-serif;
   font-size: 0.9rem;
+  color: #FFFFFF;
 }
-
+.log-lines {
+  overflow-x: visible; /* Show overflow */
+  overflow-y: auto;
+  color: #FFFFFF;
+}
 .threathunter_logviewer_log_line,
 .log-line {
-  display: grid;
-  grid-template-columns: 40px 1fr 40px;
-  border-bottom: 1px solid var(--threathunter-bg-dark);
-  transition: background-color 0.2s ease;
+  font-family: 'Arial', sans-serif;
+  font-size: 17px; /* Slightly increased font size */
+  line-height: 1.5;
+  white-space: pre-wrap; /* Allow wrapping on long lines */
+  overflow-x: auto; /* Add horizontal scrolling for very long lines */
+  position: relative;
+  color: #FFFFFF;
+}
+.line-text::-webkit-scrollbar {
+  height: 8px;
+  background-color: var(--threathunter-bg-dark);
+  color: #f2f2f2;
 }
 
+.line-text::-webkit-scrollbar-thumb {
+  background-color: #f2f2f2;
+  border-radius: 4px;
+}
+
+.line-text::-webkit-scrollbar-thumb:hover {
+  background-color: var(--threathunter-accent-glow);
+}
+
+/* HTTP Methods - Expanded */
+.http-method-get {
+  color: #4caf50; /* Green */
+  font-weight: bold;
+}
+.http-method-post {
+  color: #2196f3; /* Blue */
+  font-weight: bold;
+}
+.http-method-put, 
+.http-method-patch {
+  color: #ff9800; /* Orange */
+  font-weight: bold;
+}
+.http-method-delete {
+  color: #f44336; /* Red */
+  font-weight: bold;
+}
+.http-method-head, 
+.http-method-options {
+  color: #9c27b0; /* Purple */
+  font-weight: bold;
+}
+.http-method-connect,
+.http-method-trace {
+  color: #607d8b; /* Blue Grey */
+  font-weight: bold;
+}
+
+/* HTTP Status Codes - Detailed */
+/* 2xx Success */
+.status-200 { color: #4caf50; } /* OK */
+.status-201 { color: #81c784; } /* Created */
+.status-202 { color: #a5d6a7; } /* Accepted */
+.status-204 { color: #c8e6c9; } /* No Content */
+.status-206 { color: #e8f5e9; } /* Partial Content */
+
+/* 3xx Redirection */
+.status-300 { color: #ff9800; } /* Multiple Choices */
+.status-301 { color: #ffa726; } /* Moved Permanently */
+.status-302 { color: #ffb74d; } /* Found */
+.status-304 { color: #ffcc80; } /* Not Modified */
+.status-307 { color: #ffe0b2; } /* Temporary Redirect */
+.status-308 { color: #fff3e0; } /* Permanent Redirect */
+
+/* 4xx Client Error */
+.status-400 { color: #ef5350; } /* Bad Request */
+.status-401 { color: #e53935; } /* Unauthorized */
+.status-403 { color: #d32f2f; } /* Forbidden */
+.status-404 { color: #c62828; } /* Not Found */
+.status-405 { color: #b71c1c; } /* Method Not Allowed */
+.status-408 { color: #ffcdd2; } /* Request Timeout */
+.status-413 { color: #ef9a9a; } /* Payload Too Large */
+.status-429 { color: #e57373; } /* Too Many Requests */
+
+/* 5xx Server Error */
+.status-500 { color: #9c27b0; } /* Internal Server Error */
+.status-501 { color: #8e24aa; } /* Not Implemented */
+.status-502 { color: #7b1fa2; } /* Bad Gateway */
+.status-503 { color: #6a1b9a; } /* Service Unavailable */
+.status-504 { color: #4a148c; } /* Gateway Timeout */
+
+/* HTTP Protocol Versions */
+.http-version-1-0 { 
+  color: #9e9e9e;
+  font-style: italic;
+}
+.http-version-1-1 { 
+  color: #757575;
+  font-style: italic;
+}
+.http-version-2 { 
+  color: #616161;
+  font-style: italic;
+  font-weight: bold;
+}
+
+/* IP Addresses - More Detailed */
+.ip-address {
+  color: #2196f3; /* Blue */
+  font-weight: 500;
+}
+.ip-internal {
+  color: #64b5f6; /* Light Blue */
+}
+.ip-loopback {
+  color: #bbdefb; /* Very Light Blue */
+  font-style: italic;
+}
+.ip-external {
+  color: #1976d2; /* Dark Blue */
+  font-weight: bold;
+}
+.ip-suspicious {
+  color: #f44336; /* Red */
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* MAC Addresses */
+.mac-address {
+  color: #0097a7; /* Cyan */
+  font-family: monospace;
+}
+
+/* Timestamps - Various Formats */
+.timestamp {
+  color: #f2f2f2; /* Gray */
+}
+.timestamp-iso {
+  color: #e0e0e0; /* Light Gray */
+  font-family: monospace;
+}
+.timestamp-unix {
+  color: #bdbdbd; /* Medium Gray */
+  font-family: monospace;
+}
+.timestamp-common-log {
+  color: #9e9e9e; /* Dark Gray */
+  font-style: italic;
+}
+.timestamp-short {
+  color: #757575; /* Very Dark Gray */
+}
+
+/* Log levels - Expanded */
+.log-level-trace {
+  color: #e0e0e0; /* Very Light Gray */
+}
+.log-level-debug {
+  color: #90caf9; /* Very Light Blue */
+}
+.log-level-info {
+  color: #2196f3; /* Blue */
+}
+.log-level-notice {
+  color: #4caf50; /* Green */
+}
+.log-level-warning {
+  color: #ff9800; /* Orange */
+}
+.log-level-error {
+  color: #f44336; /* Red */
+}
+.log-level-critical, 
+.log-level-alert {
+  color: #d32f2f; /* Dark Red */
+  font-weight: bold;
+}
+.log-level-emergency, 
+.log-level-fatal {
+  color: #b71c1c; /* Very Dark Red */
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* URLs and endpoints - Expanded */
+.url-path {
+  color: #00bcd4; /* Cyan */
+}
+.url-root {
+  color: #26c6da; /* Light Cyan */
+}
+.url-admin {
+  color: #f44336; /* Red */
+  font-weight: bold;
+}
+.url-api {
+  color: #00acc1; /* Dark Cyan */
+  font-weight: 500;
+}
+.url-asset {
+  color: #80deea; /* Very Light Cyan */
+}
+.url-auth {
+  color: #ff5722; /* Deep Orange */
+  font-weight: 500;
+}
+.url-static {
+  color: #4dd0e1; /* Medium Cyan */
+}
+
+/* URL Query Parameters */
+.url-query-param {
+  color: #009688; /* Teal */
+  font-style: italic;
+}
+.url-query-value {
+  color: #4db6ac; /* Light Teal */
+}
+.url-query-suspicious {
+  color: #f44336; /* Red */
+  font-weight: bold;
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+/* File Extensions */
+.file-ext-php, .file-ext-aspx, .file-ext-jsp {
+  color: #673ab7; /* Deep Purple */
+  font-weight: 500;
+}
+.file-ext-js, .file-ext-ts {
+  color: #ffc107; /* Amber */
+  font-weight: 500;
+}
+.file-ext-html, .file-ext-htm {
+  color: #ff5722; /* Deep Orange */
+  font-weight: 500;
+}
+.file-ext-css, .file-ext-scss, .file-ext-less {
+  color: #2196f3; /* Blue */
+  font-weight: 500;
+}
+.file-ext-json, .file-ext-xml {
+  color: #ff9800; /* Orange */
+  font-weight: 500;
+}
+.file-ext-exe, .file-ext-dll, .file-ext-bat, .file-ext-sh {
+  color: #f44336; /* Red */
+  font-weight: bold;
+}
+.file-ext-jpg, .file-ext-png, .file-ext-gif, .file-ext-svg {
+  color: #9c27b0; /* Purple */
+  font-weight: 500;
+}
+.file-ext-pdf, .file-ext-doc, .file-ext-xls {
+  color: #795548; /* Brown */
+  font-weight: 500;
+}
+.file-ext-zip, .file-ext-tar, .file-ext-gz {
+  color: #607d8b; /* Blue Grey */
+  font-weight: 500;
+}
+
+/* User agents - Detailed */
+.user-agent {
+  color: #9e9e9e; /* Gray */
+  font-style: italic;
+}
+.user-agent-chrome {
+  color: #9e9e9e;
+  border-bottom: 1px dotted #2196f3;
+}
+.user-agent-firefox {
+  color: #9e9e9e;
+  border-bottom: 1px dotted #ff9800;
+}
+.user-agent-safari {
+  color: #9e9e9e;
+  border-bottom: 1px dotted #4caf50;
+}
+.user-agent-edge {
+  color: #9e9e9e;
+  border-bottom: 1px dotted #03a9f4;
+}
+.user-agent-ie {
+  color: #9e9e9e;
+  border-bottom: 1px dotted #9c27b0;
+}
+.user-agent-bot {
+  color: #9e9e9e;
+  background-color: rgba(255, 152, 0, 0.1);
+  font-weight: 500;
+}
+.user-agent-mobile {
+  color: #9e9e9e;
+  border-bottom: 1px dotted #4caf50;
+}
+.user-agent-suspicious {
+  color: #f44336;
+  font-weight: bold;
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+/* Common Network Ports */
+.port-http, .port-80 {
+  color: #4caf50; /* Green */
+}
+.port-https, .port-443 {
+  color: #2196f3; /* Blue */
+}
+.port-ssh, .port-22 {
+  color: #ffc107; /* Amber */
+}
+.port-ftp, .port-21, .port-20 {
+  color: #ff9800; /* Orange */
+}
+.port-smtp, .port-25, .port-587 {
+  color: #9c27b0; /* Purple */
+}
+.port-mysql, .port-3306 {
+  color: #03a9f4; /* Light Blue */
+}
+.port-rdp, .port-3389 {
+  color: #e91e63; /* Pink */
+}
+.port-dns, .port-53 {
+  color: #009688; /* Teal */
+}
+.port-high, .port-ephemeral {
+  color: #607d8b; /* Blue Grey */
+}
+.port-uncommon {
+  color: #f44336; /* Red */
+  font-weight: 500;
+}
+
+/* File Paths */
+.file-path {
+  color: #8bc34a; /* Light Green */
+}
+.file-path-windows {
+  color: #7cb342; /* Medium Light Green */
+}
+.file-path-linux, .file-path-mac {
+  color: #689f38; /* Medium Green */
+}
+.file-path-system {
+  color: #558b2f; /* Medium Dark Green */
+  font-weight: 500;
+}
+.file-path-config {
+  color: #33691e; /* Dark Green */
+  font-weight: 500;
+}
+.file-path-temporary {
+  color: #c0ca33; /* Lime */
+}
+.file-path-sensitive {
+  color: #f44336; /* Red */
+  font-weight: bold;
+}
+
+/* Special elements - Authentication related */
+.auth-success {
+  color: #4caf50; /* Green */
+  font-weight: 500;
+}
+.auth-failure {
+  color: #f44336; /* Red */
+  font-weight: 500;
+}
+.auth-username {
+  color: #ff9800; /* Orange */
+}
+.auth-admin {
+  color: #e91e63; /* Pink */
+  font-weight: bold;
+}
+.auth-token {
+  color: #9c27b0; /* Purple */
+  font-style: italic;
+}
+.auth-password {
+  color: #f44336; /* Red */
+  font-weight: bold;
+}
+
+/* Data Transfer Sizes */
+.data-size-small {
+  color: #b2dfdb; /* Very Light Teal */
+}
+.data-size-medium {
+  color: #80cbc4; /* Light Teal */
+}
+.data-size-large {
+  color: #4db6ac; /* Medium Teal */
+  font-weight: 500;
+}
+.data-size-very-large {
+  color: #009688; /* Teal */
+  font-weight: bold;
+}
+
+/* Domain Names */
+.domain-local {
+  color: #90a4ae; /* Light Blue Grey */
+}
+.domain-internal {
+  color: #78909c; /* Medium Blue Grey */
+}
+.domain-common {
+  color: #607d8b; /* Blue Grey */
+}
+.domain-uncommon {
+  color: #455a64; /* Dark Blue Grey */
+  font-weight: 500;
+}
+.domain-suspicious {
+  color: #f44336; /* Red */
+  font-weight: bold;
+}
+
+/* SQL Query Fragments */
+.sql-query {
+  color: #e57373; /* Light Red */
+  font-family: monospace;
+}
+.sql-select {
+  color: #81c784; /* Light Green */
+  font-weight: bold;
+  font-family: monospace;
+}
+.sql-insert {
+  color: #64b5f6; /* Light Blue */
+  font-weight: bold;
+  font-family: monospace;
+}
+.sql-update {
+  color: #ffb74d; /* Light Orange */
+  font-weight: bold;
+  font-family: monospace;
+}
+.sql-delete {
+  color: #e57373; /* Light Red */
+  font-weight: bold;
+  font-family: monospace;
+}
+.sql-drop {
+  color: #f44336; /* Red */
+  font-weight: bold;
+  font-family: monospace;
+}
+.sql-injection {
+  color: #f44336; /* Red */
+  font-weight: bold;
+  background-color: rgba(244, 67, 54, 0.1);
+  font-family: monospace;
+}
+
+/* Base64 Encoded Content */
+.base64-content {
+  color: #9575cd; /* Light Deep Purple */
+  font-family: monospace;
+  letter-spacing: -0.5px;
+}
+
+/* Email Addresses */
+.email-address {
+  color: #7e57c2; /* Light Deep Purple */
+  text-decoration: underline dotted;
+}
+
+/* Common Attack Patterns */
+.attack-xss {
+  color: #f44336; /* Red */
+  font-weight: bold;
+  background-color: rgba(244, 67, 54, 0.1);
+}
+.attack-sqli {
+  color: #9c27b0; /* Purple */
+  font-weight: bold;
+  background-color: rgba(156, 39, 176, 0.1);
+}
+.attack-path-traversal {
+  color: #ff5722; /* Deep Orange */
+  font-weight: bold;
+  background-color: rgba(255, 87, 34, 0.1);
+}
+.attack-cmd-injection {
+  color: #ff9800; /* Orange */
+  font-weight: bold;
+  background-color: rgba(255, 152, 0, 0.1);
+}
+.attack-rce {
+  color: #e91e63; /* Pink */
+  font-weight: bold;
+  background-color: rgba(233, 30, 99, 0.1);
+}
+.attack-lfi {
+  color: #2196f3; /* Blue */
+  font-weight: bold;
+  background-color: rgba(33, 150, 243, 0.1);
+}
+.attack-rfi {
+  color: #3f51b5; /* Indigo */
+  font-weight: bold;
+  background-color: rgba(63, 81, 181, 0.1);
+}
+.attack-csrf {
+  color: #673ab7; /* Deep Purple */
+  font-weight: bold;
+  background-color: rgba(103, 58, 183, 0.1);
+}
+.attack-xxe {
+  color: #009688; /* Teal */
+  font-weight: bold;
+  background-color: rgba(0, 150, 136, 0.1);
+}
+
+/* HTTP Headers */
+.header-security {
+  color: #4caf50; /* Green */
+  font-weight: 500;
+}
+.header-content {
+  color: #03a9f4; /* Light Blue */
+}
+.header-cache {
+  color: #9e9e9e; /* Grey */
+}
+.header-auth {
+  color: #ff9800; /* Orange */
+  font-weight: 500;
+}
+.header-custom {
+  color: #9c27b0; /* Purple */
+  font-style: italic;
+}
+
+/* JSON/XML Fragments */
+.json-fragment, .xml-fragment {
+  color: #ff9800; /* Orange */
+  font-family: monospace;
+}
+.json-key, .xml-tag {
+  color: #2196f3; /* Blue */
+  font-family: monospace;
+}
+.json-value, .xml-value {
+  color: #4caf50; /* Green */
+  font-family: monospace;
+}
+.json-string, .xml-attribute {
+  color: #ff5722; /* Deep Orange */
+  font-family: monospace;
+}
+
+/* Command and Process Names */
+.command {
+  color: #ffc107; /* Amber */
+  font-weight: bold;
+  font-family: monospace;
+}
+.process-regular {
+  color: #ff9800; /* Orange */
+  font-family: monospace;
+}
+.process-suspicious {
+  color: #f44336; /* Red */
+  font-weight: bold;
+  font-family: monospace;
+}
+.process-system {
+  color: #9e9e9e; /* Grey */
+  font-family: monospace;
+}
+.process-pid {
+  color: #9e9e9e; /* Grey */
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+/* Error Messages */
+.error-message {
+  color: #f44336; /* Red */
+}
+.error-code {
+  color: #d32f2f; /* Dark Red */
+  font-weight: bold;
+  font-family: monospace;
+}
+.error-stack-trace {
+  color: #ef5350; /* Light Red */
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+/* System Components */
+.component-db {
+  color: #03a9f4; /* Light Blue */
+  font-weight: 500;
+}
+.component-web {
+  color: #4caf50; /* Green */
+  font-weight: 500;
+}
+.component-auth {
+  color: #ff9800; /* Orange */
+  font-weight: 500;
+}
+.component-file {
+  color: #9c27b0; /* Purple */
+  font-weight: 500;
+}
+.component-network {
+  color: #2196f3; /* Blue */
+  font-weight: 500;
+}
+.component-security {
+  color: #f44336; /* Red */
+  font-weight: 500;
+}
+
+/* Special highlighting for suspicious items - Expanded */
+.suspicious {
+  background-color: rgba(244, 67, 54, 0.1); /* Subtle red background */
+}
+.suspicious-high {
+  background-color: rgba(244, 67, 54, 0.2); /* More noticeable red background */
+  border-left: 2px solid #f44336;
+}
+.suspicious-critical {
+  background-color: rgba(244, 67, 54, 0.3); /* Very noticeable red background */
+  border-left: 3px solid #d32f2f;
+  font-weight: bold;
+}
+
+/* Numeric values */
+.number-small {
+  color: #90caf9; /* Very Light Blue */
+}
+.number-medium {
+  color: #64b5f6; /* Light Blue */
+}
+.number-large {
+  color: #2196f3; /* Blue */
+  font-weight: 500;
+}
+.number-percentage {
+  color: #bbdefb; /* Pale Blue */
+}
+.number-bytes {
+  color: #0d47a1; /* Very Dark Blue */
+}
+
+/* Service Names */
+.service-web {
+  color: #4caf50; /* Green */
+  font-weight: 500;
+}
+.service-db {
+  color: #2196f3; /* Blue */
+  font-weight: 500;
+}
+.service-cache {
+  color: #ff9800; /* Orange */
+  font-weight: 500;
+}
+.service-queue {
+  color: #9c27b0; /* Purple */
+  font-weight: 500;
+}
+.service-auth {
+  color: #f44336; /* Red */
+  font-weight: 500;
+}
+.service-file {
+  color: #795548; /* Brown */
+  font-weight: 500;
+}
 .threathunter_logviewer_log_line:hover,
 .log-line:hover {
   background-color: var(--threathunter-bg-dark);
@@ -545,12 +1217,11 @@
   user-select: none;
 }
 
-.threathunter_logviewer_line_text,
 .line-text {
+  white-space: pre-wrap; /* Allow text to wrap */
+  word-break: break-word; /* Break long words if needed */
   padding: 8px 10px;
-  overflow-x: auto;
-  white-space: nowrap;
-  font-size: 15px;
+  overflow-x: auto; /* Add horizontal scrolling for very long lines */
 }
 
 .threathunter_logviewer_line_text pre,
@@ -571,11 +1242,12 @@
 .flag-button {
   background: none;
   border: none;
-  color: var(--threathunter-text);
+  color: #B22222;
   opacity: 0.5;
   cursor: pointer;
   padding: 5px;
   transition: all 0.3s ease;
+  font-size: 20px;
 }
 
 .threathunter_logviewer_flag_button:hover,
@@ -598,7 +1270,7 @@
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid var(--threathunter-border-dark);
-  font-size: 0.85rem;
+  font-size: 1rem;
 }
 
 .threathunter_logviewer_statistics,
@@ -613,7 +1285,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  color: var(--threathunter-text-secondary);
+  color: #FFFFFF;
   opacity: 0.7;
 }
 
@@ -881,7 +1553,7 @@
 }
 
 .threathunter_analysistools_detected_threats h4 {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: var(--threathunter-text);
   margin-bottom: 15px;
   display: flex;
@@ -893,7 +1565,7 @@
   background-color: var(--threathunter-bg-dark);
   padding: 20px 15px;
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   color: var(--threathunter-text-secondary);
   text-align: center;
   border: 1px dashed var(--threathunter-border-dark);
@@ -1406,7 +2078,7 @@
 }
 
 .threathunter_threatcontrols_status_label {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: var(--threathunter-text-secondary);
 }
 
@@ -1465,7 +2137,7 @@
   background-color: var(--threathunter-bg-dark);
   padding: 12px 15px;
   border-radius: 5px;
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: var(--threathunter-text-secondary);
   line-height: 1.5;
   border: 1px solid var(--threathunter-border-dark);
@@ -1767,7 +2439,7 @@
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: var(--threathunter-shadow), 0 0 20px var(--threathunter-accent-10);
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Arial', sans-serif;
   color: var(--threathunter-text);
   animation: scaleIn 0.4s ease;
   padding: 0;
@@ -1858,7 +2530,7 @@
 }
 
 .threathunter_resultsmodal_score_percentage {
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: bold;
   color: var(--threathunter-text);
   position: relative;
@@ -2278,7 +2950,7 @@
 }
 
 .threathunter_resultsmodal_twitter_share {
-  background-color: #1da1f2;
+  background-color: #000;
   color: white;
 }
 
@@ -2313,7 +2985,7 @@
 }
 
 .threat-hunter-stat-icon {
-  color: var(--accent-color, #6543cc);
+  color: #FFD700;
 }
 
 .threathunter_analysistools_threat_options {
@@ -2431,16 +3103,14 @@
 /* Medium screens (laptops) */
 @media (max-width: 1440px) and (min-width: 1025px) {
   .log-viewer {
-    height: 550px;
-    max-height: calc(65vh - 200px);
+    height: 900px;
   }
 }
 
 /* Small screens (tablets) */
 @media (max-width: 1024px) {
   .log-viewer {
-    height: 450px;
-    max-height: calc(60vh - 150px);
+    height: 500px;
     min-height: 300px;
   }
   
@@ -2489,8 +3159,7 @@
 /* Mobile screens (phones) */
 @media (max-width: 768px) {
   .log-viewer {
-    height: 400px;
-    max-height: calc(50vh - 100px);
+    height: 750px;
     min-height: 250px;
   }
   
@@ -2614,8 +3283,7 @@
 /* Small mobile phones */
 @media (max-width: 480px) {
   .log-viewer {
-    height: 350px;
-    max-height: calc(45vh - 80px);
+    height: 650px;
     min-height: 200px;
   }
   

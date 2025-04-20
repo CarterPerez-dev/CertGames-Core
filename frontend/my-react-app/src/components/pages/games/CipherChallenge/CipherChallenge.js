@@ -161,7 +161,7 @@ const CipherChallenge = () => {
         <h1><FaKey /> Cipher Challenge</h1>
         <p>Decode cryptographic messages and unlock the secrets!</p>
         <button 
-          className="info-button"
+          className="cipher-info-button"
           onClick={() => setShowInfo(true)}
           aria-label="Show information about cipher types"
         >
