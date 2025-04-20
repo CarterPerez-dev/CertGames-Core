@@ -18,14 +18,20 @@ import {
   FaBook,
   FaLaptopCode,
   FaChessKnight,
-  FaGamepad
+  FaGamepad,
+  FaAward,
+  FaAmazon,
+  FaShieldAlt
 } from 'react-icons/fa';
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(true);
   const [toolsOpen, setToolsOpen] = useState(false);
-  const [practiceTestsOpen, setPracticeTestsOpen] = useState(false);
+  const [comptiaTestsOpen, setComptiaTestsOpen] = useState(false);
+  const [isc2TestsOpen, setIsc2TestsOpen] = useState(false);
+  const [awsTestsOpen, setAwsTestsOpen] = useState(false);
   const [gamesOpen, setGamesOpen] = useState(false);
+  const [gameHubOpen, setGameHubOpen] = useState(false);
 
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
@@ -39,14 +45,25 @@ const Sidebar = () => {
     setToolsOpen(!toolsOpen);
   };
 
-  const togglePracticeTests = () => {
-    setPracticeTestsOpen(!practiceTestsOpen);
+  const toggleComptiaTests = () => {
+    setComptiaTestsOpen(!comptiaTestsOpen);
+  };
+
+  const toggleIsc2Tests = () => {
+    setIsc2TestsOpen(!isc2TestsOpen);
+  };
+
+  const toggleAwsTests = () => {
+    setAwsTestsOpen(!awsTestsOpen);
   };
   
   const toggleGames = () => {
     setGamesOpen(!gamesOpen);
   };  
   
+  const toggleGameHub = () => {
+    setGameHubOpen(!gameHubOpen);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -166,6 +183,48 @@ const Sidebar = () => {
                       <span className="sidebar-link-text">Cipher Challenge</span>
                     </NavLink>
                   </li>
+                  {/* Added Daily PBQ (renamed from Bonus) into Games dropdown */}
+                  <li>
+                    <NavLink to="/daily" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
+                      <span className="sidebar-link-text">Daily PBQ</span>
+                    </NavLink>
+                  </li>
+                </ul>
+              </li>
+              
+              {/* Game Hub group - moved below Games */}
+              <li className="sidebar-group">
+                <div
+                  className="group-header"
+                  onClick={toggleGameHub}
+                  role="button"
+                  tabIndex={0}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') toggleGameHub();
+                  }}
+                >
+                  <div className="group-header-content">
+                    <FaAward className="sidebar-icon" />
+                    <span className="sidebar-link-text">/Game Hub</span>
+                  </div>
+                  {gameHubOpen ? <FaChevronUp className="group-icon" /> : <FaChevronDown className="group-icon" />}
+                </div>
+                <ul className={`group-sublist ${gameHubOpen ? 'expanded' : ''}`}>
+                  <li>
+                    <NavLink to="/shop" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
+                      <span className="sidebar-link-text">Shop</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/achievements" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
+                      <span className="sidebar-link-text">Achievements</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/leaderboard" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
+                      <span className="sidebar-link-text">Leaderboard</span>
+                    </NavLink>
+                  </li>
                 </ul>
               </li>
               
@@ -207,27 +266,33 @@ const Sidebar = () => {
                       <span className="sidebar-link-text">GRC Wizard</span>
                     </NavLink>
                   </li>
+                  {/* Added Study Resources to Tools dropdown */}
+                  <li>
+                    <NavLink to="/resources" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
+                      <span className="sidebar-link-text">Study Resources</span>
+                    </NavLink>
+                  </li>
                 </ul>
               </li>
               
-              {/* Practice Tests group */}
+              {/* CompTIA Tests group */}
               <li className="sidebar-group">
                 <div
                   className="group-header"
-                  onClick={togglePracticeTests}
+                  onClick={toggleComptiaTests}
                   role="button"
                   tabIndex={0}
                   onKeyPress={(e) => {
-                    if (e.key === 'Enter') togglePracticeTests();
+                    if (e.key === 'Enter') toggleComptiaTests();
                   }}
                 >
                   <div className="group-header-content">
                     <FaLaptopCode className="sidebar-icon" />
-                    <span className="sidebar-link-text">/Practice Tests</span>
+                    <span className="sidebar-link-text">/CompTIA Tests</span>
                   </div>
-                  {practiceTestsOpen ? <FaChevronUp className="group-icon" /> : <FaChevronDown className="group-icon" />}
+                  {comptiaTestsOpen ? <FaChevronUp className="group-icon" /> : <FaChevronDown className="group-icon" />}
                 </div>
-                <ul className={`group-sublist ${practiceTestsOpen ? 'expanded' : ''}`}>
+                <ul className={`group-sublist ${comptiaTestsOpen ? 'expanded' : ''}`}>
                   <li>
                     <NavLink to="/practice-tests/a-plus" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
                       <span className="sidebar-link-text">A+ Core 1</span>
@@ -283,11 +348,53 @@ const Sidebar = () => {
                       <span className="sidebar-link-text">Server+</span>
                     </NavLink>
                   </li>
+                </ul>
+              </li>
+              
+              {/* ISC2 Tests group */}
+              <li className="sidebar-group">
+                <div
+                  className="group-header"
+                  onClick={toggleIsc2Tests}
+                  role="button"
+                  tabIndex={0}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') toggleIsc2Tests();
+                  }}
+                >
+                  <div className="group-header-content">
+                    <FaShieldAlt className="sidebar-icon" />
+                    <span className="sidebar-link-text">/ISC2 Tests</span>
+                  </div>
+                  {isc2TestsOpen ? <FaChevronUp className="group-icon" /> : <FaChevronDown className="group-icon" />}
+                </div>
+                <ul className={`group-sublist ${isc2TestsOpen ? 'expanded' : ''}`}>
                   <li>
                     <NavLink to="/practice-tests/cissp" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
                       <span className="sidebar-link-text">CISSP</span>
                     </NavLink>
                   </li>
+                </ul>
+              </li>
+              
+              {/* AWS Tests group */}
+              <li className="sidebar-group">
+                <div
+                  className="group-header"
+                  onClick={toggleAwsTests}
+                  role="button"
+                  tabIndex={0}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') toggleAwsTests();
+                  }}
+                >
+                  <div className="group-header-content">
+                    <FaAmazon className="sidebar-icon" />
+                    <span className="sidebar-link-text">/AWS Tests</span>
+                  </div>
+                  {awsTestsOpen ? <FaChevronUp className="group-icon" /> : <FaChevronDown className="group-icon" />}
+                </div>
+                <ul className={`group-sublist ${awsTestsOpen ? 'expanded' : ''}`}>
                   <li>
                     <NavLink to="/practice-tests/aws-cloud" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
                       <span className="sidebar-link-text">AWS Cloud Practitioner</span>
@@ -296,44 +403,40 @@ const Sidebar = () => {
                 </ul>
               </li>
               
-              {/* Shop */}
-              <li>
-                <NavLink to="/shop" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/shop')}
-                  <span className="sidebar-link-text">∼Shop</span>
-                </NavLink>
-              </li>
-              
-              {/* Achievements */}
-              <li>
-                <NavLink to="/achievements" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/achievements')}
-                  <span className="sidebar-link-text">-Achievements</span>
-                </NavLink>
-              </li>
-              
-              {/* Bonus (was Daily) */}
-              <li>
-                <NavLink to="/daily" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/daily')}
-                  <span className="sidebar-link-text">∼Bonus</span>
-                </NavLink>
-              </li>
-              
-              {/* Leaderboard */}
-              <li>
-                <NavLink to="/leaderboard" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/leaderboard')}
-                  <span className="sidebar-link-text">-Leaderboard</span>
-                </NavLink>
-              </li>
-
-              {/* Study Resources */}
-              <li>
-                <NavLink to="/resources" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/resources')}
-                  <span className="sidebar-link-text">∼Study Resources</span>
-                </NavLink>
+              {/* Game Hub group */}
+              <li className="sidebar-group">
+                <div
+                  className="group-header"
+                  onClick={toggleGameHub}
+                  role="button"
+                  tabIndex={0}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') toggleGameHub();
+                  }}
+                >
+                  <div className="group-header-content">
+                    <FaAward className="sidebar-icon" />
+                    <span className="sidebar-link-text">/Game Hub</span>
+                  </div>
+                  {gameHubOpen ? <FaChevronUp className="group-icon" /> : <FaChevronDown className="group-icon" />}
+                </div>
+                <ul className={`group-sublist ${gameHubOpen ? 'expanded' : ''}`}>
+                  <li>
+                    <NavLink to="/shop" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
+                      <span className="sidebar-link-text">Shop</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/achievements" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
+                      <span className="sidebar-link-text">Achievements</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/leaderboard" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
+                      <span className="sidebar-link-text">Leaderboard</span>
+                    </NavLink>
+                  </li>
+                </ul>
               </li>
               
               {/* Daily CyberBrief */}
