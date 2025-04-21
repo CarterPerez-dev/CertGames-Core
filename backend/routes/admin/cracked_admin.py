@@ -1,4 +1,4 @@
-# 2000 LINES OF CODE OF STRAIGHT-- IM WATCHING EVERY LAST REQUEST, INPUT, IP, AUTH ATTEMPT AND MORE. IM WATCHING EVERY MOVE WITH EVERY DEFENSE MECHANISM YOU CAN POSSIBLY FATHOMMMM
+# 2000 lines of baller
 import csv
 import io
 import random
@@ -53,27 +53,27 @@ def require_cracked_admin(required_role=None):
     Returns:
         bool: True if properly authenticated with sufficient role permissions
     """
-    # First check if user is authenticated as admin
+   
     is_authenticated = session.get('cracked_admin_logged_in', False)
     
     if not is_authenticated:
         return False
         
-    # If no specific role is required, basic authentication is enough
+   
     if not required_role:
         return True
         
-    # Get the user's current role
+  
     current_role = session.get('cracked_admin_role', 'basic')
     
-    # Role priority mapping
+   
     priority_map = {"basic": 1, "supervisor": 2, "superadmin": 3}
     
-    # Get numeric values for required role and current role
+
     needed_priority = priority_map.get(required_role, 1)
     current_priority = priority_map.get(current_role, 1)
     
-    # Check if current role has sufficient priority
+    
     return current_priority >= needed_priority
 
 
@@ -115,11 +115,11 @@ def read_nginx_logs():
             output = subprocess.check_output(["sudo", "tail", "-n", "100", "nginx/logs/access.log"], text=True)
             lines = output.splitlines()
         except Exception as e:
-            # If subprocess fails, fall back to the original method
+            # If subprocess fails, fall back to the original method fuckkkkkkkkkkkk
             for path in possible_paths:
                 try:
                     with open(path, "r") as f:
-                        lines = f.readlines()[-100:]  # Get last 100 lines
+                        lines = f.readlines()[-100:] 
                     if lines:
                         break
                 except Exception as e:
@@ -128,12 +128,11 @@ def read_nginx_logs():
         if not lines:
             return {"success": False, "error": error_msg}
             
-        # Parse the lines and create log entries
+
         log_entries = []
         for line in lines:
             if line:
-                # Parse the line to extract relevant information
-                # This regex pattern matches common nginx log format
+
                 pattern = r'([\d\.]+) - - \[(.*?)\] "(.*?)" (\d+) (\d+) "(.*?)" "(.*?)" "(.*?)"'
                 match = re.match(pattern, line)
                 
@@ -171,15 +170,12 @@ def filter_out_example_accounts(query=None):
     if query is None:
         query = {}
     
-    # Only add email filter if it doesn't already exist
     if "email" not in query:
         query["email"] = {"$not": {"$regex": "@example.com$"}}
         
     return query
 
-# Example usage:
-# users = db.mainusers.find(filter_out_example_accounts())
-# user_count = db.mainusers.count_documents(filter_out_example_accounts())
+)
 
 
 
@@ -188,13 +184,11 @@ def admin_nginx_logs():
     if not require_cracked_admin():
         return jsonify({"error": "Not authenticated"}), 401
     
-    # Optionally trigger a refresh of the logs
     if request.args.get('refresh', 'false').lower() == 'true':
         read_result = read_nginx_logs()
         if not read_result['success']:
             return jsonify({"error": f"Failed to read nginx logs: {read_result['error']}"}), 500
     
-    # Apply filtering if provided
     filter_text = request.args.get('filter', '').lower()
     
     if filter_text:
@@ -213,7 +207,6 @@ def admin_api_logs():
     if not require_cracked_admin():
         return jsonify({"error": "Not authenticated"}), 401
     
-    # Apply filtering if provided
     filter_text = request.args.get('filter', '').lower()
     
     if filter_text:
@@ -282,7 +275,7 @@ def admin_dashboard():
             "email": {"$not": {"$regex": "@example.com$"}}
         })
 
-        # Only consider real users for test score calculation
+      
         pipeline = [
             {"$match": {
                 "finished": True,
@@ -303,10 +296,8 @@ def admin_dashboard():
         result = list(db.testAttempts.aggregate(pipeline))
         avg_score = result[0]["avgScorePercent"] if result else 0.0
 
-        # 2) Performance metrics (the latest doc)
         perf_metrics = db.performanceMetrics.find_one({}, sort=[("timestamp", -1)])
         if not perf_metrics:
-            # Provide a fallback doc if none exist
             perf_metrics = {
                 "avg_request_time": 0.123,
                 "avg_db_query_time_ms": 45.0,
@@ -320,13 +311,11 @@ def admin_dashboard():
             if '_id' in perf_metrics:
                 perf_metrics['_id'] = str(perf_metrics['_id'])
 
-            # If there's a numeric 'avg_db_query_time', convert to ms
             if 'avg_db_query_time' in perf_metrics:
                 ms_val = round(perf_metrics['avg_db_query_time'] * 1000, 2)
                 perf_metrics['avg_db_query_time_ms'] = ms_val
                 del perf_metrics['avg_db_query_time']
 
-            # Convert timestamp to EST
             if 'timestamp' in perf_metrics and isinstance(perf_metrics['timestamp'], datetime):
                 import pytz
                 est_tz = pytz.timezone('America/New_York')
@@ -347,7 +336,6 @@ def admin_dashboard():
                 "email": {"$not": {"$regex": "@example.com$"}}
             })
             
-            # Only count test attempts by real users
             day_test_attempts = db.testAttempts.count_documents({
                 "finished": True,
                 "finishedAt": {"$gte": day_start, "$lt": day_end},
@@ -359,7 +347,7 @@ def admin_dashboard():
                 "dailyBonus": day_bonus_count,
                 "testAttempts": day_test_attempts
             })
-        # Reverse so oldest is first
+      
         recentStats.reverse()
 
         now_est = now_utc.astimezone(est_tz).isoformat()
@@ -395,14 +383,14 @@ def admin_list_users():
     # Get the value of a new "include_example" query parameter (default: False)
     include_example = request.args.get('include_example', 'false').lower() == 'true'
 
-    # Optional: Cache page1 limit20 w/no search
+    
     if not search and page == 1 and limit == 20 and not include_example:
         cache_key = "admin_users_list_page1_limit20"
         cached_data = cache_get(cache_key)
         if cached_data:
             return jsonify(cached_data), 200
 
-    # Enhanced query - search across more fields
+    # Enhanced query
     query = {}
     if search:
         query = {
@@ -416,13 +404,11 @@ def admin_list_users():
             ]
         }
     
-    # Unless explicitly included, exclude @example.com accounts
+ 
     if not include_example:
-        # Add condition to filter out example.com emails
-        # We need to add this to the query differently depending on
-        # whether it already has conditions
+
         if query and "$or" in query:
-            # There's an $or condition, need to wrap it with $and to add email filter
+
             query = {
                 "$and": [
                     {"email": {"$not": {"$regex": "@example.com$"}}},
@@ -430,12 +416,11 @@ def admin_list_users():
                 ]
             }
         else:
-            # Just add the email filter directly
+    
             query["email"] = {"$not": {"$regex": "@example.com$"}}
     
     skip_count = (page - 1) * limit
 
-    # Enhanced projection with more user information
     projection = {
         "_id": 1,
         "username": 1,
@@ -463,12 +448,11 @@ def admin_list_users():
     
     # Current timestamp for active session calculation
     now = datetime.utcnow()
-    active_threshold = now - timedelta(minutes=15)  # Consider users active in last 15 min
+    active_threshold = now - timedelta(minutes=15)  
     
     for u in cursor:
         u['_id'] = str(u['_id'])
         
-        # Format as short ID for display purposes
         u['shortId'] = u['_id'][-5:] 
         
         if 'currentAvatar' in u and isinstance(u['currentAvatar'], ObjectId):
@@ -476,25 +460,21 @@ def admin_list_users():
         if 'achievements' in u and isinstance(u['achievements'], list):
             u['achievements'] = [str(a) for a in u['achievements']]
 
-        # Get test statistics
         counters = u.get('achievement_counters', {})
         u['totalQuestionsAnswered'] = counters.get('total_questions_answered', 0)
         u['perfectTestsCount'] = counters.get('perfect_tests_count', 0)
         
-        # Check if currently active
         recent_activity = db.auditLogs.find_one({
             "userId": ObjectId(u['_id']),
             "timestamp": {"$gte": active_threshold}
         })
         u['isActive'] = True if recent_activity else False
         
-        # Get additional information
         test_attempts = db.testAttempts_collection.count_documents({
             "userId": ObjectId(u['_id'])
         })
         u['testAttempts'] = test_attempts
         
-        # Format timestamps
         if 'subscriptionStartDate' in u and u['subscriptionStartDate']:
             u['subscriptionStartDate'] = u['subscriptionStartDate'].isoformat()
         if 'subscriptionEndDate' in u and u['subscriptionEndDate']:
@@ -504,7 +484,6 @@ def admin_list_users():
         if 'lastLoginAt' in u and u['lastLoginAt']:
             u['lastLoginAt'] = u['lastLoginAt'].isoformat()
             
-        # Identify signup source (iOS or Web)
         if u.get('appleTransactionId'):
             u['signupSource'] = 'iOS'
         elif u.get('stripeSubscriptionId'):
@@ -517,7 +496,7 @@ def admin_list_users():
             
         results.append(u)
 
-    # Get total count (also respecting the example.com filter)
+   
     total_count = db.mainusers.count_documents(query)
     
     resp_data = {
@@ -545,7 +524,7 @@ def admin_toggle_subscription(user_id):
         return jsonify({"error": "Invalid user id"}), 400
 
     data = request.json or {}
-    active = data.get("active", False)  # Whether to activate or deactivate
+    active = data.get("active", False)
 
     user = db.mainusers.find_one({"_id": obj_id})
     if not user:
@@ -555,7 +534,7 @@ def admin_toggle_subscription(user_id):
         "subscriptionActive": active
     }
     
-    # If activating, set status to active
+  
     if active:
         update_fields["subscriptionStatus"] = "active"
     else:
@@ -566,7 +545,6 @@ def admin_toggle_subscription(user_id):
         {"$set": update_fields}
     )
     
-    # Log this subscription event
     db.subscriptionEvents.insert_one({
         'userId': obj_id,
         'event': 'subscription_toggled_by_admin',
@@ -593,7 +571,6 @@ def admin_update_user(user_id):
     except:
         return jsonify({"error": "Invalid user id"}), 400
 
-    # We only allow editing certain fields
     update_fields = {}
     for field in ["username", "coins", "xp", "level", "subscriptionActive", "suspended"]:
         if field in data:
@@ -786,7 +763,7 @@ def admin_close_thread(thread_id):
                 "timestamp": now.isoformat()
             }
         },
-        room=str(obj_id)  # The Socket.IO room is the thread's string ID
+        room=str(obj_id) 
     )
 
     return jsonify({"message": "Thread closed"}), 200
