@@ -160,6 +160,17 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
                 <div className="threathunter_analysistools_threat_form">
                   <h4>{editingThreatId ? 'Edit Threat' : 'Select Detected Threat'}</h4>
                   
+                  <div className="threathunter_analysistools_form_actions" style={{ marginBottom: '15px' }}>
+                    <button 
+                      className="threathunter_analysistools_submit_threat_button" 
+                      onClick={handleSubmitThreat}
+                      disabled={!selectedThreatOption}
+                    >
+                      <FaCheckCircle />
+                      {editingThreatId ? 'Update' : 'Add'} Threat
+                    </button>
+                  </div>
+                  
                   <div className="threathunter_analysistools_form_group">
                     <label>Select a Threat:</label>
                     <div className="threathunter_analysistools_threat_options">
