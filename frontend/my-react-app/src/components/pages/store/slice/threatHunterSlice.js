@@ -94,7 +94,9 @@ const threatHunterSlice = createSlice({
       state.results = null;
       state.error = null;
     },
-    // Add other reducers as needed
+    updateCurrentScenario: (state, action) => {
+      state.currentScenario = action.payload;    
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -142,8 +144,8 @@ const threatHunterSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       });
-  },
+  }
 });
 
-export const { resetGame } = threatHunterSlice.actions;
+export const { resetGame, updateCurrentScenario } = threatHunterSlice.actions;
 export default threatHunterSlice.reducer;

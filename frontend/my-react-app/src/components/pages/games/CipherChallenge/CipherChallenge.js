@@ -45,6 +45,8 @@ const CipherChallenge = () => {
   
   // Ref to keep track if challenges have been loaded
   const challengesLoaded = useRef(false);
+  // Ref to track retry count
+  const retryCount = useRef(0);
   
   const [userSolution, setUserSolution] = useState('');
   const [feedbackMessage, setFeedbackMessage] = useState(null);
@@ -54,32 +56,28 @@ const CipherChallenge = () => {
   const [congratsData, setCongratsData] = useState(null);
   const [dataRefreshed, setDataRefreshed] = useState(false);
   
-  // Load challenges when component mounts and ensure persistence
+  // Load challenges when component mounts
   useEffect(() => {
     if (userId && !challengesLoaded.current) {
       // Set the flag to true immediately to prevent multiple calls
       challengesLoaded.current = true;
       
-      // Add a retry counter to prevent infinite loops
-      let retryCount = 0;
-      const maxRetries = 3;
-      
       const fetchData = () => {
-        if (retryCount >= maxRetries) {
+        if (retryCount.current >= 3) {
           console.error("Max retries reached for fetching challenges");
           return;
         }
         
-        dispatch(fetchCipherChallenges())
+        dispatch(fetchCipherChallenges(userId))
           .then(() => {
-            dispatch(fetchUserData(userId));
+            retryCount.current = 0; // Reset retry count on success
             setDataRefreshed(true);
           })
           .catch((error) => {
             console.error("Error fetching challenges:", error);
-            retryCount++;
+            retryCount.current += 1;
             // Only reset if we haven't exceeded max retries
-            if (retryCount < maxRetries) {
+            if (retryCount.current < 3) {
               challengesLoaded.current = false;
             }
           });
@@ -95,7 +93,7 @@ const CipherChallenge = () => {
     setFeedbackMessage(null);
   }, [currentChallenge]);
   
-  // FIX: Improved selectNextChallenge function with logging
+  // Improved selectNextChallenge function with logging
   const selectNextChallenge = () => {
     if (!currentChallenge || !challenges || challenges.length === 0) {
       console.log("Cannot select next challenge: No current challenge or challenges");
@@ -107,19 +105,12 @@ const CipherChallenge = () => {
       .filter(c => c.levelId === currentChallenge.levelId)
       .sort((a, b) => a.id - b.id);
     
-    console.log(`Current level challenges (${currentLevelChallenges.length}):`);
-    console.log(currentLevelChallenges.map(c => ({ id: c.id, title: c.title })));
-    
     // Find the index of the current challenge
     const currentIndex = currentLevelChallenges.findIndex(c => c.id === currentChallenge.id);
-    console.log(`Current challenge id: ${currentChallenge.id}, index: ${currentIndex}`);
     
     // If this is not the last challenge in the level, select the next one
     if (currentIndex < currentLevelChallenges.length - 1) {
       const nextChallenge = currentLevelChallenges[currentIndex + 1];
-      console.log(`Moving to next challenge in same level: ${nextChallenge.id}`);
-      
-      // FIX: Use the actual challenge object, not just its ID
       dispatch(resetCurrentChallenge(nextChallenge));
       return true;
     }
@@ -131,20 +122,13 @@ const CipherChallenge = () => {
         .filter(c => c.levelId === currentChallenge.levelId + 1)
         .sort((a, b) => a.id - b.id);
       
-      console.log(`Next level challenges (${nextLevelChallenges.length}):`);
-      console.log(nextLevelChallenges.map(c => ({ id: c.id, title: c.title })));
-      
       if (nextLevelChallenges.length > 0) {
         const nextChallenge = nextLevelChallenges[0];
-        console.log(`Moving to first challenge in next level: ${nextChallenge.id}`);
-        
-        // FIX: Use the actual challenge object, not just its ID
         dispatch(resetCurrentChallenge(nextChallenge));
         return true;
       }
     }
     
-    console.log("No next challenge found");
     return false;
   };
   
@@ -186,9 +170,6 @@ const CipherChallenge = () => {
         timeSpent: 0, // TODO: Add timer functionality
       })).then((resultAction) => {
         if (submitSolution.fulfilled.match(resultAction)) {
-          // Fetch updated user data to refresh coins and XP
-          dispatch(fetchUserData(userId));
-          
           // Show success message
           setFeedbackMessage({
             type: 'success',
@@ -216,9 +197,12 @@ const CipherChallenge = () => {
             setShowCongratulations(true);
           }
           
-          // Explicitly fetch challenges again to refresh the UI
-          // FIX: This helps ensure the UI shows the latest progress
-          dispatch(fetchCipherChallenges());
+          // Refresh challenges list to update completion status
+          // Only do this if we haven't already refreshed recently
+          if (!dataRefreshed) {
+            dispatch(fetchCipherChallenges(userId));
+            setDataRefreshed(true);
+          }
         }
       });
     } else {
@@ -251,7 +235,6 @@ const CipherChallenge = () => {
   };
   
   const handleSelectChallenge = (challengeId) => {
-    // FIX: Pass the full challenge object, not just the ID
     const challenge = challenges.find(c => c.id === challengeId);
     if (challenge) {
       dispatch(resetCurrentChallenge(challenge));
@@ -267,15 +250,13 @@ const CipherChallenge = () => {
     selectNextChallenge();
   };
   
-  // FIX: Improved handleNextChallenge function
   const handleNextChallenge = () => {
-    console.log("Next button clicked");
     const result = selectNextChallenge();
-    console.log(`selectNextChallenge result: ${result}`);
     
-    // If next challenge wasn't found, refresh the data
-    if (!result) {
-      dispatch(fetchCipherChallenges());
+    // Don't fetch again if we've just selected a new challenge
+    if (!result && !dataRefreshed) {
+      setDataRefreshed(true);
+      dispatch(fetchCipherChallenges(userId));
     }
   };
   
@@ -296,7 +277,7 @@ const CipherChallenge = () => {
           <p>Decode cryptographic messages and unlock the secrets!</p>
         </div>
         
-        {/* Add user stats display */}
+        {/* User stats display */}
         {userId && (
           <div className="cipher-user-stats">
             <div className="cipher-stat">

@@ -5,9 +5,12 @@ import { fetchUserData } from './userSlice';
 // Fetch cipher challenges from the backend
 export const fetchCipherChallenges = createAsyncThunk(
   'cipherChallenge/fetchChallenges',
-  async (_, { rejectWithValue }) => {
+  async (userId, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/cipher/challenges');
+      // Add userId as a query parameter if it exists
+      const url = userId ? `/api/cipher/challenges?userId=${userId}` : '/api/cipher/challenges';
+      const response = await fetch(url);
+      
       if (!response.ok) {
         throw new Error('Failed to fetch cipher challenges');
       }

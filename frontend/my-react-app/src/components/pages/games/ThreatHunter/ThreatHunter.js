@@ -44,13 +44,24 @@ const ThreatHunter = () => {
   const { userId, coins, xp } = useSelector(state => state.user);
   
   const [selectedThreatType, setSelectedThreatType] = useState('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('medium');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all'); // Changed from 'medium' to 'all'
   const [showResults, setShowResults] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const [flaggedLines, setFlaggedLines] = useState({});
   const [detectedThreats, setDetectedThreats] = useState([]);
   const [currentTimeLeft, setCurrentTimeLeft] = useState(null);
   const [timerRunning, setTimerRunning] = useState(false);
+  const [shuffledThreatOptions, setShuffledThreatOptions] = useState([]); // New state for shuffled threats
+  
+  // Utility function to shuffle arrays
+  const shuffleArray = (array) => {
+    const arrayCopy = [...array];
+    for (let i = arrayCopy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arrayCopy[i], arrayCopy[j]] = [arrayCopy[j], arrayCopy[i]];
+    }
+    return arrayCopy;
+  };
   
   // Debug logs - for development only
   useEffect(() => {
@@ -106,6 +117,13 @@ const ThreatHunter = () => {
     };
   }, [timerRunning, currentTimeLeft]);
   
+  // Shuffle threat options when scenario changes
+  useEffect(() => {
+    if (currentScenario && currentScenario.threatOptions) {
+      setShuffledThreatOptions(shuffleArray(currentScenario.threatOptions));
+    }
+  }, [currentScenario?.id]);
+  
   const handleStartScenario = (scenarioId) => {
     dispatch(startScenario({ 
       scenarioId, 
@@ -160,9 +178,6 @@ const ThreatHunter = () => {
   const handleThreatRemoval = (threatId) => {
     setDetectedThreats(detectedThreats.filter(t => t.id !== threatId));
   };
-  
-  // src/components/pages/games/ThreatHunter/ThreatHunter.js
-  // Update the handleSubmitAnalysis function with a null check
   
   const handleSubmitAnalysis = useCallback(() => {
     // Add null check for currentScenario
@@ -221,10 +236,26 @@ const ThreatHunter = () => {
     }
   };
   
-  // Filter scenarios based on selected threat type
-  const filteredScenarios = selectedThreatType === 'all' 
-    ? scenarios 
-    : scenarios.filter(scenario => scenario.threatType === selectedThreatType);
+  // Define difficulty mapping
+  const difficultyMapping = {
+    'easy': 1,
+    'medium': 2,
+    'hard': 3
+  };
+  
+  // Apply both filters: threat type and difficulty
+  let filteredScenarios = scenarios;
+  
+  // Filter by threat type if not 'all'
+  if (selectedThreatType !== 'all') {
+    filteredScenarios = filteredScenarios.filter(scenario => scenario.threatType === selectedThreatType);
+  }
+  
+  // Filter by difficulty if not 'all'
+  if (selectedDifficulty !== 'all') {
+    const difficultyValue = difficultyMapping[selectedDifficulty];
+    filteredScenarios = filteredScenarios.filter(scenario => scenario.difficulty === difficultyValue);
+  }
   
   // Ensure the logs have content arrays
   const getScenarioLogs = () => {
@@ -340,7 +371,10 @@ const ThreatHunter = () => {
               
               <div className="analysis-panel">
                 <AnalysisTools 
-                  scenario={currentScenario}
+                  scenario={{
+                    ...currentScenario,
+                    threatOptions: shuffledThreatOptions // Use shuffled threat options
+                  }}
                   detectedThreats={detectedThreats}
                   onDetectThreat={handleThreatDetection}
                   onRemoveThreat={handleThreatRemoval}

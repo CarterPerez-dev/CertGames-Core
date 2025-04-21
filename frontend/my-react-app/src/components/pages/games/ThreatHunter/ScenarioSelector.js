@@ -47,6 +47,13 @@ const ScenarioSelector = ({
   // Difficulty settings
   const difficulties = [
     {
+      id: 'all',
+      name: 'All Levels',
+      description: 'Show scenarios of all difficulty levels.',
+      timeMultiplier: 'Varies',
+      complexity: 'All'
+    },
+    {
       id: 'easy',
       name: 'Easy',
       description: 'More obvious indicators, extra time, and simplified logs.',

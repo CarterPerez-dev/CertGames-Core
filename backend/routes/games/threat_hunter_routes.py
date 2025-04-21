@@ -58,7 +58,7 @@ def start_scenario():
     if not scenario:
         # No fallback anymore, just return a 404 error
         return jsonify({"error": "Scenario not found"}), 404
-    
+        
     # Apply difficulty modifier to time limit
     time_modifiers = {
         'easy': 1.5,
@@ -67,6 +67,15 @@ def start_scenario():
     }
     base_time_limit = scenario.get('timeLimit', 300)  # Default: 5 minutes
     modified_time_limit = int(base_time_limit * time_modifiers.get(difficulty, 1.0))
+    
+    # *** NEW CODE: Randomize threat options ***
+    if 'threatOptions' in scenario:
+        # Convert for manipulation (MongoDB objects may be immutable)
+        threat_options = list(scenario['threatOptions'])
+        # Shuffle the threat options randomly
+        random.shuffle(threat_options)
+        # Put back in scenario
+        scenario['threatOptions'] = threat_options
     
     # Check if content exists, generate dummy content only if needed
     if 'logs' in scenario:

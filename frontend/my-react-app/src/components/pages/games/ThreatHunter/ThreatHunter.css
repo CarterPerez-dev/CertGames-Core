@@ -3091,8 +3091,7 @@
 /* Large screens (desktops) */
 @media (min-width: 1441px) {
   .log-viewer {
-    height: 600px;
-    max-height: calc(70vh - 200px);
+    height: 750px;
   }
   
   .threathunter_scenarioselector_scenarios_grid {
@@ -3110,7 +3109,7 @@
 /* Small screens (tablets) */
 @media (max-width: 1024px) {
   .log-viewer {
-    height: 500px;
+    height: 850px;
     min-height: 300px;
   }
   
