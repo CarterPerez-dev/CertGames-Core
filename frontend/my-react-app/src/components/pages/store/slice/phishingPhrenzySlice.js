@@ -1,5 +1,6 @@
 // src/components/pages/store/slice/phishingPhrenzySlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchUserData } from './userSlice';
 
 // Thunk to fetch phishing examples from the backend
 export const fetchPhishingData = createAsyncThunk(
@@ -21,7 +22,7 @@ export const fetchPhishingData = createAsyncThunk(
 // Thunk to submit game results to backend
 export const submitGameResults = createAsyncThunk(
   'phishingPhrenzy/submitGameResults',
-  async ({ userId, score, timestamp }, { rejectWithValue }) => {
+  async ({ userId, score, timestamp }, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch('/api/phishing/submit-score', {
         method: 'POST',
@@ -40,6 +41,10 @@ export const submitGameResults = createAsyncThunk(
       }
       
       const data = await response.json();
+      
+      // Fetch updated user data to refresh coins/XP
+      dispatch(fetchUserData(userId));
+      
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -65,6 +70,10 @@ const phishingPhrenzySlice = createSlice({
     startGame: (state) => {
       state.gameStatus = 'playing';
       state.score = 0;
+      // Shuffle phishing items when starting a new game
+      state.phishingItems = [...state.phishingItems]
+        .sort(() => Math.random() - 0.5)
+        .map(item => ({ ...item }));
     },
     endGame: (state, action) => {
       state.gameStatus = 'finished';
@@ -93,10 +102,7 @@ const phishingPhrenzySlice = createSlice({
     resetGame: (state) => {
       state.gameStatus = 'idle';
       state.score = 0;
-      // Shuffle phishing items for next game
-      state.phishingItems = [...state.phishingItems]
-        .sort(() => Math.random() - 0.5)
-        .map(item => ({ ...item }));
+      // Don't reset phishingItems here to avoid unnecessary refetching
     }
   },
   extraReducers: (builder) => {
@@ -109,6 +115,10 @@ const phishingPhrenzySlice = createSlice({
       .addCase(fetchPhishingData.fulfilled, (state, action) => {
         state.loading = false;
         state.phishingItems = action.payload;
+        // Ensure items are shuffled
+        state.phishingItems = [...state.phishingItems]
+          .sort(() => Math.random() - 0.5)
+          .map(item => ({ ...item }));
       })
       .addCase(fetchPhishingData.rejected, (state, action) => {
         state.loading = false;

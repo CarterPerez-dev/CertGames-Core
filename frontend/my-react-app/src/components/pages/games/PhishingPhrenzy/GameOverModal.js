@@ -1,5 +1,5 @@
 // src/components/pages/games/PhishingPhrenzy/GameOverModal.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaTrophy, FaMedal, FaRedo, FaHome, FaLinkedin } from 'react-icons/fa';
 import { 
   FaXTwitter,  
@@ -9,6 +9,15 @@ import './GameOverModal.css';
 
 const GameOverModal = ({ score, highScore, onClose, onPlayAgain }) => {
   const isNewHighScore = score > highScore;
+  // Add a state to prevent multiple button clicks
+  const [isProcessing, setIsProcessing] = useState(false);
+  // Store a fixed tip to prevent changing on re-renders
+  const [fixedTip, setFixedTip] = useState('');
+  
+  useEffect(() => {
+    // Set a fixed tip when component mounts
+    setFixedTip(getPhishingTip());
+  }, []);
   
   const getScoreRating = () => {
     if (score >= 500) return { rating: 'Legendary', icon: <FaTrophy className="phishingphrenzy_gold_trophy" /> };
@@ -54,8 +63,28 @@ const GameOverModal = ({ score, highScore, onClose, onPlayAgain }) => {
       "When in doubt, contact the company directly using a known phone number or website."
     ];
     
-    // Return a random tip
-    return tips[Math.floor(Math.random() * tips.length)];
+    // Return a fixed tip based on score to prevent changing
+    return tips[Math.abs(score) % tips.length] || tips[0];
+  };
+  
+  const handlePlayAgain = () => {
+    if (isProcessing) return;
+    
+    setIsProcessing(true);
+    // Add a small delay to prevent modal flicker
+    setTimeout(() => {
+      if (onPlayAgain) onPlayAgain();
+    }, 100);
+  };
+  
+  const handleClose = () => {
+    if (isProcessing) return;
+    
+    setIsProcessing(true);
+    // Add a small delay to prevent modal flicker
+    setTimeout(() => {
+      if (onClose) onClose();
+    }, 100);
   };
   
   return (
@@ -85,14 +114,22 @@ const GameOverModal = ({ score, highScore, onClose, onPlayAgain }) => {
         
         <div className="phishingphrenzy_phishing_tip">
           <h3>Phishing Tip:</h3>
-          <p>{getPhishingTip()}</p>
+          <p>{fixedTip}</p>
         </div>
         
         <div className="phishingphrenzy_modal_buttons">
-          <button className="phishingphrenzy_play_again_button" onClick={onPlayAgain}>
+          <button 
+            className="phishingphrenzy_play_again_button" 
+            onClick={handlePlayAgain}
+            disabled={isProcessing}
+          >
             <FaRedo /> Play Again
           </button>
-          <button className="phishingphrenzy_home_button" onClick={onClose}>
+          <button 
+            className="phishingphrenzy_home_button" 
+            onClick={handleClose}
+            disabled={isProcessing}
+          >
             <FaHome /> Return to Menu
           </button>
         </div>

@@ -1,15 +1,17 @@
 // src/components/pages/games/PhishingPhrenzy/PhishingPhrenzy.js
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaShieldAlt, FaSkullCrossbones, FaClock, FaTrophy } from 'react-icons/fa';
+import { FaShieldAlt, FaSkullCrossbones, FaClock, FaTrophy, FaArrowLeft, FaTimesCircle, FaCoins, FaStar } from 'react-icons/fa';
 import { 
   startGame, 
   endGame, 
   incrementScore, 
   decrementScore, 
   resetGame,
-  fetchPhishingData
+  fetchPhishingData,
+  submitGameResults
 } from '../../store/slice/phishingPhrenzySlice';
+import { fetchUserData } from '../../store/slice/userSlice';
 import PhishingCard from './PhishingCard';
 import GameOverModal from './GameOverModal';
 import './PhishingPhrenzy.css';
@@ -38,83 +40,157 @@ const difficultySettings = {
 const PhishingPhrenzy = () => {
   const dispatch = useDispatch();
   const { phishingItems, gameStatus, score, highScore, loading, error } = useSelector(state => state.phishingPhrenzy);
-  const { userId } = useSelector(state => state.user);
+  const { userId, coins, xp } = useSelector(state => state.user);
   
   const [currentItem, setCurrentItem] = useState(null);
   const [itemIndex, setItemIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(null);
   const [difficulty, setDifficulty] = useState('medium');
   const [showModal, setShowModal] = useState(false);
   const [feedback, setFeedback] = useState(null);
   const [answered, setAnswered] = useState(false);
   const [streak, setStreak] = useState(0);
+  const [localGameStatus, setLocalGameStatus] = useState('idle'); // Local game status to prevent loops
   
   const timerRef = useRef(null);
+  const gameOverRef = useRef(false); // Reference to track if game over has been handled
   const settings = difficultySettings[difficulty];
   
   // Load phishing examples when component mounts
   useEffect(() => {
     dispatch(fetchPhishingData());
+    
+    // Clean up on unmount
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
   }, [dispatch]);
 
-  // Set up game when status changes to 'playing'
+  // Sync Redux game status with local state, but prevent loops
   useEffect(() => {
-    if (gameStatus === 'playing') {
+    if (gameStatus === 'playing' && localGameStatus !== 'playing') {
+      setLocalGameStatus('playing');
+      gameOverRef.current = false;
+      
+      // Initialize game when it starts
       setTimeLeft(settings.timeLimit);
       setItemIndex(0);
       setStreak(0);
+      setShowModal(false);
+      
       if (phishingItems.length > 0) {
         setCurrentItem(phishingItems[0]);
       }
+    } 
+    else if (gameStatus === 'finished' && !showModal && !gameOverRef.current) {
+      // Only show modal once when game finishes
+      gameOverRef.current = true;
+      setShowModal(true);
+      setLocalGameStatus('finished');
+      
+      // Submit score
+      if (userId) {
+        dispatch(submitGameResults({
+          userId,
+          score,
+          timestamp: new Date().toISOString()
+        })).then(() => {
+          dispatch(fetchUserData(userId));
+        });
+      }
     }
-  }, [gameStatus, phishingItems, settings.timeLimit]);
+    else if (gameStatus === 'idle' && localGameStatus !== 'idle') {
+      setLocalGameStatus('idle');
+      // Reset when going back to idle
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      setShowModal(false);
+    }
+  }, [gameStatus, localGameStatus, phishingItems, settings.timeLimit, userId, score, dispatch, showModal]);
 
   // Timer logic
   useEffect(() => {
-    if (gameStatus === 'playing' && timeLeft > 0) {
+    // Clear any existing timer first
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    
+    // Only start timer if game is actively playing
+    if (localGameStatus === 'playing' && timeLeft > 0) {
       timerRef.current = setInterval(() => {
         setTimeLeft(prevTime => {
           if (prevTime <= 1) {
-            clearInterval(timerRef.current);
-            handleGameOver();
+            // Time's up - only call handleGameOver if we haven't already
+            if (!gameOverRef.current) {
+              handleGameOver();
+            }
             return 0;
           }
           return prevTime - 1;
         });
       }, 1000);
-    } else if (timeLeft <= 0 && gameStatus === 'playing') {
+    } 
+    else if (timeLeft <= 0 && localGameStatus === 'playing' && !gameOverRef.current) {
+      // Double check that handleGameOver is called when time runs out
       handleGameOver();
     }
 
+    // Clean up timer on effect cleanup
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
+        timerRef.current = null;
       }
     };
-  }, [gameStatus, timeLeft]);
-
-  // Clean up on unmount
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, []);
+  }, [localGameStatus, timeLeft]);
 
   const startNewGame = () => {
+    // Clear any existing timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    
+    // Reset all local state
+    setShowModal(false);
+    setFeedback(null);
+    setAnswered(false);
+    setTimeLeft(null);
+    gameOverRef.current = false;
+    
+    // Reset game state and start new game with delay
     dispatch(resetGame());
-    dispatch(startGame());
+    
+    // Delay starting a new game to ensure state is reset
+    setTimeout(() => {
+      dispatch(startGame());
+    }, 50);
   };
 
   const handleGameOver = () => {
-    clearInterval(timerRef.current);
+    // Prevent multiple calls to handleGameOver
+    if (gameOverRef.current) return;
+    gameOverRef.current = true;
+    
+    // Clear timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    
+    // Update game status
+    setLocalGameStatus('finished');
     dispatch(endGame(userId));
-    setShowModal(true);
   };
 
   const handleAnswer = (answer) => {
-    if (answered || !currentItem) return;
+    if (answered || !currentItem || localGameStatus !== 'playing') return;
     
     setAnswered(true);
     const isCorrect = answer === currentItem.isPhishing;
@@ -150,6 +226,8 @@ const PhishingPhrenzy = () => {
     
     // Wait to show the next item
     setTimeout(() => {
+      if (localGameStatus !== 'playing') return;
+      
       if (itemIndex < phishingItems.length - 1) {
         setItemIndex(prev => prev + 1);
         setCurrentItem(phishingItems[itemIndex + 1]);
@@ -167,8 +245,36 @@ const PhishingPhrenzy = () => {
     if (timeLeft > settings.timeLimit * 0.3) return 'orange';
     return 'red';
   };
+  
+  const handleEndEarly = () => {
+    if (window.confirm('Are you sure you want to end the game? Your current score will be submitted.')) {
+      handleGameOver();
+    }
+  };
+  
+  const handleReturnToMenu = () => {
+    if (localGameStatus === 'playing' && window.confirm('Are you sure you want to return to the menu? Your progress will be lost.')) {
+      // Clear timer
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      
+      // Reset all state
+      setShowModal(false);
+      setLocalGameStatus('idle');
+      gameOverRef.current = false;
+      dispatch(resetGame());
+    } else if (localGameStatus !== 'playing') {
+      // Just reset everything
+      setShowModal(false);
+      setLocalGameStatus('idle');
+      gameOverRef.current = false;
+      dispatch(resetGame());
+    }
+  };
 
-  if (loading) {
+  if (loading && phishingItems.length === 0) {
     return <div className="phishingphrenzy_loading">Loading game data...</div>;
   }
 
@@ -181,9 +287,21 @@ const PhishingPhrenzy = () => {
       <div className="phishingphrenzy_header_section">
         <h1><FaShieldAlt /> Phishing Phrenzy</h1>
         <p>Quickly identify phishing attempts before time runs out!</p>
+        
+        {/* User stats display */}
+        <div className="phishingphrenzy_user_stats">
+          <div className="phishingphrenzy_stat">
+            <FaCoins className="phishingphrenzy_stat_icon" />
+            <span>{coins}</span>
+          </div>
+          <div className="phishingphrenzy_stat">
+            <FaStar className="phishingphrenzy_stat_icon" />
+            <span>{xp}</span>
+          </div>
+        </div>
       </div>
       
-      {gameStatus === 'idle' ? (
+      {localGameStatus === 'idle' ? (
         <div className="phishingphrenzy_start_screen">
           <h2>Ready to test your phishing detection skills?</h2>
           <p>You'll be shown various emails, messages, and websites. Quickly decide if they're legitimate or phishing attempts.</p>
@@ -227,6 +345,24 @@ const PhishingPhrenzy = () => {
         </div>
       ) : (
         <div className="phishingphrenzy_gameplay">
+          <div className="phishingphrenzy_game_controls">
+            <button 
+              className="phishingphrenzy_back_button"
+              onClick={handleReturnToMenu}
+            >
+              <FaArrowLeft /> Return to Menu
+            </button>
+            
+            {localGameStatus === 'playing' && (
+              <button 
+                className="phishingphrenzy_end_button"
+                onClick={handleEndEarly}
+              >
+                <FaTimesCircle /> End Game
+              </button>
+            )}
+          </div>
+          
           <div className="phishingphrenzy_game_stats">
             <div className="phishingphrenzy_timer">
               <FaClock /> Time: <span style={{ color: getTimerColor() }}>{timeLeft}</span>
@@ -247,14 +383,14 @@ const PhishingPhrenzy = () => {
                 <button 
                   className="phishingphrenzy_legitimate_button"
                   onClick={() => handleAnswer(false)}
-                  disabled={answered}
+                  disabled={answered || localGameStatus !== 'playing'}
                 >
                   Legitimate
                 </button>
                 <button 
                   className="phishingphrenzy_phishing_button"
                   onClick={() => handleAnswer(true)}
-                  disabled={answered}
+                  disabled={answered || localGameStatus !== 'playing'}
                 >
                   <FaSkullCrossbones /> Phishing
                 </button>
@@ -274,7 +410,7 @@ const PhishingPhrenzy = () => {
         <GameOverModal 
           score={score} 
           highScore={highScore}
-          onClose={() => setShowModal(false)}
+          onClose={handleReturnToMenu}
           onPlayAgain={startNewGame}
         />
       )}
@@ -282,4 +418,4 @@ const PhishingPhrenzy = () => {
   );
 };
 
-export default PhishingPhrenzy
+export default PhishingPhrenzy;

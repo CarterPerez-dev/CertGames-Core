@@ -449,6 +449,82 @@
   100% { transform: rotate(360deg); }
 }
 
+
+.phishingphrenzy_game_controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_back_button,
+.phishingphrenzy_end_button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--phishing-border);
+  color: var(--phishing-text);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_back_button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.phishingphrenzy_end_button {
+  color: var(--phishing-error);
+}
+
+.phishingphrenzy_end_button:hover {
+  background-color: rgba(255, 78, 78, 0.15);
+  transform: translateY(-2px);
+}
+
+/* User stats display */
+.phishingphrenzy_user_stats {
+  display: flex;
+  gap: 15px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.phishingphrenzy_stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--phishing-border);
+}
+
+.phishingphrenzy_stat_icon {
+  font-size: 1.1rem;
+  color: var(--phishing-accent);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .phishingphrenzy_user_stats {
+    position: static;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .phishingphrenzy_game_controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .phishingphrenzy_header_section h1 {

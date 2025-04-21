@@ -403,42 +403,6 @@ const Sidebar = () => {
                 </ul>
               </li>
               
-              {/* Game Hub group */}
-              <li className="sidebar-group">
-                <div
-                  className="group-header"
-                  onClick={toggleGameHub}
-                  role="button"
-                  tabIndex={0}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') toggleGameHub();
-                  }}
-                >
-                  <div className="group-header-content">
-                    <FaAward className="sidebar-icon" />
-                    <span className="sidebar-link-text">/Game Hub</span>
-                  </div>
-                  {gameHubOpen ? <FaChevronUp className="group-icon" /> : <FaChevronDown className="group-icon" />}
-                </div>
-                <ul className={`group-sublist ${gameHubOpen ? 'expanded' : ''}`}>
-                  <li>
-                    <NavLink to="/shop" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
-                      <span className="sidebar-link-text">Shop</span>
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/achievements" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
-                      <span className="sidebar-link-text">Achievements</span>
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/leaderboard" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
-                      <span className="sidebar-link-text">Leaderboard</span>
-                    </NavLink>
-                  </li>
-                </ul>
-              </li>
-              
               {/* Daily CyberBrief */}
               <li>
                 <NavLink to="/dailycyberbrief" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>

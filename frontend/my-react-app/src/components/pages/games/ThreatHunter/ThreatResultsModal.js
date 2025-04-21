@@ -2,7 +2,8 @@
 import React from 'react';
 import { 
   FaTrophy, FaRedo, FaHome, FaCheck, FaTimes, 
-  FaClock, FaExclamationTriangle, FaLinkedin 
+  FaClock, FaExclamationTriangle, FaLinkedin, 
+  FaFlag
 } from 'react-icons/fa';
 
 import { 
@@ -24,10 +25,12 @@ const ThreatResultsModal = ({ results, scenario, onClose, onRestart }) => {
     coinsAwarded,
     xpAwarded,
     feedback,
-    newAchievements
+    newAchievements,
+    correctlyFlaggedLines = [], // New prop for correctly flagged lines
+    missedFlaggedLines = []    // New prop for missed lines that should have been flagged
   } = results;
   
-  // Calculate score percentage
+  // Calculate score percentage and round to whole number
   const scorePercentage = Math.round((score / maxScore) * 100);
   
   // Determine rating based on score percentage
@@ -46,6 +49,15 @@ const ThreatResultsModal = ({ results, scenario, onClose, onRestart }) => {
     if (scorePercentage >= 40) return 'junior';
     return 'trainee';
   };
+
+  // Calculate points breakdown
+  const threatPoints = correctThreats.length > 0 ? 
+    Math.round((correctThreats.length / (correctThreats.length + missedThreats.length)) * 70) : 0;
+  
+  const evidencePoints = correctlyFlaggedLines.length > 0 ?
+    Math.min(20, Math.round((correctlyFlaggedLines.length / (correctlyFlaggedLines.length + missedFlaggedLines.length)) * 20)) : 0;
+  
+  const penaltyPoints = Math.min(30, (falsePositives.length * 5));
   
   return (
     <div className="threathunter_resultsmodal_overlay">
@@ -94,6 +106,61 @@ const ThreatResultsModal = ({ results, scenario, onClose, onRestart }) => {
             </div>
           </div>
         </div>
+
+        {/* New section for score breakdown */}
+        <div className="threathunter_resultsmodal_score_breakdown">
+          <h3>Points Breakdown</h3>
+          <div className="threathunter_resultsmodal_breakdown_container">
+            <div className="threathunter_resultsmodal_breakdown_item">
+              <div className="threathunter_resultsmodal_breakdown_label">Threat Detection</div>
+              <div className="threathunter_resultsmodal_breakdown_bar">
+                <div 
+                  className="threathunter_resultsmodal_breakdown_progress" 
+                  style={{ width: `${threatPoints / 0.7}%`, backgroundColor: '#4caf50' }}
+                ></div>
+              </div>
+              <div className="threathunter_resultsmodal_breakdown_value">+{threatPoints}</div>
+            </div>
+            
+            <div className="threathunter_resultsmodal_breakdown_item">
+              <div className="threathunter_resultsmodal_breakdown_label">Evidence Quality</div>
+              <div className="threathunter_resultsmodal_breakdown_bar">
+                <div 
+                  className="threathunter_resultsmodal_breakdown_progress" 
+                  style={{ width: `${evidencePoints * 5}%`, backgroundColor: '#2196f3' }}
+                ></div>
+              </div>
+              <div className="threathunter_resultsmodal_breakdown_value">+{evidencePoints}</div>
+            </div>
+            
+            <div className="threathunter_resultsmodal_breakdown_item">
+              <div className="threathunter_resultsmodal_breakdown_label">Time Bonus</div>
+              <div className="threathunter_resultsmodal_breakdown_bar">
+                <div 
+                  className="threathunter_resultsmodal_breakdown_progress" 
+                  style={{ width: `${timeBonus * 10}%`, backgroundColor: '#9c27b0' }}
+                ></div>
+              </div>
+              <div className="threathunter_resultsmodal_breakdown_value">+{timeBonus}</div>
+            </div>
+            
+            <div className="threathunter_resultsmodal_breakdown_item">
+              <div className="threathunter_resultsmodal_breakdown_label">False Positives Penalty</div>
+              <div className="threathunter_resultsmodal_breakdown_bar">
+                <div 
+                  className="threathunter_resultsmodal_breakdown_progress" 
+                  style={{ width: `${penaltyPoints / 0.3}%`, backgroundColor: '#f44336' }}
+                ></div>
+              </div>
+              <div className="threathunter_resultsmodal_breakdown_value">-{penaltyPoints}</div>
+            </div>
+            
+            <div className="threathunter_resultsmodal_breakdown_total">
+              <div className="threathunter_resultsmodal_breakdown_label">Total Score</div>
+              <div className="threathunter_resultsmodal_breakdown_value">{score}</div>
+            </div>
+          </div>
+        </div>
         
         <div className="threathunter_resultsmodal_rewards_summary">
           <div className="threathunter_resultsmodal_reward_item">
@@ -103,6 +170,54 @@ const ThreatResultsModal = ({ results, scenario, onClose, onRestart }) => {
           <div className="threathunter_resultsmodal_reward_item">
             <div className="threathunter_resultsmodal_reward_value">+{coinsAwarded}</div>
             <div className="threathunter_resultsmodal_reward_label">Coins</div>
+          </div>
+        </div>
+        
+        {/* New section for evidence details */}
+        <div className="threathunter_resultsmodal_evidence_details">
+          <h3>Evidence Details</h3>
+          <div className="threathunter_resultsmodal_evidence_container">
+            {correctlyFlaggedLines.length > 0 ? (
+              <div className="threathunter_resultsmodal_evidence_section">
+                <h4>Correctly Flagged Log Lines</h4>
+                <div className="threathunter_resultsmodal_evidence_list">
+                  {correctlyFlaggedLines.map((line, index) => (
+                    <div key={`correct-${index}`} className="threathunter_resultsmodal_evidence_item correct">
+                      <FaFlag className="threathunter_resultsmodal_evidence_icon" />
+                      <div className="threathunter_resultsmodal_evidence_details">
+                        <span className="threathunter_resultsmodal_evidence_source">
+                          {line.logName || `Log ${line.logId}`} - Line {line.lineIndex + 1}
+                        </span>
+                        <span className="threathunter_resultsmodal_evidence_content">
+                          {line.content}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+            
+            {missedFlaggedLines.length > 0 ? (
+              <div className="threathunter_resultsmodal_evidence_section">
+                <h4>Missed Suspicious Lines</h4>
+                <div className="threathunter_resultsmodal_evidence_list">
+                  {missedFlaggedLines.map((line, index) => (
+                    <div key={`missed-${index}`} className="threathunter_resultsmodal_evidence_item missed">
+                      <FaTimes className="threathunter_resultsmodal_evidence_icon" />
+                      <div className="threathunter_resultsmodal_evidence_details">
+                        <span className="threathunter_resultsmodal_evidence_source">
+                          {line.logName || `Log ${line.logId}`} - Line {line.lineIndex + 1}
+                        </span>
+                        <span className="threathunter_resultsmodal_evidence_content">
+                          {line.content}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
         
@@ -155,6 +270,23 @@ const ThreatResultsModal = ({ results, scenario, onClose, onRestart }) => {
                     <FaTimes className="threathunter_resultsmodal_threat_icon missed" />
                     <div className="threathunter_resultsmodal_threat_info">
                       <div className="threathunter_resultsmodal_threat_name">{threat.name}</div>
+                      <div className="threathunter_resultsmodal_threat_description">{threat.description}</div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {falsePositives.length > 0 && (
+            <div className="threathunter_resultsmodal_details_section">
+              <h3>False Positives</h3>
+              <ul className="threathunter_resultsmodal_threats_list false">
+                {falsePositives.map((threat, index) => (
+                  <li key={index} className="threathunter_resultsmodal_threat_item">
+                    <FaExclamationTriangle className="threathunter_resultsmodal_threat_icon false" />
+                    <div className="threathunter_resultsmodal_threat_info">
+                      <div className="threathunter_resultsmodal_threat_name">{threat.name || threat.type}</div>
                       <div className="threathunter_resultsmodal_threat_description">{threat.description}</div>
                     </div>
                   </li>

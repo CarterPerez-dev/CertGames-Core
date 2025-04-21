@@ -125,6 +125,8 @@ def start_scenario():
         "timeLimit": modified_time_limit
     })
 
+# Update this function in your threat_hunter_routes.py file
+
 @threat_hunter_bp.route('/submit-analysis', methods=['POST'])
 def submit_analysis():
     """
@@ -225,6 +227,24 @@ def submit_analysis():
             # Assuming line is just an index
             formatted_suspicious_lines.append({'lineIndex': line})
     
+    # Track correctly flagged and missed suspicious lines for the response
+    correctly_flagged_lines = []
+    missed_flagged_lines = []
+    incorrect_flagged_lines = []
+    
+    # Get log content for reference
+    log_content_map = {}
+    if scenario.get('logs'):
+        for log in scenario.get('logs'):
+            log_id = log.get('id')
+            log_name = log.get('name')
+            content = log.get('content', [])
+            log_content_map[log_id] = {
+                'name': log_name,
+                'content': content
+            }
+    
+    # Process flagged lines
     flagged_correct = 0
     flagged_incorrect = 0
     
@@ -234,6 +254,27 @@ def submit_analysis():
             if 'logId' in flagged_line and 'logId' in suspicious_line:
                 if flagged_line['logId'] == suspicious_line['logId'] and flagged_line['lineIndex'] == suspicious_line['lineIndex']:
                     found = True
+                    
+                    # Add to correctly flagged lines with content if available
+                    log_id = flagged_line['logId']
+                    line_index = flagged_line['lineIndex']
+                    
+                    line_info = {
+                        'logId': log_id,
+                        'lineIndex': line_index,
+                    }
+                    
+                    # Add log name and content if available
+                    if log_id in log_content_map:
+                        line_info['logName'] = log_content_map[log_id]['name']
+                        if line_index < len(log_content_map[log_id]['content']):
+                            content_obj = log_content_map[log_id]['content'][line_index]
+                            if isinstance(content_obj, dict) and 'text' in content_obj:
+                                line_info['content'] = content_obj['text']
+                            else:
+                                line_info['content'] = str(content_obj)
+                    
+                    correctly_flagged_lines.append(line_info)
                     break
             else:
                 # For backward compatibility
@@ -245,6 +286,65 @@ def submit_analysis():
             flagged_correct += 1
         else:
             flagged_incorrect += 1
+            
+            # Add to incorrectly flagged lines
+            log_id = flagged_line.get('logId')
+            line_index = flagged_line.get('lineIndex')
+            
+            if log_id and line_index is not None:
+                line_info = {
+                    'logId': log_id,
+                    'lineIndex': line_index,
+                }
+                
+                # Add log name and content if available
+                if log_id in log_content_map:
+                    line_info['logName'] = log_content_map[log_id]['name']
+                    if line_index < len(log_content_map[log_id]['content']):
+                        content_obj = log_content_map[log_id]['content'][line_index]
+                        if isinstance(content_obj, dict) and 'text' in content_obj:
+                            line_info['content'] = content_obj['text']
+                        else:
+                            line_info['content'] = str(content_obj)
+                
+                incorrect_flagged_lines.append(line_info)
+    
+    # Find missed suspicious lines
+    for suspicious_line in formatted_suspicious_lines:
+        found = False
+        for flagged_line in flagged_lines:
+            if 'logId' in flagged_line and 'logId' in suspicious_line:
+                if flagged_line['logId'] == suspicious_line['logId'] and flagged_line['lineIndex'] == suspicious_line['lineIndex']:
+                    found = True
+                    break
+            else:
+                # For backward compatibility
+                if flagged_line.get('lineIndex', flagged_line) == suspicious_line.get('lineIndex', suspicious_line):
+                    found = True
+                    break
+        
+        if not found:
+            # Add to missed suspicious lines
+            log_id = suspicious_line.get('logId')
+            line_index = suspicious_line.get('lineIndex')
+            
+            if line_index is not None:
+                line_info = {
+                    'logId': log_id if log_id else 'missed',
+                    'lineIndex': line_index,
+                }
+                
+                # Add log name and content if available
+                if log_id and log_id in log_content_map:
+                    line_info['logName'] = log_content_map[log_id]['name']
+                    if isinstance(line_index, int) and line_index < len(log_content_map[log_id]['content']):
+                        content_obj = log_content_map[log_id]['content'][line_index]
+                        if isinstance(content_obj, dict) and 'text' in content_obj:
+                            line_info['content'] = content_obj['text']
+                        else:
+                            line_info['content'] = str(content_obj)
+                
+                missed_flagged_lines.append(line_info)
     
     if len(formatted_suspicious_lines) > 0:
         # 20% of score from correctly flagging suspicious lines
@@ -262,8 +362,8 @@ def submit_analysis():
     # Add time bonus (up to 10 points)
     time_bonus = min(10, int(time_left / 10))
     
-    # Final score
-    total_score = min(max_score, base_score + time_bonus)
+    # Final score - ensure it's an integer
+    total_score = int(min(max_score, base_score + time_bonus))
     
     # Award XP and coins based on score
     xp_awarded = int(total_score / 2)  # 1 XP for every 2 points
@@ -326,7 +426,10 @@ def submit_analysis():
         "xpAwarded": xp_awarded,
         "coinsAwarded": coins_awarded,
         "feedback": feedback,
-        "newAchievements": new_achievements
+        "newAchievements": new_achievements,
+        "correctlyFlaggedLines": correctly_flagged_lines,
+        "missedFlaggedLines": missed_flagged_lines,
+        "incorrectFlaggedLines": incorrect_flagged_lines
     }
     
     return jsonify(result)
