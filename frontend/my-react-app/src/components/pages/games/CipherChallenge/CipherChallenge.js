@@ -45,8 +45,6 @@ const CipherChallenge = () => {
   
   // Ref to keep track if challenges have been loaded
   const challengesLoaded = useRef(false);
-  // Flag to control data refreshes
-  const [dataRefreshed, setDataRefreshed] = useState(false);
   
   const [userSolution, setUserSolution] = useState('');
   const [feedbackMessage, setFeedbackMessage] = useState(null);
@@ -54,25 +52,40 @@ const CipherChallenge = () => {
   const [activeTool, setActiveTool] = useState(null);
   const [showCongratulations, setShowCongratulations] = useState(false);
   const [congratsData, setCongratsData] = useState(null);
+  const [dataRefreshed, setDataRefreshed] = useState(false);
   
-  // Load challenges only once when component mounts
+  // Load challenges when component mounts and ensure persistence
   useEffect(() => {
     if (userId && !challengesLoaded.current) {
       // Set the flag to true immediately to prevent multiple calls
       challengesLoaded.current = true;
       
-      // Fetch challenges first
-      dispatch(fetchCipherChallenges())
-        .then(() => {
-          // After challenges are loaded, fetch user data
-          dispatch(fetchUserData(userId));
-          // Mark data as refreshed
-          setDataRefreshed(true);
-        })
-        .catch(() => {
-          // If there's an error, reset the flag so we can try again
-          challengesLoaded.current = false;
-        });
+      // Add a retry counter to prevent infinite loops
+      let retryCount = 0;
+      const maxRetries = 3;
+      
+      const fetchData = () => {
+        if (retryCount >= maxRetries) {
+          console.error("Max retries reached for fetching challenges");
+          return;
+        }
+        
+        dispatch(fetchCipherChallenges())
+          .then(() => {
+            dispatch(fetchUserData(userId));
+            setDataRefreshed(true);
+          })
+          .catch((error) => {
+            console.error("Error fetching challenges:", error);
+            retryCount++;
+            // Only reset if we haven't exceeded max retries
+            if (retryCount < maxRetries) {
+              challengesLoaded.current = false;
+            }
+          });
+      };
+      
+      fetchData();
     }
   }, [dispatch, userId]);
   
@@ -82,7 +95,7 @@ const CipherChallenge = () => {
     setFeedbackMessage(null);
   }, [currentChallenge]);
   
-  // Function to find and navigate to the next challenge
+  // FIX: Improved selectNextChallenge function with logging
   const selectNextChallenge = () => {
     if (!currentChallenge || !challenges || challenges.length === 0) {
       console.log("Cannot select next challenge: No current challenge or challenges");
@@ -94,12 +107,19 @@ const CipherChallenge = () => {
       .filter(c => c.levelId === currentChallenge.levelId)
       .sort((a, b) => a.id - b.id);
     
+    console.log(`Current level challenges (${currentLevelChallenges.length}):`);
+    console.log(currentLevelChallenges.map(c => ({ id: c.id, title: c.title })));
+    
     // Find the index of the current challenge
     const currentIndex = currentLevelChallenges.findIndex(c => c.id === currentChallenge.id);
+    console.log(`Current challenge id: ${currentChallenge.id}, index: ${currentIndex}`);
     
     // If this is not the last challenge in the level, select the next one
     if (currentIndex < currentLevelChallenges.length - 1) {
       const nextChallenge = currentLevelChallenges[currentIndex + 1];
+      console.log(`Moving to next challenge in same level: ${nextChallenge.id}`);
+      
+      // FIX: Use the actual challenge object, not just its ID
       dispatch(resetCurrentChallenge(nextChallenge));
       return true;
     }
@@ -111,13 +131,20 @@ const CipherChallenge = () => {
         .filter(c => c.levelId === currentChallenge.levelId + 1)
         .sort((a, b) => a.id - b.id);
       
+      console.log(`Next level challenges (${nextLevelChallenges.length}):`);
+      console.log(nextLevelChallenges.map(c => ({ id: c.id, title: c.title })));
+      
       if (nextLevelChallenges.length > 0) {
         const nextChallenge = nextLevelChallenges[0];
+        console.log(`Moving to first challenge in next level: ${nextChallenge.id}`);
+        
+        // FIX: Use the actual challenge object, not just its ID
         dispatch(resetCurrentChallenge(nextChallenge));
         return true;
       }
     }
     
+    console.log("No next challenge found");
     return false;
   };
   
@@ -189,9 +216,9 @@ const CipherChallenge = () => {
             setShowCongratulations(true);
           }
           
-          // Instead of another fetch, just mark this challenge as completed in our state
-          // This avoids the API spam but still updates the UI
-          setDataRefreshed(true);
+          // Explicitly fetch challenges again to refresh the UI
+          // FIX: This helps ensure the UI shows the latest progress
+          dispatch(fetchCipherChallenges());
         }
       });
     } else {
@@ -224,6 +251,7 @@ const CipherChallenge = () => {
   };
   
   const handleSelectChallenge = (challengeId) => {
+    // FIX: Pass the full challenge object, not just the ID
     const challenge = challenges.find(c => c.id === challengeId);
     if (challenge) {
       dispatch(resetCurrentChallenge(challenge));
@@ -236,27 +264,17 @@ const CipherChallenge = () => {
   
   const handleCongratulationsClose = () => {
     setShowCongratulations(false);
-    
-    // After closing congratulations, check for the next challenge
-    const success = selectNextChallenge();
-    
-    // If selecting the next challenge failed and we haven't refreshed data yet,
-    // refresh the data once to ensure we have the latest state
-    if (!success && !dataRefreshed) {
-      // Set flag to true to prevent multiple refreshes
-      setDataRefreshed(true);
-      dispatch(fetchCipherChallenges());
-    }
+    selectNextChallenge();
   };
   
+  // FIX: Improved handleNextChallenge function
   const handleNextChallenge = () => {
+    console.log("Next button clicked");
     const result = selectNextChallenge();
+    console.log(`selectNextChallenge result: ${result}`);
     
-    // If next challenge wasn't found and we haven't refreshed data yet,
-    // refresh the data once
-    if (!result && !dataRefreshed) {
-      // Set flag to true to prevent multiple refreshes
-      setDataRefreshed(true);
+    // If next challenge wasn't found, refresh the data
+    if (!result) {
       dispatch(fetchCipherChallenges());
     }
   };
