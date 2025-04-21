@@ -340,16 +340,13 @@ def delete_user_account(user_id):
         return jsonify({"error": "Invalid user ID"}), 400
 
     try:
-        # Optional: Add additional authentication checks here
-        # For example, check if the user is deleting their own account
 
-        # Delete user from mainusers collection
         result = mainusers_collection.delete_one({"_id": user_oid})
         
-        # Optional: Delete related collections (test attempts, achievements, etc.)
+   
         testAttempts_collection.delete_many({"userId": user_oid})
         achievements_collection.delete_many({"userId": user_oid})
-        # Add more collection deletions as needed
+
 
         if result.deleted_count > 0:
             return jsonify({"message": "Account deleted successfully"}), 200
@@ -398,7 +395,7 @@ def decrement_questions(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
         
-    # Only decrement for free users
+
     if not user.get("subscriptionActive", False):
         remaining = user.get("practiceQuestionsRemaining", 0)
         if remaining > 0:
@@ -412,7 +409,7 @@ def decrement_questions(user_id):
                 g.db_time_accumulator = 0.0
             g.db_time_accumulator += duration
             
-    # Get updated user
+
     start_db = time.time()
     updated_user = get_user_by_id(user_id)
     duration = time.time() - start_db
