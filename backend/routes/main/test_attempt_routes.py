@@ -22,39 +22,39 @@ def get_test_attempt(user_id, test_id):
     except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
 
-    # IMPORTANT FIX: Handle status parameter to specifically query finished or unfinished
+
     status = request.args.get("status")
     
-    # Build the query based on user ID and test ID
+
     base_query = {"userId": user_oid}
     if test_id_int is not None:
         base_query["$or"] = [{"testId": test_id_int}, {"testId": test_id}]
     else:
         base_query["testId"] = test_id
 
-    # Add finished status filter if specified
+
     if status == "finished":
         base_query["finished"] = True
     elif status == "unfinished":
         base_query["finished"] = False
     else:
-        # Default behavior (no status parameter): look for unfinished first, then finished
+ 
         try:
             unfinished_attempt = testAttempts_collection.find_one({**base_query, "finished": False})
             if unfinished_attempt:
                 attempt = unfinished_attempt
             else:
-                # If no unfinished attempt, look for most recent finished attempt
+
                 attempt = testAttempts_collection.find_one(
                     {**base_query, "finished": True}, 
                     sort=[("finishedAt", -1)]
                 )
             
-            # Continue with existing code for handling attempt
+   
             if not attempt:
                 return jsonify({"attempt": None}), 200
 
-            # IMPORTANT FIX: Ensure none of the arrays are null/None
+     
             if attempt.get("answers") is None:
                 attempt["answers"] = []
             if attempt.get("shuffleOrder") is None:
@@ -68,7 +68,7 @@ def get_test_attempt(user_id, test_id):
         except Exception as e:
             return jsonify({"error": f"Database error: {str(e)}"}), 500
 
-    # If status was specified, execute the query
+
     start_db = time.time()
     attempt = testAttempts_collection.find_one(base_query)
     duration = time.time() - start_db
@@ -79,7 +79,6 @@ def get_test_attempt(user_id, test_id):
     if not attempt:
         return jsonify({"attempt": None}), 200
 
-    # IMPORTANT FIX: Ensure none of the arrays are null/None
     if attempt.get("answers") is None:
         attempt["answers"] = []
     if attempt.get("shuffleOrder") is None:
@@ -123,7 +122,7 @@ def update_test_attempt(user_id, test_id):
         "$or": [{"testId": test_id_int}, {"testId": test_id}]
     }
     
-    # IMPORTANT FIX: Include examTimerSeconds in the update
+
     update_doc = {
         "$set": {
             "userId": user_oid,
@@ -168,7 +167,7 @@ def finish_test_attempt(user_id, test_id):
     except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
 
-    # IMPORTANT FIX: Use more specific query to ensure we're updating the correct test
+ 
     category = data.get("category", "global")
     filter_ = {
         "userId": user_oid,
@@ -356,7 +355,7 @@ def submit_answer(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
         
-    # Check if free user has remaining questions
+
     if not user.get("subscriptionActive", False):
         remaining = user.get("practiceQuestionsRemaining", 0)
         if remaining <= 0:
@@ -367,7 +366,7 @@ def submit_answer(user_id):
                 "practiceQuestionsRemaining": 0
             }), 403
             
-        # Decrement question count for free users
+       
         start_db = time.time()
         mainusers_collection.update_one(
             {"_id": user["_id"]},
@@ -378,7 +377,7 @@ def submit_answer(user_id):
             g.db_time_accumulator = 0.0
         g.db_time_accumulator += duration
         
-        # Update remaining count
+
         remaining -= 1
 
     start_db = time.time()
@@ -582,7 +581,7 @@ def update_single_answer(user_id, test_id):
             g.db_time_accumulator = 0.0
         g.db_time_accumulator += duration
     else:
-        # IMPORTANT FIX: For both exam and non-exam mode, add answer
+
         update_doc = {
             "$push": {
                 "answers": {
@@ -593,7 +592,7 @@ def update_single_answer(user_id, test_id):
             }
         }
         
-        # Only update score for non-exam mode
+  
         if not exam_mode:
             update_doc["$set"] = {"score": data.get("score", 0)}
             
@@ -624,13 +623,13 @@ def update_position(user_id, test_id):
     except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
 
-    # IMPORTANT FIX: Include examTimerSeconds in the update
+ 
     update_fields = {
         "currentQuestionIndex": current_index,
         "finished": data.get("finished", False)
     }
     
-    # Add timer if provided
+  
     if "examTimerSeconds" in data:
         update_fields["examTimerSeconds"] = data["examTimerSeconds"]
 
