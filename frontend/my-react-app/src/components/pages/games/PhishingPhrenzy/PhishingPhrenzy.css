@@ -524,6 +524,18 @@
   }
 }
 
+@media (max-width: 950px) {
+  .phishingphrenzy_user_stats {
+    position: static;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .phishingphrenzy_game_controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {
