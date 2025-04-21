@@ -175,7 +175,7 @@ def filter_out_example_accounts(query=None):
         
     return query
 
-)
+
 
 
 

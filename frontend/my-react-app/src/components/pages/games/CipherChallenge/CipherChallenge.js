@@ -45,6 +45,8 @@ const CipherChallenge = () => {
   
   // Ref to keep track if challenges have been loaded
   const challengesLoaded = useRef(false);
+  // Flag to control data refreshes
+  const [dataRefreshed, setDataRefreshed] = useState(false);
   
   const [userSolution, setUserSolution] = useState('');
   const [feedbackMessage, setFeedbackMessage] = useState(null);
@@ -53,14 +55,24 @@ const CipherChallenge = () => {
   const [showCongratulations, setShowCongratulations] = useState(false);
   const [congratsData, setCongratsData] = useState(null);
   
-  // Load challenges when component mounts and ensure persistence
+  // Load challenges only once when component mounts
   useEffect(() => {
     if (userId && !challengesLoaded.current) {
-      // Fetch challenges and user data to ensure everything is in sync
-      dispatch(fetchCipherChallenges()).then(() => {
-        challengesLoaded.current = true;
-      });
-      dispatch(fetchUserData(userId));
+      // Set the flag to true immediately to prevent multiple calls
+      challengesLoaded.current = true;
+      
+      // Fetch challenges first
+      dispatch(fetchCipherChallenges())
+        .then(() => {
+          // After challenges are loaded, fetch user data
+          dispatch(fetchUserData(userId));
+          // Mark data as refreshed
+          setDataRefreshed(true);
+        })
+        .catch(() => {
+          // If there's an error, reset the flag so we can try again
+          challengesLoaded.current = false;
+        });
     }
   }, [dispatch, userId]);
   
@@ -70,9 +82,12 @@ const CipherChallenge = () => {
     setFeedbackMessage(null);
   }, [currentChallenge]);
   
-  // Select next challenge function
+  // Function to find and navigate to the next challenge
   const selectNextChallenge = () => {
-    if (!currentChallenge || !challenges || challenges.length === 0) return false;
+    if (!currentChallenge || !challenges || challenges.length === 0) {
+      console.log("Cannot select next challenge: No current challenge or challenges");
+      return false;
+    }
     
     // Get all challenges in the current level
     const currentLevelChallenges = challenges
@@ -84,7 +99,8 @@ const CipherChallenge = () => {
     
     // If this is not the last challenge in the level, select the next one
     if (currentIndex < currentLevelChallenges.length - 1) {
-      dispatch(resetCurrentChallenge(currentLevelChallenges[currentIndex + 1]));
+      const nextChallenge = currentLevelChallenges[currentIndex + 1];
+      dispatch(resetCurrentChallenge(nextChallenge));
       return true;
     }
     
@@ -96,14 +112,14 @@ const CipherChallenge = () => {
         .sort((a, b) => a.id - b.id);
       
       if (nextLevelChallenges.length > 0) {
-        dispatch(resetCurrentChallenge(nextLevelChallenges[0]));
+        const nextChallenge = nextLevelChallenges[0];
+        dispatch(resetCurrentChallenge(nextChallenge));
         return true;
       }
     }
     
     return false;
   };
-  
   
   const handleSolutionChange = (value) => {
     setUserSolution(value);
@@ -171,8 +187,11 @@ const CipherChallenge = () => {
               coinsEarned: wasAlreadyCompleted ? 0 : currentChallenge.levelId * 20
             });
             setShowCongratulations(true);
-          } 
-          // Don't auto-select next challenge immediately - let the user see they've completed this one
+          }
+          
+          // Instead of another fetch, just mark this challenge as completed in our state
+          // This avoids the API spam but still updates the UI
+          setDataRefreshed(true);
         }
       });
     } else {
@@ -217,11 +236,29 @@ const CipherChallenge = () => {
   
   const handleCongratulationsClose = () => {
     setShowCongratulations(false);
-    selectNextChallenge();
+    
+    // After closing congratulations, check for the next challenge
+    const success = selectNextChallenge();
+    
+    // If selecting the next challenge failed and we haven't refreshed data yet,
+    // refresh the data once to ensure we have the latest state
+    if (!success && !dataRefreshed) {
+      // Set flag to true to prevent multiple refreshes
+      setDataRefreshed(true);
+      dispatch(fetchCipherChallenges());
+    }
   };
   
   const handleNextChallenge = () => {
-    selectNextChallenge();
+    const result = selectNextChallenge();
+    
+    // If next challenge wasn't found and we haven't refreshed data yet,
+    // refresh the data once
+    if (!result && !dataRefreshed) {
+      // Set flag to true to prevent multiple refreshes
+      setDataRefreshed(true);
+      dispatch(fetchCipherChallenges());
+    }
   };
   
   if (loading && challenges.length === 0) {

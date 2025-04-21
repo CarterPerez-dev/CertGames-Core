@@ -180,18 +180,17 @@ def submit_cipher_solution():
         if hasattr(g, 'db_time_accumulator'):
             g.db_time_accumulator += duration
         
- 
-    else:
-        # If already completed, give smaller rewards
-        xp_reward = 0
-        coin_reward = 0
+        # Update user rewards
+        update_user_xp(user_id, xp_reward)
+        update_user_coins(user_id, coin_reward)
     
+    # Fix: Use the actual isNewCompletion value
     return jsonify({
         "success": True,
-        "isNewCompletion": False,
+        "isNewCompletion": is_new_completion,  # Fixed: was hardcoded to False before
         "xpAwarded": xp_reward,
         "coinsAwarded": coin_reward,
-        "message": "Challenge already completed. No additional rewards."
+        "message": "Challenge completed successfully!" if is_new_completion else "Challenge already completed. No additional rewards."
     })
 
 @cipher_bp.route('/unlock-hint', methods=['POST'])

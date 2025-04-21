@@ -1,12 +1,4 @@
-
 # ROUTES
-
-----
-----
-```python
-# TEST routes
-
-
 /test/user/<user_id> (GET) - Retrieves a user's profile information by ID
 /test/user (POST) - Registers a new user account
 /test/login (POST) - Handles user authentication and login
@@ -36,9 +28,7 @@
 /test/public-leaderboard/board (GET) - Gets public leaderboard with longer cache duration
 /test/user/<user_id>/delete (DELETE) - Deletes a user account and related data
 
---------------
-
-# OAuth Routes (oauth_bp, assumed prefix /oauth)
+# OAuth Routes 
 
 GET /oauth/login/google: Initiates the Google OAuth login flow, redirecting the user to Google's authentication page.
 GET /oauth/auth/google: Handles the callback from Google after user authentication, exchanges code for token, fetches user info, creates/updates user, and redirects to frontend.
@@ -50,9 +40,35 @@ POST /oauth/verify-google-token: Verifies a Google access token provided directl
 GET /oauth/admin-login/google: Initiates a Google OAuth login flow specifically for the admin dashboard, prompting for account selection.
 GET /oauth/admin-auth/google: Handles the callback for admin Google login, verifies if the email is authorized, and sets admin session if successful.
 
---------------
 
-# Subscription Routes (subscription_bp, assumed prefix /subscription)
+# Game Routes (various blueprints for each game)
+
+GET /phishing/examples: Retrieves a set of phishing and legitimate examples for the Phishing Phrenzy game.
+POST /phishing/submit-score: Submits a Phishing Phrenzy game score and awards XP/coins based on performance.
+GET /phishing/leaderboard: Gets the top scores for the Phishing Phrenzy game.
+GET /cipher/challenges: Gets all cipher challenges with user progress information.
+POST /cipher/submit: Submits a solution for a cipher challenge.
+POST /cipher/unlock-hint: Unlocks a hint for a cipher challenge by spending coins.
+GET /threat_hunter/scenarios: Gets all log analysis scenarios with metadata.
+POST /threat_hunter/start-scenario: Starts a log analysis scenario and gets the full scenario data including logs.
+POST /threat_hunter/submit-analysis: Submits a log analysis for scoring and evaluation.
+GET /incident/scenarios: Gets all incident response scenarios.
+POST /incident/start: Starts a scenario and returns its details.
+POST /incident/action: Processes a user action in a scenario stage.
+POST /incident/complete: Completes a scenario and calculates results.
+
+
+# AI tool routes 
+POST /scenario/stream_scenario: Generates a security scenario based on input parameters (industry, attack type, etc.) and streams the output text.
+POST /scenario/stream_questions: Generates interactive questions based on a provided scenario text and streams the output JSON.
+POST /grc/generate_question: Generates a GRC (Governance, Risk, Compliance) question based on category and difficulty (uses Celery, non-streaming).
+POST /grc/stream_question: Generates a GRC question based on category and difficulty and streams the output JSON chunk by chunk.
+POST /xploit/generate_payload: Generates a conceptual exploit payload based on a given vulnerability and optional evasion technique, with streaming support.
+POST /analogy/generate_analogy: Generates an analogy comparing cybersecurity concepts based on type and input concepts (uses Celery, non-streaming, likely legacy).
+POST /analogy/stream_analogy: Generates an analogy comparing cybersecurity concepts and streams the output text chunk by chunk.
+
+
+# Subscription Routes 
 
 POST /subscription/create-checkout-session: Creates a Stripe Checkout session for starting a new subscription purchase.
 GET /subscription/config: Returns public Stripe configuration details (publishable key, price ID).
@@ -68,9 +84,7 @@ POST /subscription/restore-purchases: Handles requests from the mobile app to re
 POST /subscription/apple-webhook: Listens for and processes incoming Server-to-Server notifications from Apple about subscription events (renewals, expirations, etc.).
 GET /subscription/apple-webhook: A simple endpoint for Apple to verify the webhook URL during setup.
 
------------------
-
-# Support Routes (support_bp, prefix /support)
+# Support Routes 
 
 GET /support/my-chat: Retrieves a list of all support chat threads initiated by the currently authenticated user.
 POST /support/my-chat: Creates a new support chat thread for the authenticated user.
@@ -78,9 +92,7 @@ GET /support/my-chat/{thread_id}: Retrieves the messages and details for a speci
 POST /support/my-chat/{thread_id}: Allows the authenticated user to post a message to one of their specific support threads.
 POST /support/my-chat/{thread_id}/close: Allows the authenticated user to mark their own support thread as closed.
 
------------
-
-# Cracked Admin Routes (cracked_bp, prefix /cracked)
+# Cracked Admin Routes 
 
 GET /cracked/request-logs/nginx: (Admin) Retrieves recent Nginx access logs.
 GET /cracked/request-logs: (Admin) Retrieves recent API request logs recorded by the application.
@@ -122,11 +134,6 @@ PUT /cracked/tests/{test_id}/update-name: (Admin) Specifically updates the name 
 GET /cracked-health-check: (Admin) Performs a live health check on the API and database connectivity.
 GET /cracked/server-metrics: (Admin) Retrieves current server resource usage statistics (CPU, RAM, Disk, Network, Processes).
 GET /cracked/rate-limits: (Admin) Displays current rate limit usage across different endpoints and users/IPs.
-
-------------
-
-# Admin Newsletter Routes (admin_news_bp, assumed prefix /cracked/newsletter)
-
 POST /cracked/newsletter/create: (Admin) Creates a new draft newsletter campaign. (Requires supervisor role)
 GET /cracked/newsletter/{campaign_id}: (Admin) Retrieves the details (title, content, status) of a specific newsletter campaign.
 POST /cracked/newsletter/send/{campaign_id}: (Admin) Sends a specific newsletter campaign to all active subscribers. (Requires supervisor role)
@@ -134,52 +141,20 @@ GET /cracked/newsletter/subscribers: (Admin) Retrieves a list of all email addre
 GET /cracked/newsletter/campaigns: (Admin) Retrieves a list of all created newsletter campaigns.
 DELETE /cracked/newsletter/{campaign_id}: (Admin) Deletes a newsletter campaign. (Requires supervisor role)
 
-----------------
-
-# Public Newsletter Routes (newsletter_bp, assumed prefix /newsletter)
+# Public Newsletter Routes 
 
 POST /newsletter/subscribe: Allows a user to subscribe their email address to the newsletter list.
 POST /newsletter/unsubscribe: Allows a user to unsubscribe their email address using the email itself.
 GET /newsletter/unsubscribe/{token}: Allows a user to unsubscribe using a unique token, typically clicked from a link in an email.
 
------------------
-
-# Password Reset Routes (password_reset_bp, assumed prefix /password-reset)
+# Password Reset Routes 
 
 POST /password-reset/request-reset: Initiates the password reset process by sending a reset link to the provided email (if registered).
 GET /password-reset/verify-token/{token}: Checks if a given password reset token is valid and not expired.
 POST /password-reset/reset-password: Resets the user's password using a valid token and the new password provided.
 
-
-----------------
-
-# Contact Form Routes (contact_bp, assumed prefix /contact)
+# Contact Form Routes 
 
 POST /contact/submit: Handles submissions from the public contact form, sending the message to support and saving it.
 
----------------
-# Scenario Generation Routes (scenario_bp, assumed prefix /scenario)
-
-POST /scenario/stream_scenario: Generates a security scenario based on input parameters (industry, attack type, etc.) and streams the output text.
-POST /scenario/stream_questions: Generates interactive questions based on a provided scenario text and streams the output JSON.
-
----------------
-
-# GRC Question Routes (grc_bp, assumed prefix /grc)
-
-POST /grc/generate_question: Generates a GRC (Governance, Risk, Compliance) question based on category and difficulty (uses Celery, non-streaming).
-POST /grc/stream_question: Generates a GRC question based on category and difficulty and streams the output JSON chunk by chunk.
-
---------------------
-
-# XploitCraft Routes (xploit_bp, assumed prefix /xploit)
-
-POST /xploit/generate_payload: Generates a conceptual exploit payload based on a given vulnerability and optional evasion technique, with streaming support.
-
--------------------
-
-# Analogy Generation Routes (analogy_bp, assumed prefix /analogy)
-
-POST /analogy/generate_analogy: Generates an analogy comparing cybersecurity concepts based on type and input concepts (uses Celery, non-streaming, likely legacy).
-POST /analogy/stream_analogy: Generates an analogy comparing cybersecurity concepts and streams the output text chunk by chunk.
 ```
