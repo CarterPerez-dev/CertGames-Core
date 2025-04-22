@@ -183,6 +183,8 @@ def generate_default_examples():
     # Phishing emails
     examples.append({
         "type": "email",
+        "name": "Bank of America Security Alert",
+        "reason": "Uses a deceptive domain 'bankofamerica-secure.com' instead of the official bankofamerica.com domain.",
         "from": "security@bankofamerica-secure.com",
         "subject": "URGENT: Your Account Has Been Compromised",
         "body": "Dear Valued Customer,\n\nWe have detected suspicious activity on your account. Your account has been temporarily limited.\n\nTo remove the limitation, please verify your information by clicking the link below:\n\nhttps://secure-bankofamerica.com.verify-identity.net/login\n\nIgnoring this message will result in permanent account suspension.\n\nSincerely,\nBank of America Security Team",
@@ -193,6 +195,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "email",
+        "name": "Netflix Payment Declined Scam",
+        "reason": "Uses a fake domain 'netflix-billing.com' rather than netflix.com and creates urgency to update payment information.",
         "from": "accounts@netflix-billing.com",
         "subject": "Netflix Payment Declined - Action Required",
         "body": "Dear Netflix Customer,\n\nWe were unable to process your payment for your Netflix subscription. To avoid service interruption, please update your payment information immediately.\n\nUpdate Payment Method: https://netflix-account-verify.com/update-payment\n\nIf you do not update your payment information within 24 hours, your account will be suspended.\n\nThank you,\nNetflix Billing Team",
@@ -203,6 +207,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "email",
+        "name": "Microsoft 365 Account Suspension",
+        "reason": "Uses an unofficial domain 'microsoft365.support' and creates urgency with account deletion threats.",
         "from": "helpdesk@microsoft365.support",
         "subject": "Your Microsoft 365 account will be suspended",
         "body": "Your Microsoft 365 subscription has expired.\n\nTo continue using Microsoft Office 365 services, you must verify your account information. Otherwise, your account will be deleted within 24 hours.\n\nVerify Account: https://office365-verification-center.com/verify\n\nThank you,\nMicrosoft Support Team",
@@ -214,6 +220,8 @@ def generate_default_examples():
     # Legitimate emails
     examples.append({
         "type": "email",
+        "name": "Amazon Order Confirmation",
+        "reason": "Uses the official amazon.com domain and includes specific order details without requiring urgent action.",
         "from": "no-reply@amazon.com",
         "subject": "Your Amazon Order #112-3426789-9214568",
         "body": "Hello John Doe,\n\nThank you for your order. We'll send a confirmation when your item ships.\n\nDetails:\nOrder #112-3426789-9214568\nPlaced on March 16, 2025\n\nEcho Dot (4th Gen) - Smart speaker with Alexa - Charcoal\nPrice: $29.99\nQuantity: 1\nShipping: FREE Prime Shipping\nEstimated delivery: March 19, 2025\n\nView or manage your order: https://www.amazon.com/orders/112-3426789-9214568\n\nThank you for shopping with us.\nAmazon.com",
@@ -224,6 +232,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "email",
+        "name": "GitHub Security Login Alert",
+        "reason": "Comes from the official github.com domain and includes specific login details with no urgent calls to action.",
         "from": "noreply@github.com",
         "subject": "Security alert: New sign-in to your GitHub account",
         "body": "Hello username,\n\nWe noticed a new sign-in to your GitHub account.\n\nTime: March 15, 2025, 09:42 UTC\nLocation: San Francisco, CA, USA\nDevice: Chrome on Windows\n\nIf this was you, you can disregard this email.\n\nIf this wasn't you, you can secure your account here: https://github.com/settings/security\n\nThanks,\nThe GitHub Team",
@@ -235,6 +245,8 @@ def generate_default_examples():
     # Phishing SMS
     examples.append({
         "type": "sms",
+        "name": "Amazon Account Alert SMS",
+        "reason": "Uses a suspicious shortened URL and creates false urgency about account lockout.",
         "from": "+1-345-678-9012",
         "message": "ALERT: Your Amazon account has been locked due to suspicious activity. Verify your identity here: amzn-secure.com/verify",
         "links": ["amzn-secure.com/verify"],
@@ -243,6 +255,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "sms",
+        "name": "Fake iCloud Deletion Alert",
+        "reason": "Uses a suspicious domain 'secure-icloud.com' rather than the official apple.com domain.",
         "from": "+1-234-567-8910",
         "message": "Apple: Your iCloud account is being deleted. Verify your information to keep your account: secure-icloud.com/verify-now",
         "links": ["secure-icloud.com/verify-now"],
@@ -252,6 +266,8 @@ def generate_default_examples():
     # Legitimate SMS
     examples.append({
         "type": "sms",
+        "name": "Chase Fraud Alert",
+        "reason": "Comes from the official Chase shortcode and doesn't include suspicious links or request personal information.",
         "from": "CHASE",
         "message": "Chase: A charge of $752.25 at APPLE ONLINE STORE was made on your credit card. If not you, call 800-432-3117.",
         "links": [],
@@ -260,6 +276,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "sms",
+        "name": "Amazon OTP Message",
+        "reason": "Sent from an official Amazon shortcode with a one-time password format that doesn't request action or contain links.",
         "from": "887-65",
         "message": "Your Amazon OTP is: 358942. Do not share this code with anyone.",
         "links": [],
@@ -269,6 +287,8 @@ def generate_default_examples():
     # Phishing websites
     examples.append({
         "type": "website",
+        "name": "Fake Facebook Login",
+        "reason": "Uses a misspelled domain 'faceboook-login.com' with an extra 'o' instead of the official facebook.com.",
         "url": "https://faceboook-login.com/",
         "title": "Log into Facebook",
         "content": "Connect with friends and the world around you on Facebook.",
@@ -282,6 +302,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "website",
+        "name": "PayPal Login Impersonation",
+        "reason": "Uses a look-alike domain 'paypaI.com' with a capital 'I' instead of lowercase 'l' in the URL.",
         "url": "https://secure-paypaI.com/signin",
         "title": "PayPal: Login",
         "content": "Login to your PayPal account to manage your money, send payments, and more.",
@@ -296,6 +318,8 @@ def generate_default_examples():
     # Legitimate websites
     examples.append({
         "type": "website",
+        "name": "Apple Store Checkout",
+        "reason": "Uses the official apple.com domain with secure HTTPS and standard payment form fields.",
         "url": "https://www.apple.com/shop/checkout",
         "title": "Apple Store Checkout",
         "content": "Review your bag. Complete your purchase securely with Apple Pay or enter your payment details below.",
@@ -310,6 +334,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "website",
+        "name": "LinkedIn Login Page",
+        "reason": "Uses the official linkedin.com domain with secure HTTPS connection and standard login form.",
         "url": "https://www.linkedin.com/login",
         "title": "LinkedIn Login",
         "content": "Make the most of your professional life. Join your colleagues, classmates, and friends on LinkedIn.",
@@ -326,6 +352,8 @@ def generate_default_examples():
     # 1. App Download Examples
     examples.append({
         "type": "app_download",
+        "name": "Fake Banking App",
+        "reason": "Uses a deceptive developer name 'SecureBankOfficial LLC' and requests excessive permissions like contacts and location.",
         "app_name": "SecureBank Mobile",
         "developer": "SecureBankOfficial LLC",
         "platform": "Google Play",
@@ -344,6 +372,8 @@ def generate_default_examples():
     # Legitimate app example
     examples.append({
         "type": "app_download",
+        "name": "Official Chase Banking App",
+        "reason": "Published by the verified JPMorgan Chase developer with appropriate banking permissions and millions of installs.",
         "app_name": "Chase Mobile",
         "developer": "JPMorgan Chase & Co.",
         "platform": "App Store",
@@ -362,6 +392,8 @@ def generate_default_examples():
     # 2. QR Code Examples
     examples.append({
         "type": "qr_code",
+        "name": "Deceptive Discount QR Code",
+        "reason": "Links to a suspicious domain 'malicious-discount.net' that doesn't match a legitimate retailer website.",
         "title": "Scan for Special Discount",
         "context": "Limited time offer! Scan this QR code to receive a 50% discount on your next purchase.",
         "url": "https://malicious-discount.net/claim?ref=qr1922",
@@ -371,6 +403,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "qr_code",
+        "name": "Fake WiFi Portal",
+        "reason": "Leads to a suspicious domain 'fake-wifi-portal.com' that doesn't match the venue's official website.",
         "title": "Wi-Fi Login",
         "context": "Connect to our guest Wi-Fi network by scanning this QR code.",
         "url": "https://fake-wifi-portal.com/connect?trap=visitor",
@@ -380,6 +414,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "qr_code",
+        "name": "Starbucks Rewards QR",
+        "reason": "Links to the official starbucks.com domain with a legitimate rewards program URL path.",
         "title": "Starbucks Rewards",
         "context": "Scan to join Starbucks Rewards and get a free drink on your birthday!",
         "url": "https://www.starbucks.com/rewards/join",
@@ -390,6 +426,8 @@ def generate_default_examples():
     # 3. Social Media Examples
     examples.append({
         "type": "social_media",
+        "name": "Fake Elon Musk Giveaway",
+        "reason": "Uses a suspicious handle '@elonmusk_giveaway' and promotes a cryptocurrency scam with unrealistic returns.",
         "platform": "Facebook",
         "timestamp": "3 hours ago",
         "sender": "Elon Musk Official",
@@ -405,6 +443,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "social_media",
+        "name": "Fake iPhone Giveaway Post",
+        "reason": "Promotes a too-good-to-be-true free iPhone giveaway with a suspicious non-Apple URL.",
         "platform": "Facebook",
         "timestamp": "Yesterday at 4:15 PM",
         "sender": "Mark Wilson",
@@ -420,6 +460,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "social_media",
+        "name": "National Geographic Earth Day Post",
+        "reason": "Posted by the verified National Geographic account with link to their official domain for a legitimate event.",
         "platform": "Facebook",
         "timestamp": "April 21 at 1:30 PM",
         "sender": "National Geographic",
@@ -436,6 +478,8 @@ def generate_default_examples():
     # 4. Job Offer Examples
     examples.append({
         "type": "job_offer",
+        "name": "Suspicious Remote Job Offer",
+        "reason": "Offers suspiciously high salary for minimal experience and uses a generic company name with a hyphenated domain.",
         "position": "Financial Coordinator - Work From Home",
         "company": "Global Finance Solutions",
         "location": "Remote (Anywhere)",
@@ -453,6 +497,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "job_offer",
+        "name": "Payment Processing Money Mule Scam",
+        "reason": "Red flags include using personal bank account for business transactions and unusually high compensation for simple tasks.",
         "position": "Payment Processing Agent",
         "company": "Swift Money Transfer Inc.",
         "location": "Remote (United States)",
@@ -471,6 +517,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "job_offer",
+        "name": "Adobe Software Engineer Position",
+        "reason": "Lists appropriate qualifications, realistic salary range, and uses the official adobe.com email domain.",
         "position": "Software Engineer - Full Stack",
         "company": "Adobe",
         "location": "San Jose, CA (Hybrid)",
@@ -490,6 +538,8 @@ def generate_default_examples():
     # 5. Tech Support Scam Examples
     examples.append({
         "type": "tech_support",
+        "name": "Fake Virus Alert Popup",
+        "reason": "Creates false urgency with exaggerated threats and asks you to call a suspicious support number.",
         "title": "WARNING: VIRUS DETECTED",
         "alertMessage": "Critical security alert: Your computer has been infected with a Trojan virus. Your personal data and banking information are at risk. Call our security team now to remove the virus and protect your information.",
         "technicalDetails": "Threat detected: Trojan.Malware.Stuxnet.BW4T\nInfected files: 32\nRisk Level: HIGH\nStatus: ACTIVE",
@@ -506,6 +556,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "tech_support",
+        "name": "Fake Windows License Alert",
+        "reason": "Creates false urgency about Windows security and requests an immediate call to a suspicious support number.",
         "title": "System Security Breach",
         "alertMessage": "Your Windows license has expired, and your computer is now vulnerable to security threats. We have detected suspicious activity indicating that your personal data may be compromised. Immediate action is required.",
         "technicalDetails": "Error code: 0x80070426\nWindows Security: DISABLED\nFirewall: COMPROMISED\nSystem scan: 23 THREATS FOUND",
@@ -521,6 +573,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "tech_support",
+        "name": "Adobe Creative Cloud Update",
+        "reason": "Provides specific version information, doesn't create urgency, and directs to official Adobe help resources.",
         "title": "Software Update Available",
         "alertMessage": "A new version of Adobe Creative Cloud is available. Update now to access the latest features and security improvements.",
         "technicalDetails": "Current version: 5.6.2\nNew version: 6.0.1\nUpdate size: 275MB",
@@ -537,6 +591,8 @@ def generate_default_examples():
     # 6. Document Download Examples
     examples.append({
         "type": "document",
+        "name": "Suspicious Invoice with Macros",
+        "reason": "Requires enabling macros (a common malware delivery method) and comes from a suspicious non-corporate domain.",
         "fileName": "Invoice_04873_PaymentRequired.docx",
         "fileType": "Microsoft Word Document",
         "sender": "accounting@generic-supplier.net",
@@ -549,6 +605,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "document",
+        "name": "Suspicious Tax Form with Macros",
+        "reason": "Requests enabling macros in an Excel file supposedly containing sensitive tax information from a suspicious domain.",
         "fileName": "W-2_Tax_Form_2025.xlsm",
         "fileType": "Microsoft Excel Macro-Enabled Workbook",
         "sender": "hr_department@company-payroll.org",
@@ -561,6 +619,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "document",
+        "name": "Company Benefits Guide PDF",
+        "reason": "Standard PDF document from a legitimate corporate domain with expected content formatting and no macro requirements.",
         "fileName": "Company_Benefits_2025.pdf",
         "fileType": "Adobe PDF Document",
         "sender": "hr@acme-corporation.com",
@@ -573,6 +633,8 @@ def generate_default_examples():
     # 7. Payment Confirmation Examples
     examples.append({
         "type": "payment_confirmation",
+        "name": "Fake PayPal Transaction Alert",
+        "reason": "Creates urgency about an unexpected large transaction with a suspicious dispute option.",
         "company": "PayPal",
         "title": "Payment Confirmation",
         "message": "You've sent a payment of $1,499.99 to Tech Gadget Store (techgadgets@marketplace.com). This transaction will appear on your statement as PAYPAL*TECHGADGET.",
@@ -586,6 +648,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "payment_confirmation",
+        "name": "Fake CashApp Transfer Alert",
+        "reason": "Reports a suspicious high-value transaction for an iPhone purchased through CashApp, which isn't typical for such purchases.",
         "company": "CashApp",
         "title": "Money Transfer Complete",
         "message": "You've sent $850.00 to @MarketplaceDeals for 'iPhone 15 Pro - Gray'. The funds have been withdrawn from your linked bank account.",
@@ -599,6 +663,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "payment_confirmation",
+        "name": "Amazon Order Payment Confirmation",
+        "reason": "Contains typical Amazon order information, appropriate transaction ID format, and no urgent dispute requirements.",
         "company": "Amazon",
         "title": "Order Payment Confirmation",
         "message": "Thank you for your order! We've successfully processed your payment for order #112-2548167-2459721. Your items will ship soon.",
@@ -612,6 +678,8 @@ def generate_default_examples():
     # 8. Security Alert Examples
     examples.append({
         "type": "security_alert",
+        "name": "Fake Google Account Alert",
+        "reason": "Creates urgency about suspicious access and includes a suspicious 'Secure Account Now' button.",
         "title": "Account Security Alert",
         "message": "We've detected unusual activity on your Google account. Someone from Kiev, Ukraine (IP: 93.175.24.198) attempted to access your account. If this was not you, your account may be compromised.",
         "details": {
@@ -634,6 +702,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "security_alert",
+        "name": "Fake Credit Card Alert",
+        "reason": "Creates urgency with an unexpected high-value purchase alert requiring immediate verification via suspicious button.",
         "title": "Credit Card Security Notice",
         "message": "Important notification regarding your Mastercard ending in 3845. We've detected an unusual purchase of $899.99 at 'Electronics World' in Los Angeles, CA on April 21, 2025 at 7:23 PM.",
         "details": {
@@ -655,6 +725,8 @@ def generate_default_examples():
     
     examples.append({
         "type": "security_alert",
+        "name": "Microsoft Account Sign-in Alert",
+        "reason": "Provides specific device information without creating urgency and offers legitimate security options.",
         "title": "Sign-in from new device",
         "message": "We noticed a new sign-in to your Microsoft account from a device in Chicago, IL. If this was you, you can ignore this message. If not, we'll help you secure your account.",
         "details": {
