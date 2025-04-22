@@ -7,8 +7,8 @@
   border: 1px solid var(--phishing-border);
   overflow: hidden;
   box-shadow: var(--phishing-shadow);
-  transition: all 0.3s ease;
-  max-height: 500px;
+  transition: all 0.1s ease;
+  max-height: 800px;
   overflow-y: auto;
   position: relative;
 }

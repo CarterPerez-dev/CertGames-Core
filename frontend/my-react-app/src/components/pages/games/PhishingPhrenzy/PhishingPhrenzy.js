@@ -217,7 +217,7 @@ const PhishingPhrenzy = () => {
     startNewGame();
   }, [startNewGame]);
   
-  // Handle answering a question
+  // Handle answering a question - MODIFIED to add time for every correct answer
   const handleAnswer = useCallback((answer) => {
     if (answered || !currentItem || gameState !== 'playing') return;
     
@@ -236,22 +236,27 @@ const PhishingPhrenzy = () => {
     
     if (isCorrect) {
       dispatch(incrementScore(settings.pointsPerCorrect));
+      
+      // MODIFIED: Add time for every correct answer, not just streaks
+      const baseTimeBonus = settings.bonusTime;
+      setTimeLeft(prevTime => prevTime + baseTimeBonus);
+      
       setFeedback({
         type: 'correct',
-        message: `+${settings.pointsPerCorrect} points! ${currentItem.isPhishing ? 'This was phishing!' : 'This was legitimate!'}`
+        message: `+${settings.pointsPerCorrect} points! +${baseTimeBonus}s bonus! ${currentItem.isPhishing ? 'This was phishing!' : 'This was legitimate!'}`
       });
       
-      // Handle streak
+      // Handle streak (additional time bonus for streaks)
       setStreak(prev => {
         const newStreak = prev + 1;
         
-        // Add bonus time if on a streak
+        // MODIFIED: Add EXTRA bonus time if on a streak (on top of the base bonus)
         if (newStreak >= 2) {
-          const bonusTime = Math.min(newStreak, 5) * settings.bonusTime;
-          setTimeLeft(prevTime => prevTime + bonusTime);
+          const streakBonus = Math.min(newStreak - 1, 4) * settings.bonusTime / 2; // Half the bonus per streak level
+          setTimeLeft(prevTime => prevTime + streakBonus);
           setFeedback(prevFeedback => ({
             ...prevFeedback,
-            message: `${prevFeedback.message} Streak bonus: +${bonusTime}s!`
+            message: `${prevFeedback.message} Streak bonus: +${streakBonus.toFixed(1)}s!`
           }));
         }
         
@@ -280,7 +285,7 @@ const PhishingPhrenzy = () => {
         // Ran out of items, end the game
         handleGameOver();
       }
-    }, 1500);
+    }, 750);
   }, [answered, currentItem, gameState, itemIndex, phishingItems, dispatch, settings, handleGameOver]);
   
   const getTimerColor = () => {
@@ -384,6 +389,12 @@ const PhishingPhrenzy = () => {
             <>
               <PhishingCard item={currentItem} />
               
+              {feedback && (
+                <div className={`phishingphrenzy_feedback ${feedback.type}`}>
+                  {feedback.message}
+                </div>
+              )}
+              
               <div className="phishingphrenzy_answer_buttons">
                 <button 
                   className="phishingphrenzy_legitimate_button"
@@ -400,12 +411,6 @@ const PhishingPhrenzy = () => {
                   <FaSkullCrossbones /> Phishing
                 </button>
               </div>
-              
-              {feedback && (
-                <div className={`phishingphrenzy_feedback ${feedback.type}`}>
-                  {feedback.message}
-                </div>
-              )}
             </>
           )}
         </div>
