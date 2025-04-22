@@ -50,16 +50,20 @@ const PhishingPhrenzy = () => {
   const [feedback, setFeedback] = useState(null);
   const [answered, setAnswered] = useState(false);
   const [streak, setStreak] = useState(0);
+  const [showGameOverModal, setShowGameOverModal] = useState(false); // NEW: explicit modal display state
   
   // Refs to prevent multiple calls
   const timerRef = useRef(null);
   const scoreSubmittedRef = useRef(false);
+  const isEndingGameRef = useRef(false); // NEW: ref to track if game ending is in progress
   
   const settings = difficultySettings[difficulty];
   
   // Load phishing examples when component mounts
   useEffect(() => {
-    dispatch(fetchPhishingData());
+    if (phishingItems.length === 0) {
+      dispatch(fetchPhishingData());
+    }
     
     // Clean up on unmount
     return () => {
@@ -67,17 +71,27 @@ const PhishingPhrenzy = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, [dispatch]);
+  }, [dispatch, phishingItems.length]);
   
-  // Handle game over
+  // SIMPLIFIED game over handling - the core fix
   const handleGameOver = useCallback(() => {
-    // Stop the timer
+    if (isEndingGameRef.current) return; // Prevent duplicate calls
+    
+    isEndingGameRef.current = true; // Lock to prevent duplicate calls
+    
+    // First stop the timer
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
     
-    // Only submit score once
+    // Set game state to game over
+    setGameState('gameOver');
+    
+    // Explicitly show the game over modal
+    setShowGameOverModal(true);
+    
+    // Submit score if needed (don't reset anything here)
     if (!scoreSubmittedRef.current && userId) {
       scoreSubmittedRef.current = true;
       
@@ -85,14 +99,8 @@ const PhishingPhrenzy = () => {
         userId,
         score,
         timestamp: new Date().toISOString()
-      }))
-      .then(() => {
-        dispatch(fetchUserData(userId));
-      });
+      }));
     }
-    
-    // Set game state to game over to show the modal
-    setGameState('gameOver');
   }, [dispatch, score, userId]);
   
   // Timer effect
@@ -102,7 +110,8 @@ const PhishingPhrenzy = () => {
       timerRef.current = setInterval(() => {
         setTimeLeft(prevTime => {
           if (prevTime <= 1) {
-            // Time's up
+            clearInterval(timerRef.current);
+            timerRef.current = null;
             handleGameOver();
             return 0;
           }
@@ -110,7 +119,6 @@ const PhishingPhrenzy = () => {
         });
       }, 1000);
     } else if (gameState === 'playing' && timeLeft <= 0) {
-      // Double-check time's up
       handleGameOver();
     }
     
@@ -130,7 +138,9 @@ const PhishingPhrenzy = () => {
     setStreak(0);
     setFeedback(null);
     setAnswered(false);
+    setShowGameOverModal(false); // Hide modal
     scoreSubmittedRef.current = false;
+    isEndingGameRef.current = false; // Reset lock
     
     // Reset Redux state
     dispatch(resetGame());
@@ -144,33 +154,52 @@ const PhishingPhrenzy = () => {
     }
   }, [dispatch, settings.timeLimit, phishingItems]);
   
-  // Handle manual end game
+  // REVISED: Handle manual end game
   const handleEndEarly = useCallback(() => {
+    if (isEndingGameRef.current) return;
+    
     if (window.confirm('Are you sure you want to end the game? Your current score will be submitted.')) {
       handleGameOver();
     }
   }, [handleGameOver]);
   
-  // Handle return to menu
+  // REVISED: Return to menu
   const handleReturnToMenu = useCallback(() => {
-    if (gameState === 'playing' && window.confirm('Are you sure you want to return to the menu? Your progress will be lost.')) {
-      // Clean up
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
+    if (isEndingGameRef.current && gameState !== 'gameOver') return;
+    
+    if (gameState === 'playing' && !isEndingGameRef.current) {
+      if (window.confirm('Are you sure you want to return to the menu? Your progress will be lost.')) {
+        // Clean up
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+        }
+        
+        // Reset state with delay to ensure clean transition
+        setTimeout(() => {
+          setGameState('idle');
+          setShowGameOverModal(false);
+          scoreSubmittedRef.current = false;
+          isEndingGameRef.current = false;
+          dispatch(resetGame());
+        }, 50);
       }
-      
-      // Reset state
-      setGameState('idle');
-      scoreSubmittedRef.current = false;
-      dispatch(resetGame());
     } else if (gameState === 'gameOver') {
-      // Just go back to the start screen
-      setGameState('idle');
-      scoreSubmittedRef.current = false;
-      dispatch(resetGame());
+      // From game over screen, just go back to start
+      setTimeout(() => {
+        setGameState('idle');
+        setShowGameOverModal(false);
+        scoreSubmittedRef.current = false;
+        isEndingGameRef.current = false;
+        dispatch(resetGame());
+      }, 50);
     }
   }, [gameState, dispatch]);
+  
+  // REVISED: Play again handler for the game over modal
+  const handlePlayAgain = useCallback(() => {
+    startNewGame();
+  }, [startNewGame]);
   
   // Handle answering a question
   const handleAnswer = useCallback((answer) => {
@@ -297,6 +326,7 @@ const PhishingPhrenzy = () => {
             <button 
               className="phishingphrenzy_back_button"
               onClick={handleReturnToMenu}
+              disabled={isEndingGameRef.current}
             >
               <FaArrowLeft /> Return to Menu
             </button>
@@ -305,6 +335,7 @@ const PhishingPhrenzy = () => {
               <button 
                 className="phishingphrenzy_end_button"
                 onClick={handleEndEarly}
+                disabled={isEndingGameRef.current}
               >
                 <FaTimesCircle /> End Game
               </button>
@@ -378,13 +409,13 @@ const PhishingPhrenzy = () => {
       {/* Main content area */}
       {renderGameContent()}
       
-      {/* Game Over Modal - only show in gameOver state */}
-      {gameState === 'gameOver' && (
+      {/* Game Over Modal - use explicit state for showing */}
+      {gameState === 'gameOver' && showGameOverModal && (
         <GameOverModal 
           score={score} 
           highScore={highScore}
           onClose={handleReturnToMenu}
-          onPlayAgain={startNewGame}
+          onPlayAgain={handlePlayAgain}
         />
       )}
     </div>

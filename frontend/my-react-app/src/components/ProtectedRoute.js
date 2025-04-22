@@ -46,7 +46,7 @@ const ProtectedRoute = ({ children, requiresPremium = false }) => {
     verifyAccess();
   }, [userId, dispatch, subscriptionActive]);
   
-  if (isChecking || status === 'loading') {
+  if (isChecking || (!userId && status === 'loading')) {
     // Show loading state
     return (
       <div className="loading-container">

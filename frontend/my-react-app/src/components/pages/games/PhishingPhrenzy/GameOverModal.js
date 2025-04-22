@@ -17,6 +17,20 @@ const GameOverModal = ({ score, highScore, onClose, onPlayAgain }) => {
   useEffect(() => {
     // Set a fixed tip when component mounts
     setFixedTip(getPhishingTip());
+    
+    // Create a listener for the escape key to prevent accidental closing
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    
+    document.addEventListener('keydown', handleEscape);
+    
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
   }, []);
   
   const getScoreRating = () => {
@@ -71,24 +85,31 @@ const GameOverModal = ({ score, highScore, onClose, onPlayAgain }) => {
     if (isProcessing) return;
     
     setIsProcessing(true);
-    // Add a small delay to prevent modal flicker
+    
+    // Add a small delay to prevent issues
     setTimeout(() => {
       if (onPlayAgain) onPlayAgain();
-    }, 100);
+    }, 50);
   };
   
   const handleClose = () => {
     if (isProcessing) return;
     
     setIsProcessing(true);
-    // Add a small delay to prevent modal flicker
+    
+    // Add a small delay to prevent issues
     setTimeout(() => {
       if (onClose) onClose();
-    }, 100);
+    }, 50);
+  };
+  
+  // Stop click events from propagating through the modal
+  const handleModalClick = (e) => {
+    e.stopPropagation();
   };
   
   return (
-    <div className="phishingphrenzy_gameover_overlay">
+    <div className="phishingphrenzy_gameover_overlay" onClick={handleModalClick}>
       <div className="phishingphrenzy_gameover_modal">
         <h2 className="phishingphrenzy_gameover_title">Game Over!</h2>
         

@@ -43,7 +43,7 @@ export const submitGameResults = createAsyncThunk(
       const data = await response.json();
       
       // Fetch updated user data to refresh coins/XP
-      dispatch(fetchUserData(userId));
+      await dispatch(fetchUserData(userId));
       
       return data;
     } catch (error) {
@@ -100,7 +100,9 @@ const phishingPhrenzySlice = createSlice({
       state.score = Math.max(0, state.score - action.payload);
     },
     resetGame: (state) => {
-      state.gameStatus = 'idle';
+      // IMPORTANT: Don't reset to 'idle' automatically
+      // This will be done explicitly by the component 
+      // at the right time to avoid race conditions
       state.score = 0;
       // Don't reset phishingItems here to avoid unnecessary refetching
     }
@@ -138,6 +140,9 @@ const phishingPhrenzySlice = createSlice({
         if (action.payload.achievements) {
           state.achievements = action.payload.achievements;
         }
+        
+        // IMPORTANT: DO NOT reset the game state here
+        // This allows the game over modal to remain visible
       })
       .addCase(submitGameResults.rejected, (state, action) => {
         state.loading = false;
