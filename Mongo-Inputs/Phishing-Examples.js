@@ -1,3 +1,4 @@
+Atlas xploitcraft> db.phishingExamples.find();
 [
   {
     _id: ObjectId('6803ec5e2dc40c6452277c76'),
@@ -6,7 +7,7 @@
     subject: 'URGENT: Your Account Has Been Compromised',
     body: 'Dear Valued Customer,\n' +
       '\n' +
-      'We have detected suspicious activity on your account. Your account has been temporarily limited.\n' +                                                                                    
+      'We have detected suspicious activity on your account. Your account has been temporarily limited.\n' +
       '\n' +
       'To remove the limitation, please verify your information by clicking the link below:\n' +
       '\n' +
@@ -1227,5 +1228,533 @@ Atlas xploitcraft> it
     ],
     date: '2025-04-22',
     isPhishing: false
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cf0'),
+    type: 'email',
+    name: 'Remote Work Equipment Reimbursement',
+    reason: "Uses an unofficial domain 'hr-employee-support.net' instead of a legitimate company domain and creates urgency.",                                                                  
+    from: 'hr.reimbursements@hr-employee-support.net',
+    subject: 'URGENT: Submit Remote Work Equipment Reimbursement by EOD',
+    body: 'Dear Employee,\n' +
+      '\n' +
+      'Due to recent audit requirements, all pending remote work equipment reimbursements must be processed before the end of the fiscal quarter.\n' +                                          
+      '\n' +
+      'To expedite your reimbursement, please complete the attached form and submit it along with your receipts through our secure portal by end of day today: https://hr-employee-support.net/reimbursement-claims\n' +                                                                        
+      '\n' +
+      'Any submissions after 5:00 PM will not be processed until next quarter (minimum 90-day delay).\n' +                                                                                      
+      '\n' +
+      'Regards,\n' +
+      'Human Resources\n' +
+      'Employee Support Division',
+    links: [ 'https://hr-employee-support.net/reimbursement-claims' ],
+    date: '2025-04-21',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cf1'),
+    type: 'website',
+    name: 'Major Retailer Gift Card Balance Checker',
+    reason: "Uses a suspicious domain 'gift-card-balance-services.com' instead of the retailer's official website.",                                                                            
+    url: 'https://target-gift-card-balance-services.com/check-balance',
+    title: 'Check Your Target Gift Card Balance',
+    content: 'Enter your Target gift card number and security code below to check your current balance. Our secure system provides instant balance verification for all Target gift cards.',    
+    formFields: [
+      {
+        label: 'Gift Card Number (16 digits)',
+        type: 'text',
+        placeholder: 'XXXX-XXXX-XXXX-XXXX'
+      },
+      {
+        label: 'Security Code (PIN)',
+        type: 'password',
+        placeholder: '8-digit PIN'
+      },
+      {
+        label: 'Email Address (for receipt)',
+        type: 'email',
+        placeholder: 'your@email.com'
+      }
+    ],
+    submitButton: 'Check Balance',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cf2'),
+    type: 'sms',
+    name: 'Streaming Service Payment Failure',
+    reason: 'Uses URL shortener to hide the destination and creates undue urgency with account cancellation threat.',                                                                           
+    from: '+1-833-429-7651',
+    message: 'NETFLIX: We could not process your payment. To avoid service interruption, update your payment info within 24hrs: bit.ly/nflx-payment-update',                                    
+    links: [ 'bit.ly/nflx-payment-update' ],
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cf3'),
+    type: 'app_download',
+    name: 'Fake Investment Portfolio Tracker',
+    reason: 'Requests excessive permissions like contacts and SMS access which are unnecessary for an investment app.',                                                                         
+    app_name: 'InvestTrack Pro',
+    developer: 'Financial Solutions LLC',
+    platform: 'Google Play',
+    rating: '4.4 ★★★★☆',
+    installs: '500K+',
+    description: 'Track your investments in real-time with our comprehensive portfolio management solution. Monitor stocks, ETFs, cryptocurrencies, and more. Get instant alerts for price changes and personalized investment recommendations based on your goals.',                           
+    permissions: [
+      'Internet',
+      'Storage',
+      'Camera',
+      'Contacts',
+      'SMS',
+      'Phone',
+      'Location',
+      'Device Admin'
+    ],
+    reviewHighlights: [
+      {
+        user: 'Robert K.',
+        text: 'Great app, made me 15% returns in just two weeks following the recommendations!',
+        rating: 5
+      },
+      {
+        user: 'Teresa M.',
+        text: 'The interface is clean but it keeps asking for contact access which seems weird.',
+        rating: 3
+      }
+    ],
+    downloadUrl: 'https://play.google.com/store/apps/investtrack-pro',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cf4'),
+    type: 'qr_code',
+    name: 'Conference Wi-Fi Access',
+    reason: "QR code leads to the venue's legitimate website with appropriate security context and proper domain.",                                                                             
+    title: 'Complimentary Conference Wi-Fi',
+    context: 'Scan to connect to the official TechSummit 2025 Wi-Fi network at the San Diego Convention Center.',                                                                               
+    url: 'https://sdconventioncenter.com/wifi-access/techsummit2025',
+    caption: 'Password will be provided after scanning',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cf5'),
+    type: 'social_media',
+    name: 'Fake Limited Edition Sneakers Giveaway',
+    reason: "Uses suspicious handle '@nikeofficialdeals_' with unnecessary underscore and time pressure tactics.",                                                                              
+    platform: 'Facebook',
+    timestamp: '2 hours ago',
+    sender: 'Nike Official Deals',
+    handle: '@nikeofficialdeals_',
+    verified: true,
+    message: "🔥 FLASH 24HR GIVEAWAY 🔥 To celebrate our new collection launch, we're giving away 50 pairs of limited edition Air Jordan 4 'Midnight Blue' (Retail: $350). Simply like, share this post and click the link to claim your size. First 50 participants only, shipping worldwide!  👟 #NikeDrop #AirJordan #Giveaway",                                                             
+    link: 'https://nike-limited-drops.com/giveaway/aj4-midnight',
+    likes: 5782,
+    shares: 3219,
+    comments: 842,
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cf6'),
+    type: 'job_opportunity',
+    name: 'Corporate Legal Assistant Position',
+    reason: 'Posted by legitimate company on their careers page with appropriate qualification requirements.',                                                                                  
+    position: 'Legal Administrative Assistant',
+    company: 'Johnson & Partners Law Firm',
+    location: 'Chicago, IL (Hybrid)',
+    salary: '$55,000 - $65,000 per year',
+    description: 'Johnson & Partners, a mid-sized corporate law firm specializing in intellectual property law, is seeking a detail-oriented Legal Administrative Assistant to join our growing team. This position provides crucial support to our legal professionals while ensuring the smooth operation of our downtown Chicago office.',                                                   
+    requirements: [
+      "Associate's degree or 2+ years of administrative experience in a legal setting",
+      'Proficiency in Microsoft Office Suite, particularly Word and Excel',
+      'Experience with legal document management systems',
+      'Strong organizational skills and attention to detail',
+      'Ability to maintain strict confidentiality'
+    ],
+    applyEmail: 'careers@johnsonpartners-law.com',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cf7'),
+    type: 'tech_support',
+    name: 'Legitimate Windows Security Update',
+    reason: 'Comes from the official Windows Update service with appropriate messaging and no urgency tactics.',                                                                                
+    title: 'Windows Security Update Available',
+    alertMessage: 'Important security updates are available for your device. Installing these updates helps protect your device and keep Windows running smoothly.',                            
+    technicalDetails: 'Windows 11 Version 25H2\n' +
+      'Security Update KB5072039\n' +
+      'Size: 285 MB\n' +
+      'Category: Security Updates\n' +
+      'Developed by: Microsoft',
+    steps: [
+      'Save and close your work before updating',
+      "Select 'Download and install' to begin the update process",
+      'Your device will restart automatically to complete installation',
+      'Installation typically takes 15-20 minutes depending on your device'
+    ],
+    contactInfo: 'For more information about this update, visit support.microsoft.com',
+    actionButton: 'Download and install',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cf8'),
+    type: 'document',
+    name: 'Organization Chart with Malicious Macro',
+    reason: 'Requires enabling macros to view content and comes from an external rather than internal domain.',                                                                                 
+    fileName: 'Company_Org_Chart_2025_Updated.xlsm',
+    fileType: 'Microsoft Excel Macro-Enabled Workbook',
+    sender: 'management@corporate-documents-portal.com',
+    contentsPreview: 'COMPANY ORGANIZATIONAL STRUCTURE - 2025\n' +
+      '\n' +
+      'This document contains the updated organizational chart for fiscal year 2025, including the recent restructuring of the Marketing and R&D departments.\n' +                              
+      '\n' +
+      'To view the complete interactive organizational chart with department breakdowns and reporting lines, please enable macros when prompted.',                                              
+    secured: true,
+    source: 'Email attachment from management@corporate-documents-portal.com',
+    enableButton: 'Enable Content to View Org Chart',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cf9'),
+    type: 'payment_confirmation',
+    name: 'Legitimate Airline Ticket Confirmation',
+    reason: 'Contains appropriate transaction details, official airline domain, and no urgent calls to action.',                                                                                
+    company: 'Delta Air Lines',
+    title: 'Your Ticket Purchase Confirmation',
+    message: 'Thank you for your purchase. Your ticket has been confirmed and your card has been charged. Please find your receipt and ticket information below.',                              
+    transactionId: 'DL-8576291-34',
+    date: 'April 22, 2025 - 10:18 AM',
+    amount: '$428.60 USD',
+    paymentMethod: 'Visa ending in 4873',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cfa'),
+    type: 'security_alert',
+    name: 'Browser Update Security Warning',
+    reason: 'Uses legitimate language with no immediate financial risks or pressure tactics.',
+    title: 'Chrome Browser Security Alert',
+    message: 'Chrome has detected that your browser version (119.0.6045.124) is outdated and contains known security vulnerabilities that could compromise your browsing safety.',              
+    details: {
+      'Browser Version': 'Chrome 119.0.6045.124',
+      'Latest Version': 'Chrome 124.0.6367.73',
+      'Vulnerability Level': 'High',
+      Status: 'Update Available',
+      Released: 'April 15, 2025'
+    },
+    actions: [
+      'Update your browser to the latest version to protect your data',
+      'Enable automatic updates for future security patches',
+      'Restart your browser after updating'
+    ],
+    referenceId: 'CHR-SEC-83692',
+    actionButton: 'Update Chrome Now',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cfb'),
+    type: 'online_advertisement',
+    name: 'Investment Platform High Return Ad',
+    reason: 'Promise of unrealistic guaranteed returns (12-15% monthly) is a classic investment scam red flag.',                                                                                
+    title: 'Guaranteed 12-15% Monthly Investment Returns',
+    description: 'Join thousands of investors who are earning 12-15% monthly returns with our proprietary AI-powered trading algorithm. No trading experience needed. Start with as little as $250 and watch your money grow.',                                                                 
+    imageText: 'FINANCIAL FREEDOM',
+    displayUrl: 'secure-investment.com',
+    actualUrl: 'https://secure-investment-global-trading.com/signup?ref=ad12',
+    buttonText: 'Start Investing Now',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cfc'),
+    type: 'browser_extension',
+    name: 'SafeKey Password Manager',
+    reason: "Requests excessive permissions including 'read and change all your data' which is unnecessary.",                                                                                   
+    developer: 'SecureKey Solutions',
+    users: '250K+',
+    rating: '★★★★☆',
+    description: 'SafeKey Password Manager helps you create, store, and auto-fill strong, unique passwords for all your online accounts. Our military-grade encryption ensures your passwords are safe while making your online life easier and more secure.',                                  
+    permissions: [
+      'Read and change all your data on the websites you visit',
+      'Display notifications',
+      'Access browser tabs',
+      'Access browser activity during navigation',
+      'Store unlimited amount of client-side data',
+      'Access your browser history',
+      'Access all browser cookies'
+    ],
+    reviewQuote: 'This extension has made logging into sites so much easier! I no longer worry about forgetting my passwords.',                                                                 
+    source: 'Chrome Web Store',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cfd'),
+    type: 'event_invitation',
+    name: 'Professional Networking Conference',
+    reason: 'Uses official conference website domain and includes appropriate venue and speaker details.',                                                                                      
+    title: 'TechConnect 2025: Annual Industry Networking Conference',
+    organizer: 'TechConnect Association',
+    date: 'June 15-17, 2025',
+    time: '8:00 AM - 6:00 PM daily',
+    location: 'Seattle Convention Center',
+    address: '705 Pike Street, Seattle, WA 98101',
+    description: 'Join us for the premier networking event in the tech industry. TechConnect 2025 brings together professionals from startups to Fortune 500 companies for three days of inspiring keynotes, technical workshops, and valuable networking opportunities.',                      
+    speakers: [
+      { name: 'Dr. Amelia Chen', title: 'Chief AI Officer, Microsoft' },
+      { name: 'Rajiv Patel', title: 'Founder & CEO, DataFlow Systems' },
+      {
+        name: 'Sarah Johnson',
+        title: 'Director of Engineering, Google'
+      }
+    ],
+    price: '$899 (Early Bird until May 1)',
+    registerText: 'Register Now',
+    registrationUrl: 'https://techconnect2025.org/register',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cfe'),
+    type: 'survey',
+    name: 'Fake Electronics Store Gift Card Survey',
+    reason: 'Offers unusually high reward for minimal effort and uses a non-official domain that mimics BestBuy.',                                                                              
+    title: 'Customer Satisfaction Survey - Win a $750 Gift Card!',
+    sponsoredBy: 'BestBuy Customer Rewards Program',
+    description: "We value your feedback! Complete this 2-minute survey about your recent shopping experience at Best Buy and you'll be automatically entered to win one of ten $750 Best Buy gift cards. Your opinions help us improve our service and product offerings.",                    
+    timeRequired: '2 minutes',
+    questionCount: '5',
+    reward: '$750 Best Buy Gift Card',
+    sampleQuestion: 'How would you rate your overall shopping experience at Best Buy?',
+    sampleOptions: [ 'Excellent', 'Good', 'Average', 'Poor', 'Very Poor' ],
+    disclaimer: 'Winners will be notified by email within 24 hours. Gift card will be sent electronically after verification.',                                                                 
+    buttonText: 'Begin Survey',
+    url: 'https://customer-surveys-bestbuy.com/gift-card-survey',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544cff'),
+    type: 'wifi_portal',
+    name: 'Airport Lounge WiFi Portal',
+    reason: "Has a legitimate domain matching the airport, standard terms, and doesn't request unusual information.",                                                                           
+    title: 'SFO International Airport - VIP Lounge WiFi',
+    networkName: 'SFO_VIPLounge_Secure',
+    message: 'Welcome to San Francisco International Airport VIP Lounge. Please log in below to access complimentary high-speed WiFi for the duration of your stay.',                           
+    loginMethod: 'credentials',
+    skipPassword: false,
+    requiresAgreement: true,
+    footerText: 'This service is provided exclusively for VIP Lounge guests. Connection valid for 12 hours.',                                                                                   
+    buttonText: 'Connect',
+    portalUrl: 'wifi.flysfo.com/vip-lounge',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544d00'),
+    type: 'certificate_error',
+    name: 'Legitimate SSL Certificate Expiration Warning',
+    reason: 'Provides accurate technical details about certificate expiration without suspicious request elements.',                                                                            
+    title: 'Your connection is not fully secure',
+    message: 'The security certificate for this site has expired. This might mean someone is trying to trick you or intercept your data.',                                                      
+    errorDetails: 'SSL_ERROR_EXPIRED_CERT',
+    url: 'https://old-corporate-intranet.company.net',
+    helpList: [
+      'You can continue to the site, but it might not be secure',
+      'Report this issue to your IT department',
+      'Return to the previous page'
+    ],
+    customMessage: 'This appears to be an older company intranet site with an expired SSL certificate. If you need to access this resource, contact IT at helpdesk@company.com for assistance.',
+    proceedText: 'Proceed anyway (unsafe)',
+    isPhishing: false
   }
 ]
+Type "it" for more
+Atlas xploitcraft> it
+[
+  {
+    _id: ObjectId('6807a8e435322b21ba544d01'),
+    type: 'software_update',
+    name: 'Fake Antivirus Update Alert',
+    reason: "Uses generic malware threats and a domain that doesn't match the actual antivirus company.",                                                                                       
+    title: 'Critical McAfee Antivirus Update',
+    message: 'Your McAfee Antivirus protection requires an urgent security update to defend against newly discovered ransomware threats targeting home users.',                                 
+    currentVersion: '16.2.54',
+    newVersion: '16.5.79',
+    size: '64.3 MB',
+    releaseNotes: 'This critical security update protects against the recently discovered Darklock Ransomware that has affected over 50,000 home users in the past 48 hours. The update includes enhanced ransomware rollback capabilities and improved real-time scanning algorithms.',        
+    warningMessage: 'Your system is currently vulnerable to 3 high-severity threats. Update now to ensure protection.',                                                                         
+    laterText: 'Remind me later',
+    updateText: 'Update Now',
+    downloadSource: 'mcafee-secure-updates.com/update-center',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544d02'),
+    type: 'puzzle_game',
+    name: 'Seasonal Shopping Giveaway Game',
+    reason: 'Uses high-value prizes with artificial scarcity and urgency to motivate personal information sharing.',                                                                            
+    title: 'Holiday Shopping Spree Giveaway',
+    message: "Congratulations! You've been randomly selected to participate in our Holiday Shopping Spree Giveaway!",                                                                           
+    challenge: 'Find the hidden gift box in this image to win one of our premium prizes:',
+    prizes: [
+      'Apple MacBook Pro 16"',
+      '$500 Amazon Gift Card',
+      'Sony PlayStation 5 Bundle',
+      'Bose Noise Cancelling Headphones'
+    ],
+    timeRemaining: '04:59',
+    attemptsRemaining: '2',
+    terms: 'Prize will be shipped after verification of your shipping and contact information.',
+    playButtonText: 'Unwrap Your Prize',
+    gameUrl: 'holiday-rewards-center.com/giveaway',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544d03'),
+    type: 'video_conference',
+    name: 'Legitimate Team Project Update Meeting',
+    reason: 'Contains proper company domain in emails and standard meeting software information.',                                                                                              
+    platform: 'Microsoft Teams',
+    title: 'Quarterly Project Status Update',
+    organizer: 'Jennifer Roberts',
+    organizerEmail: 'j.roberts@acme-industries.com',
+    topic: 'Q2 Project Status Review - Marketing Dashboard',
+    time: 'April 25, 2025, 2:00 PM - 3:30 PM EDT',
+    duration: '90 minutes',
+    meetingLink: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_NzIyNjFjYTAtNDRjYS00N2UxLWJjYzYtYmQzYzNiMTYxNTFk%40thread.v2/0',                                                       
+    meetingId: '957 423 186 47',
+    passcode: '925361',
+    joinButtonText: 'Join Teams Meeting',
+    note: 'Please review the project documentation before the meeting.',
+    hostDomain: 'teams.microsoft.com',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544d04'),
+    type: 'file_sharing',
+    name: 'Tax Filing Assistance Program Document Share',
+    reason: 'Uses a fraudulent tax service domain rather than legitimate accounting or government websites.',                                                                                   
+    platform: 'Document Portal',
+    title: 'Tax Filing Assistance Documents',
+    userName: 'Thomas Reynolds',
+    userEmail: 'treynolds@tax-filing-assistance.net',
+    message: "I've shared the tax assistance program documents you requested. These forms will help you claim the maximum eligible deductions and credits for your 2024 filing. Please complete and return them as soon as possible so we can proceed with your application.",                  
+    fileName: 'Tax_Assistance_Program_Forms_2024.pdf',
+    fileSize: '3.4 MB',
+    fileType: 'PDF Document',
+    expirationPeriod: '5 days',
+    buttonText: 'Download Documents',
+    fileUrl: 'https://docs-tax-assistance.net/secure/TR7392',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544d05'),
+    type: 'bank_alert',
+    name: 'Genuine Unusual Account Activity Alert',
+    reason: 'Comes from official bank domain with appropriate security measures and no urgent payment requests.',                                                                               
+    bankName: 'Chase Banking Alert',
+    alertMessage: "We've detected unusual activity on your Chase account",
+    message: "We noticed a sign-in to your Chase Mobile app from a device we don't recognize. If this wasn't you, please secure your account immediately.",                                     
+    alertType: 'Unusual Sign-in Activity',
+    accountNumber: '****8724',
+    dateDetected: 'April 22, 2025 - 3:42 PM ET',
+    status: 'Action Required',
+    actionText: "If you don't recognize this activity, please sign in to your account on chase.com (not through this email) and update your security settings. You can also call the number on the back of your card.",                                                                         
+    url: 'https://chase.com/account/security',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544d06'),
+    type: 'crypto_investment',
+    name: 'New Blockchain Technology Limited-Time Offer',
+    reason: 'Promises unrealistic returns with artificial scarcity tactics and overly enthusiastic testimonials.',                                                                              
+    platform: 'NextGen Crypto Investments',
+    title: 'Exclusive Early Access: Quantum Blockchain Technology',
+    subtitle: 'Limited Spots Available for Early Investors',
+    opportunityTitle: 'Revolutionary Investment Opportunity',
+    opportunityText: "Our proprietary Quantum Blockchain technology has consistently delivered 28-35% returns monthly for our private investors. For the first time, we're opening access to just 100 qualified public investors with a minimum investment of only $1,000.",                    
+    testimonials: [
+      {
+        text: "I've made over $45,000 in just 4 months with minimal effort. This technology is revolutionary and the team is incredibly responsive!",                                           
+        author: 'Michael D., Toronto'
+      },
+      {
+        text: "After trying multiple crypto platforms, NextGen's Quantum Blockchain has outperformed everything else in my portfolio by 300%. Truly life-changing.",                            
+        author: 'Elena S., Miami'
+      }
+    ],
+    actionButton: 'Secure Your Position Now',
+    disclaimer: 'Only 17 spots remaining. Offer closes in 24 hours.',
+    url: 'https://quantum-blockchain-invest.io/exclusive-offer',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544d07'),
+    type: 'account_verification',
+    name: 'Legitimate University Portal Password Reset',
+    reason: 'Uses the official university domain and follows standard security practices for password resets.',                                                                                 
+    serviceName: 'Stanford University IT Services',
+    message: 'Your Stanford University account password will expire in 7 days. To maintain uninterrupted access to university resources, please update your password before the expiration date.',                                                                                              
+    statusMessage: 'Password Expiration: April 29, 2025',
+    steps: [
+      {
+        stepNumber: '1',
+        stepText: 'Visit the official Stanford University IT portal at accounts.stanford.edu'
+      },
+      {
+        stepNumber: '2',
+        stepText: 'Log in with your current credentials'
+      },
+      {
+        stepNumber: '3',
+        stepText: "Navigate to 'Security Settings' and select 'Change Password'"
+      },
+      {
+        stepNumber: '4',
+        stepText: 'Follow the prompts to create a new password that meets our security requirements'                                                                                            
+      }
+    ],
+    deadline: 'Please complete this process before April 29, 2025. After this date, you will need to contact the IT Help Desk to regain access.',                                               
+    buttonText: 'Go to Stanford IT Portal',
+    url: 'https://accounts.stanford.edu',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544d08'),
+    type: 'charity_donation',
+    name: 'Hurricane Relief Donation Campaign',
+    reason: 'Uses professional design with appropriate donation options and an official charity domain.',                                                                                       
+    charityName: 'American Red Cross',
+    slogan: 'Help Hurricane Survivors Rebuild',
+    appealMessage: 'Hurricane Maria has devastated communities across the southeastern United States, leaving thousands without homes, power, or access to clean water. Your donation today provides emergency shelter, food, comfort, and hope to families affected by this catastrophic storm.',                                                                                              
+    donate: {
+      donateTitle: 'Provide Critical Relief Today',
+      amounts: [ '$50', '$100', '$250', '$500' ]
+    },
+    customAmount: { customLabel: 'Other Amount:', customPlaceholder: 'Enter amount' },
+    button: 'Donate Now',
+    secure: 'Secure donation processing',
+    url: 'https://www.redcross.org/hurricane-maria-relief',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807a8e435322b21ba544d09'),
+    type: 'membership_renewal',
+    name: 'Fitness Club Membership Expiration Notice',
+    reason: 'Contains specific membership details without suspicious discount offers or unusual payment methods.',                                                                              
+    serviceName: 'FitLife Fitness Centers',
+    message: 'Your FitLife Premium Membership is about to expire. To ensure uninterrupted access to all facilities and benefits, please renew your membership before the expiration date.',     
+    statusMessage: 'Membership Status: Expiring in 5 days',
+    memberId: 'FL-9238475',
+    currentPlan: 'Premium Annual Membership',
+    expirationDate: 'April 27, 2025',
+    renewalPrice: '$599.99/year',
+    benefits: [
+      'Unlimited 24/7 access to all FitLife locations nationwide',
+      'Complimentary fitness assessment and personalized workout plan quarterly',
+      'Free access to all premium group fitness classes',
+      'Guest passes (12 per year)',
+      'Dedicated locker and towel service'
+    ],
+    buttonText: 'Renew Membership',
+    secure: 'Secure payment processing',
+    url: 'https://members.fitlifecenters.com/renew',
+    isPhishing: false
+  }
+]
+
