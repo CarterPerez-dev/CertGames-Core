@@ -1,7 +1,7 @@
-/* Enhanced PhishingCard.css with theme compatibility and new phishing types */
+/* PhishingCard.css with theme compatibility and phishing types 2-5.css seperate */
 /* Original card styles -11 to -2 */
 /* From PhishingCard.css to PhishingCard5.css we have 35 unique styles/css....dont ask me why it starts at -11 */
-/* Original card styles (keep these) */
+/* This css file also contains our @media, mobile, responsiveness etc. for all PhishingCard.css's  */
 .phishingphrenzy_card_container {
   background-color: var(--phishing-bg-card);
   border-radius: 12px;
@@ -1037,6 +1037,617 @@
   font-weight: 500;
   cursor: not-allowed;
 }
+
+/* Comprehensive Media Queries for PhishingCard Components */
+
+/* Larger Screens (Tablets) */
+@media (max-width: 992px) {
+  /* General card container adjustments */
+  .phishingphrenzy_card_container {
+    max-height: 500px;
+  }
+  
+  /* Cloud plans need more space on smaller screens */
+  .phishingphrenzy_cloud_plan {
+    min-width: 140px;
+  }
+  
+  /* Adjust charity donation buttons */
+  .phishingphrenzy_charity_amount_buttons {
+    flex-wrap: wrap;
+  }
+  
+  /* Adjust lottery sections */
+  .phishingphrenzy_lottery_details,
+  .phishingphrenzy_lottery_instructions {
+    padding: 12px;
+  }
+}
+
+/* Medium Screens (Tablets and Large Phones) */
+@media (max-width: 768px) {
+  /* General card container adjustments */
+  .phishingphrenzy_card_container {
+    max-height: 450px;
+  }
+  
+  /* Email styles */
+  .phishingphrenzy_email_body,
+  .phishingphrenzy_modern_email_body,
+  .phishingphrenzy_website_preview {
+    min-height: 120px;
+  }
+  
+  .phishingphrenzy_modern_email_sender {
+    flex-wrap: wrap;
+  }
+  
+  .phishingphrenzy_modern_email_footer {
+    overflow-x: auto;
+  }
+  
+  /* SMS styles */
+  .phishingphrenzy_sms_message {
+    max-width: 90%;
+  }
+  
+  /* App Download styles */
+  .phishingphrenzy_app_header {
+    flex-direction: column;
+  }
+  
+  .phishingphrenzy_permissions_list {
+    flex-wrap: wrap;
+  }
+  
+  /* QR Code styles */
+  .phishingphrenzy_qr_image {
+    width: 150px;
+    height: 150px;
+  }
+  
+  /* Social Media styles */
+  .phishingphrenzy_social_interactions {
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  /* Job Offer styles */
+  .phishingphrenzy_job_header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .phishingphrenzy_job_action {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Tech Support styles */
+  .phishingphrenzy_popup_footer {
+    flex-direction: column;
+  }
+  
+  .phishingphrenzy_popup_buttons {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* Document styles */
+  .phishingphrenzy_document_footer {
+    flex-direction: column;
+  }
+  
+  .phishingphrenzy_document_source {
+    margin-bottom: 10px;
+  }
+  
+  .phishingphrenzy_document_buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  /* Payment styles */
+  .phishingphrenzy_payment_buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .phishingphrenzy_payment_button {
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Security Alert styles */
+  .phishingphrenzy_security_footer {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .phishingphrenzy_security_buttons {
+    width: 100%;
+  }
+  
+  .phishingphrenzy_security_button {
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Advertisement styles */
+  .phishingphrenzy_ad_content {
+    flex-direction: column;
+  }
+  
+  .phishingphrenzy_ad_image {
+    width: 100%;
+    max-height: 150px;
+  }
+  
+  /* Browser Extension styles */
+  .phishingphrenzy_extension_header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  /* Event styles */
+  .phishingphrenzy_event_registration {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .phishingphrenzy_event_register_button {
+    width: 100%;
+  }
+  
+  /* Survey styles */
+  .phishingphrenzy_survey_details {
+    flex-direction: column;
+  }
+  
+  /* WiFi Portal styles */
+  .phishingphrenzy_wifi_header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .phishingphrenzy_wifi_social_buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .phishingphrenzy_wifi_social_button {
+    width: 100%;
+  }
+  
+  /* Certificate Error styles */
+  .phishingphrenzy_certificate_footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .phishingphrenzy_certificate_back_button,
+  .phishingphrenzy_certificate_advanced_button,
+  .phishingphrenzy_certificate_proceed_button {
+    width: 100%;
+  }
+  
+  /* Software Update styles */
+  .phishingphrenzy_update_buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .phishingphrenzy_update_later_button,
+  .phishingphrenzy_update_now_button {
+    width: 100%;
+  }
+  
+  /* Puzzle Game styles */
+  .phishingphrenzy_puzzle_participation {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .phishingphrenzy_puzzle_play_button {
+    width: 100%;
+  }
+  
+  /* Video Conference styles */
+  .phishingphrenzy_conference_organizer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  /* File Sharing styles */
+  .phishingphrenzy_file_sharing_user_info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  /* Bank Notification styles */
+  .phishingphrenzy_bank_buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .phishingphrenzy_bank_button {
+    width: 100%;
+  }
+  
+  /* Crypto Investment styles */
+  .phishingphrenzy_crypto_stats {
+    flex-direction: column;
+  }
+  
+  /* Account Verification styles */
+  .phishingphrenzy_verification_step {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  /* Lottery Winner styles */
+  .phishingphrenzy_lottery_details .phishingphrenzy_lottery_detail {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  /* Charity Donation styles */
+  .phishingphrenzy_charity_plans {
+    flex-direction: column;
+  }
+  
+  /* Package Delivery styles */
+  .phishingphrenzy_package_detail {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  /* Cloud Storage styles */
+  .phishingphrenzy_cloud_plans {
+    flex-direction: column;
+  }
+  
+  .phishingphrenzy_cloud_plan {
+    width: 100%;
+  }
+  
+  /* Dating Profile styles */
+  .phishingphrenzy_dating_profile_section {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .phishingphrenzy_dating_profile_pic {
+    margin-bottom: 10px;
+  }
+  
+  /* Review Request styles */
+  .phishingphrenzy_review_product {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .phishingphrenzy_review_product_image {
+    margin-bottom: 10px;
+  }
+  
+  /* Medical Alert styles */
+  .phishingphrenzy_medical_patient_row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  /* Membership Renewal styles */
+  .phishingphrenzy_membership_detail {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  /* News Alert styles */
+  .phishingphrenzy_news_breaking {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .phishingphrenzy_news_actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  /* Government Notice styles */
+  .phishingphrenzy_government_recipient_row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Small Screens (Phones) */
+@media (max-width: 576px) {
+  /* General container adjustments */
+  .phishingphrenzy_card_container {
+    max-height: 400px;
+  }
+  
+  .phishingphrenzy_card_header {
+    padding: 10px;
+  }
+  
+  .phishingphrenzy_card_type {
+    font-size: 1rem;
+  }
+  
+  .phishingphrenzy_card_content {
+    padding: 12px;
+  }
+  
+  /* Email styles */
+  .phishingphrenzy_email_header,
+  .phishingphrenzy_modern_email_sender {
+    padding: 12px;
+  }
+  
+  .phishingphrenzy_email_body,
+  .phishingphrenzy_modern_email_body {
+    padding: 15px;
+    min-height: 100px;
+  }
+  
+  .phishingphrenzy_email_from, 
+  .phishingphrenzy_email_subject, 
+  .phishingphrenzy_email_date {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .phishingphrenzy_email_from strong, 
+  .phishingphrenzy_email_subject strong, 
+  .phishingphrenzy_email_date strong {
+    min-width: auto;
+    margin-bottom: 2px;
+  }
+  
+  /* Website styles */
+  .phishingphrenzy_website_url {
+    font-size: 0.8rem;
+  }
+  
+  .phishingphrenzy_website_header h3 {
+    font-size: 1rem;
+  }
+  
+  .phishingphrenzy_website_content {
+    padding: 15px;
+  }
+  
+  .phishingphrenzy_form_field {
+    margin-bottom: 8px;
+  }
+  
+  /* SMS styles */
+  .phishingphrenzy_sms_message {
+    max-width: 95%;
+  }
+  
+  /* App Download styles */
+  .phishingphrenzy_app_reviews {
+    padding: 12px;
+  }
+  
+  .phishingphrenzy_app_name {
+    font-size: 1.1rem;
+  }
+  
+  /* QR Code styles */
+  .phishingphrenzy_qr_image {
+    width: 130px;
+    height: 130px;
+  }
+  
+  .phishingphrenzy_qr_title {
+    font-size: 1.2rem;
+  }
+  
+  /* Social Media styles */
+  .phishingphrenzy_social_profile {
+    padding: 0 12px;
+  }
+  
+  .phishingphrenzy_social_message {
+    padding: 0 12px 12px;
+  }
+  
+  /* Tech Support styles */
+  .phishingphrenzy_technical_details {
+    padding: 10px;
+  }
+  
+  .phishingphrenzy_popup_title {
+    font-size: 1rem;
+  }
+  
+  /* Document styles */
+  .phishingphrenzy_document_button {
+    padding: 8px 12px;
+  }
+  
+  .phishingphrenzy_document_name {
+    font-size: 1rem;
+  }
+  
+  /* Security Alert styles */
+  .phishingphrenzy_security_detail_item {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .phishingphrenzy_security_detail_key,
+  .phishingphrenzy_security_detail_value {
+    width: 100%;
+  }
+  
+  /* Additional card types */
+  .phishingphrenzy_crypto_testimonial {
+    padding: 12px;
+  }
+  
+  .phishingphrenzy_lottery_amount {
+    font-size: 1.6rem;
+  }
+  
+  .phishingphrenzy_charity_amount_button {
+    padding: 8px 12px;
+  }
+  
+  .phishingphrenzy_review_stars .phishingphrenzy_review_star {
+    font-size: 1.8rem;
+  }
+  
+  .phishingphrenzy_medical_alert_box {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .phishingphrenzy_government_notice_title {
+    font-size: 1.1rem;
+  }
+}
+
+/* Extra Small Screens */
+@media (max-width: 480px) {
+  /* General container */
+  .phishingphrenzy_card_container {
+    max-height: 350px;
+  }
+  
+  .phishingphrenzy_card_icon {
+    font-size: 1.2rem;
+  }
+  
+  .phishingphrenzy_card_type {
+    font-size: 0.9rem;
+  }
+  
+  .phishingphrenzy_card_instruction {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+  
+  /* Email styles */
+  .phishingphrenzy_modern_email_subject {
+    font-size: 1rem;
+    padding: 12px 15px;
+  }
+  
+  .phishingphrenzy_modern_email_date {
+    margin-top: 10px;
+    width: 100%;
+    text-align: right;
+  }
+  
+  /* Website styles */
+  .phishingphrenzy_form_submit {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+  
+  /* Job Offer styles */
+  .phishingphrenzy_job_position {
+    font-size: 1.1rem;
+  }
+  
+  /* Dating Profile styles */
+  .phishingphrenzy_dating_profile_pic {
+    width: 80px;
+    height: 80px;
+  }
+  
+  /* Membership Renewal styles */
+  .phishingphrenzy_membership_benefits_title {
+    font-size: 0.9rem;
+  }
+  
+  /* News Alert styles */
+  .phishingphrenzy_news_breaking_label {
+    font-size: 0.75rem;
+  }
+  
+  .phishingphrenzy_news_breaking_text {
+    font-size: 1rem;
+  }
+  
+  /* All buttons in the components */
+  .phishingphrenzy_form_submit,
+  .phishingphrenzy_document_button,
+  .phishingphrenzy_payment_button,
+  .phishingphrenzy_security_button,
+  .phishingphrenzy_ad_button,
+  .phishingphrenzy_extension_button,
+  .phishingphrenzy_event_register_button,
+  .phishingphrenzy_survey_button,
+  .phishingphrenzy_wifi_button,
+  .phishingphrenzy_certificate_back_button,
+  .phishingphrenzy_certificate_advanced_button,
+  .phishingphrenzy_certificate_proceed_button,
+  .phishingphrenzy_update_later_button,
+  .phishingphrenzy_update_now_button,
+  .phishingphrenzy_puzzle_play_button,
+  .phishingphrenzy_conference_join_button,
+  .phishingphrenzy_file_sharing_button,
+  .phishingphrenzy_bank_button,
+  .phishingphrenzy_crypto_action_button,
+  .phishingphrenzy_verification_button,
+  .phishingphrenzy_lottery_button,
+  .phishingphrenzy_charity_button,
+  .phishingphrenzy_package_button,
+  .phishingphrenzy_cloud_button,
+  .phishingphrenzy_dating_button,
+  .phishingphrenzy_review_button,
+  .phishingphrenzy_medical_button,
+  .phishingphrenzy_membership_button,
+  .phishingphrenzy_news_button,
+  .phishingphrenzy_government_button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Custom heights for different screen widths */
+@media (max-height: 700px) {
+  .phishingphrenzy_card_container {
+    max-height: 300px;
+  }
+}
+
+@media (max-height: 600px) {
+  .phishingphrenzy_card_container {
+    max-height: 250px;
+  }
+}
+
+/* Printing styles */
+@media print {
+  .phishingphrenzy_card_container {
+    max-height: none !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+  
+  .phishingphrenzy_card_header {
+    background: #f5f5f5 !important;
+    color: #333 !important;
+    print-color-adjust: exact;
+  }
+  
+  .phishingphrenzy_card_instruction {
+    display: none !important;
+  }
+}
+
+
 
 
 /* Media queries for responsive design */
