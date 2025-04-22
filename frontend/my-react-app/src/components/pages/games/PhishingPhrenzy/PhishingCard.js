@@ -21,12 +21,36 @@ import {
   FaCalendarAlt,
   FaCertificate,
   FaPuzzlePiece,
-  FaVideoCamera,
+  FaCamera,
   FaShareAlt,
   FaMicrochip,
-  FaLock
+  FaLock,
+  FaUniversity,
+  FaBitcoin,
+  FaChartLine,
+  FaShieldAlt,
+  FaTrophy,
+  FaHandHoldingHeart,
+  FaShippingFast,
+  FaCloud,
+  FaHeart,
+  FaUser,
+  FaCheckCircle,
+  FaStar,
+  FaBox,
+  FaGift,
+  FaHospital,
+  FaClipboardCheck,
+  FaIdCard,
+  FaNewspaper,
+  FaBookmark,
+  FaClock,
+  FaExclamationCircle,
+  FaMoneyCheckAlt,
+  FaGamepad,  
 } from 'react-icons/fa';
 import './PhishingCard.css';
+import cardTypeNames from './cardTypeNames.js';
 
 const PhishingCard = ({ item }) => {
   if (!item) return null;
@@ -909,7 +933,7 @@ const PhishingCard = ({ item }) => {
           <div className="phishingphrenzy_puzzle">
             <div className="phishingphrenzy_puzzle_header">
               <div className="phishingphrenzy_puzzle_icon">
-                <FaPuzzlePiece />
+                <FaGamepad />
               </div>
               <div className="phishingphrenzy_puzzle_title">
                 {item.title || "Win a Prize!"}
@@ -980,7 +1004,7 @@ const PhishingCard = ({ item }) => {
                   <img src={item.logo} alt="Conference platform logo" />
                 ) : (
                   <div className="phishingphrenzy_conference_logo_placeholder">
-                    <FaVideoCamera />
+                    <FaCamera />
                   </div>
                 )}
               </div>
@@ -1176,8 +1200,981 @@ const PhishingCard = ({ item }) => {
           </div>
         );
       
-      // Adding more
+      case 'bank_notification':
+        return (
+          <div className="phishingphrenzy_bank_notification">
+            <div className="phishingphrenzy_bank_header">
+              <div className="phishingphrenzy_bank_logo">
+                <div className="phishingphrenzy_bank_logo_placeholder">B</div>
+              </div>
+              <div className="phishingphrenzy_bank_title">
+                {item.bankName || "Online Banking Alert"}
+              </div>
+            </div>
+            <div className="phishingphrenzy_bank_body">
+              <div className="phishingphrenzy_bank_alert">
+                <div className="phishingphrenzy_bank_alert_icon">
+                  <FaExclamationTriangle />
+                </div>
+                <div className="phishingphrenzy_bank_alert_text">
+                  {item.alertMessage || "Important account notification requires your attention."}
+                </div>
+              </div>
+              <div className="phishingphrenzy_bank_message">
+                {item.message || "We have detected unusual activity on your account that requires verification. Please review the details below and take action to secure your account."}
+              </div>
+              <div className="phishingphrenzy_bank_details">
+                <div className="phishingphrenzy_bank_detail">
+                  <div className="phishingphrenzy_bank_detail_label">Account Number:</div>
+                  <div className="phishingphrenzy_bank_detail_value">{item.accountNumber || "XXXX-XXXX-XXXX-3857"}</div>
+                </div>
+                <div className="phishingphrenzy_bank_detail">
+                  <div className="phishingphrenzy_bank_detail_label">Alert Type:</div>
+                  <div className="phishingphrenzy_bank_detail_value">{item.alertType || "Security Verification"}</div>
+                </div>
+                <div className="phishingphrenzy_bank_detail">
+                  <div className="phishingphrenzy_bank_detail_label">Date Detected:</div>
+                  <div className="phishingphrenzy_bank_detail_value">{item.dateDetected || "April 22, 2025"}</div>
+                </div>
+                <div className="phishingphrenzy_bank_detail">
+                  <div className="phishingphrenzy_bank_detail_label">Status:</div>
+                  <div className="phishingphrenzy_bank_detail_value">{item.status || "Pending Verification"}</div>
+                </div>
+              </div>
+              <div className="phishingphrenzy_bank_actions">
+                <div className="phishingphrenzy_bank_action_message">
+                  Please verify your identity to maintain full access to your online banking services.
+                </div>
+                <div className="phishingphrenzy_bank_buttons">
+                  <button className="phishingphrenzy_bank_button primary" disabled>
+                    Verify Identity
+                  </button>
+                  <button className="phishingphrenzy_bank_button secondary" disabled>
+                    Contact Support
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="phishingphrenzy_bank_footer">
+              <div className="phishingphrenzy_bank_footer_text">
+                For security reasons, this notification will expire in 24 hours.
+              </div>
+              <div className="phishingphrenzy_bank_url">
+                {item.url || "https://secure-bank-verify.com/auth/login"}
+              </div>
+            </div>
+          </div>
+        );
       
+      case 'crypto_investment':
+        return (
+          <div className="phishingphrenzy_crypto_investment">
+            <div className="phishingphrenzy_crypto_header">
+              <div className="phishingphrenzy_crypto_logo">
+                <FaBitcoin />
+              </div>
+              <div className="phishingphrenzy_crypto_title">
+                {item.platform || "CryptoWealth Investments"}
+              </div>
+              <div className="phishingphrenzy_crypto_subtitle">
+                {item.slogan || "The Future of Financial Freedom"}
+              </div>
+            </div>
+            <div className="phishingphrenzy_crypto_body">
+              <div className="phishingphrenzy_crypto_opportunity">
+                <div className="phishingphrenzy_crypto_opportunity_title">
+                  <span className="phishingphrenzy_crypto_opportunity_icon">
+                    <FaChartLine />
+                  </span>
+                  {item.opportunityTitle || "Exclusive Investment Opportunity"}
+                </div>
+                <div className="phishingphrenzy_crypto_opportunity_text">
+                  {item.opportunityText || "Our proprietary trading algorithm has consistently delivered 35% monthly returns for our investors. For a limited time, we're opening access to our platform for select new investors with a minimum investment of only $500."}
+                </div>
+              </div>
+              <div className="phishingphrenzy_crypto_stats">
+                <div className="phishingphrenzy_crypto_stat">
+                  <div className="phishingphrenzy_crypto_stat_value">35%</div>
+                  <div className="phishingphrenzy_crypto_stat_label">Monthly Return</div>
+                </div>
+                <div className="phishingphrenzy_crypto_stat">
+                  <div className="phishingphrenzy_crypto_stat_value">$500</div>
+                  <div className="phishingphrenzy_crypto_stat_label">Min Investment</div>
+                </div>
+                <div className="phishingphrenzy_crypto_stat">
+                  <div className="phishingphrenzy_crypto_stat_value">24/7</div>
+                  <div className="phishingphrenzy_crypto_stat_label">Live Support</div>
+                </div>
+              </div>
+              <div className="phishingphrenzy_crypto_testimonials">
+                <div className="phishingphrenzy_crypto_testimonials_title">
+                  What Our Investors Say
+                </div>
+                <div className="phishingphrenzy_crypto_testimonial">
+                  <div className="phishingphrenzy_crypto_testimonial_text">
+                    "I invested $2,000 just 3 months ago and have already made over $7,000 in profits. This platform changed my life!"
+                  </div>
+                  <div className="phishingphrenzy_crypto_testimonial_author">
+                    - James R., London
+                  </div>
+                </div>
+                <div className="phishingphrenzy_crypto_testimonial">
+                  <div className="phishingphrenzy_crypto_testimonial_text">
+                    "After trying multiple crypto platforms, this is the only one that consistently delivers results. 10/10 would recommend."
+                  </div>
+                  <div className="phishingphrenzy_crypto_testimonial_author">
+                    - Sarah M., Toronto
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="phishingphrenzy_crypto_action">
+              <button className="phishingphrenzy_crypto_action_button" disabled>
+                Start Investing Now
+              </button>
+              <div className="phishingphrenzy_crypto_disclaimer">
+                Limited spots available. Offer ends in 24 hours.
+              </div>
+              <div className="phishingphrenzy_crypto_url">
+                {item.url || "https://crypto-wealth-platform.io/special-offer"}
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'account_verification':
+        return (
+          <div className="phishingphrenzy_account_verification">
+            <div className="phishingphrenzy_verification_header">
+              <div className="phishingphrenzy_verification_logo">
+                <div className="phishingphrenzy_verification_logo_placeholder">
+                  <FaShieldAlt />
+                </div>
+              </div>
+              <div className="phishingphrenzy_verification_title">
+                {item.serviceName || "Account Verification Required"}
+              </div>
+            </div>
+            <div className="phishingphrenzy_verification_body">
+              <div className="phishingphrenzy_verification_message">
+                {item.message || "For your security, we need to verify your account information to ensure continued access to all services. This verification is required by updated security protocols."}
+              </div>
+              <div className="phishingphrenzy_verification_status">
+                <div className="phishingphrenzy_verification_status_icon">
+                  <FaExclamationCircle />
+                </div>
+                <div className="phishingphrenzy_verification_status_text">
+                  {item.statusMessage || "Your account access will be limited until verification is completed."}
+                </div>
+              </div>
+              <div className="phishingphrenzy_verification_steps">
+                <div className="phishingphrenzy_verification_steps_title">
+                  Complete These Steps to Verify Your Account:
+                </div>
+                <div className="phishingphrenzy_verification_step">
+                  <div className="phishingphrenzy_verification_step_number">1</div>
+                  <div className="phishingphrenzy_verification_step_text">
+                    Click the "Verify Account" button below to access the secure verification portal.
+                  </div>
+                </div>
+                <div className="phishingphrenzy_verification_step">
+                  <div className="phishingphrenzy_verification_step_number">2</div>
+                  <div className="phishingphrenzy_verification_step_text">
+                    Sign in with your existing credentials.
+                  </div>
+                </div>
+                <div className="phishingphrenzy_verification_step">
+                  <div className="phishingphrenzy_verification_step_number">3</div>
+                  <div className="phishingphrenzy_verification_step_text">
+                    Confirm your personal information and update if necessary.
+                  </div>
+                </div>
+                <div className="phishingphrenzy_verification_step">
+                  <div className="phishingphrenzy_verification_step_number">4</div>
+                  <div className="phishingphrenzy_verification_step_text">
+                    Complete the security questions and verification process.
+                  </div>
+                </div>
+              </div>
+              <div className="phishingphrenzy_verification_deadline">
+                <div className="phishingphrenzy_verification_deadline_icon">
+                  <FaClock />
+                </div>
+                <div className="phishingphrenzy_verification_deadline_text">
+                  {item.deadline || "This verification request expires in 48 hours. After this period, account limitations may be applied."}
+                </div>
+              </div>
+            </div>
+            <div className="phishingphrenzy_verification_footer">
+              <button className="phishingphrenzy_verification_button" disabled>
+                Verify Account Now
+              </button>
+              <div className="phishingphrenzy_verification_note">
+                Verification typically takes less than 5 minutes to complete.
+              </div>
+              <div className="phishingphrenzy_verification_url">
+                {item.url || "https://account-verification-secure.com/verify"}
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'lottery_winner':
+        return (
+          <div className="phishingphrenzy_lottery_winner">
+            <div className="phishingphrenzy_lottery_header">
+              <div className="phishingphrenzy_lottery_logo">
+                <FaTrophy />
+              </div>
+              <div className="phishingphrenzy_lottery_title">
+                {item.lotteryName || "International Lottery Commission"}
+              </div>
+              <div className="phishingphrenzy_lottery_subtitle">
+                {item.subtitle || "Official Winner Notification"}
+              </div>
+            </div>
+            <div className="phishingphrenzy_lottery_body">
+              <div className="phishingphrenzy_lottery_congratulations">
+                <div className="phishingphrenzy_lottery_congrats_title">
+                  Congratulations!
+                </div>
+                <div className="phishingphrenzy_lottery_congrats_text">
+                  {item.congratsMessage || "Your email address has been selected as a winner in our international electronic lottery draw held on April 15, 2025."}
+                </div>
+                <div className="phishingphrenzy_lottery_amount">
+                  {item.prizeAmount || "$1,500,000.00 USD"}
+                </div>
+              </div>
+              <div className="phishingphrenzy_lottery_details">
+                <div className="phishingphrenzy_lottery_details_title">
+                  Winner Details:
+                </div>
+                <div className="phishingphrenzy_lottery_detail">
+                  <div className="phishingphrenzy_lottery_detail_label">Reference Number:</div>
+                  <div className="phishingphrenzy_lottery_detail_value">{item.referenceNumber || "ILC/92735/2025"}</div>
+                </div>
+                <div className="phishingphrenzy_lottery_detail">
+                  <div className="phishingphrenzy_lottery_detail_label">Batch Number:</div>
+                  <div className="phishingphrenzy_lottery_detail_value">{item.batchNumber || "BN/173/8926/ILC"}</div>
+                </div>
+                <div className="phishingphrenzy_lottery_detail">
+                  <div className="phishingphrenzy_lottery_detail_label">Draw Date:</div>
+                  <div className="phishingphrenzy_lottery_detail_value">{item.drawDate || "April 15, 2025"}</div>
+                </div>
+                <div className="phishingphrenzy_lottery_detail">
+                  <div className="phishingphrenzy_lottery_detail_label">Winner Number:</div>
+                  <div className="phishingphrenzy_lottery_detail_value">{item.winnerNumber || "23 out of 50 winners"}</div>
+                </div>
+              </div>
+              <div className="phishingphrenzy_lottery_instructions">
+                <div className="phishingphrenzy_lottery_instructions_title">
+                  To Claim Your Prize:
+                </div>
+                <ol className="phishingphrenzy_lottery_instructions_list">
+                  <li className="phishingphrenzy_lottery_instructions_item">
+                    Contact our claims agent immediately with your reference number.
+                  </li>
+                  <li className="phishingphrenzy_lottery_instructions_item">
+                    Complete the verification process to confirm your identity.
+                  </li>
+                  <li className="phishingphrenzy_lottery_instructions_item">
+                    Provide necessary information for prize transfer to your bank account.
+                  </li>
+                  <li className="phishingphrenzy_lottery_instructions_item">
+                    Keep your winning information confidential for security purposes.
+                  </li>
+                </ol>
+                <div className="phishingphrenzy_lottery_warning">
+                  Your prize must be claimed within 14 days or it will be forfeited.
+                </div>
+              </div>
+            </div>
+            <div className="phishingphrenzy_lottery_footer">
+              <button className="phishingphrenzy_lottery_button" disabled>
+                Claim Your Prize Now
+              </button>
+              <div className="phishingphrenzy_lottery_disclaimer">
+                A processing fee of $93.50 may apply to verify international transfers.
+              </div>
+              <div className="phishingphrenzy_lottery_url">
+                {item.url || "https://intl-lottery-commission.org/claim-prize"}
+              </div>
+            </div>
+          </div>
+        );
+      
+          
+          case 'charity_donation':
+            return (
+              <div className="phishingphrenzy_charity_donation">
+                <div className="phishingphrenzy_charity_header">
+                  <div className="phishingphrenzy_charity_logo">
+                    <FaHandHoldingHeart />
+                  </div>
+                  <div className="phishingphrenzy_charity_title">
+                    {item.charityName || "Global Relief Foundation"}
+                  </div>
+                  <div className="phishingphrenzy_charity_subtitle">
+                    {item.slogan || "Help Us Make a Difference Today"}
+                  </div>
+                </div>
+                <div className="phishingphrenzy_charity_body">
+                  <div className="phishingphrenzy_charity_message">
+                    {item.appealMessage || "Our organization is currently responding to a humanitarian crisis affecting millions of people. Your donation today can provide immediate relief to families in desperate need of food, water, shelter, and medical care."}
+                  </div>
+                  <div className="phishingphrenzy_charity_impact">
+                    <div className="phishingphrenzy_charity_impact_item">
+                      <div className="phishingphrenzy_charity_donate">
+                        <div className="phishingphrenzy_charity_donate_title">
+                          Make a Donation Today
+                        </div>
+                        <div className="phishingphrenzy_charity_amount_buttons">
+                          <button className="phishingphrenzy_charity_amount_button" disabled>$10</button>
+                          <button className="phishingphrenzy_charity_amount_button" disabled>$25</button>
+                          <button className="phishingphrenzy_charity_amount_button active" disabled>$50</button>
+                          <button className="phishingphrenzy_charity_amount_button" disabled>$100</button>
+                        </div>
+                        <div className="phishingphrenzy_charity_custom_amount">
+                          <div className="phishingphrenzy_charity_custom_label">Custom Amount:</div>
+                          <input type="text" className="phishingphrenzy_charity_custom_input" placeholder="Enter amount" disabled />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="phishingphrenzy_charity_footer">
+                  <button className="phishingphrenzy_charity_button" disabled>
+                    Donate Now
+                  </button>
+                  <div className="phishingphrenzy_charity_secure">
+                    <span className="phishingphrenzy_charity_secure_icon">
+                      <FaLock />
+                    </span>
+                    Secure donation processing
+                  </div>
+                  <div className="phishingphrenzy_charity_url">
+                    {item.url || "https://global-relief-foundation.org/donate"}
+                  </div>
+                </div>
+              </div>
+            );
+          
+          
+          case 'package_delivery':
+            return (
+              <div className="phishingphrenzy_package_delivery">
+                <div className="phishingphrenzy_package_header">
+                  <div className="phishingphrenzy_package_logo">
+                    <div className="phishingphrenzy_package_logo_placeholder">
+                      <FaShippingFast />
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_package_title">
+                    {item.courierName || "Package Delivery Notification"}
+                  </div>
+                </div>
+                <div className="phishingphrenzy_package_body">
+                  <div className="phishingphrenzy_package_message">
+                    {item.message || "We attempted to deliver your package today but we were unable to complete the delivery due to an incorrect delivery address."}
+                  </div>
+                  <div className="phishingphrenzy_package_status">
+                    <div className="phishingphrenzy_package_status_icon">
+                      <FaExclamationTriangle />
+                    </div>
+                    <div className="phishingphrenzy_package_status_text">
+                      {item.statusMessage || "Action Required: Please update your delivery information to receive your package."}
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_package_details">
+                    <div className="phishingphrenzy_package_details_title">
+                      Shipment Details:
+                    </div>
+                    <div className="phishingphrenzy_package_detail">
+                      <div className="phishingphrenzy_package_detail_label">Tracking Number:</div>
+                      <div className="phishingphrenzy_package_detail_value">{item.trackingNumber || "DX785421936"}</div>
+                    </div>
+                    <div className="phishingphrenzy_package_detail">
+                      <div className="phishingphrenzy_package_detail_label">Delivery Attempt:</div>
+                      <div className="phishingphrenzy_package_detail_value">{item.deliveryAttempt || "April 22, 2025, 10:45 AM"}</div>
+                    </div>
+                    <div className="phishingphrenzy_package_detail">
+                      <div className="phishingphrenzy_package_detail_label">Carrier:</div>
+                      <div className="phishingphrenzy_package_detail_value">{item.carrier || "Express Delivery Service"}</div>
+                    </div>
+                    <div className="phishingphrenzy_package_detail">
+                      <div className="phishingphrenzy_package_detail_label">Status:</div>
+                      <div className="phishingphrenzy_package_detail_value">{item.status || "Delivery Failed - Address Error"}</div>
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_package_actions">
+                    <div className="phishingphrenzy_package_action_message">
+                      Please update your delivery address within 24 hours to schedule redelivery.
+                    </div>
+                    <div className="phishingphrenzy_package_action_note">
+                      After 3 days, your package will be returned to the sender.
+                    </div>
+                  </div>
+                </div>
+                <div className="phishingphrenzy_package_footer">
+                  <button className="phishingphrenzy_package_button" disabled>
+                    Update Delivery Address
+                  </button>
+                  <div className="phishingphrenzy_package_contact">
+                    Customer Support: 1-800-555-0123
+                  </div>
+                  <div className="phishingphrenzy_package_url">
+                    {item.url || "https://delivery-tracking.info/update-address"}
+                  </div>
+                </div>
+              </div>
+            );
+          
+          case 'cloud_storage':
+            return (
+              <div className="phishingphrenzy_cloud_storage">
+                <div className="phishingphrenzy_cloud_header">
+                  <div className="phishingphrenzy_cloud_logo">
+                    <FaCloud />
+                  </div>
+                  <div className="phishingphrenzy_cloud_title">
+                    {item.serviceName || "Cloud Storage Alert"}
+                  </div>
+                </div>
+                <div className="phishingphrenzy_cloud_body">
+                  <div className="phishingphrenzy_cloud_alert">
+                    <div className="phishingphrenzy_cloud_alert_icon">
+                      <FaExclamationCircle />
+                    </div>
+                    <div className="phishingphrenzy_cloud_alert_text">
+                      {item.alertMessage || "Your cloud storage is almost full. You've used 95% of your free storage quota. Upgrade now to prevent data loss and service interruptions."}
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_cloud_usage">
+                    <div className="phishingphrenzy_cloud_usage_title">
+                      Storage Usage:
+                    </div>
+                    <div className="phishingphrenzy_cloud_usage_bar_container">
+                      <div className="phishingphrenzy_cloud_usage_bar"></div>
+                    </div>
+                    <div className="phishingphrenzy_cloud_usage_stats">
+                      <div className="phishingphrenzy_cloud_usage_used">
+                        {item.storageUsed || "19.0 GB used"}
+                      </div>
+                      <div className="phishingphrenzy_cloud_usage_total">
+                        {item.storageTotal || "of 20 GB"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_cloud_upgrade">
+                    <div className="phishingphrenzy_cloud_upgrade_title">
+                      Upgrade Options:
+                    </div>
+                    <div className="phishingphrenzy_cloud_plans">
+                      <div className="phishingphrenzy_cloud_plan">
+                        <div className="phishingphrenzy_cloud_plan_name">Basic</div>
+                        <div className="phishingphrenzy_cloud_plan_storage">100GB</div>
+                        <div className="phishingphrenzy_cloud_plan_price">$1.99/month</div>
+                        <button className="phishingphrenzy_cloud_plan_button" disabled>
+                          Select
+                        </button>
+                      </div>
+                      <div className="phishingphrenzy_cloud_plan phishingphrenzy_cloud_recommended">
+                        <div className="phishingphrenzy_cloud_plan_name">Premium</div>
+                        <div className="phishingphrenzy_cloud_plan_storage">1TB</div>
+                        <div className="phishingphrenzy_cloud_plan_price">$9.99/month</div>
+                        <button className="phishingphrenzy_cloud_plan_button" disabled>
+                          Select
+                        </button>
+                      </div>
+                      <div className="phishingphrenzy_cloud_plan">
+                        <div className="phishingphrenzy_cloud_plan_name">Business</div>
+                        <div className="phishingphrenzy_cloud_plan_storage">5TB</div>
+                        <div className="phishingphrenzy_cloud_plan_price">$29.99/month</div>
+                        <button className="phishingphrenzy_cloud_plan_button" disabled>
+                          Select
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="phishingphrenzy_cloud_footer">
+                  <button className="phishingphrenzy_cloud_button" disabled>
+                    Upgrade Storage Now
+                  </button>
+                  <div className="phishingphrenzy_cloud_secure">
+                    <span className="phishingphrenzy_cloud_secure_icon">
+                      <FaLock />
+                    </span>
+                    Secure payment processing
+                  </div>
+                  <div className="phishingphrenzy_cloud_url">
+                    {item.url || "https://secure-cloud-storage.com/upgrade"}
+                  </div>
+                </div>
+              </div>
+            );
+          
+          case 'dating_profile':
+            return (
+              <div className="phishingphrenzy_dating_profile">
+                <div className="phishingphrenzy_dating_header">
+                  <div className="phishingphrenzy_dating_logo">
+                    <FaHeart />
+                  </div>
+                  <div className="phishingphrenzy_dating_title">
+                    {item.appName || "ConnectMatch"}
+                  </div>
+                </div>
+                <div className="phishingphrenzy_dating_body">
+                  <div className="phishingphrenzy_dating_profile_section">
+                    <div className="phishingphrenzy_dating_profile_pic">
+                      {item.profilePic || <FaUser />}
+                    </div>
+                    <div className="phishingphrenzy_dating_profile_info">
+                      <div className="phishingphrenzy_dating_profile_name">
+                        {item.name || "Jessica, 28"}
+                        <span className="phishingphrenzy_dating_profile_verified">
+                          <FaCheckCircle />
+                        </span>
+                      </div>
+                      <div className="phishingphrenzy_dating_profile_details">
+                        <span className="phishingphrenzy_dating_profile_detail">
+                          {item.location || "2 miles away"}
+                        </span>
+                        <span className="phishingphrenzy_dating_profile_detail">
+                          {item.occupation || "Model / Influencer"}
+                        </span>
+                      </div>
+                      <div className="phishingphrenzy_dating_profile_bio">
+                        {item.bio || "Just moved to this area! Looking to make new friends and maybe find someone special. I love traveling, fitness, and photography. Message me if you want to chat! 😊"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_dating_message_section">
+                    <div className="phishingphrenzy_dating_message">
+                      {item.message || "Hey there! I saw your profile and thought you seemed interesting. I'm fairly new here and don't fully understand how this app works yet. Can we chat on my Instagram instead? It's @jessica_model92 or you can check out my pics here:"} 
+                      <span className="phishingphrenzy_dating_link">{item.link || "https://photo-view.me/jessica92"}</span>
+                      <div className="phishingphrenzy_dating_message_time">
+                        Just now
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="phishingphrenzy_dating_footer">
+                  <div className="phishingphrenzy_dating_reply" disabled>
+                    Type a message...
+                  </div>
+                  <div className="phishingphrenzy_dating_buttons">
+                    <button className="phishingphrenzy_dating_button" disabled>
+                      <FaHeart />
+                    </button>
+                    <button className="phishingphrenzy_dating_button secondary" disabled>
+                      <FaCamera />
+                    </button>
+                  </div>
+                </div>
+                <div className="phishingphrenzy_dating_app_url">
+                  {item.appUrl || "connectmatch-app.com/messages"}
+                </div>
+              </div>
+            );
+          
+          case 'review_request':
+            return (
+              <div className="phishingphrenzy_review_request">
+                <div className="phishingphrenzy_review_header">
+                  <div className="phishingphrenzy_review_logo">
+                    <div className="phishingphrenzy_review_logo_placeholder">
+                      <FaStar />
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_review_title">
+                    {item.storeName || "Product Review Request"}
+                  </div>
+                </div>
+                <div className="phishingphrenzy_review_body">
+                  <div className="phishingphrenzy_review_message">
+                    {item.message || "Thank you for your recent purchase! We would appreciate if you could take a moment to share your feedback. Your review helps other customers make informed decisions and helps us improve our products and services."}
+                  </div>
+                  <div className="phishingphrenzy_review_product">
+                    <div className="phishingphrenzy_review_product_image">
+                      <FaBox />
+                    </div>
+                    <div className="phishingphrenzy_review_product_info">
+                      <div className="phishingphrenzy_review_product_name">
+                        {item.productName || "Premium Wireless Bluetooth Headphones"}
+                      </div>
+                      <div className="phishingphrenzy_review_product_details">
+                        {item.orderDetails || "Order #39285 • Delivered April 18, 2025"}
+                      </div>
+                      <div className="phishingphrenzy_review_product_date">
+                        {item.purchaseDate || "Purchased on April 15, 2025"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_review_stars">
+                    <div className="phishingphrenzy_review_stars_title">
+                      Rate your experience:
+                    </div>
+                    <div className="phishingphrenzy_review_stars_buttons">
+                      <span className="phishingphrenzy_review_star active">★</span>
+                      <span className="phishingphrenzy_review_star active">★</span>
+                      <span className="phishingphrenzy_review_star active">★</span>
+                      <span className="phishingphrenzy_review_star active">★</span>
+                      <span className="phishingphrenzy_review_star">★</span>
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_review_feedback">
+                    <div className="phishingphrenzy_review_feedback_label">
+                      Share your thoughts (optional):
+                    </div>
+                    <textarea 
+                      className="phishingphrenzy_review_feedback_input" 
+                      placeholder="Tell us what you liked or what we can improve..." 
+                      disabled
+                    ></textarea>
+                  </div>
+                  <div className="phishingphrenzy_review_incentive">
+                    <div className="phishingphrenzy_review_incentive_icon">
+                      <FaGift />
+                    </div>
+                    <div className="phishingphrenzy_review_incentive_text">
+                      {item.incentiveText || "As a token of our appreciation, we'll send you a $15 gift card after submitting your review!"}
+                    </div>
+                  </div>
+                </div>
+                <div className="phishingphrenzy_review_footer">
+                  <button className="phishingphrenzy_review_button skip" disabled>
+                    Later
+                  </button>
+                  <button className="phishingphrenzy_review_button submit" disabled>
+                    Submit Review
+                  </button>
+                </div>
+                <div className="phishingphrenzy_review_url">
+                  {item.url || "https://customer-reviews.shop/submit-review?code=RT7392"}
+                </div>
+              </div>
+            );
+          
+          case 'medical_alert':
+            return (
+              <div className="phishingphrenzy_medical_alert">
+                <div className="phishingphrenzy_medical_header">
+                  <div className="phishingphrenzy_medical_logo">
+                    <FaHospital />
+                  </div>
+                  <div className="phishingphrenzy_medical_title">
+                    {item.facilityName || "Medical Center Patient Portal"}
+                  </div>
+                </div>
+                <div className="phishingphrenzy_medical_body">
+                  <div className="phishingphrenzy_medical_alert_box">
+                    <div className="phishingphrenzy_medical_alert_icon">
+                      <FaClipboardCheck />
+                    </div>
+                    <div className="phishingphrenzy_medical_alert_text">
+                      {item.alertMessage || "Important: Your recent laboratory test results are now available for review."}
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_medical_patient">
+                    <div className="phishingphrenzy_medical_patient_title">
+                      Patient Information:
+                    </div>
+                    <div className="phishingphrenzy_medical_patient_info">
+                      <div className="phishingphrenzy_medical_patient_row">
+                        <div className="phishingphrenzy_medical_patient_label">Patient ID:</div>
+                        <div className="phishingphrenzy_medical_patient_value">{item.patientId || "P-78345219"}</div>
+                      </div>
+                      <div className="phishingphrenzy_medical_patient_row">
+                        <div className="phishingphrenzy_medical_patient_label">Name:</div>
+                        <div className="phishingphrenzy_medical_patient_value">{item.patientName || "[Patient Name]"}</div>
+                      </div>
+                      <div className="phishingphrenzy_medical_patient_row">
+                        <div className="phishingphrenzy_medical_patient_label">Test Date:</div>
+                        <div className="phishingphrenzy_medical_patient_value">{item.testDate || "April 15, 2025"}</div>
+                      </div>
+                      <div className="phishingphrenzy_medical_patient_row">
+                        <div className="phishingphrenzy_medical_patient_label">Results Available:</div>
+                        <div className="phishingphrenzy_medical_patient_value">{item.resultsDate || "April 22, 2025"}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_medical_results">
+                    <div className="phishingphrenzy_medical_results_title">
+                      Test Results Summary:
+                    </div>
+                    <div className="phishingphrenzy_medical_results_message">
+                      {item.resultsMessage || "Your recent laboratory test has shown some values outside the normal reference range. These results require timely attention and may require follow-up testing or consultation."}
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_medical_action">
+                    <div className="phishingphrenzy_medical_action_title">
+                      Required Action:
+                    </div>
+                    <div className="phishingphrenzy_medical_action_text">
+                      {item.actionText || "Please log in to your Patient Portal to view your complete test results and recommendations from your healthcare provider. If you have any questions, contact your healthcare provider."}
+                    </div>
+                    <div className="phishingphrenzy_medical_note">
+                      For your privacy, test details cannot be displayed in this message.
+                    </div>
+                  </div>
+                </div>
+                <div className="phishingphrenzy_medical_footer">
+                  <button className="phishingphrenzy_medical_button" disabled>
+                    Access Patient Portal
+                  </button>
+                  <div className="phishingphrenzy_medical_confidential">
+                    CONFIDENTIAL: This message contains protected health information.
+                  </div>
+                  <div className="phishingphrenzy_medical_url">
+                    {item.url || "https://patient-portal-medicalcenter.org/login"}
+                  </div>
+                </div>
+              </div>
+            );
+          
+          case 'membership_renewal':
+            return (
+              <div className="phishingphrenzy_membership_renewal">
+                <div className="phishingphrenzy_membership_header">
+                  <div className="phishingphrenzy_membership_logo">
+                    <div className="phishingphrenzy_membership_logo_placeholder">
+                      <FaIdCard />
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_membership_title">
+                    {item.serviceName || "Premium Membership Renewal"}
+                  </div>
+                </div>
+                <div className="phishingphrenzy_membership_body">
+                  <div className="phishingphrenzy_membership_message">
+                    {item.message || "Your premium membership is about to expire. To ensure uninterrupted access to exclusive benefits and services, please renew your subscription before the expiration date."}
+                  </div>
+                  <div className="phishingphrenzy_membership_status">
+                    <div className="phishingphrenzy_membership_status_icon">
+                      <FaExclamationCircle />
+                    </div>
+                    <div className="phishingphrenzy_membership_status_text">
+                      {item.statusMessage || "Membership Status: Expiring in 3 days"}
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_membership_details">
+                    <div className="phishingphrenzy_membership_details_title">
+                      Membership Information:
+                    </div>
+                    <div className="phishingphrenzy_membership_detail">
+                      <div className="phishingphrenzy_membership_detail_label">Member ID:</div>
+                      <div className="phishingphrenzy_membership_detail_value">{item.memberId || "MEM-7834591"}</div>
+                    </div>
+                    <div className="phishingphrenzy_membership_detail">
+                      <div className="phishingphrenzy_membership_detail_label">Current Plan:</div>
+                      <div className="phishingphrenzy_membership_detail_value">{item.currentPlan || "Premium Annual"}</div>
+                    </div>
+                    <div className="phishingphrenzy_membership_detail">
+                      <div className="phishingphrenzy_membership_detail_label">Expiration Date:</div>
+                      <div className="phishingphrenzy_membership_detail_value">{item.expirationDate || "April 25, 2025"}</div>
+                    </div>
+                    <div className="phishingphrenzy_membership_detail">
+                      <div className="phishingphrenzy_membership_detail_label">Renewal Price:</div>
+                      <div className="phishingphrenzy_membership_detail_value phishingphrenzy_membership_value">{item.renewalPrice || "$99.99/year"}</div>
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_membership_benefits">
+                    <div className="phishingphrenzy_membership_benefits_title">
+                      Premium Benefits You'll Continue to Enjoy:
+                    </div>
+                    <ul className="phishingphrenzy_membership_benefits_list">
+                      <li className="phishingphrenzy_membership_benefit">
+                        Unlimited access to all premium content
+                      </li>
+                      <li className="phishingphrenzy_membership_benefit">
+                        Priority customer support 24/7
+                      </li>
+                      <li className="phishingphrenzy_membership_benefit">
+                        Exclusive member-only discounts and offers
+                      </li>
+                      <li className="phishingphrenzy_membership_benefit">
+                        No advertisements or interruptions
+                      </li>
+                      <li className="phishingphrenzy_membership_benefit">
+                        Early access to new features and content
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="phishingphrenzy_membership_footer">
+                  <button className="phishingphrenzy_membership_button" disabled>
+                    Renew Membership Now
+                  </button>
+                  <div className="phishingphrenzy_membership_secure">
+                    <span className="phishingphrenzy_membership_secure_icon">
+                      <FaLock />
+                    </span>
+                    Secure payment processing
+                  </div>
+                  <div className="phishingphrenzy_membership_url">
+                    {item.url || "https://premium-membership-renewal.com/renew"}
+                  </div>
+                </div>
+              </div>
+            );
+          
+          case 'news_alert':
+            return (
+              <div className="phishingphrenzy_news_alert">
+                <div className="phishingphrenzy_news_header">
+                  <div className="phishingphrenzy_news_logo">
+                    <FaNewspaper />
+                  </div>
+                  <div className="phishingphrenzy_news_title">
+                    {item.newsSource || "Breaking News Alert"}
+                  </div>
+                </div>
+                <div className="phishingphrenzy_news_body">
+                  <div className="phishingphrenzy_news_breaking">
+                    <div className="phishingphrenzy_news_breaking_label">
+                      Breaking
+                    </div>
+                    <div className="phishingphrenzy_news_breaking_text">
+                      {item.headline || "Major Economic Shift Could Affect Your Investments"}
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_news_content">
+                    {item.content || "Financial experts are warning about a significant market correction expected in the coming weeks following recent changes in international trade policies. This shift could potentially affect various investment portfolios, particularly those heavily invested in technology and energy sectors."}
+                  </div>
+                  <div className="phishingphrenzy_news_image">
+                    [News Image Placeholder]
+                  </div>
+                  <div className="phishingphrenzy_news_caption">
+                    {item.imageCaption || "Market analysts discussing the potential impact of new economic policies."}
+                  </div>
+                  <div className="phishingphrenzy_news_more">
+                    <div className="phishingphrenzy_news_more_title">
+                      Read the full analysis:
+                    </div>
+                    <a href="#" onClick={(e) => e.preventDefault()} className="phishingphrenzy_news_more_link">
+                      {item.link || "https://financial-news-alert.com/market-correction-2025"}
+                    </a>
+                  </div>
+                  <div className="phishingphrenzy_news_related">
+                    <div className="phishingphrenzy_news_related_title">
+                      Related Stories:
+                    </div>
+                    <div className="phishingphrenzy_news_related_item">
+                      <div className="phishingphrenzy_news_related_image">
+                        [Img]
+                      </div>
+                      <div className="phishingphrenzy_news_related_text">
+                        How to protect your investments during market volatility
+                      </div>
+                    </div>
+                    <div className="phishingphrenzy_news_related_item">
+                      <div className="phishingphrenzy_news_related_image">
+                        [Img]
+                      </div>
+                      <div className="phishingphrenzy_news_related_text">
+                        Expert advice: Top 5 investment strategies for uncertain times
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="phishingphrenzy_news_footer">
+                  <div className="phishingphrenzy_news_actions">
+                    <button className="phishingphrenzy_news_button" disabled>
+                      <FaShareAlt /> Share
+                    </button>
+                    <button className="phishingphrenzy_news_button secondary" disabled>
+                      <FaBookmark /> Save
+                    </button>
+                  </div>
+                  <div className="phishingphrenzy_news_source">
+                    {item.source || "Source: Financial News Network"}
+                  </div>
+                </div>
+                <div className="phishingphrenzy_news_url">
+                  {item.url || "https://financial-news-alert.com/breaking"}
+                </div>
+              </div>
+            );
+          
+          case 'government_notice':
+            return (
+              <div className="phishingphrenzy_government_notice">
+                <div className="phishingphrenzy_government_header">
+                  <div className="phishingphrenzy_government_logo">
+                    <div className="phishingphrenzy_government_logo_placeholder">
+                      <FaUniversity />
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_government_title">
+                    {item.department || "Department of Treasury"}
+                  </div>
+                </div>
+                <div className="phishingphrenzy_government_body">
+                  <div className="phishingphrenzy_government_notice_header">
+                    <div className="phishingphrenzy_government_notice_title">
+                      {item.noticeTitle || "Official Notice of Action Required"}
+                    </div>
+                    <div className="phishingphrenzy_government_notice_subtitle">
+                      {item.noticeSubtitle || "Reference Number: GOV-2025-78534-TX"}
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_government_recipient">
+                    <div className="phishingphrenzy_government_recipient_title">
+                      Recipient Information:
+                    </div>
+                    <div className="phishingphrenzy_government_recipient_info">
+                      <div className="phishingphrenzy_government_recipient_row">
+                        <div className="phishingphrenzy_government_recipient_label">Name:</div>
+                        <div className="phishingphrenzy_government_recipient_value">{item.recipientName || "[Name]"}</div>
+                      </div>
+                      <div className="phishingphrenzy_government_recipient_row">
+                        <div className="phishingphrenzy_government_recipient_label">Tax ID:</div>
+                        <div className="phishingphrenzy_government_recipient_value">{item.taxId || "XXX-XX-1234"}</div>
+                      </div>
+                      <div className="phishingphrenzy_government_recipient_row">
+                        <div className="phishingphrenzy_government_recipient_label">Notice Date:</div>
+                        <div className="phishingphrenzy_government_recipient_value">{item.noticeDate || "April 22, 2025"}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_government_message">
+                    {item.message || "Our records indicate that you may be eligible for a tax refund of $1,483.27 from your 2024 tax filing. Due to an error in the processing system, this refund was not automatically issued with your original tax return. To claim this refund, you must verify your information through our secure online portal."}
+                  </div>
+                  <div className="phishingphrenzy_government_action">
+                    <div className="phishingphrenzy_government_action_title">
+                      Required Action:
+                    </div>
+                    <div className="phishingphrenzy_government_action_text">
+                      {item.actionText || "Please access our secure verification portal using the button below. You will need to confirm your identity and provide updated direct deposit information to receive your refund."}
+                    </div>
+                  </div>
+                  <div className="phishingphrenzy_government_deadline">
+                    <div className="phishingphrenzy_government_deadline_icon">
+                      <FaClock />
+                    </div>
+                    <div className="phishingphrenzy_government_deadline_text">
+                      {item.deadline || "This notice requires action within 14 days of the notice date. After this period, you may need to file an amended return to claim your refund."}
+                    </div>
+                  </div>
+                </div>
+                <div className="phishingphrenzy_government_footer">
+                  <button className="phishingphrenzy_government_button" disabled>
+                    Verify Identity & Claim Refund
+                  </button>
+                  <div className="phishingphrenzy_government_official">
+                    This is an official government communication. Do not discard.
+                  </div>
+                  <div className="phishingphrenzy_government_url">
+                    {item.url || "https://tax-refund-verification.gov.us/verify"}
+                  </div>
+                </div>
+              </div>
+            );
+              
+      // Adding more in the future
+           
       default:
         return <div>Unknown content type</div>;
     }
@@ -1223,11 +2220,37 @@ const PhishingCard = ({ item }) => {
       case 'software_update':
         return <FaMicrochip className="phishingphrenzy_card_icon" />;
       case 'puzzle_game':
-        return <FaPuzzlePiece className="phishingphrenzy_card_icon" />;
+        return <FaGamepad className="phishingphrenzy_card_icon" />;
       case 'video_conference':
-        return <FaVideoCamera className="phishingphrenzy_card_icon" />;
+        return <FaCamera className="phishingphrenzy_card_icon" />;
       case 'file_sharing':
         return <FaShareAlt className="phishingphrenzy_card_icon" />;
+      case 'bank_notification':
+        return <FaMoneyCheckAlt className="phishingphrenzy_card_icon" />;
+      case 'crypto_investment':
+        return <FaBitcoin className="phishingphrenzy_card_icon" />;
+      case 'account_verification':
+        return <FaShieldAlt className="phishingphrenzy_card_icon" />;
+      case 'lottery_winner':
+        return <FaTrophy className="phishingphrenzy_card_icon" />;
+      case 'charity_donation':
+        return <FaHandHoldingHeart className="phishingphrenzy_card_icon" />;
+      case 'package_delivery':
+        return <FaShippingFast className="phishingphrenzy_card_icon" />;
+      case 'cloud_storage':
+        return <FaCloud className="phishingphrenzy_card_icon" />;
+      case 'dating_profile':
+        return <FaHeart className="phishingphrenzy_card_icon" />;
+      case 'review_request':
+        return <FaStar className="phishingphrenzy_card_icon" />;
+      case 'medical_alert':
+        return <FaHospital className="phishingphrenzy_card_icon" />;
+      case 'membership_renewal':
+        return <FaIdCard className="phishingphrenzy_card_icon" />;
+      case 'news_alert':
+        return <FaNewspaper className="phishingphrenzy_card_icon" />;
+      case 'government_notice':
+        return <FaUniversity className="phishingphrenzy_card_icon" />;
       default:
         return null;
     }
@@ -1238,28 +2261,7 @@ const PhishingCard = ({ item }) => {
       <div className="phishingphrenzy_card_header">
         {getCardIcon()}
         <span className="phishingphrenzy_card_type">
-          {item.type === 'email' ? 'Email Message' : 
-           item.type === 'modern_email' ? 'Email Message' :
-           item.type === 'website' ? 'Website' : 
-           item.type === 'sms' ? 'SMS Message' : 
-           item.type === 'app_download' ? 'App Download' :
-           item.type === 'qr_code' ? 'QR Code' :
-           item.type === 'social_media' ? 'Social Media Post' :
-           item.type === 'job_offer' ? 'Job Opportunity' :
-           item.type === 'tech_support' ? 'Technical Support Alert' :
-           item.type === 'document' ? 'Document Download' :
-           item.type === 'payment_confirmation' ? 'Payment Confirmation' :
-           item.type === 'security_alert' ? 'Security Alert' :
-           item.type === 'advertisement' ? 'Online Advertisement' :
-           item.type === 'browser_extension' ? 'Browser Extension' :
-           item.type === 'event_invitation' ? 'Event Invitation' :
-           item.type === 'survey' ? 'Survey or Quiz' :
-           item.type === 'wifi_portal' ? 'WiFi Login Portal' :
-           item.type === 'certificate_error' ? 'Security Certificate Error' :
-           item.type === 'software_update' ? 'Software Update' :
-           item.type === 'puzzle_game' ? 'Online Game' :
-           item.type === 'video_conference' ? 'Video Meeting Invitation' :
-           item.type === 'file_sharing' ? 'File Sharing Link' : 'Unknown'}
+          {cardTypeNames[item.type] || 'Unknown'}
         </span>
       </div>
       <div className="phishingphrenzy_card_content">

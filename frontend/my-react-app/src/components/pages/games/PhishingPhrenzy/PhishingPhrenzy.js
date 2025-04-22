@@ -8,7 +8,8 @@ import {
   decrementScore, 
   resetGame,
   fetchPhishingData,
-  submitGameResults
+  submitGameResults,
+  clearPhishingItems
 } from '../../store/slice/phishingPhrenzySlice';
 import { fetchUserData } from '../../store/slice/userSlice';
 import PhishingCard from './PhishingCard';
@@ -62,7 +63,7 @@ const PhishingPhrenzy = () => {
   
   const settings = difficultySettings[difficulty];
   
-  // Load phishing examples when component mounts
+  // Load phishing examples when component mounts or when phishingItems is empty
   useEffect(() => {
     if (phishingItems.length === 0 && userId) {
       // Pass userId and increased limit for smart shuffling
@@ -79,6 +80,13 @@ const PhishingPhrenzy = () => {
       }
     };
   }, [dispatch, phishingItems.length, userId]);
+  
+  // New useEffect to set current item when phishingItems change
+  useEffect(() => {
+    if (gameState === 'playing' && phishingItems.length > 0) {
+      setCurrentItem(phishingItems[0]);
+    }
+  }, [phishingItems, gameState]);
   
   // Game over handling
   const handleGameOver = useCallback(() => {
@@ -145,8 +153,11 @@ const PhishingPhrenzy = () => {
     };
   }, [gameState, timeLeft, handleGameOver]);
   
-  // Handle starting a new game
+  // Handle starting a new game - MODIFIED to clear phishing items first
   const startNewGame = useCallback(() => {
+    // First clear the phishing items to force a refetch
+    dispatch(clearPhishingItems());
+    
     // Reset local state
     setGameState('playing');
     setTimeLeft(settings.timeLimit);
@@ -165,11 +176,8 @@ const PhishingPhrenzy = () => {
     // Start the game
     dispatch(startGame());
     
-    // Set the first item
-    if (phishingItems.length > 0) {
-      setCurrentItem(phishingItems[0]);
-    }
-  }, [dispatch, settings.timeLimit, phishingItems]);
+    // The currentItem will be set in the useEffect that watches phishingItems
+  }, [dispatch, settings.timeLimit]);
   
   // Handle manual end game
   const handleEndEarly = useCallback(() => {

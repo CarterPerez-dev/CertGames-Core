@@ -119,6 +119,10 @@ const phishingPhrenzySlice = createSlice({
       // IMPORTANT
       state.score = 0;
       // reset phishingItems avoiding unnecessary refetching
+    },
+    // Add this new action to clear phishing items and force a refetch
+    clearPhishingItems: (state) => {
+      state.phishingItems = [];
     }
   },
   extraReducers: (builder) => {
@@ -165,7 +169,8 @@ export const {
   endGame, 
   incrementScore, 
   decrementScore, 
-  resetGame 
+  resetGame,
+  clearPhishingItems
 } = phishingPhrenzySlice.actions;
 
 export default phishingPhrenzySlice.reducer;

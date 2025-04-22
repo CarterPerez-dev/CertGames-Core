@@ -592,6 +592,4825 @@
   color: #ffd700;
 }
 
+
+/* #12: Bank Notification */
+.phishingphrenzy_bank_notification {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_bank_header {
+  padding: 15px 20px;
+  background-color: #00336a;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_bank_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 6px;
+}
+
+.phishingphrenzy_bank_logo_placeholder {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00336a;
+}
+
+.phishingphrenzy_bank_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+}
+
+.phishingphrenzy_bank_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_bank_alert {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #fff8e1;
+  border-left: 4px solid #ffc107;
+  border-radius: 6px;
+}
+
+.phishingphrenzy_bank_alert_icon {
+  font-size: 1.5rem;
+  color: #ffc107;
+}
+
+.phishingphrenzy_bank_alert_text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.phishingphrenzy_bank_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_bank_details {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_bank_detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_bank_detail:last-child {
+  border-bottom: none;
+}
+
+.phishingphrenzy_bank_detail_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_bank_detail_value {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_bank_actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.phishingphrenzy_bank_action_message {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_bank_buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.phishingphrenzy_bank_button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+}
+
+.phishingphrenzy_bank_button.primary {
+  background-color: #00336a;
+  color: white;
+  border: none;
+}
+
+.phishingphrenzy_bank_button.secondary {
+  background-color: transparent;
+  border: 1px solid #00336a;
+  color: #00336a;
+}
+
+.phishingphrenzy_bank_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.phishingphrenzy_bank_footer_text {
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_bank_url {
+  color: #00336a;
+  word-break: break-all;
+}
+
+/* #13: Crypto Investment */
+.phishingphrenzy_crypto_investment {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_crypto_header {
+  padding: 20px;
+  background: linear-gradient(135deg, #1a237e, #4527a0);
+  color: white;
+  text-align: center;
+}
+
+.phishingphrenzy_crypto_logo {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_crypto_title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.phishingphrenzy_crypto_subtitle {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.phishingphrenzy_crypto_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_crypto_opportunity {
+  background-color: #e8f5e9;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #c8e6c9;
+}
+
+.phishingphrenzy_crypto_opportunity_title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2e7d32;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phishingphrenzy_crypto_opportunity_icon {
+  font-size: 1.3rem;
+}
+
+.phishingphrenzy_crypto_opportunity_text {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_crypto_stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.phishingphrenzy_crypto_stat {
+  flex: 1;
+  min-width: 120px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+}
+
+.phishingphrenzy_crypto_stat_value {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #4527a0;
+  margin-bottom: 5px;
+}
+
+.phishingphrenzy_crypto_stat_label {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_crypto_testimonials {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.phishingphrenzy_crypto_testimonials_title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_crypto_testimonial {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 3px solid #4527a0;
+}
+
+.phishingphrenzy_crypto_testimonial_text {
+  font-size: 0.9rem;
+  color: #333;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_crypto_testimonial_author {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #555;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.phishingphrenzy_crypto_action {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.phishingphrenzy_crypto_action_button {
+  background: linear-gradient(135deg, #4527a0, #7b1fa2);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_crypto_disclaimer {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.phishingphrenzy_crypto_url {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #555;
+  word-break: break-all;
+}
+
+/* #14: Account Verification */
+.phishingphrenzy_account_verification {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_verification_header {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_verification_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_verification_logo_placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #1976d2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.phishingphrenzy_verification_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_verification_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_verification_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_verification_status {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #ffebee;
+  border-radius: 6px;
+  border: 1px solid #ffcdd2;
+}
+
+.phishingphrenzy_verification_status_icon {
+  font-size: 1.5rem;
+  color: #f44336;
+}
+
+.phishingphrenzy_verification_status_text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.phishingphrenzy_verification_steps {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_verification_steps_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_verification_step {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_verification_step:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.phishingphrenzy_verification_step_number {
+  width: 24px;
+  height: 24px;
+  background-color: #1976d2;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.phishingphrenzy_verification_step_text {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+.phishingphrenzy_verification_deadline {
+  background-color: #fff3e0;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #ffe0b2;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_verification_deadline_icon {
+  font-size: 1.3rem;
+  color: #ff9800;
+}
+
+.phishingphrenzy_verification_deadline_text {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_verification_footer {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+}
+
+.phishingphrenzy_verification_button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_verification_note {
+  font-size: 0.85rem;
+  color: #777;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.phishingphrenzy_verification_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 5px;
+  word-break: break-all;
+}
+
+/* #15: Lottery Winner */
+.phishingphrenzy_lottery_winner {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_lottery_header {
+  padding: 20px;
+  background: linear-gradient(135deg, #fbc02d, #f57f17);
+  text-align: center;
+  color: white;
+}
+
+.phishingphrenzy_lottery_logo {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_lottery_title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.phishingphrenzy_lottery_subtitle {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.phishingphrenzy_lottery_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_lottery_congratulations {
+  text-align: center;
+  padding: 20px;
+  background-color: #fff8e1;
+  border-radius: 8px;
+  border: 2px dashed #fbc02d;
+}
+
+.phishingphrenzy_lottery_congrats_title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f57f17;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.phishingphrenzy_lottery_congrats_text {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_lottery_amount {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f57f17;
+  margin: 15px 0;
+}
+
+.phishingphrenzy_lottery_details {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_lottery_details_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_lottery_detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_lottery_detail:last-child {
+  border-bottom: none;
+}
+
+.phishingphrenzy_lottery_detail_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_lottery_detail_value {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_lottery_instructions {
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_lottery_instructions_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_lottery_instructions_list {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.phishingphrenzy_lottery_instructions_item {
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.phishingphrenzy_lottery_warning {
+  font-size: 0.9rem;
+  color: #f44336;
+  margin-top: 15px;
+  font-weight: 500;
+}
+
+.phishingphrenzy_lottery_footer {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.phishingphrenzy_lottery_button {
+  background: linear-gradient(135deg, #fbc02d, #f57f17);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: not-allowed;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.phishingphrenzy_lottery_disclaimer {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.phishingphrenzy_lottery_url {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 10px;
+  word-break: break-all;
+}
+
+/* #16: Charity Donation */
+.phishingphrenzy_charity_donation {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_charity_header {
+  padding: 20px;
+  background: linear-gradient(135deg, #43a047, #1b5e20);
+  text-align: center;
+  color: white;
+}
+
+.phishingphrenzy_charity_logo {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_charity_title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.phishingphrenzy_charity_subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.phishingphrenzy_charity_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_charity_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_charity_impact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.phishingphrenzy_charity_impact_item {
+  flex: 1;
+  min-width: 120px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+}
+
+.phishingphrenzy_charity_impact_value {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #43a047;
+  margin-bottom: 5px;
+}
+
+.phishingphrenzy_charity_impact_label {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_charity_story {
+  background-color: #e8f5e9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #c8e6c9;
+}
+
+.phishingphrenzy_charity_story_title {
+  font-weight: 600;
+  color: #2e7d32;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_charity_story_content {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.phishingphrenzy_charity_donate {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_charity_donate_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.phishingphrenzy_charity_amount_buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_charity_amount_button {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+  flex: 1;
+  min-width: 80px;
+  text-align: center;
+}
+
+.phishingphrenzy_charity_amount_button.active {
+  background-color: #43a047;
+  border-color: #2e7d32;
+  color: white;
+}
+
+.phishingphrenzy_charity_custom_amount {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_charity_custom_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_charity_custom_input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_charity_footer {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.phishingphrenzy_charity_button {
+  background: linear-gradient(135deg, #43a047, #2e7d32);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_charity_secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_charity_secure_icon {
+  font-size: 1rem;
+  color: #43a047;
+}
+
+.phishingphrenzy_charity_url {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 10px;
+  word-break: break-all;
+}
+
+/* #17: Package Delivery */
+.phishingphrenzy_package_delivery {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_package_header {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_package_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_package_logo_placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #ff5722;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.phishingphrenzy_package_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_package_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_package_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_package_status {
+  background-color: #fff3e0;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #ffe0b2;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_package_status_icon {
+  font-size: 1.5rem;
+  color: #ff9800;
+}
+
+.phishingphrenzy_package_status_text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_package_details {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_package_details_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_package_detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_package_detail:last-child {
+  border-bottom: none;
+}
+
+.phishingphrenzy_package_detail_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_package_detail_value {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_package_actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.phishingphrenzy_package_action_message {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_package_action_note {
+  font-size: 0.85rem;
+  color: #f44336;
+}
+
+.phishingphrenzy_package_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+}
+
+.phishingphrenzy_package_button {
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_package_contact {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_package_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 5px;
+  word-break: break-all;
+}
+
+/* #18: Cloud Storage */
+.phishingphrenzy_cloud_storage {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_cloud_header {
+  padding: 15px 20px;
+  background-color: #039be5;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+
+.phishingphrenzy_cloud_logo {
+  font-size: 1.5rem;
+}
+
+.phishingphrenzy_cloud_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.phishingphrenzy_cloud_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_cloud_alert {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #e1f5fe;
+  border-radius: 6px;
+  border: 1px solid #b3e5fc;
+}
+
+.phishingphrenzy_cloud_alert_icon {
+  font-size: 1.5rem;
+  color: #039be5;
+}
+
+.phishingphrenzy_cloud_alert_text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_cloud_usage {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_cloud_usage_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_cloud_usage_bar_container {
+  width: 100%;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.phishingphrenzy_cloud_usage_bar {
+  height: 100%;
+  width: 95%;
+  background-color: #f44336;
+  border-radius: 4px;
+}
+
+.phishingphrenzy_cloud_usage_stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_cloud_usage_used {
+  font-weight: 500;
+}
+
+.phishingphrenzy_cloud_upgrade {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_cloud_upgrade_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.phishingphrenzy_cloud_plans {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_cloud_plan {
+  flex: 1;
+  min-width: 120px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.phishingphrenzy_cloud_plan:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-color: #039be5;
+}
+
+.phishingphrenzy_cloud_plan_name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_cloud_plan_storage {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #039be5;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_cloud_plan_price {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_cloud_plan_button {
+  background-color: #039be5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+  width: 100%;
+}
+
+.phishingphrenzy_cloud_recommended {
+  position: relative;
+  overflow: hidden;
+  border-color: #039be5;
+}
+
+.phishingphrenzy_cloud_recommended::before {
+  content: 'RECOMMENDED';
+  position: absolute;
+  top: 8px;
+  right: -28px;
+  background-color: #039be5;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 30px;
+  transform: rotate(45deg);
+  font-weight: 600;
+}
+
+.phishingphrenzy_cloud_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.phishingphrenzy_cloud_button {
+  background-color: #039be5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_cloud_secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_cloud_secure_icon {
+  font-size: 1rem;
+  color: #4caf50;
+}
+
+.phishingphrenzy_cloud_url {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 10px;
+  word-break: break-all;
+}
+
+/* #19: Dating Profile */
+.phishingphrenzy_dating_profile {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_dating_header {
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #e91e63, #ad1457);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+
+.phishingphrenzy_dating_logo {
+  font-size: 1.5rem;
+}
+
+.phishingphrenzy_dating_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.phishingphrenzy_dating_body {
+  display: flex;
+  flex-direction: column;
+}
+
+.phishingphrenzy_dating_profile_section {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  gap: 20px;
+}
+
+.phishingphrenzy_dating_profile_pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #e0e0e0;
+  flex-shrink: 0;
+}
+
+.phishingphrenzy_dating_profile_info {
+  flex: 1;
+}
+
+.phishingphrenzy_dating_profile_name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phishingphrenzy_dating_profile_verified {
+  font-size: 1rem;
+  color: #4caf50;
+}
+
+.phishingphrenzy_dating_profile_details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_dating_profile_detail {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.phishingphrenzy_dating_profile_bio {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_dating_message_section {
+  padding: 20px;
+  background-color: #fafafa;
+}
+
+.phishingphrenzy_dating_message {
+  background-color: #e1f5fe;
+  padding: 15px;
+  border-radius: 15px;
+  border-top-left-radius: 0;
+  position: relative;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.phishingphrenzy_dating_message_time {
+  font-size: 0.8rem;
+  color: #888;
+  text-align: right;
+  margin-top: 5px;
+}
+
+.phishingphrenzy_dating_link {
+  color: #2196f3;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.phishingphrenzy_dating_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 15px;
+}
+
+.phishingphrenzy_dating_reply {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  background-color: white;
+  color: #777;
+}
+
+.phishingphrenzy_dating_buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.phishingphrenzy_dating_button {
+  background-color: #e91e63;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_dating_button.secondary {
+  background-color: #9e9e9e;
+}
+
+.phishingphrenzy_dating_app_url {
+  font-size: 0.85rem;
+  color: #555;
+  padding: 10px 20px;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+}
+
+/* #20: Review Request */
+.phishingphrenzy_review_request {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_review_header {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_review_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_review_logo_placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #ffc107;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.phishingphrenzy_review_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_review_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_review_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_review_product {
+  display: flex;
+  gap: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_review_product_image {
+  width: 80px;
+  height: 80px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #999;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.phishingphrenzy_review_product_info {
+  flex: 1;
+}
+
+.phishingphrenzy_review_product_name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_review_product_details {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_review_product_date {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.phishingphrenzy_review_stars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #fff8e1;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #ffecb3;
+  align-items: center;
+}
+
+.phishingphrenzy_review_stars_title {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_review_stars_buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.phishingphrenzy_review_star {
+  font-size: 2rem;
+  color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_review_star.active {
+  color: #ffc107;
+}
+
+.phishingphrenzy_review_feedback {
+  width: 100%;
+}
+
+.phishingphrenzy_review_feedback_label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_review_feedback_input {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  resize: none;
+}
+
+.phishingphrenzy_review_incentive {
+  background-color: #e8f5e9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #c8e6c9;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_review_incentive_icon {
+  font-size: 1.5rem;
+  color: #4caf50;
+}
+
+.phishingphrenzy_review_incentive_text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_review_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+}
+
+.phishingphrenzy_review_button {
+  padding: 10px 25px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+}
+
+.phishingphrenzy_review_button.submit {
+  background-color: #ffc107;
+  color: white;
+  border: none;
+}
+
+.phishingphrenzy_review_button.skip {
+  background-color: transparent;
+  border: 1px solid #ddd;
+  color: #555;
+}
+
+.phishingphrenzy_review_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 15px;
+  word-break: break-all;
+}
+
+/* #21: Medical Alert */
+.phishingphrenzy_medical_alert {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_medical_header {
+  padding: 15px 20px;
+  background-color: #2196f3;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+
+.phishingphrenzy_medical_logo {
+  font-size: 1.5rem;
+}
+
+.phishingphrenzy_medical_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.phishingphrenzy_medical_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_medical_alert_box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #e3f2fd;
+  border-radius: 6px;
+  border: 1px solid #bbdefb;
+}
+
+.phishingphrenzy_medical_alert_icon {
+  font-size: 1.5rem;
+  color: #2196f3;
+}
+
+.phishingphrenzy_medical_alert_text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_medical_patient {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_medical_patient_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_medical_patient_info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phishingphrenzy_medical_patient_row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_medical_patient_row:last-child {
+  border-bottom: none;
+}
+
+.phishingphrenzy_medical_patient_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_medical_patient_value {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_medical_results {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_medical_results_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_medical_results_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_medical_action {
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+}
+
+.phishingphrenzy_medical_action_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_medical_action_text {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_medical_note {
+  font-size: 0.85rem;
+  color: #f44336;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.phishingphrenzy_medical_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+}
+
+.phishingphrenzy_medical_button {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_medical_confidential {
+  font-size: 0.85rem;
+  color: #777;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.phishingphrenzy_medical_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 5px;
+  word-break: break-all;
+}
+
+/* #22: Membership Renewal */
+.phishingphrenzy_membership_renewal {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_membership_header {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_membership_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_membership_logo_placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #9c27b0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.phishingphrenzy_membership_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_membership_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_membership_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_membership_status {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #fce4ec;
+  border-radius: 6px;
+  border: 1px solid #f8bbd0;
+}
+
+.phishingphrenzy_membership_status_icon {
+  font-size: 1.5rem;
+  color: #e91e63;
+}
+
+.phishingphrenzy_membership_status_text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_membership_details {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_membership_details_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_membership_detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_membership_detail:last-child {
+  border-bottom: none;
+}
+
+.phishingphrenzy_membership_detail_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_membership_detail_value {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_membership_value {
+  font-weight: 600;
+  color: #9c27b0;
+}
+
+.phishingphrenzy_membership_benefits {
+  background-color: #f3e5f5;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #e1bee7;
+}
+
+.phishingphrenzy_membership_benefits_title {
+  font-weight: 600;
+  color: #9c27b0;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_membership_benefits_list {
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+
+.phishingphrenzy_membership_benefit {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.phishingphrenzy_membership_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+}
+
+.phishingphrenzy_membership_button {
+  background-color: #9c27b0;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_membership_secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_membership_secure_icon {
+  font-size: 1rem;
+  color: #4caf50;
+}
+
+.phishingphrenzy_membership_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 10px;
+  word-break: break-all;
+}
+
+/* #23: News Alert */
+.phishingphrenzy_news_alert {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_news_header {
+  padding: 15px 20px;
+  background-color: #d32f2f;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+
+.phishingphrenzy_news_logo {
+  font-size: 1.5rem;
+}
+
+.phishingphrenzy_news_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.phishingphrenzy_news_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_news_breaking {
+  background-color: #ffebee;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #ffcdd2;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_news_breaking_label {
+  background-color: #d32f2f;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.phishingphrenzy_news_breaking_text {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_news_content {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_news_image {
+  width: 100%;
+  height: 180px;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 1.2rem;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_news_caption {
+  font-size: 0.85rem;
+  color: #777;
+  font-style: italic;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_news_more {
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+}
+
+.phishingphrenzy_news_more_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_news_more_link {
+  color: #2196f3;
+  text-decoration: underline;
+  font-size: 0.95rem;
+  word-break: break-all;
+}
+
+.phishingphrenzy_news_related {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phishingphrenzy_news_related_title {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_news_related_item {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_news_related_image {
+  width: 60px;
+  height: 60px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 1rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.phishingphrenzy_news_related_text {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_news_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 15px;
+}
+
+.phishingphrenzy_news_actions {
+  display: flex;
+  gap: 15px;
+  flex: 1;
+}
+
+.phishingphrenzy_news_button {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phishingphrenzy_news_button.secondary {
+  background-color: transparent;
+  border: 1px solid #d32f2f;
+  color: #d32f2f;
+}
+
+.phishingphrenzy_news_source {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.phishingphrenzy_news_url {
+  font-size: 0.85rem;
+  color: #555;
+  padding: 0 20px 15px;
+  word-break: break-all;
+}
+
+/* #24: Government Notice */
+.phishingphrenzy_government_notice {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_government_header {
+  padding: 15px 20px;
+  background-color: #01579b;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+
+.phishingphrenzy_government_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.phishingphrenzy_government_logo_placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #01579b;
+  font-weight: bold;
+}
+
+.phishingphrenzy_government_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.phishingphrenzy_government_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_government_notice_header {
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_government_notice_title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.phishingphrenzy_government_notice_subtitle {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.phishingphrenzy_government_recipient {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_government_recipient_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_government_recipient_info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phishingphrenzy_government_recipient_row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_government_recipient_row:last-child {
+  border-bottom: none;
+}
+
+.phishingphrenzy_government_recipient_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_government_recipient_value {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_government_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_government_action {
+  background-color: #e3f2fd;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #bbdefb;
+}
+
+.phishingphrenzy_government_action_title {
+  font-weight: 600;
+  color: #01579b;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_government_action_text {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_government_deadline {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #fff3e0;
+  border-radius: 6px;
+  border: 1px solid #ffe0b2;
+  margin-top: 10px;
+}
+
+.phishingphrenzy_government_deadline_icon {
+  font-size: 1.5rem;
+  color: #ff9800;
+}
+
+.phishingphrenzy_government_deadline_text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_government_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+}
+
+.phishingphrenzy_government_button {
+  background-color: #01579b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_government_official {
+  font-size: 0.85rem;
+  color: #777;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.phishingphrenzy_government_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 5px;
+  word-break: break-all;
+}
+
+/* #12: Bank Notification */
+.phishingphrenzy_bank_notification {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_bank_header {
+  padding: 15px 20px;
+  background-color: #00336a;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_bank_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 6px;
+}
+
+.phishingphrenzy_bank_logo_placeholder {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00336a;
+}
+
+.phishingphrenzy_bank_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+}
+
+.phishingphrenzy_bank_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_bank_alert {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #fff8e1;
+  border-left: 4px solid #ffc107;
+  border-radius: 6px;
+}
+
+.phishingphrenzy_bank_alert_icon {
+  font-size: 1.5rem;
+  color: #ffc107;
+}
+
+.phishingphrenzy_bank_alert_text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.phishingphrenzy_bank_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_bank_details {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_bank_detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_bank_detail:last-child {
+  border-bottom: none;
+}
+
+.phishingphrenzy_bank_detail_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_bank_detail_value {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_bank_actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.phishingphrenzy_bank_action_message {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_bank_buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.phishingphrenzy_bank_button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+}
+
+.phishingphrenzy_bank_button.primary {
+  background-color: #00336a;
+  color: white;
+  border: none;
+}
+
+.phishingphrenzy_bank_button.secondary {
+  background-color: transparent;
+  border: 1px solid #00336a;
+  color: #00336a;
+}
+
+.phishingphrenzy_bank_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.phishingphrenzy_bank_footer_text {
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_bank_url {
+  color: #00336a;
+  word-break: break-all;
+}
+
+/* #13: Crypto Investment */
+.phishingphrenzy_crypto_investment {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_crypto_header {
+  padding: 20px;
+  background: linear-gradient(135deg, #1a237e, #4527a0);
+  color: white;
+  text-align: center;
+}
+
+.phishingphrenzy_crypto_logo {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_crypto_title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.phishingphrenzy_crypto_subtitle {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.phishingphrenzy_crypto_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_crypto_opportunity {
+  background-color: #e8f5e9;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #c8e6c9;
+}
+
+.phishingphrenzy_crypto_opportunity_title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2e7d32;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phishingphrenzy_crypto_opportunity_icon {
+  font-size: 1.3rem;
+}
+
+.phishingphrenzy_crypto_opportunity_text {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_crypto_stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.phishingphrenzy_crypto_stat {
+  flex: 1;
+  min-width: 120px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+}
+
+.phishingphrenzy_crypto_stat_value {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #4527a0;
+  margin-bottom: 5px;
+}
+
+.phishingphrenzy_crypto_stat_label {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_crypto_testimonials {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.phishingphrenzy_crypto_testimonials_title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_crypto_testimonial {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 3px solid #4527a0;
+}
+
+.phishingphrenzy_crypto_testimonial_text {
+  font-size: 0.9rem;
+  color: #333;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_crypto_testimonial_author {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #555;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.phishingphrenzy_crypto_action {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.phishingphrenzy_crypto_action_button {
+  background: linear-gradient(135deg, #4527a0, #7b1fa2);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_crypto_disclaimer {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.phishingphrenzy_crypto_url {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #555;
+  word-break: break-all;
+}
+
+/* #14: Account Verification */
+.phishingphrenzy_account_verification {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_verification_header {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_verification_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_verification_logo_placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #1976d2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.phishingphrenzy_verification_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_verification_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_verification_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_verification_status {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #ffebee;
+  border-radius: 6px;
+  border: 1px solid #ffcdd2;
+}
+
+.phishingphrenzy_verification_status_icon {
+  font-size: 1.5rem;
+  color: #f44336;
+}
+
+.phishingphrenzy_verification_status_text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.phishingphrenzy_verification_steps {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_verification_steps_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_verification_step {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_verification_step:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.phishingphrenzy_verification_step_number {
+  width: 24px;
+  height: 24px;
+  background-color: #1976d2;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.phishingphrenzy_verification_step_text {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+.phishingphrenzy_verification_deadline {
+  background-color: #fff3e0;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #ffe0b2;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_verification_deadline_icon {
+  font-size: 1.3rem;
+  color: #ff9800;
+}
+
+.phishingphrenzy_verification_deadline_text {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_verification_footer {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+}
+
+.phishingphrenzy_verification_button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_verification_note {
+  font-size: 0.85rem;
+  color: #777;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.phishingphrenzy_verification_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 5px;
+  word-break: break-all;
+}
+
+/* #15: Lottery Winner */
+.phishingphrenzy_lottery_winner {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_lottery_header {
+  padding: 20px;
+  background: linear-gradient(135deg, #fbc02d, #f57f17);
+  text-align: center;
+  color: white;
+}
+
+.phishingphrenzy_lottery_logo {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_lottery_title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.phishingphrenzy_lottery_subtitle {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.phishingphrenzy_lottery_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_lottery_congratulations {
+  text-align: center;
+  padding: 20px;
+  background-color: #fff8e1;
+  border-radius: 8px;
+  border: 2px dashed #fbc02d;
+}
+
+.phishingphrenzy_lottery_congrats_title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f57f17;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.phishingphrenzy_lottery_congrats_text {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_lottery_amount {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f57f17;
+  margin: 15px 0;
+}
+
+.phishingphrenzy_lottery_details {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_lottery_details_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_lottery_detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_lottery_detail:last-child {
+  border-bottom: none;
+}
+
+.phishingphrenzy_lottery_detail_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_lottery_detail_value {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_lottery_instructions {
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_lottery_instructions_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_lottery_instructions_list {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.phishingphrenzy_lottery_instructions_item {
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.phishingphrenzy_lottery_warning {
+  font-size: 0.9rem;
+  color: #f44336;
+  margin-top: 15px;
+  font-weight: 500;
+}
+
+.phishingphrenzy_lottery_footer {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.phishingphrenzy_lottery_button {
+  background: linear-gradient(135deg, #fbc02d, #f57f17);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: not-allowed;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.phishingphrenzy_lottery_disclaimer {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.phishingphrenzy_lottery_url {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 10px;
+  word-break: break-all;
+}
+
+/* #16: Charity Donation */
+.phishingphrenzy_charity_donation {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_charity_header {
+  padding: 20px;
+  background: linear-gradient(135deg, #43a047, #1b5e20);
+  text-align: center;
+  color: white;
+}
+
+.phishingphrenzy_charity_logo {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_charity_title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.phishingphrenzy_charity_subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.phishingphrenzy_charity_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_charity_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_charity_impact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.phishingphrenzy_charity_impact_item {
+  flex: 1;
+  min-width: 120px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+}
+
+.phishingphrenzy_charity_impact_value {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #43a047;
+  margin-bottom: 5px;
+}
+
+.phishingphrenzy_charity_impact_label {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_charity_story {
+  background-color: #e8f5e9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #c8e6c9;
+}
+
+.phishingphrenzy_charity_story_title {
+  font-weight: 600;
+  color: #2e7d32;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_charity_story_content {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.phishingphrenzy_charity_donate {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_charity_donate_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.phishingphrenzy_charity_amount_buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_charity_amount_button {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+  flex: 1;
+  min-width: 80px;
+  text-align: center;
+}
+
+.phishingphrenzy_charity_amount_button.active {
+  background-color: #43a047;
+  border-color: #2e7d32;
+  color: white;
+}
+
+.phishingphrenzy_charity_custom_amount {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_charity_custom_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_charity_custom_input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_charity_footer {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.phishingphrenzy_charity_button {
+  background: linear-gradient(135deg, #43a047, #2e7d32);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_charity_secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_charity_secure_icon {
+  font-size: 1rem;
+  color: #43a047;
+}
+
+.phishingphrenzy_charity_url {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 10px;
+  word-break: break-all;
+}
+
+/* #17: Package Delivery */
+.phishingphrenzy_package_delivery {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_package_header {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_package_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_package_logo_placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #ff5722;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.phishingphrenzy_package_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_package_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_package_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_package_status {
+  background-color: #fff3e0;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #ffe0b2;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_package_status_icon {
+  font-size: 1.5rem;
+  color: #ff9800;
+}
+
+.phishingphrenzy_package_status_text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_package_details {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_package_details_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_package_detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_package_detail:last-child {
+  border-bottom: none;
+}
+
+.phishingphrenzy_package_detail_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_package_detail_value {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_package_actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.phishingphrenzy_package_action_message {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_package_action_note {
+  font-size: 0.85rem;
+  color: #f44336;
+}
+
+.phishingphrenzy_package_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+}
+
+.phishingphrenzy_package_button {
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_package_contact {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_package_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 5px;
+  word-break: break-all;
+}
+
+/* #18: Cloud Storage */
+.phishingphrenzy_cloud_storage {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_cloud_header {
+  padding: 15px 20px;
+  background-color: #039be5;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+
+.phishingphrenzy_cloud_logo {
+  font-size: 1.5rem;
+}
+
+.phishingphrenzy_cloud_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.phishingphrenzy_cloud_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_cloud_alert {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #e1f5fe;
+  border-radius: 6px;
+  border: 1px solid #b3e5fc;
+}
+
+.phishingphrenzy_cloud_alert_icon {
+  font-size: 1.5rem;
+  color: #039be5;
+}
+
+.phishingphrenzy_cloud_alert_text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_cloud_usage {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_cloud_usage_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_cloud_usage_bar_container {
+  width: 100%;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.phishingphrenzy_cloud_usage_bar {
+  height: 100%;
+  width: 95%;
+  background-color: #f44336;
+  border-radius: 4px;
+}
+
+.phishingphrenzy_cloud_usage_stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_cloud_usage_used {
+  font-weight: 500;
+}
+
+.phishingphrenzy_cloud_upgrade {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_cloud_upgrade_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.phishingphrenzy_cloud_plans {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_cloud_plan {
+  flex: 1;
+  min-width: 120px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.phishingphrenzy_cloud_plan:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-color: #039be5;
+}
+
+.phishingphrenzy_cloud_plan_name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_cloud_plan_storage {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #039be5;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_cloud_plan_price {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_cloud_plan_button {
+  background-color: #039be5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+  width: 100%;
+}
+
+.phishingphrenzy_cloud_recommended {
+  position: relative;
+  overflow: hidden;
+  border-color: #039be5;
+}
+
+.phishingphrenzy_cloud_recommended::before {
+  content: 'RECOMMENDED';
+  position: absolute;
+  top: 8px;
+  right: -28px;
+  background-color: #039be5;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 30px;
+  transform: rotate(45deg);
+  font-weight: 600;
+}
+
+.phishingphrenzy_cloud_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.phishingphrenzy_cloud_button {
+  background-color: #039be5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_cloud_secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_cloud_secure_icon {
+  font-size: 1rem;
+  color: #4caf50;
+}
+
+.phishingphrenzy_cloud_url {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 10px;
+  word-break: break-all;
+}
+
+/* #19: Dating Profile */
+.phishingphrenzy_dating_profile {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_dating_header {
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #e91e63, #ad1457);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+
+.phishingphrenzy_dating_logo {
+  font-size: 1.5rem;
+}
+
+.phishingphrenzy_dating_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.phishingphrenzy_dating_body {
+  display: flex;
+  flex-direction: column;
+}
+
+.phishingphrenzy_dating_profile_section {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  gap: 20px;
+}
+
+.phishingphrenzy_dating_profile_pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #e0e0e0;
+  flex-shrink: 0;
+}
+
+.phishingphrenzy_dating_profile_info {
+  flex: 1;
+}
+
+.phishingphrenzy_dating_profile_name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phishingphrenzy_dating_profile_verified {
+  font-size: 1rem;
+  color: #4caf50;
+}
+
+.phishingphrenzy_dating_profile_details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_dating_profile_detail {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.phishingphrenzy_dating_profile_bio {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_dating_message_section {
+  padding: 20px;
+  background-color: #fafafa;
+}
+
+.phishingphrenzy_dating_message {
+  background-color: #e1f5fe;
+  padding: 15px;
+  border-radius: 15px;
+  border-top-left-radius: 0;
+  position: relative;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.phishingphrenzy_dating_message_time {
+  font-size: 0.8rem;
+  color: #888;
+  text-align: right;
+  margin-top: 5px;
+}
+
+.phishingphrenzy_dating_link {
+  color: #2196f3;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.phishingphrenzy_dating_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 15px;
+}
+
+.phishingphrenzy_dating_reply {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  background-color: white;
+  color: #777;
+}
+
+.phishingphrenzy_dating_buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.phishingphrenzy_dating_button {
+  background-color: #e91e63;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_dating_button.secondary {
+  background-color: #9e9e9e;
+}
+
+.phishingphrenzy_dating_app_url {
+  font-size: 0.85rem;
+  color: #555;
+  padding: 10px 20px;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+}
+
+/* #20: Review Request */
+.phishingphrenzy_review_request {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_review_header {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_review_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_review_logo_placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #ffc107;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.phishingphrenzy_review_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_review_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_review_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_review_product {
+  display: flex;
+  gap: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_review_product_image {
+  width: 80px;
+  height: 80px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #999;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.phishingphrenzy_review_product_info {
+  flex: 1;
+}
+
+.phishingphrenzy_review_product_name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_review_product_details {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_review_product_date {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.phishingphrenzy_review_stars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #fff8e1;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #ffecb3;
+  align-items: center;
+}
+
+.phishingphrenzy_review_stars_title {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_review_stars_buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.phishingphrenzy_review_star {
+  font-size: 2rem;
+  color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_review_star.active {
+  color: #ffc107;
+}
+
+.phishingphrenzy_review_feedback {
+  width: 100%;
+}
+
+.phishingphrenzy_review_feedback_label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_review_feedback_input {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  resize: none;
+}
+
+.phishingphrenzy_review_incentive {
+  background-color: #e8f5e9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #c8e6c9;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_review_incentive_icon {
+  font-size: 1.5rem;
+  color: #4caf50;
+}
+
+.phishingphrenzy_review_incentive_text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_review_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+}
+
+.phishingphrenzy_review_button {
+  padding: 10px 25px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+}
+
+.phishingphrenzy_review_button.submit {
+  background-color: #ffc107;
+  color: white;
+  border: none;
+}
+
+.phishingphrenzy_review_button.skip {
+  background-color: transparent;
+  border: 1px solid #ddd;
+  color: #555;
+}
+
+.phishingphrenzy_review_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 15px;
+  word-break: break-all;
+}
+
+/* #21: Medical Alert */
+.phishingphrenzy_medical_alert {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_medical_header {
+  padding: 15px 20px;
+  background-color: #2196f3;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+
+.phishingphrenzy_medical_logo {
+  font-size: 1.5rem;
+}
+
+.phishingphrenzy_medical_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.phishingphrenzy_medical_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_medical_alert_box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #e3f2fd;
+  border-radius: 6px;
+  border: 1px solid #bbdefb;
+}
+
+.phishingphrenzy_medical_alert_icon {
+  font-size: 1.5rem;
+  color: #2196f3;
+}
+
+.phishingphrenzy_medical_alert_text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_medical_patient {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_medical_patient_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_medical_patient_info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phishingphrenzy_medical_patient_row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_medical_patient_row:last-child {
+  border-bottom: none;
+}
+
+.phishingphrenzy_medical_patient_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_medical_patient_value {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_medical_results {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_medical_results_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_medical_results_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_medical_action {
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+}
+
+.phishingphrenzy_medical_action_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_medical_action_text {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_medical_note {
+  font-size: 0.85rem;
+  color: #f44336;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.phishingphrenzy_medical_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+}
+
+.phishingphrenzy_medical_button {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_medical_confidential {
+  font-size: 0.85rem;
+  color: #777;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.phishingphrenzy_medical_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 5px;
+  word-break: break-all;
+}
+
+/* #22: Membership Renewal */
+.phishingphrenzy_membership_renewal {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_membership_header {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_membership_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_membership_logo_placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #9c27b0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.phishingphrenzy_membership_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_membership_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_membership_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_membership_status {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #fce4ec;
+  border-radius: 6px;
+  border: 1px solid #f8bbd0;
+}
+
+.phishingphrenzy_membership_status_icon {
+  font-size: 1.5rem;
+  color: #e91e63;
+}
+
+.phishingphrenzy_membership_status_text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_membership_details {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_membership_details_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_membership_detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_membership_detail:last-child {
+  border-bottom: none;
+}
+
+.phishingphrenzy_membership_detail_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_membership_detail_value {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_membership_value {
+  font-weight: 600;
+  color: #9c27b0;
+}
+
+.phishingphrenzy_membership_benefits {
+  background-color: #f3e5f5;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #e1bee7;
+}
+
+.phishingphrenzy_membership_benefits_title {
+  font-weight: 600;
+  color: #9c27b0;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_membership_benefits_list {
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+
+.phishingphrenzy_membership_benefit {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.phishingphrenzy_membership_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+}
+
+.phishingphrenzy_membership_button {
+  background-color: #9c27b0;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_membership_secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_membership_secure_icon {
+  font-size: 1rem;
+  color: #4caf50;
+}
+
+.phishingphrenzy_membership_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 10px;
+  word-break: break-all;
+}
+
+/* #23: News Alert */
+.phishingphrenzy_news_alert {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_news_header {
+  padding: 15px 20px;
+  background-color: #d32f2f;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+
+.phishingphrenzy_news_logo {
+  font-size: 1.5rem;
+}
+
+.phishingphrenzy_news_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.phishingphrenzy_news_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_news_breaking {
+  background-color: #ffebee;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #ffcdd2;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_news_breaking_label {
+  background-color: #d32f2f;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.phishingphrenzy_news_breaking_text {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_news_content {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_news_image {
+  width: 100%;
+  height: 180px;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 1.2rem;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_news_caption {
+  font-size: 0.85rem;
+  color: #777;
+  font-style: italic;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_news_more {
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+}
+
+.phishingphrenzy_news_more_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_news_more_link {
+  color: #2196f3;
+  text-decoration: underline;
+  font-size: 0.95rem;
+  word-break: break-all;
+}
+
+.phishingphrenzy_news_related {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phishingphrenzy_news_related_title {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_news_related_item {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_news_related_image {
+  width: 60px;
+  height: 60px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 1rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.phishingphrenzy_news_related_text {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_news_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 15px;
+}
+
+.phishingphrenzy_news_actions {
+  display: flex;
+  gap: 15px;
+  flex: 1;
+}
+
+.phishingphrenzy_news_button {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phishingphrenzy_news_button.secondary {
+  background-color: transparent;
+  border: 1px solid #d32f2f;
+  color: #d32f2f;
+}
+
+.phishingphrenzy_news_source {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.phishingphrenzy_news_url {
+  font-size: 0.85rem;
+  color: #555;
+  padding: 0 20px 15px;
+  word-break: break-all;
+}
+
+/* #24: Government Notice */
+.phishingphrenzy_government_notice {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_government_header {
+  padding: 15px 20px;
+  background-color: #01579b;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+
+.phishingphrenzy_government_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.phishingphrenzy_government_logo_placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #01579b;
+  font-weight: bold;
+}
+
+.phishingphrenzy_government_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.phishingphrenzy_government_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_government_notice_header {
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.phishingphrenzy_government_notice_title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.phishingphrenzy_government_notice_subtitle {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.phishingphrenzy_government_recipient {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_government_recipient_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_government_recipient_info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phishingphrenzy_government_recipient_row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_government_recipient_row:last-child {
+  border-bottom: none;
+}
+
+.phishingphrenzy_government_recipient_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_government_recipient_value {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_government_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_government_action {
+  background-color: #e3f2fd;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #bbdefb;
+}
+
+.phishingphrenzy_government_action_title {
+  font-weight: 600;
+  color: #01579b;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_government_action_text {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_government_deadline {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #fff3e0;
+  border-radius: 6px;
+  border: 1px solid #ffe0b2;
+  margin-top: 10px;
+}
+
+.phishingphrenzy_government_deadline_icon {
+  font-size: 1.5rem;
+  color: #ff9800;
+}
+
+.phishingphrenzy_government_deadline_text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_government_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+}
+
+.phishingphrenzy_government_button {
+  background-color: #01579b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_government_official {
+  font-size: 0.85rem;
+  color: #777;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.phishingphrenzy_government_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 5px;
+  word-break: break-all;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .phishingphrenzy_user_stats {
