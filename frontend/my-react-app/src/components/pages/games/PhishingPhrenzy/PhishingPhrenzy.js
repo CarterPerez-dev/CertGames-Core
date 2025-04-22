@@ -103,23 +103,32 @@ const PhishingPhrenzy = () => {
     }
   }, [dispatch, score, userId]);
   
-  // Timer effect
+  // FIXED Timer effect with improved handling
   useEffect(() => {
     if (gameState === 'playing' && timeLeft > 0) {
       // Set up the timer
       timerRef.current = setInterval(() => {
         setTimeLeft(prevTime => {
           if (prevTime <= 1) {
+            // Clear interval immediately
             clearInterval(timerRef.current);
             timerRef.current = null;
-            handleGameOver();
+            
+            // Use setTimeout to ensure state updates have settled
+            setTimeout(() => {
+              handleGameOver();
+            }, 50);
+            
             return 0;
           }
           return prevTime - 1;
         });
       }, 1000);
     } else if (gameState === 'playing' && timeLeft <= 0) {
-      handleGameOver();
+      // Explicit check in case we already hit zero
+      if (!isEndingGameRef.current) {
+        handleGameOver();
+      }
     }
     
     return () => {
