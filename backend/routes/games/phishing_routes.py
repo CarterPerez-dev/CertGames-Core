@@ -1,4 +1,4 @@
-# backend/routes/phishing_routes.py
+# backend/routes/games/phishing_routes.py
 from flask import Blueprint, request, jsonify, g
 from bson.objectid import ObjectId
 import time
@@ -178,6 +178,8 @@ def generate_default_examples():
     """
     examples = []
     
+    # -------------------- ORIGINAL EXAMPLES --------------------
+    
     # Phishing emails
     examples.append({
         "type": "email",
@@ -316,6 +318,358 @@ def generate_default_examples():
             {"label": "Password", "type": "password", "placeholder": "Password"}
         ],
         "submitButton": "Sign in",
+        "isPhishing": False
+    })
+    
+    # -------------------- NEW EXAMPLE TYPES --------------------
+    
+    # 1. App Download Examples
+    examples.append({
+        "type": "app_download",
+        "app_name": "SecureBank Mobile",
+        "developer": "SecureBankOfficial LLC",
+        "platform": "Google Play",
+        "rating": "4.1 ★★★★☆",
+        "installs": "500K+",
+        "description": "Manage your banking needs on the go with secure access to your accounts. Deposit checks, transfer money, and pay bills.",
+        "permissions": ["Camera", "Storage", "Contacts", "Location", "Phone"],
+        "reviewHighlights": [
+            {"user": "John D.", "text": "Works great, fast and secure!", "rating": 5},
+            {"user": "Mary S.", "text": "Had some issues but support helped", "rating": 3}
+        ],
+        "downloadUrl": "https://malicious-app-store.com/securebank",
+        "isPhishing": True
+    })
+
+    # Legitimate app example
+    examples.append({
+        "type": "app_download",
+        "app_name": "Chase Mobile",
+        "developer": "JPMorgan Chase & Co.",
+        "platform": "App Store",
+        "rating": "4.8 ★★★★★",
+        "installs": "10M+",
+        "description": "Manage your Chase accounts, credit cards, and bank on the go. Check balances, pay bills, and more.",
+        "permissions": ["Camera", "Storage", "Face ID"],
+        "reviewHighlights": [
+            {"user": "Emma P.", "text": "Great security features and easy to use!", "rating": 5},
+            {"user": "Robert J.", "text": "Latest update fixed all my issues", "rating": 4}
+        ],
+        "downloadUrl": "https://apps.apple.com/us/app/chase-mobile/id298867247",
+        "isPhishing": False
+    })
+    
+    # 2. QR Code Examples
+    examples.append({
+        "type": "qr_code",
+        "title": "Scan for Special Discount",
+        "context": "Limited time offer! Scan this QR code to receive a 50% discount on your next purchase.",
+        "url": "https://malicious-discount.net/claim?ref=qr1922",
+        "caption": "Exclusive offer expires today",
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "qr_code",
+        "title": "Wi-Fi Login",
+        "context": "Connect to our guest Wi-Fi network by scanning this QR code.",
+        "url": "https://fake-wifi-portal.com/connect?trap=visitor",
+        "caption": "Free high-speed internet access",
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "qr_code",
+        "title": "Starbucks Rewards",
+        "context": "Scan to join Starbucks Rewards and get a free drink on your birthday!",
+        "url": "https://www.starbucks.com/rewards/join",
+        "caption": "Join today for free drinks and more",
+        "isPhishing": False
+    })
+    
+    # 3. Social Media Examples
+    examples.append({
+        "type": "social_media",
+        "platform": "Facebook",
+        "timestamp": "3 hours ago",
+        "sender": "Elon Musk Official",
+        "handle": "@elonmusk_giveaway",
+        "verified": True,
+        "message": "I'm giving back to my fans! The first 1,000 people to send 0.01 BTC to the address below will receive 0.1 BTC back as a thank you for your support. Limited time only!",
+        "link": "https://crypto-giveaway-event.com/elonmusk",
+        "likes": 2463,
+        "shares": 872,
+        "comments": 341,
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "social_media",
+        "platform": "Facebook",
+        "timestamp": "Yesterday at 4:15 PM",
+        "sender": "Mark Wilson",
+        "handle": "@mark.wilson.587",
+        "verified": False,
+        "message": "Hey everyone! I just got a free iPhone 15 Pro from this amazing giveaway! They're giving away the last 50 units today. I couldn't believe it worked but I just received mine! Click the link to claim yours 👇",
+        "link": "https://free-iphone-claim.net/last-units",
+        "likes": 127,
+        "shares": 43,
+        "comments": 19,
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "social_media",
+        "platform": "Facebook",
+        "timestamp": "April 21 at 1:30 PM",
+        "sender": "National Geographic",
+        "handle": "@natgeo",
+        "verified": True,
+        "message": "Earth Day is approaching! Join us for a live discussion with environmental experts on how we can all make a difference. Stream starts April 22nd at 2PM ET on our website or YouTube channel.",
+        "link": "https://www.nationalgeographic.com/environment/earth-day-live",
+        "likes": 12536,
+        "shares": 3241,
+        "comments": 867,
+        "isPhishing": False
+    })
+    
+    # 4. Job Offer Examples
+    examples.append({
+        "type": "job_offer",
+        "position": "Financial Coordinator - Work From Home",
+        "company": "Global Finance Solutions",
+        "location": "Remote (Anywhere)",
+        "salary": "$85,000 - $95,000 per year",
+        "description": "We are seeking a financial coordinator to join our team immediately. This position requires minimal experience and offers flexible hours with exceptional compensation. Training provided.",
+        "requirements": [
+            "Basic computer skills",
+            "Access to a personal bank account",
+            "Ability to work independently",
+            "No financial experience required - we will train you!"
+        ],
+        "applyEmail": "careers@global-finance-solutions.net",
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "job_offer",
+        "position": "Payment Processing Agent",
+        "company": "Swift Money Transfer Inc.",
+        "location": "Remote (United States)",
+        "salary": "$30/hr plus commission",
+        "description": "Immediate opening for payment processing agents. Receive payments from our clients into your personal account and transfer to our business partners after deducting your commission. Perfect for students or anyone seeking additional income.",
+        "requirements": [
+            "18+ years of age",
+            "Personal bank account in good standing",
+            "Available to process 2-3 transactions weekly",
+            "Reliable internet connection",
+            "Available to start immediately"
+        ],
+        "applyEmail": "jobs@swift-money-transfer.org",
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "job_offer",
+        "position": "Software Engineer - Full Stack",
+        "company": "Adobe",
+        "location": "San Jose, CA (Hybrid)",
+        "salary": "$130,000 - $180,000 DOE",
+        "description": "Adobe is seeking a talented Full Stack Software Engineer to join our Digital Experience team. In this role, you will develop new features for our Creative Cloud suite, collaborate with cross-functional teams, and help shape the future of creative software.",
+        "requirements": [
+            "Bachelor's degree in Computer Science or related field",
+            "5+ years of experience with JavaScript, React, and Node.js",
+            "Experience with cloud infrastructure (AWS or Azure)",
+            "Strong problem-solving skills and attention to detail",
+            "Excellent communication and collaboration abilities"
+        ],
+        "applyEmail": "careers@adobe.com",
+        "isPhishing": False
+    })
+    
+    # 5. Tech Support Scam Examples
+    examples.append({
+        "type": "tech_support",
+        "title": "WARNING: VIRUS DETECTED",
+        "alertMessage": "Critical security alert: Your computer has been infected with a Trojan virus. Your personal data and banking information are at risk. Call our security team now to remove the virus and protect your information.",
+        "technicalDetails": "Threat detected: Trojan.Malware.Stuxnet.BW4T\nInfected files: 32\nRisk Level: HIGH\nStatus: ACTIVE",
+        "steps": [
+            "Do not restart your computer or close this window",
+            "Call our security team at 1-800-555-1234",
+            "Provide the security code: ABC123XYZ",
+            "Our technician will guide you through the removal process"
+        ],
+        "contactInfo": "Microsoft Security Team: 1-800-555-1234 (Toll-free)",
+        "actionButton": "Call Support Now",
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "tech_support",
+        "title": "System Security Breach",
+        "alertMessage": "Your Windows license has expired, and your computer is now vulnerable to security threats. We have detected suspicious activity indicating that your personal data may be compromised. Immediate action is required.",
+        "technicalDetails": "Error code: 0x80070426\nWindows Security: DISABLED\nFirewall: COMPROMISED\nSystem scan: 23 THREATS FOUND",
+        "steps": [
+            "Call our Windows support team immediately at 1-888-123-4567",
+            "Provide your Windows ID: WLS-4829-TDHR",
+            "Get assistance from a certified technician to secure your system"
+        ],
+        "contactInfo": "Windows Support: 1-888-123-4567 (Available 24/7)",
+        "actionButton": "Renew Security License",
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "tech_support",
+        "title": "Software Update Available",
+        "alertMessage": "A new version of Adobe Creative Cloud is available. Update now to access the latest features and security improvements.",
+        "technicalDetails": "Current version: 5.6.2\nNew version: 6.0.1\nUpdate size: 275MB",
+        "steps": [
+            "Save your work before updating",
+            "Click 'Update Now' to begin the installation",
+            "Restart your application after the update completes"
+        ],
+        "contactInfo": "For assistance, visit help.adobe.com",
+        "actionButton": "Update Now",
+        "isPhishing": False
+    })
+    
+    # 6. Document Download Examples
+    examples.append({
+        "type": "document",
+        "fileName": "Invoice_04873_PaymentRequired.docx",
+        "fileType": "Microsoft Word Document",
+        "sender": "accounting@generic-supplier.net",
+        "contentsPreview": "INVOICE\n\nInvoice #: 04873\nDate: April 17, 2025\nDue Date: April 30, 2025\n\nTo: [YOUR COMPANY]\n\nAmount Due: $3,247.89\n\n...",
+        "secured": True,
+        "source": "Email attachment from accounting@generic-supplier.net",
+        "enableButton": "Enable Macros to View Content",
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "document",
+        "fileName": "W-2_Tax_Form_2025.xlsm",
+        "fileType": "Microsoft Excel Macro-Enabled Workbook",
+        "sender": "hr_department@company-payroll.org",
+        "contentsPreview": "CONFIDENTIAL: 2025 W-2 TAX FORM\n\nThis document contains your tax information for 2025.\nTo view your complete W-2 information, you must enable macros when prompted.\n\nIf you have any questions, contact HR at extension 5567.",
+        "secured": True,
+        "source": "Email attachment from hr_department@company-payroll.org",
+        "enableButton": "Enable Content",
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "document",
+        "fileName": "Company_Benefits_2025.pdf",
+        "fileType": "Adobe PDF Document",
+        "sender": "hr@acme-corporation.com",
+        "contentsPreview": "2025 EMPLOYEE BENEFITS GUIDE\n\nDear Employees,\n\nThis guide outlines your benefits package for 2025. Please review the changes to our healthcare plans and retirement options. The open enrollment period will begin on May 1, 2025.\n\nHighlights:\n- New dental provider network\n- Increased 401(k) matching\n- Additional wellness program options",
+        "secured": False,
+        "source": "Company Intranet > Human Resources > Benefits",
+        "isPhishing": False
+    })
+    
+    # 7. Payment Confirmation Examples
+    examples.append({
+        "type": "payment_confirmation",
+        "company": "PayPal",
+        "title": "Payment Confirmation",
+        "message": "You've sent a payment of $1,499.99 to Tech Gadget Store (techgadgets@marketplace.com). This transaction will appear on your statement as PAYPAL*TECHGADGET.",
+        "transactionId": "TXN-54392-87014-9P",
+        "date": "April 22, 2025 - 10:37 AM",
+        "amount": "$1,499.99 USD",
+        "paymentMethod": "Visa Ending in 4832",
+        "warning": "If you did not authorize this transaction, please click 'Dispute' to report unauthorized activity.",
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "payment_confirmation",
+        "company": "CashApp",
+        "title": "Money Transfer Complete",
+        "message": "You've sent $850.00 to @MarketplaceDeals for 'iPhone 15 Pro - Gray'. The funds have been withdrawn from your linked bank account.",
+        "transactionId": "CA-293847561",
+        "date": "April 21, 2025 - 3:15 PM",
+        "amount": "$850.00 USD",
+        "paymentMethod": "Bank of America ****2175",
+        "warning": "If this wasn't you, please contact our fraud department immediately to dispute this charge.",
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "payment_confirmation",
+        "company": "Amazon",
+        "title": "Order Payment Confirmation",
+        "message": "Thank you for your order! We've successfully processed your payment for order #112-2548167-2459721. Your items will ship soon.",
+        "transactionId": "112-2548167-2459721",
+        "date": "April 20, 2025 - 2:42 PM",
+        "amount": "$58.97 USD",
+        "paymentMethod": "Visa Ending in 1234",
+        "isPhishing": False
+    })
+    
+    # 8. Security Alert Examples
+    examples.append({
+        "type": "security_alert",
+        "title": "Account Security Alert",
+        "message": "We've detected unusual activity on your Google account. Someone from Kiev, Ukraine (IP: 93.175.24.198) attempted to access your account. If this was not you, your account may be compromised.",
+        "details": {
+            "Time": "April 22, 2025, 3:47 AM (EST)",
+            "Device": "Windows PC",
+            "Browser": "Chrome 119.0.6045.124",
+            "Location": "Kiev, Ukraine",
+            "Status": "Access blocked"
+        },
+        "actions": [
+            "Reset your password immediately",
+            "Set up two-factor authentication",
+            "Review recent account activity",
+            "Click the 'Secure Account Now' button below to protect your account"
+        ],
+        "referenceId": "SEC-G-78214503",
+        "actionButton": "Secure Account Now",
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "security_alert",
+        "title": "Credit Card Security Notice",
+        "message": "Important notification regarding your Mastercard ending in 3845. We've detected an unusual purchase of $899.99 at 'Electronics World' in Los Angeles, CA on April 21, 2025 at 7:23 PM.",
+        "details": {
+            "Card": "Mastercard ending in 3845",
+            "Amount": "$899.99",
+            "Merchant": "Electronics World",
+            "Date/Time": "April 21, 2025, 7:23 PM",
+            "Location": "Los Angeles, CA, USA"
+        },
+        "actions": [
+            "Verify this transaction immediately",
+            "If unauthorized, we'll block your card and issue a replacement",
+            "Review recent transactions for other unauthorized charges"
+        ],
+        "referenceId": "ALERT-CC-926351",
+        "actionButton": "Verify Transaction",
+        "isPhishing": True
+    })
+    
+    examples.append({
+        "type": "security_alert",
+        "title": "Sign-in from new device",
+        "message": "We noticed a new sign-in to your Microsoft account from a device in Chicago, IL. If this was you, you can ignore this message. If not, we'll help you secure your account.",
+        "details": {
+            "Time": "April 20, 2025, 2:15 PM",
+            "Location": "Chicago, IL, USA",
+            "IP Address": "76.102.43.129",
+            "Device": "iPhone",
+            "Browser": "Safari Mobile"
+        },
+        "actions": [
+            "If this wasn't you, select 'Secure Account'",
+            "Review your recent activity",
+            "Update your security info"
+        ],
+        "referenceId": "MS-SI-63719024",
         "isPhishing": False
     })
     
