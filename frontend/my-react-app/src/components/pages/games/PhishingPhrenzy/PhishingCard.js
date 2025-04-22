@@ -50,6 +50,11 @@ import {
   FaGamepad,  
 } from 'react-icons/fa';
 import './PhishingCard.css';
+import './PhishingCard2.css';
+import './PhishingCard3.css';
+import './PhishingCard4.css';
+import './PhishingCard5.css';
+// From PhishingCard.css to PhishingCard5.css we have 35 unique styles/css....dont ask me why it starts at -11 
 import cardTypeNames from './cardTypeNames.js';
 
 const PhishingCard = ({ item }) => {
