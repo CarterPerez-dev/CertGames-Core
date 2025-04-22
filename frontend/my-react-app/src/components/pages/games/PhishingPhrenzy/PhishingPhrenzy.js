@@ -389,6 +389,28 @@ const PhishingPhrenzy = () => {
             <>
               <PhishingCard item={currentItem} />
               
+              {/* Added bottom game stats around the "Is this a phishing attempt" text */}
+              <div className="phishingphrenzy_bottom_stats_container">
+                <div className="phishingphrenzy_bottom_stats_left">
+                  <div className="phishingphrenzy_timer">
+                    <FaClock /> Time: <span style={{ color: getTimerColor() }}>{timeLeft}</span>
+                  </div>
+                  <div className="phishingphrenzy_score">
+                    Score: {score}
+                  </div>
+                </div>
+                
+                <div className="phishingphrenzy_card_instruction">
+                  <strong>Is this a phishing attempt?</strong>
+                </div>
+                
+                <div className="phishingphrenzy_bottom_stats_right">
+                  <div className="phishingphrenzy_streak">
+                    Streak: {streak > 0 ? `${streak} 🔥` : '0'}
+                  </div>
+                </div>
+              </div>
+              
               {feedback && (
                 <div className={`phishingphrenzy_feedback ${feedback.type}`}>
                   {feedback.message}
