@@ -12,7 +12,19 @@ import {
   FaDesktop, 
   FaFileAlt, 
   FaCreditCard, 
-  FaExclamationTriangle 
+  FaExclamationTriangle,
+  FaAd,
+  FaUserAlt,
+  FaClipboard,
+  FaPoll,
+  FaWifi,
+  FaCalendarAlt,
+  FaCertificate,
+  FaPuzzlePiece,
+  FaVideoCamera,
+  FaShareAlt,
+  FaMicrochip,
+  FaLock
 } from 'react-icons/fa';
 import './PhishingCard.css';
 
@@ -492,6 +504,680 @@ const PhishingCard = ({ item }) => {
           </div>
         );
       
+      
+    
+      case 'advertisement':
+        return (
+          <div className="phishingphrenzy_advertisement">
+            <div className="phishingphrenzy_ad_header">
+              <div className="phishingphrenzy_ad_sponsored">Sponsored</div>
+              <div className="phishingphrenzy_ad_close">×</div>
+            </div>
+            <div className="phishingphrenzy_ad_content">
+              {item.image && (
+                <div className="phishingphrenzy_ad_image">
+                  <div className="phishingphrenzy_ad_image_placeholder">
+                    {item.imageText || "SPECIAL OFFER"}
+                  </div>
+                </div>
+              )}
+              <div className="phishingphrenzy_ad_text">
+                <div className="phishingphrenzy_ad_title">{item.title}</div>
+                <div className="phishingphrenzy_ad_description">{item.description}</div>
+                <div className="phishingphrenzy_ad_url">{item.displayUrl}</div>
+              </div>
+            </div>
+            <div className="phishingphrenzy_ad_footer">
+              <button className="phishingphrenzy_ad_button" disabled>
+                {item.buttonText || "Learn More"}
+              </button>
+              <div className="phishingphrenzy_ad_destination">
+                <span>Destination: </span>
+                <span className="phishingphrenzy_ad_dest_url">{item.actualUrl}</span>
+              </div>
+            </div>
+          </div>
+        );
+      
+  
+      case 'browser_extension':
+        return (
+          <div className="phishingphrenzy_extension">
+            <div className="phishingphrenzy_extension_header">
+              <div className="phishingphrenzy_extension_icon">
+                <div className="phishingphrenzy_extension_icon_placeholder">{item.name ? item.name[0] : 'E'}</div>
+              </div>
+              <div className="phishingphrenzy_extension_info">
+                <div className="phishingphrenzy_extension_name">{item.name || "Browser Extension"}</div>
+                <div className="phishingphrenzy_extension_developer">by {item.developer}</div>
+                <div className="phishingphrenzy_extension_stats">
+                  <span>{item.users || "10K+"} users</span>
+                  <span>{item.rating || "★★★★☆"}</span>
+                </div>
+              </div>
+            </div>
+            <div className="phishingphrenzy_extension_body">
+              <div className="phishingphrenzy_extension_description">
+                {item.description}
+              </div>
+              <div className="phishingphrenzy_extension_permissions">
+                <div className="phishingphrenzy_extension_section_title">Required Permissions:</div>
+                <ul className="phishingphrenzy_extension_permission_list">
+                  {item.permissions.map((permission, idx) => (
+                    <li key={idx} className="phishingphrenzy_extension_permission_item">
+                      {permission}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {item.reviewQuote && (
+                <div className="phishingphrenzy_extension_review">
+                  <div className="phishingphrenzy_extension_section_title">Featured Review:</div>
+                  <div className="phishingphrenzy_extension_review_content">
+                    "{item.reviewQuote}"
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="phishingphrenzy_extension_footer">
+              <button className="phishingphrenzy_extension_button" disabled>
+                Add to Browser
+              </button>
+              <div className="phishingphrenzy_extension_source">
+                Source: {item.source || "Chrome Web Store"}
+              </div>
+            </div>
+          </div>
+        );
+      
+     
+      case 'event_invitation':
+        return (
+          <div className="phishingphrenzy_event">
+            <div className="phishingphrenzy_event_header">
+              <div className="phishingphrenzy_event_title">{item.title}</div>
+              <div className="phishingphrenzy_event_organizer">Organized by: {item.organizer}</div>
+            </div>
+            <div className="phishingphrenzy_event_details">
+              <div className="phishingphrenzy_event_datetime">
+                <div className="phishingphrenzy_event_date">
+                  <FaCalendarAlt /> {item.date}
+                </div>
+                <div className="phishingphrenzy_event_time">{item.time}</div>
+              </div>
+              <div className="phishingphrenzy_event_location">
+                <div className="phishingphrenzy_event_location_name">{item.location}</div>
+                {item.address && (
+                  <div className="phishingphrenzy_event_address">{item.address}</div>
+                )}
+              </div>
+              <div className="phishingphrenzy_event_description">
+                {item.description}
+              </div>
+              {item.speakers && (
+                <div className="phishingphrenzy_event_speakers">
+                  <div className="phishingphrenzy_event_section_title">Featured Speakers:</div>
+                  <ul className="phishingphrenzy_event_speaker_list">
+                    {item.speakers.map((speaker, idx) => (
+                      <li key={idx} className="phishingphrenzy_event_speaker_item">
+                        {speaker.name} - {speaker.title}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+            <div className="phishingphrenzy_event_footer">
+              <div className="phishingphrenzy_event_registration">
+                <div className="phishingphrenzy_event_price">{item.price || "Free"}</div>
+                <button className="phishingphrenzy_event_register_button" disabled>
+                  {item.registerText || "Register Now"}
+                </button>
+              </div>
+              <div className="phishingphrenzy_event_link">
+                Registration link: <span className="phishingphrenzy_event_url">{item.registrationUrl}</span>
+              </div>
+            </div>
+          </div>
+        );
+      
+
+      case 'survey':
+        return (
+          <div className="phishingphrenzy_survey">
+            <div className="phishingphrenzy_survey_header">
+              <div className="phishingphrenzy_survey_logo">
+                {item.companyLogo ? (
+                  <img src={item.companyLogo} alt="Survey logo" />
+                ) : (
+                  <div className="phishingphrenzy_survey_logo_placeholder">
+                    <FaPoll />
+                  </div>
+                )}
+              </div>
+              <div className="phishingphrenzy_survey_title">{item.title}</div>
+              <div className="phishingphrenzy_survey_sponsor">
+                {item.sponsoredBy ? `Sponsored by ${item.sponsoredBy}` : ''}
+              </div>
+            </div>
+            <div className="phishingphrenzy_survey_body">
+              <div className="phishingphrenzy_survey_description">
+                {item.description}
+              </div>
+              <div className="phishingphrenzy_survey_details">
+                <div className="phishingphrenzy_survey_detail">
+                  <span className="phishingphrenzy_survey_detail_label">Time Required:</span>
+                  <span>{item.timeRequired || "5 minutes"}</span>
+                </div>
+                <div className="phishingphrenzy_survey_detail">
+                  <span className="phishingphrenzy_survey_detail_label">Questions:</span>
+                  <span>{item.questionCount || "10"}</span>
+                </div>
+                <div className="phishingphrenzy_survey_detail">
+                  <span className="phishingphrenzy_survey_detail_label">Reward:</span>
+                  <span>{item.reward || "None"}</span>
+                </div>
+              </div>
+              <div className="phishingphrenzy_survey_preview">
+                <div className="phishingphrenzy_survey_question">
+                  {item.sampleQuestion || "How satisfied are you with your recent purchase?"}
+                </div>
+                <div className="phishingphrenzy_survey_options">
+                  {(item.sampleOptions || ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied"]).map((option, idx) => (
+                    <div key={idx} className="phishingphrenzy_survey_option">
+                      <input type="radio" id={`option_${idx}`} name="sample_question" disabled />
+                      <label htmlFor={`option_${idx}`}>{option}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="phishingphrenzy_survey_footer">
+              <div className="phishingphrenzy_survey_disclaimer">
+                {item.disclaimer || "Your answers will be anonymous and used for market research."}
+              </div>
+              <div className="phishingphrenzy_survey_buttons">
+                <button className="phishingphrenzy_survey_button" disabled>
+                  {item.buttonText || "Start Survey"}
+                </button>
+              </div>
+              <div className="phishingphrenzy_survey_url">
+                Survey URL: {item.url}
+              </div>
+            </div>
+          </div>
+        );
+      
+   
+      case 'wifi_portal':
+        return (
+          <div className="phishingphrenzy_wifi_portal">
+            <div className="phishingphrenzy_wifi_header">
+              <div className="phishingphrenzy_wifi_icon">
+                <FaWifi />
+              </div>
+              <div className="phishingphrenzy_wifi_title">
+                {item.title || "Free WiFi Login"}
+              </div>
+              <div className="phishingphrenzy_wifi_network">
+                Network: {item.networkName || "PublicWiFi"}
+              </div>
+            </div>
+            <div className="phishingphrenzy_wifi_body">
+              <div className="phishingphrenzy_wifi_message">
+                {item.message || "Please log in to access the internet."}
+              </div>
+              <div className="phishingphrenzy_wifi_form">
+                {item.loginMethod === 'social' ? (
+                  <div className="phishingphrenzy_wifi_social_login">
+                    <div className="phishingphrenzy_wifi_social_title">Log in with:</div>
+                    <div className="phishingphrenzy_wifi_social_buttons">
+                      <button className="phishingphrenzy_wifi_social_button" disabled>
+                        <FaFacebook /> Facebook
+                      </button>
+                      <button className="phishingphrenzy_wifi_social_button" disabled>
+                        <FaUserAlt /> Google
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="phishingphrenzy_wifi_credentials">
+                    <div className="phishingphrenzy_wifi_input">
+                      <label>Email or Phone:</label>
+                      <input type="text" placeholder="Enter email or phone" disabled />
+                    </div>
+                    {!item.skipPassword && (
+                      <div className="phishingphrenzy_wifi_input">
+                        <label>Password:</label>
+                        <input type="password" placeholder="Enter password" disabled />
+                      </div>
+                    )}
+                    {item.requiresAgreement && (
+                      <div className="phishingphrenzy_wifi_agreement">
+                        <input type="checkbox" id="terms_agree" disabled />
+                        <label htmlFor="terms_agree">
+                          I agree to the <a href="#" onClick={(e) => e.preventDefault()}>Terms & Conditions</a>
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="phishingphrenzy_wifi_footer">
+              <button className="phishingphrenzy_wifi_button" disabled>
+                {item.buttonText || "Connect"}
+              </button>
+              <div className="phishingphrenzy_wifi_footer_text">
+                {item.footerText || "By connecting, you agree to our terms of service."}
+              </div>
+              <div className="phishingphrenzy_wifi_url">
+                Portal URL: {item.portalUrl || "wifi-login.example.com"}
+              </div>
+            </div>
+          </div>
+        );
+      
+     
+      case 'certificate_error':
+        return (
+          <div className="phishingphrenzy_certificate">
+            <div className="phishingphrenzy_certificate_header">
+              <div className="phishingphrenzy_certificate_icon">
+                <FaLock />
+              </div>
+              <div className="phishingphrenzy_certificate_title">
+                {item.title || "Your connection is not private"}
+              </div>
+            </div>
+            <div className="phishingphrenzy_certificate_body">
+              <div className="phishingphrenzy_certificate_message">
+                {item.message || "Attackers might be trying to steal your information from this site (for example, passwords, messages, or credit cards)."}
+              </div>
+              <div className="phishingphrenzy_certificate_details">
+                <div className="phishingphrenzy_certificate_detail_title">
+                  Error details:
+                </div>
+                <div className="phishingphrenzy_certificate_detail_text">
+                  {item.errorDetails || "NET::ERR_CERT_AUTHORITY_INVALID"}
+                </div>
+                <div className="phishingphrenzy_certificate_url">
+                  <span className="phishingphrenzy_certificate_url_label">URL:</span>
+                  <span className="phishingphrenzy_certificate_url_value">{item.url}</span>
+                </div>
+              </div>
+              <div className="phishingphrenzy_certificate_help">
+                <div className="phishingphrenzy_certificate_help_title">What can you do?</div>
+                <ul className="phishingphrenzy_certificate_help_list">
+                  {(item.helpList || [
+                    "Go back to the previous page",
+                    "Try again later",
+                    "Check your internet connection",
+                    "Check your computer's date and time"
+                  ]).map((help, idx) => (
+                    <li key={idx}>{help}</li>
+                  ))}
+                </ul>
+              </div>
+              {item.customMessage && (
+                <div className="phishingphrenzy_certificate_custom">
+                  {item.customMessage}
+                </div>
+              )}
+            </div>
+            <div className="phishingphrenzy_certificate_footer">
+              <button className="phishingphrenzy_certificate_back_button" disabled>
+                Back to safety
+              </button>
+              <button className="phishingphrenzy_certificate_advanced_button" disabled>
+                Advanced
+              </button>
+              <button className="phishingphrenzy_certificate_proceed_button" disabled>
+                {item.proceedText || "Proceed anyway (unsafe)"}
+              </button>
+            </div>
+          </div>
+        );
+      
+   
+      case 'software_update':
+        return (
+          <div className="phishingphrenzy_update">
+            <div className="phishingphrenzy_update_header">
+              <div className="phishingphrenzy_update_logo">
+                {item.logo ? (
+                  <img src={item.logo} alt="Software logo" />
+                ) : (
+                  <div className="phishingphrenzy_update_logo_placeholder">
+                    <FaMicrochip />
+                  </div>
+                )}
+              </div>
+              <div className="phishingphrenzy_update_title">
+                {item.title || "Software Update Available"}
+              </div>
+            </div>
+            <div className="phishingphrenzy_update_body">
+              <div className="phishingphrenzy_update_message">
+                {item.message || "A new version of the software is available. Please update now to get the latest features and security improvements."}
+              </div>
+              <div className="phishingphrenzy_update_details">
+                <div className="phishingphrenzy_update_detail">
+                  <span className="phishingphrenzy_update_detail_label">Current Version:</span>
+                  <span>{item.currentVersion || "1.2.1"}</span>
+                </div>
+                <div className="phishingphrenzy_update_detail">
+                  <span className="phishingphrenzy_update_detail_label">New Version:</span>
+                  <span>{item.newVersion || "1.3.0"}</span>
+                </div>
+                <div className="phishingphrenzy_update_detail">
+                  <span className="phishingphrenzy_update_detail_label">Size:</span>
+                  <span>{item.size || "24.5 MB"}</span>
+                </div>
+              </div>
+              {item.releaseNotes && (
+                <div className="phishingphrenzy_update_notes">
+                  <div className="phishingphrenzy_update_notes_title">Release Notes:</div>
+                  <div className="phishingphrenzy_update_notes_content">
+                    {item.releaseNotes}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="phishingphrenzy_update_footer">
+              <div className="phishingphrenzy_update_warning">
+                {item.warningMessage}
+              </div>
+              <div className="phishingphrenzy_update_buttons">
+                <button className="phishingphrenzy_update_later_button" disabled>
+                  {item.laterText || "Remind me later"}
+                </button>
+                <button className="phishingphrenzy_update_now_button" disabled>
+                  {item.updateText || "Update Now"}
+                </button>
+              </div>
+              <div className="phishingphrenzy_update_source">
+                Download source: {item.downloadSource || "official-update-server.com"}
+              </div>
+            </div>
+          </div>
+        );
+      
+     
+      case 'puzzle_game':
+        return (
+          <div className="phishingphrenzy_puzzle">
+            <div className="phishingphrenzy_puzzle_header">
+              <div className="phishingphrenzy_puzzle_icon">
+                <FaPuzzlePiece />
+              </div>
+              <div className="phishingphrenzy_puzzle_title">
+                {item.title || "Win a Prize!"}
+              </div>
+            </div>
+            <div className="phishingphrenzy_puzzle_body">
+              <div className="phishingphrenzy_puzzle_message">
+                {item.message || "Congratulations! You've been selected to play our prize game!"}
+              </div>
+              <div className="phishingphrenzy_puzzle_game">
+                <div className="phishingphrenzy_puzzle_challenge">
+                  {item.challenge || "Find the hidden object in the image below:"}
+                </div>
+                <div className="phishingphrenzy_puzzle_image">
+                  <div className="phishingphrenzy_puzzle_image_placeholder">
+                    [Interactive Game Image]
+                  </div>
+                </div>
+              </div>
+              <div className="phishingphrenzy_puzzle_prizes">
+                <div className="phishingphrenzy_puzzle_prizes_title">Prizes you can win:</div>
+                <ul className="phishingphrenzy_puzzle_prizes_list">
+                  {(item.prizes || [
+                    "iPhone 15 Pro Max",
+                    "$500 Amazon Gift Card",
+                    "Bluetooth Headphones",
+                    "Smart Watch"
+                  ]).map((prize, idx) => (
+                    <li key={idx} className="phishingphrenzy_puzzle_prize_item">
+                      {prize}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="phishingphrenzy_puzzle_timer">
+                <div className="phishingphrenzy_puzzle_timer_label">Time remaining:</div>
+                <div className="phishingphrenzy_puzzle_timer_value">
+                  {item.timeRemaining || "02:59"}
+                </div>
+              </div>
+            </div>
+            <div className="phishingphrenzy_puzzle_footer">
+              <div className="phishingphrenzy_puzzle_participation">
+                <div className="phishingphrenzy_puzzle_attempts">
+                  Attempts remaining: {item.attemptsRemaining || "3"}
+                </div>
+                <button className="phishingphrenzy_puzzle_play_button" disabled>
+                  {item.playButtonText || "Play Now"}
+                </button>
+              </div>
+              <div className="phishingphrenzy_puzzle_terms">
+                * {item.terms || "To claim your prize, you must provide your contact information."}
+              </div>
+              <div className="phishingphrenzy_puzzle_url">
+                Game URL: {item.gameUrl || "prize-game-winner.com/play"}
+              </div>
+            </div>
+          </div>
+        );
+      
+     
+      case 'video_conference':
+        return (
+          <div className="phishingphrenzy_conference">
+            <div className="phishingphrenzy_conference_header">
+              <div className="phishingphrenzy_conference_logo">
+                {item.logo ? (
+                  <img src={item.logo} alt="Conference platform logo" />
+                ) : (
+                  <div className="phishingphrenzy_conference_logo_placeholder">
+                    <FaVideoCamera />
+                  </div>
+                )}
+              </div>
+              <div className="phishingphrenzy_conference_platform">
+                {item.platform || "Video Meeting"}
+              </div>
+            </div>
+            <div className="phishingphrenzy_conference_body">
+              <div className="phishingphrenzy_conference_title">
+                {item.title || "You've been invited to a meeting"}
+              </div>
+              <div className="phishingphrenzy_conference_organizer">
+                <span className="phishingphrenzy_conference_from">From:</span>
+                <span className="phishingphrenzy_conference_organizer_name">{item.organizer || "John Smith"}</span>
+                <span className="phishingphrenzy_conference_organizer_email">{item.organizerEmail || "john.smith@example.com"}</span>
+              </div>
+              <div className="phishingphrenzy_conference_details">
+                <div className="phishingphrenzy_conference_topic">
+                  <span className="phishingphrenzy_conference_label">Topic:</span>
+                  <span>{item.topic || "Project Review Meeting"}</span>
+                </div>
+                <div className="phishingphrenzy_conference_time">
+                  <span className="phishingphrenzy_conference_label">Time:</span>
+                  <span>{item.time || "Apr 23, 2025, 3:00 PM"}</span>
+                </div>
+                <div className="phishingphrenzy_conference_duration">
+                  <span className="phishingphrenzy_conference_label">Duration:</span>
+                  <span>{item.duration || "1 hour"}</span>
+                </div>
+              </div>
+              <div className="phishingphrenzy_conference_join_info">
+                <div className="phishingphrenzy_conference_join_title">
+                  Join information:
+                </div>
+                <div className="phishingphrenzy_conference_link">
+                  <div className="phishingphrenzy_conference_link_label">Meeting link:</div>
+                  <div className="phishingphrenzy_conference_link_url">
+                    {item.meetingLink || "https://meet.example.com/abc-xyz-123"}
+                  </div>
+                </div>
+                <div className="phishingphrenzy_conference_id">
+                  <span className="phishingphrenzy_conference_label">Meeting ID:</span>
+                  <span>{item.meetingId || "123 456 789"}</span>
+                </div>
+                <div className="phishingphrenzy_conference_passcode">
+                  <span className="phishingphrenzy_conference_label">Passcode:</span>
+                  <span>{item.passcode || "123456"}</span>
+                </div>
+              </div>
+            </div>
+            <div className="phishingphrenzy_conference_footer">
+              <button className="phishingphrenzy_conference_join_button" disabled>
+                {item.joinButtonText || "Join Meeting"}
+              </button>
+              <div className="phishingphrenzy_conference_note">
+                {item.note || "By joining, you agree to the terms of service."}
+              </div>
+              <div className="phishingphrenzy_conference_url">
+                Host domain: {item.hostDomain || "meet.example.com"}
+              </div>
+            </div>
+          </div>
+        );
+      
+     
+      case 'file_sharing':
+        return (
+          <div className="phishingphrenzy_file_sharing">
+            <div className="phishingphrenzy_file_sharing_header">
+              <div className="phishingphrenzy_file_sharing_logo">
+                {item.logo ? (
+                  <img src={item.logo} alt="File sharing platform logo" />
+                ) : (
+                  <div className="phishingphrenzy_file_sharing_logo_placeholder">
+                    <FaShareAlt />
+                  </div>
+                )}
+              </div>
+              <div className="phishingphrenzy_file_sharing_platform">
+                {item.platform || "File Sharing"}
+              </div>
+            </div>
+            <div className="phishingphrenzy_file_sharing_body">
+              <div className="phishingphrenzy_file_sharing_title">
+                {item.title || "Shared file with you"}
+              </div>
+              <div className="phishingphrenzy_file_sharing_from">
+                <div className="phishingphrenzy_file_sharing_user_info">
+                  <div className="phishingphrenzy_file_sharing_user_avatar">
+                    {item.userName ? item.userName[0] : 'U'}
+                  </div>
+                  <div className="phishingphrenzy_file_sharing_user_details">
+                    <div className="phishingphrenzy_file_sharing_user_name">
+                      {item.userName || "James Wilson"}
+                    </div>
+                    <div className="phishingphrenzy_file_sharing_user_email">
+                      {item.userEmail || "james.wilson@example.com"}
+                    </div>
+                  </div>
+                </div>
+                <div className="phishingphrenzy_file_sharing_message">
+                  {item.message || "I've shared an important document with you. Please review it as soon as possible."}
+                </div>
+              </div>
+              <div className="phishingphrenzy_file_sharing_file">
+                <div className="phishingphrenzy_file_sharing_file_icon">
+                  <FaFileAlt />
+                </div>
+                <div className="phishingphrenzy_file_sharing_file_info">
+                  <div className="phishingphrenzy_file_sharing_file_name">
+                    {item.fileName || "Confidential_Document.pdf"}
+                  </div>
+                  <div className="phishingphrenzy_file_sharing_file_details">
+                    <span>{item.fileSize || "2.4 MB"}</span>
+                    <span>{item.fileType || "PDF Document"}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="phishingphrenzy_file_sharing_expires">
+                This link expires in {item.expirationPeriod || "7 days"}
+              </div>
+            </div>
+            <div className="phishingphrenzy_file_sharing_footer">
+              <button className="phishingphrenzy_file_sharing_button" disabled>
+                {item.buttonText || "View Document"}
+              </button>
+              <div className="phishingphrenzy_file_sharing_note">
+                {item.note || "You'll need to sign in to access this file."}
+              </div>
+              <div className="phishingphrenzy_file_sharing_url">
+                File URL: {item.fileUrl || "https://docs-share.example.com/f/abcxyz123"}
+              </div>
+            </div>
+          </div>
+        );
+      
+      // # Extra types (variations of existing types)
+      
+
+      case 'modern_email':
+        return (
+          <div className="phishingphrenzy_modern_email">
+            <div className="phishingphrenzy_modern_email_sender">
+              <div className="phishingphrenzy_modern_email_avatar">
+                {item.from ? item.from[0] : 'S'}
+              </div>
+              <div className="phishingphrenzy_modern_email_sender_info">
+                <div className="phishingphrenzy_modern_email_sender_name">
+                  {item.senderName || item.from || "Sender"}
+                </div>
+                <div className="phishingphrenzy_modern_email_sender_address">
+                  {item.from || "sender@example.com"}
+                </div>
+              </div>
+              <div className="phishingphrenzy_modern_email_date">
+                {item.date || "Today, 10:45 AM"}
+              </div>
+            </div>
+            <div className="phishingphrenzy_modern_email_subject">
+              {item.subject}
+            </div>
+            <div className="phishingphrenzy_modern_email_content">
+              <div className="phishingphrenzy_modern_email_body">
+                {item.body}
+              </div>
+              {item.callToAction && (
+                <div className="phishingphrenzy_modern_email_cta">
+                  <a href="#" onClick={(e) => e.preventDefault()} className="phishingphrenzy_modern_email_cta_button">
+                    {item.callToAction}
+                  </a>
+                </div>
+              )}
+              {item.links && item.links.length > 0 && (
+                <div className="phishingphrenzy_modern_email_links">
+                  <div className="phishingphrenzy_modern_email_links_label">Links in email:</div>
+                  {item.links.map((link, idx) => (
+                    <div className="phishingphrenzy_modern_email_link" key={idx}>
+                      <FaLink /> <span className="phishingphrenzy_modern_email_link_text">{link}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="phishingphrenzy_modern_email_footer">
+              <div className="phishingphrenzy_modern_email_actions">
+                <button className="phishingphrenzy_modern_email_action_button" disabled>Reply</button>
+                <button className="phishingphrenzy_modern_email_action_button" disabled>Forward</button>
+                <button className="phishingphrenzy_modern_email_action_button" disabled>Reply</button>
+                <button className="phishingphrenzy_modern_email_action_button" disabled>Forward</button>
+                <button className="phishingphrenzy_modern_email_action_button" disabled>Delete</button>
+              </div>
+            </div>
+          </div>
+        );
+      
+      // Adding more
+      
       default:
         return <div>Unknown content type</div>;
     }
@@ -500,6 +1186,7 @@ const PhishingCard = ({ item }) => {
   const getCardIcon = () => {
     switch (item.type) {
       case 'email':
+      case 'modern_email':
         return <FaEnvelope className="phishingphrenzy_card_icon" />;
       case 'website':
         return <FaGlobe className="phishingphrenzy_card_icon" />;
@@ -521,6 +1208,26 @@ const PhishingCard = ({ item }) => {
         return <FaCreditCard className="phishingphrenzy_card_icon" />;
       case 'security_alert':
         return <FaExclamationTriangle className="phishingphrenzy_card_icon" />;
+      case 'advertisement':
+        return <FaAd className="phishingphrenzy_card_icon" />;
+      case 'browser_extension':
+        return <FaPuzzlePiece className="phishingphrenzy_card_icon" />;
+      case 'event_invitation':
+        return <FaCalendarAlt className="phishingphrenzy_card_icon" />;
+      case 'survey':
+        return <FaPoll className="phishingphrenzy_card_icon" />;
+      case 'wifi_portal':
+        return <FaWifi className="phishingphrenzy_card_icon" />;
+      case 'certificate_error':
+        return <FaLock className="phishingphrenzy_card_icon" />;
+      case 'software_update':
+        return <FaMicrochip className="phishingphrenzy_card_icon" />;
+      case 'puzzle_game':
+        return <FaPuzzlePiece className="phishingphrenzy_card_icon" />;
+      case 'video_conference':
+        return <FaVideoCamera className="phishingphrenzy_card_icon" />;
+      case 'file_sharing':
+        return <FaShareAlt className="phishingphrenzy_card_icon" />;
       default:
         return null;
     }
@@ -532,6 +1239,7 @@ const PhishingCard = ({ item }) => {
         {getCardIcon()}
         <span className="phishingphrenzy_card_type">
           {item.type === 'email' ? 'Email Message' : 
+           item.type === 'modern_email' ? 'Email Message' :
            item.type === 'website' ? 'Website' : 
            item.type === 'sms' ? 'SMS Message' : 
            item.type === 'app_download' ? 'App Download' :
@@ -541,7 +1249,17 @@ const PhishingCard = ({ item }) => {
            item.type === 'tech_support' ? 'Technical Support Alert' :
            item.type === 'document' ? 'Document Download' :
            item.type === 'payment_confirmation' ? 'Payment Confirmation' :
-           item.type === 'security_alert' ? 'Security Alert' : 'Unknown'}
+           item.type === 'security_alert' ? 'Security Alert' :
+           item.type === 'advertisement' ? 'Online Advertisement' :
+           item.type === 'browser_extension' ? 'Browser Extension' :
+           item.type === 'event_invitation' ? 'Event Invitation' :
+           item.type === 'survey' ? 'Survey or Quiz' :
+           item.type === 'wifi_portal' ? 'WiFi Login Portal' :
+           item.type === 'certificate_error' ? 'Security Certificate Error' :
+           item.type === 'software_update' ? 'Software Update' :
+           item.type === 'puzzle_game' ? 'Online Game' :
+           item.type === 'video_conference' ? 'Video Meeting Invitation' :
+           item.type === 'file_sharing' ? 'File Sharing Link' : 'Unknown'}
         </span>
       </div>
       <div className="phishingphrenzy_card_content">

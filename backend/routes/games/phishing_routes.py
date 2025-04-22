@@ -8,31 +8,35 @@ import random
 from mongodb.database import db
 from models.test import get_user_by_id, update_user_coins, update_user_xp
 
-# Initialize the blueprint
+
 phishing_bp = Blueprint('phishing', __name__)
 
-# Phishing examples collection
+
 phishing_examples_collection = db.phishingExamples
 phishing_scores_collection = db.phishingScores
+phishing_game_history_collection = db.phishingGameHistory  
 
-# Get all phishing examples
+
 @phishing_bp.route('/examples', methods=['GET'])
 def get_phishing_examples():
     """
     Retrieve a set of phishing and legitimate examples 
-    for the Phishing Phrenzy game.
+    for the Phishing Phrenzy game with smart shuffling based on user history.
     """
+    user_id = request.args.get('userId')
+    example_limit = int(request.args.get('limit', 100))  
+    
     start_db = time.time()
     examples = list(phishing_examples_collection.find({}, {'_id': 0}))
     duration = time.time() - start_db
     if hasattr(g, 'db_time_accumulator'):
         g.db_time_accumulator += duration
 
-    # If there are no examples in the database, generate some defaults
+
     if not examples:
         examples = generate_default_examples()
         
-        # Store these examples in the database for future use
+
         if examples:
             start_db = time.time()
             phishing_examples_collection.insert_many(examples)
@@ -40,11 +44,119 @@ def get_phishing_examples():
             if hasattr(g, 'db_time_accumulator'):
                 g.db_time_accumulator += duration
     
-    # Shuffle examples to ensure randomized order
-    random.shuffle(examples)
+    # If user_id is provided, use smart shuffling based on history
+    if user_id and ObjectId.is_valid(user_id):
+        return jsonify(smart_shuffle_examples(user_id, examples, example_limit))
+    else:
+        # If no user_id, regular shuffling
+        random.shuffle(examples)
+        return jsonify(examples[:example_limit])
+
+def smart_shuffle_examples(user_id, examples, limit):
+    """
+    Smart shuffling algorithm that considers user's game history
+    to minimize repeats between game sessions.
+    """
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        # Fall back to random shuffle if user_id is invalid
+        random.shuffle(examples)
+        return examples[:limit]
     
-    # Limit to 20 examples per game session
-    return jsonify(examples[:20])
+    # Get user's game history (last 5 games)
+    start_db = time.time()
+    history_entries = list(phishing_game_history_collection.find(
+        {"userId": user_oid},
+        {"examples": 1, "_id": 0}
+    ).sort("timestamp", -1).limit(5))
+    duration = time.time() - start_db
+    if hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator += duration
+    
+    # Extract example names from history
+    recently_seen = set()
+    for entry in history_entries:
+        recently_seen.update(entry.get("examples", []))
+    
+    # Get all example names for indexing
+    all_example_names = [example.get("name", "") for example in examples]
+    
+    # weighted list where recently seen examples have lower weight
+    weighted_indices = []
+    for i, example in enumerate(examples):
+        weight = 1.0
+        if example.get("name", "") in recently_seen:
+            weight = 0.3  # 70% less likely to see again
+        
+        # Add index multiple times based on weight (integer weights)
+        for _ in range(int(weight * 10)):
+            weighted_indices.append(i)
+    
+    # Select indices from weighted list without replacement
+    selected_indices = set()
+    while len(selected_indices) < min(limit, len(examples)):
+        if not weighted_indices:
+            # If we've exhausted our weighted indices, add all remaining indices
+            remaining = set(range(len(examples))) - selected_indices
+            weighted_indices.extend(list(remaining))
+        
+        if weighted_indices:
+            idx = weighted_indices.pop(random.randint(0, len(weighted_indices) - 1))
+            selected_indices.add(idx)
+    
+    # Get the selected examples
+    selected_examples = [examples[idx] for idx in selected_indices]
+    
+    # Final shuffle to ensure randomness
+    random.shuffle(selected_examples)
+    
+    # Store this game's examples in history
+    store_game_history(user_id, [ex.get("name", "") for ex in selected_examples])
+    
+    return selected_examples
+
+def store_game_history(user_id, example_names):
+    """
+    Store the current game's example names in user history.
+    """
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return
+    
+    # Create new history entry
+    history_entry = {
+        "userId": user_oid,
+        "timestamp": datetime.utcnow(),
+        "examples": example_names
+    }
+    
+    # Store in database
+    start_db = time.time()
+    phishing_game_history_collection.insert_one(history_entry)
+    duration = time.time() - start_db
+    if hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator += duration
+    
+    # Remove old entries (keep only last 10 per user)
+    start_db = time.time()
+    history_count = phishing_game_history_collection.count_documents({"userId": user_oid})
+    if history_count > 10:
+        # Find the 10th oldest entry
+        tenth_newest = list(phishing_game_history_collection.find(
+            {"userId": user_oid}
+        ).sort("timestamp", -1).skip(9).limit(1))
+        
+        if tenth_newest:
+            # Remove all entries older than the 10th newest
+            phishing_game_history_collection.delete_many({
+                "userId": user_oid,
+                "timestamp": {"$lt": tenth_newest[0]["timestamp"]}
+            })
+    duration = time.time() - start_db
+    if hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator += duration
 
 @phishing_bp.route('/submit-score', methods=['POST'])
 def submit_score():
@@ -171,14 +283,14 @@ def get_leaderboard():
         entry["userId"] = str(entry["userId"])
     
     return jsonify(leaderboard)
-
+    
+    
 def generate_default_examples():
     """
     Generate default phishing and legitimate examples if none exist in the database.
     """
     examples = []
     
-    # -------------------- ORIGINAL EXAMPLES --------------------
     
     # Phishing emails
     examples.append({
@@ -347,8 +459,7 @@ def generate_default_examples():
         "isPhishing": False
     })
     
-    # -------------------- NEW EXAMPLE TYPES --------------------
-    
+
     # 1. App Download Examples
     examples.append({
         "type": "app_download",

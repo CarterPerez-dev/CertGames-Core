@@ -1522,6 +1522,1817 @@
   background-color: var(--phishing-accent-glow);
 }
 
+/* ======== NEW PHISHING TYPES STYLES ======== */
+
+/* #1: Online Advertisement */
+.phishingphrenzy_advertisement {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_ad_header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_ad_sponsored {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.phishingphrenzy_ad_close {
+  cursor: not-allowed;
+  font-weight: bold;
+  color: #555;
+}
+
+.phishingphrenzy_ad_content {
+  display: flex;
+  padding: 15px;
+  gap: 15px;
+}
+
+.phishingphrenzy_ad_image {
+  width: 120px;
+  height: 120px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.phishingphrenzy_ad_image_placeholder {
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+  padding: 5px;
+  font-weight: bold;
+  background-color: #ffcc00;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_ad_text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.phishingphrenzy_ad_title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_ad_description {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.phishingphrenzy_ad_url {
+  font-size: 0.8rem;
+  color: #0066cc;
+  margin-top: 3px;
+}
+
+.phishingphrenzy_ad_footer {
+  padding: 12px 15px;
+  background-color: #f8f8f8;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phishingphrenzy_ad_button {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.phishingphrenzy_ad_destination {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.phishingphrenzy_ad_dest_url {
+  color: #0066cc;
+  word-break: break-all;
+}
+
+/* #2: Browser Extension */
+.phishingphrenzy_extension {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_extension_header {
+  display: flex;
+  padding: 15px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+  gap: 15px;
+}
+
+.phishingphrenzy_extension_icon {
+  width: 60px;
+  height: 60px;
+  background-color: #e6f2ff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.phishingphrenzy_extension_icon_placeholder {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0066cc;
+}
+
+.phishingphrenzy_extension_info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.phishingphrenzy_extension_name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_extension_developer {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.phishingphrenzy_extension_stats {
+  display: flex;
+  gap: 15px;
+  font-size: 0.85rem;
+  color: #777;
+  margin-top: 3px;
+}
+
+.phishingphrenzy_extension_body {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.phishingphrenzy_extension_description {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_extension_section_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_extension_permissions {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 12px 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_extension_permission_list {
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+
+.phishingphrenzy_extension_permission_item {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.phishingphrenzy_extension_permission_item:last-child {
+  margin-bottom: 0;
+}
+
+.phishingphrenzy_extension_review {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 12px 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_extension_review_content {
+  font-size: 0.9rem;
+  color: #555;
+  font-style: italic;
+}
+
+.phishingphrenzy_extension_footer {
+  padding: 15px;
+  background-color: #f8f8f8;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.phishingphrenzy_extension_button {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+}
+
+.phishingphrenzy_extension_source {
+  font-size: 0.85rem;
+  color: #777;
+  margin-top: 5px;
+}
+
+/* #3: Event Invitation */
+.phishingphrenzy_event {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_event_header {
+  padding: 20px;
+  background-color: #f0f7ff;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.phishingphrenzy_event_title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.phishingphrenzy_event_organizer {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.phishingphrenzy_event_details {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.phishingphrenzy_event_datetime {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_event_date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_event_time {
+  font-size: 1rem;
+  color: #333;
+}
+
+.phishingphrenzy_event_location {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_event_location_name {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_event_address {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.phishingphrenzy_event_description {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_event_section_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.phishingphrenzy_event_speakers {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 12px 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_event_speaker_list {
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+
+.phishingphrenzy_event_speaker_item {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.phishingphrenzy_event_footer {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phishingphrenzy_event_registration {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.phishingphrenzy_event_price {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_event_register_button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+}
+
+.phishingphrenzy_event_link {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 10px;
+  word-break: break-all;
+}
+
+.phishingphrenzy_event_url {
+  color: #0066cc;
+}
+
+/* #4: Survey or Quiz */
+.phishingphrenzy_survey {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_survey_header {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.phishingphrenzy_survey_logo {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_survey_logo img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.phishingphrenzy_survey_logo_placeholder {
+  width: 60px;
+  height: 60px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  color: #555;
+}
+
+.phishingphrenzy_survey_title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.phishingphrenzy_survey_sponsor {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.phishingphrenzy_survey_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_survey_description {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_survey_details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 12px 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_survey_detail {
+  flex: 1;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.phishingphrenzy_survey_detail_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.85rem;
+}
+
+.phishingphrenzy_survey_preview {
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 15px;
+  background-color: #fff;
+}
+
+.phishingphrenzy_survey_question {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.phishingphrenzy_survey_options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phishingphrenzy_survey_option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phishingphrenzy_survey_option input {
+  cursor: not-allowed;
+}
+
+.phishingphrenzy_survey_option label {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.phishingphrenzy_survey_footer {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.phishingphrenzy_survey_disclaimer {
+  font-size: 0.85rem;
+  color: #777;
+  font-style: italic;
+}
+
+.phishingphrenzy_survey_buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.phishingphrenzy_survey_button {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 25px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+}
+
+.phishingphrenzy_survey_url {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 5px;
+}
+
+/* #5: WiFi Login Portal */
+.phishingphrenzy_wifi_portal {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_wifi_header {
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.phishingphrenzy_wifi_icon {
+  font-size: 2rem;
+  color: #0066cc;
+  margin-bottom: 5px;
+}
+
+.phishingphrenzy_wifi_title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_wifi_network {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 5px;
+}
+
+.phishingphrenzy_wifi_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_wifi_message {
+  font-size: 0.95rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_wifi_form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_wifi_social_login {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.phishingphrenzy_wifi_social_title {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.phishingphrenzy_wifi_social_buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.phishingphrenzy_wifi_social_button {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.phishingphrenzy_wifi_credentials {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.phishingphrenzy_wifi_input {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.phishingphrenzy_wifi_input label {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_wifi_input input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_wifi_agreement {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.phishingphrenzy_wifi_agreement a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.phishingphrenzy_wifi_footer {
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.phishingphrenzy_wifi_button {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  cursor: not-allowed;
+  font-weight: 500;
+  min-width: 200px;
+}
+
+.phishingphrenzy_wifi_footer_text {
+  font-size: 0.85rem;
+  color: #777;
+  text-align: center;
+  max-width: 400px;
+}
+
+.phishingphrenzy_wifi_url {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 5px;
+}
+
+/* #6: Certificate Error */
+.phishingphrenzy_certificate {
+  background-color: #ffebee;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ffcdd2;
+}
+
+.phishingphrenzy_certificate_header {
+  padding: 15px 20px;
+  background-color: #f44336;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.phishingphrenzy_certificate_icon {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.phishingphrenzy_certificate_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+}
+
+.phishingphrenzy_certificate_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_certificate_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_certificate_details {
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #ffcdd2;
+}
+
+.phishingphrenzy_certificate_detail_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_certificate_detail_text {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #d32f2f;
+  margin-bottom: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.phishingphrenzy_certificate_url {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.phishingphrenzy_certificate_url_label {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.85rem;
+}
+
+.phishingphrenzy_certificate_url_value {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #333;
+  word-break: break-all;
+}
+
+.phishingphrenzy_certificate_help {
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #ffcdd2;
+}
+
+.phishingphrenzy_certificate_help_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_certificate_help_list {
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+
+.phishingphrenzy_certificate_help_list li {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_certificate_custom {
+  font-size: 0.9rem;
+  color: #d32f2f;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 4px;
+  border-left: 3px solid #f44336;
+}
+
+.phishingphrenzy_certificate_footer {
+  padding: 15px 20px;
+  background-color: #ffebee;
+  border-top: 1px solid #ffcdd2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.phishingphrenzy_certificate_back_button,
+.phishingphrenzy_certificate_advanced_button,
+.phishingphrenzy_certificate_proceed_button {
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+  border: none;
+  font-weight: 500;
+}
+
+.phishingphrenzy_certificate_back_button {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_certificate_advanced_button {
+  background-color: transparent;
+  color: #0066cc;
+  text-decoration: underline;
+  padding: 10px 5px;
+}
+
+.phishingphrenzy_certificate_proceed_button {
+  background-color: #f44336;
+  color: white;
+}
+
+/* #7: Software Update */
+.phishingphrenzy_update {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_update_header {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_update_logo {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_update_logo img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.phishingphrenzy_update_logo_placeholder {
+  width: 50px;
+  height: 50px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  color: #555;
+}
+
+.phishingphrenzy_update_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_update_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_update_message {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_update_details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_update_detail {
+  flex: 1;
+  min-width: 120px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.phishingphrenzy_update_detail_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_update_notes {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_update_notes_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_update_notes_content {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.phishingphrenzy_update_footer {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.phishingphrenzy_update_warning {
+  font-size: 0.9rem;
+  color: #d32f2f;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phishingphrenzy_update_buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.phishingphrenzy_update_later_button,
+.phishingphrenzy_update_now_button {
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+}
+
+.phishingphrenzy_update_later_button {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_update_now_button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+}
+
+.phishingphrenzy_update_source {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: right;
+  margin-top: 5px;
+}
+
+/* #8: Online Puzzle/Game */
+.phishingphrenzy_puzzle {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_puzzle_header {
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #ff9500, #ff5252);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.phishingphrenzy_puzzle_icon {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.phishingphrenzy_puzzle_title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: white;
+}
+
+.phishingphrenzy_puzzle_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_puzzle_message {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.5;
+  text-align: center;
+  font-weight: 500;
+}
+
+.phishingphrenzy_puzzle_game {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.phishingphrenzy_puzzle_challenge {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.phishingphrenzy_puzzle_image {
+  width: 100%;
+  height: 150px;
+  background-color: #f5f5f5;
+  border: 1px dashed #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.phishingphrenzy_puzzle_image_placeholder {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.phishingphrenzy_puzzle_prizes {
+  background-color: #fff9e6;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #ffe0b2;
+  width: 100%;
+}
+
+.phishingphrenzy_puzzle_prizes_title {
+  font-weight: 600;
+  color: #ff9800;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_puzzle_prizes_list {
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+
+.phishingphrenzy_puzzle_prize_item {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_puzzle_timer {
+  background-color: #f5f5f5;
+  border-radius: 25px;
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.phishingphrenzy_puzzle_timer_label {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phishingphrenzy_puzzle_timer_value {
+  font-weight: bold;
+  color: #f44336;
+  font-size: 1rem;
+  font-family: monospace;
+}
+
+.phishingphrenzy_puzzle_footer {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.phishingphrenzy_puzzle_participation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.phishingphrenzy_puzzle_attempts {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.phishingphrenzy_puzzle_play_button {
+  background: linear-gradient(135deg, #ff9500, #ff5252);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+}
+
+.phishingphrenzy_puzzle_terms {
+  font-size: 0.85rem;
+  color: #777;
+  font-style: italic;
+}
+
+.phishingphrenzy_puzzle_url {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 5px;
+}
+
+/* #9: Video Conference Invitation */
+.phishingphrenzy_conference {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_conference_header {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.phishingphrenzy_conference_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_conference_logo img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.phishingphrenzy_conference_logo_placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #0066cc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.phishingphrenzy_conference_platform {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_conference_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_conference_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_conference_organizer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_conference_from {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_conference_organizer_name {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_conference_organizer_email {
+  color: #0066cc;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_conference_details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_conference_topic,
+.phishingphrenzy_conference_time,
+.phishingphrenzy_conference_duration {
+  display: flex;
+  gap: 10px;
+}
+
+.phishingphrenzy_conference_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+  min-width: 60px;
+}
+
+.phishingphrenzy_conference_join_info {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_conference_join_title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_conference_link {
+  margin-bottom: 12px;
+}
+
+.phishingphrenzy_conference_link_label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.phishingphrenzy_conference_link_url {
+  background-color: #f0f0f0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 0.85rem;
+  color: #0066cc;
+  word-break: break-all;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_conference_id,
+.phishingphrenzy_conference_passcode {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.phishingphrenzy_conference_footer {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.phishingphrenzy_conference_join_button {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+  min-width: 150px;
+}
+
+.phishingphrenzy_conference_note {
+  font-size: 0.85rem;
+  color: #777;
+  text-align: center;
+}
+
+.phishingphrenzy_conference_url {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* #10: File Sharing Link */
+.phishingphrenzy_file_sharing {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_file_sharing_header {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.phishingphrenzy_file_sharing_logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phishingphrenzy_file_sharing_logo img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.phishingphrenzy_file_sharing_logo_placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #4285f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.phishingphrenzy_file_sharing_platform {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_file_sharing_body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phishingphrenzy_file_sharing_title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.phishingphrenzy_file_sharing_from {
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.phishingphrenzy_file_sharing_user_info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phishingphrenzy_file_sharing_user_avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #e1f5fe;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #0288d1;
+  font-size: 1.1rem;
+}
+
+.phishingphrenzy_file_sharing_user_details {
+  flex: 1;
+}
+
+.phishingphrenzy_file_sharing_user_name {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_file_sharing_user_email {
+  color: #555;
+  font-size: 0.85rem;
+}
+
+.phishingphrenzy_file_sharing_message {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.5;
+  padding-top: 10px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.phishingphrenzy_file_sharing_file {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #eee;
+}
+
+.phishingphrenzy_file_sharing_file_icon {
+  font-size: 2rem;
+  color: #4285f4;
+}
+
+.phishingphrenzy_file_sharing_file_info {
+  flex: 1;
+}
+
+.phishingphrenzy_file_sharing_file_name {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_file_sharing_file_details {
+  color: #777;
+  font-size: 0.85rem;
+  display: flex;
+  gap: 15px;
+}
+
+.phishingphrenzy_file_sharing_expires {
+  font-size: 0.85rem;
+  color: #0288d1;
+  text-align: center;
+  background-color: #e1f5fe;
+  padding: 8px 15px;
+  border-radius: 20px;
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.phishingphrenzy_file_sharing_footer {
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.phishingphrenzy_file_sharing_button {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 25px;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+  font-weight: 500;
+  min-width: 180px;
+}
+
+.phishingphrenzy_file_sharing_note {
+  font-size: 0.85rem;
+  color: #777;
+  text-align: center;
+}
+
+.phishingphrenzy_file_sharing_url {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 5px;
+}
+
+/* #11: Modern Email (Variation of existing email) */
+.phishingphrenzy_modern_email {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ddd;
+}
+
+.phishingphrenzy_modern_email_sender {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+}
+
+.phishingphrenzy_modern_email_avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #e1f5fe;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #0288d1;
+  font-size: 1.1rem;
+}
+
+.phishingphrenzy_modern_email_sender_info {
+  flex: 1;
+}
+
+.phishingphrenzy_modern_email_sender_name {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_modern_email_sender_address {
+  color: #555;
+  font-size: 0.85rem;
+}
+
+.phishingphrenzy_modern_email_date {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.phishingphrenzy_modern_email_subject {
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.phishingphrenzy_modern_email_content {
+  padding: 20px;
+}
+
+.phishingphrenzy_modern_email_body {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.phishingphrenzy_modern_email_cta {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.phishingphrenzy_modern_email_cta_button {
+  display: inline-block;
+  background-color: #4285f4;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.phishingphrenzy_modern_email_links {
+  margin-top: 20px;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 15px;
+}
+
+.phishingphrenzy_modern_email_links_label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.phishingphrenzy_modern_email_link {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  word-break: break-all;
+  font-size: 0.85rem;
+}
+
+.phishingphrenzy_modern_email_link_text {
+  color: #0066cc;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.phishingphrenzy_modern_email_footer {
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+}
+
+.phishingphrenzy_modern_email_action_button {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+  color: #333;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .phishingphrenzy_ad_content {
+    flex-direction: column;
+  }
+  
+  .phishingphrenzy_ad_image {
+    width: 100%;
+    max-height: 150px;
+  }
+  
+  .phishingphrenzy_event_registration,
+  .phishingphrenzy_puzzle_participation,
+  .phishingphrenzy_certificate_footer,
+  .phishingphrenzy_update_buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .phishingphrenzy_event_register_button,
+  .phishingphrenzy_puzzle_play_button,
+  .phishingphrenzy_certificate_back_button,
+  .phishingphrenzy_certificate_advanced_button,
+  .phishingphrenzy_certificate_proceed_button,
+  .phishingphrenzy_update_later_button,
+  .phishingphrenzy_update_now_button {
+    width: 100%;
+  }
+  
+  .phishingphrenzy_conference_organizer,
+  .phishingphrenzy_file_sharing_user_info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .phishingphrenzy_extension_header,
+  .phishingphrenzy_wifi_header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .phishingphrenzy_modern_email_sender {
+    flex-wrap: wrap;
+  }
+  
+  .phishingphrenzy_modern_email_date {
+    margin-top: 10px;
+    width: 100%;
+    text-align: right;
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .phishingphrenzy_card_container {

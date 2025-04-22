@@ -1,5 +1,4 @@
-// Updated src/components/pages/games/PhishingPhrenzy/PhishingPhrenzy.js
-// Modifications to track seen examples for the game over modal
+// src/components/pages/games/PhishingPhrenzy/PhishingPhrenzy.js
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaSkullCrossbones, FaClock, FaTrophy, FaArrowLeft, FaTimesCircle, FaCoins, FaStar, FaShieldVirus, FaFlagCheckered } from 'react-icons/fa';
@@ -51,7 +50,7 @@ const PhishingPhrenzy = () => {
   const [feedback, setFeedback] = useState(null);
   const [answered, setAnswered] = useState(false);
   const [streak, setStreak] = useState(0);
-  const [showGameOverModal, setShowGameOverModal] = useState(false); // NEW: explicit modal display state
+  const [showGameOverModal, setShowGameOverModal] = useState(false);
   
   // Track examples the user has seen during the game
   const [seenExamples, setSeenExamples] = useState([]);
@@ -59,14 +58,18 @@ const PhishingPhrenzy = () => {
   // Refs to prevent multiple calls
   const timerRef = useRef(null);
   const scoreSubmittedRef = useRef(false);
-  const isEndingGameRef = useRef(false); // NEW: ref to track if game ending is in progress
+  const isEndingGameRef = useRef(false);
   
   const settings = difficultySettings[difficulty];
   
   // Load phishing examples when component mounts
   useEffect(() => {
-    if (phishingItems.length === 0) {
-      dispatch(fetchPhishingData());
+    if (phishingItems.length === 0 && userId) {
+      // Pass userId and increased limit for smart shuffling
+      dispatch(fetchPhishingData({ userId, limit: 100 }));
+    } else if (phishingItems.length === 0) {
+      // No userId, just fetch with increased limit
+      dispatch(fetchPhishingData({ limit: 100 }));
     }
     
     // Clean up on unmount
@@ -75,9 +78,9 @@ const PhishingPhrenzy = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, [dispatch, phishingItems.length]);
+  }, [dispatch, phishingItems.length, userId]);
   
-  // SIMPLIFIED game over handling - the core fix
+  // Game over handling
   const handleGameOver = useCallback(() => {
     if (isEndingGameRef.current) return; // Prevent duplicate calls
     
@@ -107,7 +110,7 @@ const PhishingPhrenzy = () => {
     }
   }, [dispatch, score, userId]);
   
-  // FIXED Timer effect with improved handling
+  // Timer effect with improved handling
   useEffect(() => {
     if (gameState === 'playing' && timeLeft > 0) {
       // Set up the timer
@@ -168,7 +171,7 @@ const PhishingPhrenzy = () => {
     }
   }, [dispatch, settings.timeLimit, phishingItems]);
   
-  // REVISED: Handle manual end game
+  // Handle manual end game
   const handleEndEarly = useCallback(() => {
     if (isEndingGameRef.current) return;
     
@@ -177,7 +180,7 @@ const PhishingPhrenzy = () => {
     }
   }, [handleGameOver]);
   
-  // REVISED: Return to menu
+  // Return to menu
   const handleReturnToMenu = useCallback(() => {
     if (isEndingGameRef.current && gameState !== 'gameOver') return;
     
@@ -212,7 +215,7 @@ const PhishingPhrenzy = () => {
     }
   }, [gameState, dispatch]);
   
-  // REVISED: Play again handler for the game over modal
+  // Play again handler for the game over modal
   const handlePlayAgain = useCallback(() => {
     startNewGame();
   }, [startNewGame]);
@@ -237,7 +240,7 @@ const PhishingPhrenzy = () => {
     if (isCorrect) {
       dispatch(incrementScore(settings.pointsPerCorrect));
       
-      // MODIFIED: Add time for every correct answer, not just streaks
+      // Add time for every correct answer, not just streaks
       const baseTimeBonus = settings.bonusTime;
       setTimeLeft(prevTime => prevTime + baseTimeBonus);
       
@@ -250,7 +253,7 @@ const PhishingPhrenzy = () => {
       setStreak(prev => {
         const newStreak = prev + 1;
         
-        // MODIFIED: Add EXTRA bonus time if on a streak (on top of the base bonus)
+        // Add EXTRA bonus time if on a streak (on top of the base bonus)
         if (newStreak >= 2) {
           const streakBonus = Math.min(newStreak - 1, 4) * settings.bonusTime / 2; // Half the bonus per streak level
           setTimeLeft(prevTime => prevTime + streakBonus);
@@ -389,8 +392,6 @@ const PhishingPhrenzy = () => {
             <>
               <PhishingCard item={currentItem} />
               
-              {/* We don't need to add a new instruction, as it's already in the PhishingCard component.
-                  Instead, we'll add the bottom stats immediately after the card */}
               <div className="phishingphrenzy_bottom_stats_container">
                 <div className="phishingphrenzy_timer">
                   <FaClock /> Time: <span style={{ color: getTimerColor() }}>{timeLeft}</span>
@@ -464,7 +465,7 @@ const PhishingPhrenzy = () => {
           highScore={highScore}
           onClose={handleReturnToMenu}
           onPlayAgain={handlePlayAgain}
-          seenExamples={seenExamples} // Pass the examples the user has seen
+          seenExamples={seenExamples}
         />
       )}
     </div>

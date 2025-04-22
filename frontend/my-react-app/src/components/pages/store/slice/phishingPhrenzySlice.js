@@ -5,9 +5,30 @@ import { fetchUserData } from './userSlice';
 // Thunk to fetch phishing examples from the backend
 export const fetchPhishingData = createAsyncThunk(
   'phishingPhrenzy/fetchPhishingData',
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue, getState }) => {
     try {
-      const response = await fetch('/api/phishing/examples');
+      // Getting userId from params or state if available
+      const { userId, limit = 100 } = params;
+      const state = getState();
+      const actualUserId = userId || state.user.userId;
+      
+
+      let url = '/api/phishing/examples';
+      const queryParams = [];
+      
+      if (actualUserId) {
+        queryParams.push(`userId=${actualUserId}`);
+      }
+      
+      if (limit) {
+        queryParams.push(`limit=${limit}`);
+      }
+      
+      if (queryParams.length > 0) {
+        url += '?' + queryParams.join('&');
+      }
+      
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Failed to fetch phishing examples');
       }
@@ -42,7 +63,7 @@ export const submitGameResults = createAsyncThunk(
       
       const data = await response.json();
       
-      // Fetch updated user data to refresh coins/XP
+      // Fetching updated user data to refresh coins/XP
       await dispatch(fetchUserData(userId));
       
       return data;
@@ -70,10 +91,6 @@ const phishingPhrenzySlice = createSlice({
     startGame: (state) => {
       state.gameStatus = 'playing';
       state.score = 0;
-      // Shuffle phishing items when starting a new game
-      state.phishingItems = [...state.phishingItems]
-        .sort(() => Math.random() - 0.5)
-        .map(item => ({ ...item }));
     },
     endGame: (state, action) => {
       state.gameStatus = 'finished';
@@ -83,10 +100,9 @@ const phishingPhrenzySlice = createSlice({
         localStorage.setItem('phishingPhrenzyHighScore', state.score.toString());
       }
       
-      // Submit score to backend if userId is provided
+
       const userId = action.payload;
       if (userId) {
-        // This will be handled by the submitGameResults thunk
         state.lastSubmittedScore = {
           score: state.score,
           timestamp: new Date().toISOString()
@@ -100,16 +116,13 @@ const phishingPhrenzySlice = createSlice({
       state.score = Math.max(0, state.score - action.payload);
     },
     resetGame: (state) => {
-      // IMPORTANT: Don't reset to 'idle' automatically
-      // This will be done explicitly by the component 
-      // at the right time to avoid race conditions
+      // IMPORTANT
       state.score = 0;
-      // Don't reset phishingItems here to avoid unnecessary refetching
+      // reset phishingItems avoiding unnecessary refetching
     }
   },
   extraReducers: (builder) => {
     builder
-      // Fetch phishing data
       .addCase(fetchPhishingData.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -117,17 +130,12 @@ const phishingPhrenzySlice = createSlice({
       .addCase(fetchPhishingData.fulfilled, (state, action) => {
         state.loading = false;
         state.phishingItems = action.payload;
-        // Ensure items are shuffled
-        state.phishingItems = [...state.phishingItems]
-          .sort(() => Math.random() - 0.5)
-          .map(item => ({ ...item }));
+        // The backend handles the smart shuffling
       })
       .addCase(fetchPhishingData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
-      
-      // Submit game results
+      })      
       .addCase(submitGameResults.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -136,18 +144,18 @@ const phishingPhrenzySlice = createSlice({
         state.loading = false;
         state.lastSubmittedScore = null;
         
-        // If the server returned any achievements, store them
+
         if (action.payload.achievements) {
           state.achievements = action.payload.achievements;
         }
         
-        // IMPORTANT: DO NOT reset the game state here
-        // This allows the game over modal to remain visible
+        // IMPORTANT
+
       })
       .addCase(submitGameResults.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        // We keep the lastSubmittedScore in case we want to retry
+
       });
   },
 });
