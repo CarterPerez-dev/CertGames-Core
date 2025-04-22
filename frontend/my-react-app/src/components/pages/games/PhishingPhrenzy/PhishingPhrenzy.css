@@ -57,7 +57,7 @@
   min-height: 100vh;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Arial', sans-serif;
   background-color: var(--phishing-bg-dark);
   color: var(--phishing-text);
   border-radius: 15px;
@@ -91,7 +91,7 @@
 }
 
 .phishingphrenzy_header_section h1 {
-  font-size: 2.5rem;
+  font-size: 2.75rem;
   background: var(--phishing-gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -101,11 +101,12 @@
   justify-content: center;
   gap: 10px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Orbitron', 'Roboto', sans-serif;
 }
 
 .phishingphrenzy_header_section p {
-  font-size: 1.2rem;
-  color: var(--phishing-text-secondary);
+  font-size: 1.3rem;
+  color: var(--phishing-text-secondary); 
 }
 
 /* Start Screen */
@@ -136,13 +137,14 @@
 }
 
 .phishingphrenzy_start_screen h2 {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
+  font-size: 2rem;
+  margin-bottom: 8px;
   color: var(--phishing-accent);
+  font-family: 'Orbitron', 'Roboto', sans-serif;
 }
 
 .phishingphrenzy_start_screen p {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   text-align: center;
   margin-bottom: 30px;
   max-width: 600px;
@@ -163,7 +165,7 @@
   text-align: center;
   margin-bottom: 15px;
   color: var(--phishing-accent);
-  font-size: 1.3rem;
+  font-size: 1.55rem;
 }
 
 .phishingphrenzy_difficulty_buttons {
@@ -208,7 +210,7 @@
 
 .phishingphrenzy_difficulty_details p {
   margin: 8px 0;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   display: flex;
   justify-content: space-between;
 }
@@ -438,6 +440,86 @@
   color: var(--phishing-error);
 }
 
+/* Add these new styles for the bottom stats container */
+
+/* Bottom stats container styling */
+.phishingphrenzy_bottom_stats_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  margin-top: -75px; /* Position it to overlap with the card instruction */
+  pointer-events: none; /* Allow clicks to pass through to the card below */
+  padding: 0 20px;
+  height: 52px; /* Match the height of the card instruction */
+  z-index: 5;
+}
+
+.phishingphrenzy_bottom_stats_left {
+  display: flex;
+  gap: 15px;
+}
+
+.phishingphrenzy_bottom_stats_right {
+  display: flex;
+  gap: 15px;
+}
+
+
+/* Adjust the card instruction to be centered */
+.phishingphrenzy_card_instruction {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.2);
+  font-size: 1.1rem;
+  border-top: 1px solid var(--phishing-border);
+  color: var(--phishing-accent-glow);
+  font-weight: bold;
+  backdrop-filter: blur(3px);
+}
+/* Add space for the instruction placeholder */
+.phishingphrenzy_instruction_placeholder {
+  flex: 1;
+}
+.phishingphrenzy_bottom_stats_container .phishingphrenzy_timer,
+.phishingphrenzy_bottom_stats_container .phishingphrenzy_score,
+.phishingphrenzy_bottom_stats_container .phishingphrenzy_streak {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  pointer-events: auto; /* Make these clickable */
+  z-index: 10;
+  border: 1px solid var(--phishing-border);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .phishingphrenzy_bottom_stats_container {
+    padding: 0 5px;
+  }
+  
+  .phishingphrenzy_bottom_stats_container .phishingphrenzy_timer,
+  .phishingphrenzy_bottom_stats_container .phishingphrenzy_score,
+  .phishingphrenzy_bottom_stats_container .phishingphrenzy_streak {
+    padding: 5px 8px;
+    font-size: 0.8rem;
+  }
+  
+  .phishingphrenzy_bottom_stats_container .phishingphrenzy_timer svg,
+  .phishingphrenzy_bottom_stats_container .phishingphrenzy_score svg,
+  .phishingphrenzy_bottom_stats_container .phishingphrenzy_streak svg {
+    font-size: 0.9rem;
+  }
+}
+
+
+
 /* Animations */
 @keyframes feedbackFadeIn {
   from { opacity: 0; transform: translateY(-10px); }
@@ -507,7 +589,7 @@
 
 .phishingphrenzy_stat_icon {
   font-size: 1.1rem;
-  color: var(--phishing-accent);
+  color: #ffd700;
 }
 
 /* Responsive adjustments */

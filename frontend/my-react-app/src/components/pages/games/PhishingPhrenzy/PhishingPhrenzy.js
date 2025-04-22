@@ -2,7 +2,7 @@
 // Modifications to track seen examples for the game over modal
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaShieldAlt, FaSkullCrossbones, FaClock, FaTrophy, FaArrowLeft, FaTimesCircle, FaCoins, FaStar } from 'react-icons/fa';
+import { FaSkullCrossbones, FaClock, FaTrophy, FaArrowLeft, FaTimesCircle, FaCoins, FaStar, FaShieldVirus, FaFlagCheckered } from 'react-icons/fa';
 import { 
   startGame, 
   incrementScore, 
@@ -18,21 +18,21 @@ import './PhishingPhrenzy.css';
 
 const difficultySettings = {
   easy: { 
-    timeLimit: 60, 
-    penaltyTime: 2,
-    bonusTime: 3,
+    timeLimit: 69, 
+    penaltyTime: 4,
+    bonusTime: 11,
     pointsPerCorrect: 10
   },
   medium: { 
-    timeLimit: 45, 
-    penaltyTime: 3,
-    bonusTime: 2,
+    timeLimit: 60, 
+    penaltyTime: 5,
+    bonusTime: 7,
     pointsPerCorrect: 15
   },
   hard: { 
-    timeLimit: 30, 
-    penaltyTime: 5,
-    bonusTime: 1,
+    timeLimit: 55, 
+    penaltyTime: 6,
+    bonusTime: 5,
     pointsPerCorrect: 20
   }
 };
@@ -389,25 +389,20 @@ const PhishingPhrenzy = () => {
             <>
               <PhishingCard item={currentItem} />
               
-              {/* Added bottom game stats around the "Is this a phishing attempt" text */}
+              {/* We don't need to add a new instruction, as it's already in the PhishingCard component.
+                  Instead, we'll add the bottom stats immediately after the card */}
               <div className="phishingphrenzy_bottom_stats_container">
-                <div className="phishingphrenzy_bottom_stats_left">
-                  <div className="phishingphrenzy_timer">
-                    <FaClock /> Time: <span style={{ color: getTimerColor() }}>{timeLeft}</span>
-                  </div>
-                  <div className="phishingphrenzy_score">
-                    Score: {score}
-                  </div>
+                <div className="phishingphrenzy_timer">
+                  <FaClock /> Time: <span style={{ color: getTimerColor() }}>{timeLeft}</span>
                 </div>
-                
-                <div className="phishingphrenzy_card_instruction">
-                  <strong>Is this a phishing attempt?</strong>
+                <div className="phishingphrenzy_score">
+                  Score: {score}
                 </div>
-                
-                <div className="phishingphrenzy_bottom_stats_right">
-                  <div className="phishingphrenzy_streak">
-                    Streak: {streak > 0 ? `${streak} 🔥` : '0'}
-                  </div>
+                <div className="phishingphrenzy_instruction_placeholder">
+                  {/* This is just a placeholder for spacing, the actual text is in the PhishingCard */}
+                </div>
+                <div className="phishingphrenzy_streak">
+                  Streak: {streak > 0 ? `${streak} 🔥` : '0'}
                 </div>
               </div>
               
@@ -418,14 +413,14 @@ const PhishingPhrenzy = () => {
               )}
               
               <div className="phishingphrenzy_answer_buttons">
-                <button 
+                <button
                   className="phishingphrenzy_legitimate_button"
                   onClick={() => handleAnswer(false)}
                   disabled={answered || gameState !== 'playing'}
                 >
-                  Legitimate
+                  <FaFlagCheckered /> Legitimate
                 </button>
-                <button 
+                <button
                   className="phishingphrenzy_phishing_button"
                   onClick={() => handleAnswer(true)}
                   disabled={answered || gameState !== 'playing'}
@@ -443,7 +438,7 @@ const PhishingPhrenzy = () => {
   return (
     <div className="phishingphrenzy_main_container">
       <div className="phishingphrenzy_header_section">
-        <h1><FaShieldAlt /> Phishing Phrenzy</h1>
+        <h1><FaShieldVirus /> Phishing Phrenzy</h1>
         <p>Quickly identify phishing attempts before time runs out!</p>
         
         {/* User stats display */}

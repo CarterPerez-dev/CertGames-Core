@@ -196,7 +196,7 @@ const GameOverModal = ({ score, highScore, onClose, onPlayAgain, seenExamples = 
           <p>Share your score:</p>
           <div className="phishingphrenzy_share_buttons">
             <button className="phishingphrenzy_twitter_share">
-              <FaXTwitter /> X
+              <FaXTwitter /> 
             </button>
             <button className="phishingphrenzy_facebook_share">
               <FaLinkedin /> Linkedin

@@ -23,7 +23,7 @@
   max-width: 600px;
   padding: 30px;
   box-shadow: var(--phishing-shadow), var(--phishing-glow);
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Arial', sans-serif;
   color: var(--phishing-text);
   animation: modalScaleIn 0.5s ease;
   position: relative;
@@ -58,13 +58,14 @@
 
 .phishingphrenzy_gameover_title {
   text-align: center;
-  font-size: 2.2rem;
-  margin-bottom: 25px;
+  font-size: 2.6rem;
+  margin-bottom: 20px;
   background: var(--phishing-gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   position: relative;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
 }
 
 .phishingphrenzy_score_container {
@@ -90,9 +91,10 @@
 
 .phishingphrenzy_final_score h3, 
 .phishingphrenzy_rating_container h3 {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   color: var(--phishing-accent);
   margin-bottom: 15px;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
 }
 
 .phishingphrenzy_score_number {
@@ -104,6 +106,7 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   position: relative;
   display: inline-block;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
 }
 
 .phishingphrenzy_score_number::after {
@@ -137,12 +140,14 @@
 }
 
 .phishingphrenzy_rating {
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   margin-bottom: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
+  font-style: Italic;
 }
 
 .phishingphrenzy_gold_trophy, 
@@ -196,11 +201,12 @@
 }
 
 .phishingphrenzy_phishing_tip p {
-  font-size: 0.95rem;
+  font-size: 1rem;
   line-height: 1.6;
   color: var(--phishing-text-secondary);
   position: relative;
   padding-left: 20px;
+  font-style: Italic;
 }
 
 .phishingphrenzy_phishing_tip p::before {
@@ -283,7 +289,7 @@
 
 .phishingphrenzy_example_reason {
   color: var(--phishing-text-secondary);
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.4;
   padding-left: 25px;
 }
