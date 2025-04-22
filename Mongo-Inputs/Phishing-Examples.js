@@ -1,4 +1,3 @@
-Atlas xploitcraft> db.phishingExamples.find();
 [
   {
     _id: ObjectId('6803ec5e2dc40c6452277c76'),
@@ -7,7 +6,7 @@ Atlas xploitcraft> db.phishingExamples.find();
     subject: 'URGENT: Your Account Has Been Compromised',
     body: 'Dear Valued Customer,\n' +
       '\n' +
-      'We have detected suspicious activity on your account. Your account has been temporarily limited.\n' +
+      'We have detected suspicious activity on your account. Your account has been temporarily limited.\n' +                                                                                    
       '\n' +
       'To remove the limitation, please verify your information by clicking the link below:\n' +
       '\n' +
@@ -1754,6 +1753,530 @@ Atlas xploitcraft> it
     buttonText: 'Renew Membership',
     secure: 'Secure payment processing',
     url: 'https://members.fitlifecenters.com/renew',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544ca7'),
+    type: 'email',
+    name: 'Venmo Unusual Activity Alert',
+    reason: "Uses a deceptive domain 'venmo-security-alerts.com' instead of the official venmo.com domain.",                                                                                    
+    from: 'security@venmo-security-alerts.com',
+    subject: 'Unusual Activity Detected - Immediate Action Required',
+    body: 'Dear Venmo Customer,\n' +
+      '\n' +
+      'We have detected unusual activity on your Venmo account. A transfer of $453.78 was initiated to an unrecognized recipient.\n' +                                                          
+      '\n' +
+      'If you did not authorize this transaction, please verify your identity immediately to prevent further unauthorized transfers.\n' +                                                       
+      '\n' +
+      'Secure your account: https://account-verify.venmo-security-alerts.com/verify\n' +
+      '\n' +
+      'If you fail to verify within 24 hours, your account will be temporarily suspended as a security measure.\n' +                                                                            
+      '\n' +
+      'Venmo Security Team',
+    links: [ 'https://account-verify.venmo-security-alerts.com/verify' ],
+    date: '2025-04-22',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544ca8'),
+    type: 'email',
+    name: 'Adobe Creative Cloud Subscription Renewal',
+    reason: 'Sent from an official adobe.com domain with standard renewal notification formatting and legitimate links.',                                                                       
+    from: 'mail@adobe.com',
+    subject: 'Your Adobe Creative Cloud subscription will renew soon',
+    body: 'Hello Jordan,\n' +
+      '\n' +
+      'This is a reminder that your annual Adobe Creative Cloud subscription will automatically renew on May 15, 2025.\n' +                                                                     
+      '\n' +
+      'Subscription details:\n' +
+      '- Plan: Creative Cloud All Apps\n' +
+      '- Renewal price: $599.88 USD (billed annually)\n' +
+      '- Renewal date: May 15, 2025\n' +
+      '- Payment method: Visa ending in 4721\n' +
+      '\n' +
+      'If you wish to make any changes to your subscription before renewal, please visit your Adobe account page: https://account.adobe.com/plans\n' +                                          
+      '\n' +
+      'Thank you for being an Adobe Creative Cloud member.\n' +
+      '\n' +
+      'The Adobe Team',
+    links: [ 'https://account.adobe.com/plans' ],
+    date: '2025-04-20',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544ca9'),
+    type: 'website',
+    name: 'Cryptocurrency Exchange Login Spoof',
+    reason: "Uses a domain with a hyphen 'coinbase-login.net' instead of the legitimate coinbase.com website.",                                                                                 
+    url: 'https://www.coinbase-login.net/signin',
+    title: 'Sign in to Coinbase',
+    content: 'Sign in to your Coinbase account to manage your cryptocurrency portfolio. Buy, sell, and store Bitcoin, Ethereum, and more with trust.',                                          
+    formFields: [
+      {
+        label: 'Email address',
+        type: 'email',
+        placeholder: 'Email address'
+      },
+      { label: 'Password', type: 'password', placeholder: 'Password' }
+    ],
+    submitButton: 'Sign In',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544caa'),
+    type: 'website',
+    name: 'Disney+ Login Page',
+    reason: 'Uses the official disneyplus.com domain with appropriate security measures and standard login form.',                                                                              
+    url: 'https://www.disneyplus.com/login',
+    title: 'Log in to Disney+',
+    content: 'Enter your email and password to start watching your favorite movies and shows on Disney+.',                                                                                      
+    formFields: [
+      { label: 'Email', type: 'email', placeholder: 'Email' },
+      { label: 'Password', type: 'password', placeholder: 'Password' }
+    ],
+    submitButton: 'Log In',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cab'),
+    type: 'sms',
+    name: 'Tax Refund Status Text Message',
+    reason: 'Uses a URL shortener to hide the destination and creates false urgency regarding a tax refund.',                                                                                   
+    from: '+1-507-346-9281',
+    message: 'IRS: Your tax refund of $2,819.43 is pending verification. Complete verification within 48 hours to avoid delays: bit.ly/irs-verify-refund',                                      
+    links: [ 'bit.ly/irs-verify-refund' ],
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cac'),
+    type: 'app_download',
+    name: 'WhatsApp2 Messenger Alternative',
+    reason: 'Mimics the popular messaging app with a slightly modified name and requests excessive permissions.',                                                                               
+    app_name: 'WhatsApp2 Messenger',
+    developer: 'Global Messaging Solutions',
+    platform: 'Google Play',
+    rating: '4.3 ★★★★☆',
+    installs: '1M+',
+    description: 'WhatsApp2 is a free messaging app that works across platforms. Send text messages, voice notes, make video calls, and share documents with friends and family worldwide. Enhanced features beyond the original WhatsApp!',                                                    
+    permissions: [
+      'Contacts',
+      'Camera',
+      'Microphone',
+      'Storage',
+      'Phone',
+      'Location',
+      'SMS',
+      'Device Admin'
+    ],
+    reviewHighlights: [
+      {
+        user: 'Rachel T.',
+        text: 'Works just like the original but with more features!',
+        rating: 5
+      },
+      {
+        user: 'Malik J.',
+        text: 'Good app but drains battery quickly.',
+        rating: 3
+      }
+    ],
+    downloadUrl: 'https://play.google.com/store/apps/whatsapp2-messenger',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cad'),
+    type: 'qr_code',
+    name: 'Concert Venue Entry QR',
+    reason: 'Points to the official venue website with appropriate ticketing path and context.',
+    title: 'Digital Ticket Entry',
+    context: 'Scan this QR code at the entrance of Madison Square Garden for quick access to the Taylor Swift concert.',                                                                        
+    url: 'https://www.msg.com/tickets/entry/TS042625',
+    caption: 'Entry valid for April 26, 2025 show only',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cae'),
+    type: 'social_media',
+    name: 'Celebrity Cryptocurrency Endorsement',
+    reason: "Uses a celebrity's image and fake endorsement to promote suspicious cryptocurrency investment.",                                                                                   
+    platform: 'Facebook',
+    timestamp: '3 hours ago',
+    sender: 'Elon Musk Investment Insights',
+    handle: '@elonmusk.investments',
+    verified: true,
+    message: "I'm excited to share my latest investment strategy that's generating $5,000-$10,000 daily returns for everyday investors. My team has developed an AI-powered cryptocurrency trading algorithm with 98.9% accuracy. For a limited time, I'm allowing public access to help more people achieve financial freedom. Click below to join the beta program before it closes forever.",
+    link: 'https://elon-crypto-strategy.investment/special-access',
+    likes: 12453,
+    shares: 5327,
+    comments: 2184,
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544caf'),
+    type: 'job_offer',
+    name: 'Data Entry Work-From-Home Position',
+    reason: 'Offers unrealistically high pay for basic work with minimal qualifications and uses generic company name.',                                                                        
+    position: 'Remote Data Entry Specialist',
+    company: 'Global Data Solutions',
+    location: 'Remote (Anywhere)',
+    salary: '$35-$50 per hour',
+    description: 'Immediate opening for data entry specialists to work from home. Simple data entry tasks can be completed on your own schedule with minimal supervision. No specialized experience required - just basic typing skills and attention to detail. Weekly direct deposits to your bank account. Start earning immediately!',                                                      
+    requirements: [
+      'Basic computer skills',
+      'Internet connection',
+      'Typing speed of 30+ WPM',
+      'Available to work 10-40 hours weekly',
+      'No prior experience necessary'
+    ],
+    applyEmail: 'careers@global-data-solutions.info',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cb0'),
+    type: 'tech_support',
+    name: 'Adobe Creative Cloud Update Assistant',
+    reason: 'Contains appropriate branding and legitimate update information without urgency or scare tactics.',                                                                                
+    title: 'Adobe Creative Cloud Update',
+    alertMessage: 'Updates are available for Adobe Creative Cloud applications. Installing these updates provides new features, performance improvements, and security fixes.',                 
+    technicalDetails: 'Updates available for:\n' +
+      '- Photoshop 24.5.0 → 24.6.2\n' +
+      '- Illustrator 27.8.1 → 27.9.0\n' +
+      '- Premiere Pro 23.5 → 23.6.1\n' +
+      'Total download size: 1.2 GB',
+    steps: [
+      'Save your work before updating',
+      "Click 'Update Now' to download and install all updates",
+      'Applications will close automatically during the update process',
+      'Updates typically take 5-15 minutes depending on your connection speed'
+    ],
+    contactInfo: 'For help with Creative Cloud updates, visit helpx.adobe.com/creative-cloud',
+    actionButton: 'Update Now',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cb1'),
+    type: 'document',
+    name: 'Quarterly Tax Statement with Macro',
+    reason: 'Requires enabling macros and comes from a non-government domain with urgent tax language.',                                                                                        
+    fileName: 'Q1_2025_Tax_Statement_Required.xlsm',
+    fileType: 'Microsoft Excel Macro-Enabled Workbook',
+    sender: 'tax.department@financial-documents-center.com',
+    contentsPreview: 'QUARTERLY TAX STATEMENT - Q1 2025\n' +
+      '\n' +
+      'This document contains your quarterly tax statement for Q1 2025 (January-March).\n' +
+      '\n' +
+      'IMPORTANT: This document must be processed before April 30, 2025, to avoid late filing penalties.\n' +                                                                                   
+      '\n' +
+      'To view and complete the required tax information, you must enable macros when prompted.\n' +                                                                                            
+      '\n' +
+      '[CONTENT PROTECTED]\n' +
+      '\n' +
+      'Please enable macros to access the full document...',
+    secured: true,
+    source: 'Email attachment from tax.department@financial-documents-center.com',
+    enableButton: 'Enable Content to View Tax Statement',
+    isPhishing: true
+  }
+]
+Type "it" for more
+Atlas xploitcraft> it
+[
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cb2'),
+    type: 'payment_confirmation',
+    name: 'Spotify Premium Family Plan Renewal',
+    reason: 'Contains appropriate transaction details with the official Spotify domain and standard renewal language.',                                                                         
+    company: 'Spotify',
+    title: 'Your Spotify subscription payment',
+    message: "We've processed your payment for Spotify Premium Family Plan. Your subscription has been renewed for another month and gives up to 6 family members access to unlimited music and podcasts without ads.",                                                                         
+    transactionId: 'SP429587136',
+    date: 'April 21, 2025 - 9:17 AM',
+    amount: '$16.99 USD',
+    paymentMethod: 'Mastercard ending in 8742',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cb3'),
+    type: 'security_alert',
+    name: 'Instagram Account Compromise Warning',
+    reason: 'Creates urgency with suspicious activity claims and links to a non-Instagram domain.',                                                                                             
+    title: 'Instagram Security Warning',
+    message: "We've detected suspicious login attempts on your Instagram account from an unrecognized device in Moscow, Russia. Your account security may be compromised.",                     
+    details: {
+      Time: 'April 22, 2025, 2:37 AM UTC',
+      Device: 'Unknown Windows Device',
+      Browser: 'Chrome 123.0.6312.87',
+      Location: 'Moscow, Russia',
+      'IP Address': '178.248.233.134'
+    },
+    actions: [
+      'Verify this was you by confirming this login attempt',
+      "If this wasn't you, secure your account immediately",
+      'Reset your password and enable two-factor authentication',
+      'Review recently connected applications'
+    ],
+    referenceId: 'IG-SEC-7629384',
+    actionButton: 'Secure Account Now',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cb4'),
+    type: 'advertisement',
+    name: 'Legitimate Online Course Promotion',
+    reason: 'Features realistic pricing, recognizable institution, and links to the official university domain.',                                                                               
+    title: 'Stanford Online: Data Science Certificate',
+    description: "Advance your career with Stanford's Professional Certificate in Data Science. Learn from world-class faculty through flexible online modules designed for working professionals. Next cohort starts June 1.",                                                                 
+    imageText: 'STANFORD ONLINE',
+    displayUrl: 'online.stanford.edu',
+    actualUrl: 'https://online.stanford.edu/programs/data-science-certificate',
+    buttonText: 'Learn More',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cb5'),
+    type: 'browser_extension',
+    name: 'YouTube Video Downloader Plus',
+    reason: 'Requests excessive permissions including access to all website data and browser history.',                                                                                         
+    developer: 'VideoTools International',
+    users: '500K+',
+    rating: '★★★★☆',
+    description: 'Download videos from YouTube and other video sharing platforms with one click. Save videos in HD, convert to MP3, and organize your media library with this simple extension.',
+    permissions: [
+      'Read and change all your data on the websites you visit',
+      'Display notifications',
+      'Access all browser tabs',
+      'Access browser activity during navigation',
+      'Access your browsing history',
+      'Access clipboard contents'
+    ],
+    reviewQuote: 'Great extension for saving YouTube videos. I use it almost every day and it works flawlessly!',                                                                               
+    source: 'Chrome Web Store',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cb6'),
+    type: 'event_invitation',
+    name: 'Industry Technology Conference',
+    reason: 'Contains appropriate venue information, realistic ticket pricing, and links to the official event website.',                                                                       
+    title: 'DevCon 2025: AI & Cloud Innovation Summit',
+    organizer: 'TechEvents International',
+    date: 'May 15-17, 2025',
+    time: '9:00 AM - 6:30 PM daily',
+    location: 'Moscone Center',
+    address: '747 Howard Street, San Francisco, CA 94103',
+    description: 'Join us for the premier developer conference exploring the latest in artificial intelligence, cloud computing, and DevOps. Featuring keynotes from industry leaders, hands-on workshops, and unparalleled networking opportunities with peers and potential employers.',      
+    speakers: [
+      { name: 'Dr. Lisa Patel', title: 'CTO, Azure Cloud Services' },
+      {
+        name: 'Michael Zhang',
+        title: 'Director of AI Research, Google'
+      },
+      {
+        name: 'Sophia Rodriguez',
+        title: 'Founder & CEO, CloudNative Systems'
+      }
+    ],
+    price: '$795 (Standard) / $995 (VIP Access)',
+    registerText: 'Register Now',
+    registrationUrl: 'https://devcon2025.com/register',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cb7'),
+    type: 'survey',
+    name: 'Quick Customer Satisfaction Survey',
+    reason: 'Uses a suspicious domain that mimics a major retailer with an unusually large reward offer.',                                                                                      
+    title: 'Walmart Customer Experience Survey - Win $500',
+    sponsoredBy: 'Walmart Customer Research',
+    description: "Thank you for shopping at Walmart! We value your opinion and would like to hear about your recent shopping experience. Complete this short 2-minute survey and you'll be entered to win a $500 Walmart gift card.",                                                           
+    timeRequired: '2 minutes',
+    questionCount: '5',
+    reward: '$500 Walmart Gift Card',
+    sampleQuestion: 'How satisfied were you with your recent shopping experience at Walmart?',
+    sampleOptions: [
+      'Very Satisfied',
+      'Satisfied',
+      'Neutral',
+      'Dissatisfied',
+      'Very Dissatisfied'
+    ],
+    disclaimer: 'Winners selected weekly. Gift card will be emailed within 24 hours of selection.',                                                                                             
+    buttonText: 'Start Survey',
+    url: 'https://walmart-customer-rewards.com/survey',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cb8'),
+    type: 'wifi_portal',
+    name: 'Hotel Guest WiFi Login',
+    reason: "Uses standard hotel WiFi access format with the hotel's legitimate domain and appropriate terms.",                                                                                 
+    title: 'Marriott Bonvoy Guest WiFi',
+    networkName: 'Marriott_Guest',
+    message: 'Welcome to Marriott San Francisco Union Square. Please enter your room number and last name to access complimentary high-speed internet during your stay.',                       
+    loginMethod: 'credentials',
+    skipPassword: false,
+    requiresAgreement: true,
+    footerText: 'This connection is valid for the duration of your stay. Premium high-speed option available for streaming.',                                                                   
+    buttonText: 'Connect',
+    portalUrl: 'wifi.marriott.com/sanfrancisco',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cb9'),
+    type: 'certificate_error',
+    name: 'Banking Website Certificate Warning',
+    reason: 'Shows a real certificate error but tries to convince you to proceed anyway with a bank site.',                                                                                     
+    title: 'Your connection is not private',
+    message: 'Attackers might be trying to steal your information from bank-of-america-secure.com (for example, passwords, messages, or credit cards).',                                        
+    errorDetails: 'NET::ERR_CERT_AUTHORITY_INVALID',
+    url: 'https://bank-of-america-secure.com/login',
+    helpList: [
+      'Go back to the previous page',
+      'Contact your bank directly using the phone number on your card',
+      'Visit the official Bank of America website by typing bankofamerica.com in your address bar'                                                                                              
+    ],
+    customMessage: 'IMPORTANT: This connection is not secure. The security certificate for this site does not match bank-of-america-secure.com. Your banking information may be compromised if you proceed.',                                                                                   
+    proceedText: 'Proceed (unsafe)',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cba'),
+    type: 'software_update',
+    name: 'Windows Security Update Notification',
+    reason: 'Contains legitimate Windows update information with appropriate Microsoft domain references.',                                                                                     
+    title: 'Windows Security Update Available',
+    message: 'Important security updates are available for your device. Installing these updates helps protect your device and keeps Windows running smoothly.',                                
+    currentVersion: 'Windows 11 Version 25H1 (Build 25201.1237)',
+    newVersion: 'Windows 11 Version 25H1 (Build 25201.1575)',
+    size: '435 MB',
+    releaseNotes: 'This security update includes quality improvements and fixes for recently discovered vulnerabilities. Key updates include fixes for Secure Boot vulnerabilities, Kernel security improvements, and patched exploit in Microsoft Defender.',                                  
+    warningMessage: '',
+    laterText: 'Restart later',
+    updateText: 'Restart now',
+    downloadSource: 'update.microsoft.com',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cbb'),
+    type: 'puzzle_game',
+    name: 'Smartphone Giveaway Contest',
+    reason: 'Uses too-good-to-be-true prize offers with artificial scarcity tactics to collect personal information.',                                                                          
+    title: 'Find & Win: Smartphone Giveaway',
+    message: "Congratulations! You've been selected for our exclusive smartphone giveaway event!",                                                                                              
+    challenge: 'Find the hidden smartphone in this image to claim your prize:',
+    prizes: [
+      'iPhone 15 Pro Max (256GB)',
+      'Samsung Galaxy S25 Ultra',
+      '$500 Amazon Gift Card',
+      'Bose QuietComfort Earbuds'
+    ],
+    timeRemaining: '03:45',
+    attemptsRemaining: '2',
+    terms: 'You must complete identity verification to claim your prize.',
+    playButtonText: 'Claim Your Prize',
+    gameUrl: 'smartphone-winners.com/claim-prize',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cbc'),
+    type: 'video_conference',
+    name: 'Legitimate Zoom Webinar Invitation',
+    reason: 'Contains proper Zoom formatting, legitimate domain, and standard webinar information.',                                                                                            
+    platform: 'Zoom',
+    title: 'Invitation: Digital Marketing Trends 2025 Webinar',
+    organizer: 'Marketing Innovation Summit',
+    organizerEmail: 'events@marketinginnovation.org',
+    topic: 'Digital Marketing Trends 2025: AI, Personalization, and Privacy',
+    time: 'May 12, 2025, 11:00 AM - 12:30 PM EDT',
+    duration: '90 minutes',
+    meetingLink: 'https://zoom.us/j/9268457301?pwd=eHJ5RU1mZ2dnQ0dKWGZDWmx2QT09',
+    meetingId: '926 845 7301',
+    passcode: '752913',
+    joinButtonText: 'Join Webinar',
+    note: 'Registration is required. The webinar will be recorded and shared with all registrants.',                                                                                            
+    hostDomain: 'zoom.us',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cbd'),
+    type: 'bank_notification',
+    name: 'Unauthorized Transfer Alert',
+    reason: 'Uses urgency tactics and links to a deceptive domain that mimics a legitimate bank.',                                                                                              
+    bankName: 'TD Bank Alert',
+    alertMessage: 'URGENT: Unusual transfer detected from your account',
+    message: "We've detected an unauthorized transfer of $978.32 from your checking account to an unrecognized external bank account. This transaction is currently pending and can be canceled if reported immediately.",                                                                      
+    alertType: 'Fraud Alert',
+    accountNumber: '****7382',
+    dateDetected: 'April 22, 2025 - 10:23 AM ET',
+    status: 'Action Required Immediately',
+    actionText: 'Please verify this transaction immediately to either approve or decline the pending transfer. If unauthorized, we will block your card and issue a replacement.',              
+    url: 'https://td-bank-secure-alert.com/verify',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cbe'),
+    type: 'package_delivery',
+    name: 'USPS Delivery Notification',
+    reason: 'Contains legitimate USPS tracking information with official domain and standard delivery messaging.',                                                                              
+    courierName: 'USPS Delivery Notification',
+    message: 'Your package with tracking number 9405536897846092847563 is scheduled for delivery tomorrow, April 23, between 11:45 AM and 3:15 PM.',                                            
+    statusMessage: 'Package en route to destination',
+    trackingNumber: '9405536897846092847563',
+    deliveryAttempt: 'First delivery attempt scheduled for April 23, 2025',
+    carrier: 'United States Postal Service',
+    status: 'In Transit - On Time',
+    actionMessage: 'No action required. Signature is not required for this delivery.',
+    button: 'Track Package',
+    contact: 'Customer Support: 1-800-ASK-USPS',
+    url: 'https://tools.usps.com/go/TrackConfirmAction?tLabels=9405536897846092847563',
+    isPhishing: false
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cbf'),
+    type: 'lottery_winner',
+    name: 'International Sweepstakes Award Notification',
+    reason: 'Claims an unlikely win in a contest you never entered with suspicious contact requirements.',                                                                                      
+    lotteryName: 'International Electronic Lottery Commission',
+    congratsMessage: 'Congratulations! Your email address has been randomly selected as a winner in our international sweepstakes draw held on April 18, 2025. Your email was selected from over 250 million email addresses worldwide.',                                                       
+    prizeAmount: '$1,750,000.00 USD',
+    referenceNumber: 'ILC/25087/2025',
+    batchNumber: 'BATCH/455/0827/IEL',
+    drawDate: 'April 18, 2025',
+    winnerNumber: '5 out of 25 winners',
+    button: 'Claim Your Prize Now',
+    disclaimer: 'To process your winnings, a verification fee of $49.95 is required to cover administrative costs.',                                                                            
+    url: 'https://international-lottery-commission.org/claim-prize',
+    isPhishing: true
+  },
+  {
+    _id: ObjectId('6807bd1f2473693d1f544cc0'),
+    type: 'account_verification',
+    name: 'College Portal Password Reset',
+    reason: 'Sent from the official university domain with appropriate account verification steps.',                                                                                            
+    serviceName: 'UCLA IT Services',
+    message: 'Your UCLA account password will expire in 10 days. To maintain access to university systems including MyUCLA, BruinLearn, and campus Wi-Fi, please update your password before the expiration date.',                                                                             
+    statusMessage: 'Password Expiration: May 2, 2025',
+    steps: [
+      {
+        stepNumber: '1',
+        stepText: 'Visit the UCLA Central Authentication Service at logon.ucla.edu'
+      },
+      {
+        stepNumber: '2',
+        stepText: "Click on 'Change Password' and log in with your current credentials"
+      },
+      {
+        stepNumber: '3',
+        stepText: 'Create a new password that meets our security requirements'
+      },
+      {
+        stepNumber: '4',
+        stepText: 'Log out and log back in with your new password to verify it works properly'
+      }
+    ],
+    deadline: 'Please complete this process by May 2, 2025. After this date, you will need to contact the IT Help Desk.',                                                                       
+    buttonText: 'Go to UCLA Password Reset',
+    url: 'https://logon.ucla.edu',
     isPhishing: false
   }
 ]
