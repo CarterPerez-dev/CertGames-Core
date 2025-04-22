@@ -1,18 +1,18 @@
-// src/components/pages/games/PhishingPhrenzy/GameOverModal.js
+// Updated GameOverModal.js with examples explanations
 import React, { useState, useEffect } from 'react';
-import { FaTrophy, FaMedal, FaRedo, FaHome, FaLinkedin } from 'react-icons/fa';
-import { 
-  FaXTwitter,  
-} from 'react-icons/fa6';
+import { FaTrophy, FaMedal, FaRedo, FaHome, FaLinkedin, FaCheckCircle, FaTimesCircle, FaInfoCircle } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 import './GameOverModal.css';
 
-const GameOverModal = ({ score, highScore, onClose, onPlayAgain }) => {
+const GameOverModal = ({ score, highScore, onClose, onPlayAgain, seenExamples = [] }) => {
   const isNewHighScore = score > highScore;
   // Add a state to prevent multiple button clicks
   const [isProcessing, setIsProcessing] = useState(false);
   // Store a fixed tip to prevent changing on re-renders
   const [fixedTip, setFixedTip] = useState('');
+  // State to toggle showing examples
+  const [showExamples, setShowExamples] = useState(false);
   
   useEffect(() => {
     // Set a fixed tip when component mounts
@@ -137,6 +137,43 @@ const GameOverModal = ({ score, highScore, onClose, onPlayAgain }) => {
           <h3>Phishing Tip:</h3>
           <p>{fixedTip}</p>
         </div>
+        
+        {/* New Examples Review section */}
+        {seenExamples.length > 0 && (
+          <div className="phishingphrenzy_examples_container">
+            <div 
+              className="phishingphrenzy_examples_header" 
+              onClick={() => setShowExamples(!showExamples)}
+            >
+              <h3>
+                <FaInfoCircle /> Your Phishing Challenge Results
+                <span className="phishingphrenzy_toggle_examples">
+                  {showExamples ? "Hide" : "Show"} Details
+                </span>
+              </h3>
+            </div>
+            
+            {showExamples && (
+              <div className="phishingphrenzy_examples_list">
+                {seenExamples.map((example, index) => (
+                  <div key={index} className="phishingphrenzy_example_item">
+                    <div className="phishingphrenzy_example_name">
+                      {example.isPhishing ? (
+                        <FaTimesCircle className="phishingphrenzy_icon_phishing" />
+                      ) : (
+                        <FaCheckCircle className="phishingphrenzy_icon_legitimate" />
+                      )}
+                      <span>{example.name}</span>
+                    </div>
+                    <div className="phishingphrenzy_example_reason">
+                      {example.reason}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
         
         <div className="phishingphrenzy_modal_buttons">
           <button 

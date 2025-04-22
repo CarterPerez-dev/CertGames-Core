@@ -1,4 +1,5 @@
-// src/components/pages/games/PhishingPhrenzy/PhishingPhrenzy.js
+// Updated src/components/pages/games/PhishingPhrenzy/PhishingPhrenzy.js
+// Modifications to track seen examples for the game over modal
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaShieldAlt, FaSkullCrossbones, FaClock, FaTrophy, FaArrowLeft, FaTimesCircle, FaCoins, FaStar } from 'react-icons/fa';
@@ -51,6 +52,9 @@ const PhishingPhrenzy = () => {
   const [answered, setAnswered] = useState(false);
   const [streak, setStreak] = useState(0);
   const [showGameOverModal, setShowGameOverModal] = useState(false); // NEW: explicit modal display state
+  
+  // Track examples the user has seen during the game
+  const [seenExamples, setSeenExamples] = useState([]);
   
   // Refs to prevent multiple calls
   const timerRef = useRef(null);
@@ -150,6 +154,7 @@ const PhishingPhrenzy = () => {
     setShowGameOverModal(false); // Hide modal
     scoreSubmittedRef.current = false;
     isEndingGameRef.current = false; // Reset lock
+    setSeenExamples([]); // Reset seen examples
     
     // Reset Redux state
     dispatch(resetGame());
@@ -190,6 +195,7 @@ const PhishingPhrenzy = () => {
           setShowGameOverModal(false);
           scoreSubmittedRef.current = false;
           isEndingGameRef.current = false;
+          setSeenExamples([]); // Clear seen examples
           dispatch(resetGame());
         }, 50);
       }
@@ -200,6 +206,7 @@ const PhishingPhrenzy = () => {
         setShowGameOverModal(false);
         scoreSubmittedRef.current = false;
         isEndingGameRef.current = false;
+        setSeenExamples([]); // Clear seen examples
         dispatch(resetGame());
       }, 50);
     }
@@ -216,6 +223,16 @@ const PhishingPhrenzy = () => {
     
     setAnswered(true);
     const isCorrect = answer === currentItem.isPhishing;
+    
+    // Add current item to seen examples for end-game summary
+    if (currentItem.name && currentItem.reason) {
+      setSeenExamples(prev => [...prev, {
+        name: currentItem.name,
+        reason: currentItem.reason,
+        isPhishing: currentItem.isPhishing,
+        userCorrect: isCorrect
+      }]);
+    }
     
     if (isCorrect) {
       dispatch(incrementScore(settings.pointsPerCorrect));
@@ -425,6 +442,7 @@ const PhishingPhrenzy = () => {
           highScore={highScore}
           onClose={handleReturnToMenu}
           onPlayAgain={handlePlayAgain}
+          seenExamples={seenExamples} // Pass the examples the user has seen
         />
       )}
     </div>
