@@ -170,6 +170,51 @@ export const selectAction = createAsyncThunk(
   }
 );
 
+
+export const toggleBookmark = createAsyncThunk(
+  'incidentResponder/toggleBookmark',
+  async ({ userId, scenarioId }, { rejectWithValue }) => {
+    try {
+      const response = await fetch('/api/incident/bookmark', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId, scenarioId })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to toggle bookmark');
+      }
+      
+      const data = await response.json();
+      return { scenarioId, bookmarked: data.bookmarked };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// New thunk for fetching bookmarks
+export const fetchBookmarks = createAsyncThunk(
+  'incidentResponder/fetchBookmarks',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`/api/incident/bookmarks/${userId}`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch bookmarks');
+      }
+      
+      const data = await response.json();
+      return data.bookmarkedScenarios;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
 const initialState = {
   scenarios: [],
   currentScenario: null,
@@ -180,7 +225,10 @@ const initialState = {
   results: null,
   loading: false,
   error: null,
-  showExplanation: false  // NEW: Flag to track if we're showing explanation
+  showExplanation: false,
+  bookmarkedScenarios: [],
+  bookmarksLoading: false,
+  bookmarksError: null,
 };
 
 const incidentResponderSlice = createSlice({
@@ -199,8 +247,8 @@ const incidentResponderSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
+    // Existing reducers for fetchScenarios
     builder
-      // Fetch scenarios
       .addCase(fetchScenarios.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -214,7 +262,7 @@ const incidentResponderSlice = createSlice({
         state.error = action.payload;
       })
       
-      // Start scenario
+      // Existing reducers for startScenario
       .addCase(startScenario.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -225,48 +273,83 @@ const incidentResponderSlice = createSlice({
         state.gameStatus = 'intro';
         state.selectedActions = {};
         state.score = 0;
-        state.results = null;
-        state.showExplanation = false;
       })
       .addCase(startScenario.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
       
-      // Select action
+      // Existing reducers for selectAction
       .addCase(selectAction.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(selectAction.fulfilled, (state, action) => {
         state.loading = false;
         
-        if (action.payload.isComplete) {
-          // Scenario is complete
-          state.gameStatus = 'completed';
-          state.results = action.payload.results;
-        } else {
-          // Update current stage and save selected action
-          state.currentStage = action.payload.nextStage;
+        const { actionId, stageId, nextStage, score, showExplanation } = action.payload;
+        
+        // Handle special action IDs
+        if (actionId === 'start') {
           state.gameStatus = 'playing';
-          state.showExplanation = action.payload.showExplanation;
-          
-          if (action.payload.action && action.payload.action.id !== 'start' && action.payload.action.id !== 'continue') {
-            // Store the action for this stage
-            const actionId = action.payload.action.id;
-            const stageId = state.currentStage ? state.currentStage.id : 'unknown';
-            state.selectedActions[stageId] = actionId;
-            
-            // Update score
-            if (action.payload.points) {
-              state.score += action.payload.points;
-            }
+          state.currentStage = action.payload.stage;
+        } else if (actionId === 'continue') {
+          if (nextStage) {
+            state.currentStage = nextStage;
+            state.showExplanation = false;
+          } else {
+            // Game completed
+            state.gameStatus = 'completed';
+          }
+        } else {
+          // Regular action selection
+          state.selectedActions[stageId] = actionId;
+          state.showExplanation = showExplanation || false;
+          if (score !== undefined) {
+            state.score = score;
           }
         }
       })
       .addCase(selectAction.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      
+      // NEW CODE - Add these bookmark-related reducers
+      
+      // Toggle bookmark
+      .addCase(toggleBookmark.pending, (state) => {
+        state.bookmarksLoading = true;
+      })
+      .addCase(toggleBookmark.fulfilled, (state, action) => {
+        state.bookmarksLoading = false;
+        const { scenarioId, bookmarked } = action.payload;
+        
+        if (bookmarked) {
+          // Add to bookmarked scenarios
+          if (!state.bookmarkedScenarios.includes(scenarioId)) {
+            state.bookmarkedScenarios.push(scenarioId);
+          }
+        } else {
+          // Remove from bookmarked scenarios
+          state.bookmarkedScenarios = state.bookmarkedScenarios.filter(id => id !== scenarioId);
+        }
+      })
+      .addCase(toggleBookmark.rejected, (state, action) => {
+        state.bookmarksLoading = false;
+        state.bookmarksError = action.payload;
+      })
+      
+      // Fetch bookmarks
+      .addCase(fetchBookmarks.pending, (state) => {
+        state.bookmarksLoading = true;
+      })
+      .addCase(fetchBookmarks.fulfilled, (state, action) => {
+        state.bookmarksLoading = false;
+        state.bookmarkedScenarios = action.payload;
+      })
+      .addCase(fetchBookmarks.rejected, (state, action) => {
+        state.bookmarksLoading = false;
+        state.bookmarksError = action.payload;
       });
   },
 });

@@ -75,6 +75,12 @@ const ScenarioStage = ({
     return 'poor';
   };
   
+  // Calculate progress percentage for the progress bar
+  const calculateProgress = () => {
+    if (!stage || !stage.order || !stage.totalSteps) return 0;
+    return (stage.order / stage.totalSteps) * 100;
+  };
+  
   return (
     <div className="incidentresponder_stage_container">
       <div className="incidentresponder_stage_header">
@@ -95,6 +101,14 @@ const ScenarioStage = ({
             </div>
           )}
         </div>
+      </div>
+      
+      {/* New Progress Bar */}
+      <div className="incidentresponder_progress_container">
+        <div 
+          className="incidentresponder_progress_bar"
+          style={{ width: `${calculateProgress()}%` }}
+        />
       </div>
       
       <div className="incidentresponder_stage_situation">

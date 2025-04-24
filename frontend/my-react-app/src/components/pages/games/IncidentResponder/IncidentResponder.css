@@ -2047,17 +2047,112 @@
   font-size: 1rem;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .incidentresponder_user_stats {
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-  }
+/* Progress Bar Styles */
+.incidentresponder_progress_container {
+  height: 8px;
+  background-color: rgba(var(--incidentresponder-accent-rgb), 0.1);
+  border-radius: 4px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
+.incidentresponder_progress_bar {
+  height: 100%;
+  background: var(--incidentresponder-gradient-primary);
+  border-radius: 4px;
+  transition: width 0.5s ease-in-out;
+  box-shadow: 0 0 5px rgba(var(--incidentresponder-accent-rgb), 0.5);
+}
 
+/* Add to IncidentResponder.css */
 
+/* Mute Button Styles */
+.incidentresponder_mute_button {
+  background-color: rgba(var(--incidentresponder-accent-rgb), 0.1);
+  color: var(--incidentresponder-text);
+  border: 1px solid rgba(var(--incidentresponder-accent-rgb), 0.2);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.incidentresponder_mute_button:hover {
+  background-color: rgba(var(--incidentresponder-accent-rgb), 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.incidentresponder_back_button_container {
+  display: flex;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+/* Bookmark Button Styles */
+
+.incidentresponder_bookmark_button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.incidentresponder_bookmark_button:hover {
+  background-color: rgba(var(--incidentresponder-accent-rgb), 0.5);
+  transform: translateY(-2px);
+}
+
+.incidentresponder_bookmark_filter {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.incidentresponder_bookmark_filter_button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(var(--incidentresponder-accent-rgb), 0.1);
+  color: var(--incidentresponder-text);
+  border: 1px solid rgba(var(--incidentresponder-accent-rgb), 0.2);
+  border-radius: 8px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.incidentresponder_bookmark_filter_button:hover {
+  background-color: rgba(var(--incidentresponder-accent-rgb), 0.2);
+  transform: translateY(-2px);
+}
+
+.incidentresponder_bookmark_filter_button.active {
+  background: var(--incidentresponder-gradient-primary);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 5px 15px rgba(var(--incidentresponder-accent-rgb), 0.3);
+}
+
+.incidentresponder_scenario_icon_wrapper {
+  position: relative;
+}
 /* ===========================
  * ANIMATIONS
  * =========================== */
@@ -2100,6 +2195,16 @@
     max-width: 100%;
   }
 }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .incidentresponder_user_stats {
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
 
 /* Mobile styles */
 @media (max-width: 768px) {

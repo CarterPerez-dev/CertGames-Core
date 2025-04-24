@@ -149,7 +149,7 @@ const ScenarioResults = ({ results, scenario, selectedActions, score, onRestart 
       
       <div className="incidentresponder_results_actions">
         <button className="incidentresponder_restart_button" onClick={onRestart}>
-          <FaRedo /> Try Again
+          <FaRedo /> Menu
         </button>
         <button className="incidentresponder_home_button" onClick={onRestart}>
           <FaHome /> Choose New Scenario

@@ -376,6 +376,76 @@ def generate_key_lessons(scenario, selected_actions):
     # Limit to 5 lessons
     return lessons[:5]
 
+@incident_bp.route('/bookmark', methods=['POST'])
+def toggle_bookmark():
+    """
+    Toggle bookmark status for a scenario.
+    """
+    data = request.json
+    user_id = data.get('userId')
+    scenario_id = data.get('scenarioId')
+    
+    if not user_id or not scenario_id:
+        return jsonify({"error": "userId and scenarioId are required"}), 400
+    
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user ID"}), 400
+    
+    # Find bookmarks collection or create if it doesn't exist
+    if 'incidentBookmarks' not in db.list_collection_names():
+        db.create_collection('incidentBookmarks')
+    
+    # Check if bookmark already exists
+    bookmark = db.incidentBookmarks.find_one({
+        "userId": user_oid,
+        "scenarioId": scenario_id
+    })
+    
+    if bookmark:
+        # Remove bookmark if it exists
+        db.incidentBookmarks.delete_one({
+            "userId": user_oid,
+            "scenarioId": scenario_id
+        })
+        bookmarked = False
+    else:
+        # Add bookmark if it doesn't exist
+        db.incidentBookmarks.insert_one({
+            "userId": user_oid,
+            "scenarioId": scenario_id,
+            "createdAt": datetime.utcnow()
+        })
+        bookmarked = True
+    
+    return jsonify({
+        "success": True,
+        "bookmarked": bookmarked
+    }), 200
+
+@incident_bp.route('/bookmarks/<user_id>', methods=['GET'])
+def get_bookmarks(user_id):
+    """
+    Get bookmarked scenarios for a user.
+    """
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user ID"}), 400
+    
+    # Find all bookmarks for this user
+    bookmarks = list(db.incidentBookmarks.find({"userId": user_oid}))
+    
+    # Extract scenario IDs
+    scenario_ids = [bookmark.get('scenarioId') for bookmark in bookmarks]
+    
+    return jsonify({
+        "bookmarkedScenarios": scenario_ids
+    }), 200
+
+
+
 def generate_feedback_summary(response_rating, action_details):
     """
     Generate a feedback summary based on the response rating.
