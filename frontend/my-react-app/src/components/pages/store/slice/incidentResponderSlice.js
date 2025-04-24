@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { addCoins, fetchUserData } from './userSlice';
 
+
 // Fetch incident responder scenarios
 export const fetchScenarios = createAsyncThunk(
   'incidentResponder/fetchScenarios',

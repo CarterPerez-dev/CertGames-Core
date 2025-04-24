@@ -1,5 +1,6 @@
 // src/components/pages/games/IncidentResponder/ScenarioStage.js
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { FaClipboardCheck, FaExclamationCircle, FaClock, FaTrophy, FaInfoCircle } from 'react-icons/fa';
 import './IncidentResponder.css';
 
@@ -12,12 +13,12 @@ const ScenarioStage = ({
   difficulty
 }) => {
   const [timeLeft, setTimeLeft] = useState(null);
-  const [showExplanation, setShowExplanation] = useState(false);
   const [selectedActionId, setSelectedActionId] = useState(null);
+  // Get the showExplanation state from the Redux store
+  const showExplanation = useSelector(state => state.incidentResponder.showExplanation);
   
   useEffect(() => {
     // Reset state when stage changes
-    setShowExplanation(false);
     setSelectedActionId(null);
     
     // Set timer based on difficulty if this stage has a time limit
@@ -58,7 +59,6 @@ const ScenarioStage = ({
   
   const handleSelectAction = (actionId) => {
     setSelectedActionId(actionId);
-    setShowExplanation(true);
     onSelectAction(actionId);
   };
   
@@ -131,7 +131,15 @@ const ScenarioStage = ({
       ) : (
         <div className="incidentresponder_action_explanation">
           {(() => {
-            const selectedAction = getActionById(selectedActionId);
+            // If selectedActionId is not set but we have selectedActions data for this stage
+            // Use that as the fallback
+            const effectiveActionId = selectedActionId || selectedActions[stage.id];
+            const selectedAction = getActionById(effectiveActionId);
+            
+            if (!selectedAction) {
+              return <div>Error: Could not find selected action.</div>;
+            }
+            
             const quality = getActionQuality(selectedAction.points);
             
             return (

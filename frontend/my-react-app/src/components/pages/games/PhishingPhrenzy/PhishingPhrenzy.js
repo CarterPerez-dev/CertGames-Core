@@ -9,7 +9,8 @@ import {
   resetGame,
   fetchPhishingData,
   submitGameResults,
-  clearPhishingItems
+  clearPhishingItems,
+  endGame 
 } from '../../store/slice/phishingPhrenzySlice';
 import { fetchUserData } from '../../store/slice/userSlice';
 import PhishingCard from './PhishingCard';
@@ -18,22 +19,22 @@ import './PhishingPhrenzy.css';
 
 const difficultySettings = {
   easy: { 
-    timeLimit: 100, 
+    timeLimit: 69, 
     penaltyTime: 5,
     bonusTime: 7,
-    pointsPerCorrect: 50
+    pointsPerCorrect: 5
   },
   medium: { 
     timeLimit: 55, 
     penaltyTime: 6,
-    bonusTime: 5,
-    pointsPerCorrect: 15
+    bonusTime: 6,
+    pointsPerCorrect: 10
   },
   hard: { 
     timeLimit: 50, 
     penaltyTime: 9,
     bonusTime: 5,
-    pointsPerCorrect: 22
+    pointsPerCorrect: 15
   }
 };
 
@@ -99,6 +100,9 @@ const PhishingPhrenzy = () => {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
+    
+    // UPDATED: Dispatch endGame action to update high score in Redux state
+    dispatch(endGame(userId));
     
     // Set game state to game over
     setGameState('gameOver');

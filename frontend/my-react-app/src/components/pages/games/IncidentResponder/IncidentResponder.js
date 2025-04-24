@@ -7,7 +7,7 @@ import {
   selectAction,
   resetGame
 } from '../../store/slice/incidentResponderSlice';
-import { FaShieldAlt, FaBug, FaExclamationTriangle, FaAward, FaClipboardCheck } from 'react-icons/fa';
+import { FaShieldAlt, FaBug, FaExclamationTriangle, FaAward, FaClipboardCheck, FaStar, FaCoins } from 'react-icons/fa';
 import ScenarioIntro from './ScenarioIntro';
 import ScenarioStage from './ScenarioStage';
 import ScenarioResults from './ScenarioResults';
@@ -27,7 +27,7 @@ const IncidentResponder = () => {
     loading, 
     error 
   } = useSelector(state => state.incidentResponder);
-  const { userId } = useSelector(state => state.user);
+  const { userId, coins, xp } = useSelector(state => state.user);
   
   const [scenarioTypes, setScenarioTypes] = useState([]);
   const [selectedType, setSelectedType] = useState('all');
@@ -190,8 +190,25 @@ const IncidentResponder = () => {
   return (
     <div className="incidentresponder_main_container">
       <div className="incidentresponder_header_section">
-        <h1><FaShieldAlt /> Incident Responder</h1>
-        <p>Test your cybersecurity incident response skills in realistic scenarios</p>
+        <div className="incidentresponder_header_main">
+          <h1><FaShieldAlt /> Incident Responder</h1>
+          <p>Test your cybersecurity incident response skills in realistic scenarios</p>
+        </div>
+        
+        {/* User stats display - NEW ADDITION */}
+        {userId && (
+          <div className="incidentresponder_user_stats">
+            <div className="incidentresponder_stat">
+              <FaCoins className="incidentresponder_stat_icon coins" />
+              <span className="incidentresponder_stat_value">{coins}</span>
+            </div>
+            <div className="incidentresponder_stat">
+              <FaStar className="incidentresponder_stat_icon xp" />
+              <span className="incidentresponder_stat_value">{xp}</span>
+            </div>
+          </div>
+        )}
+        
       </div>
       
       <div className="incidentresponder_content_area">

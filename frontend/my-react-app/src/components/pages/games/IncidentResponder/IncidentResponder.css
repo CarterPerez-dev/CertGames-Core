@@ -58,7 +58,7 @@
   min-height: 100vh;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Orbitron', 'Roboto', sans-serif;
+  font-family: 'Arial', sans-serif;
   color: var(--incidentresponder-text);
   background-color: transparent;
   position: relative;
@@ -104,7 +104,7 @@
 }
 
 .incidentresponder_header_section h1 {
-  font-size: 2.5rem;
+  font-size: 2.7rem;
   color: var(--incidentresponder-accent-glow);
   display: flex;
   align-items: center;
@@ -113,6 +113,8 @@
   margin-bottom: 10px;
   position: relative;
   text-shadow: 0 0 10px rgba(var(--incidentresponder-accent-rgb), 0.3);
+  font-family: 'Orbitron', 'Roboto', sans-serif;
+  
 }
 
 .incidentresponder_header_section h1 svg {
@@ -120,10 +122,11 @@
 }
 
 .incidentresponder_header_section p {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   opacity: 0.8;
   max-width: 700px;
   margin: 0 auto;
+  font-family: 'Arial', sans-serif;
 }
 
 .incidentresponder_content_area {
@@ -527,14 +530,16 @@
   border-radius: 12px;
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
   margin-bottom: 25px;
   animation: pulse 2s infinite;
   box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+  max-width: 80%;
+  margin-left: 120px;
 }
 
 .incidentresponder_scenariointro_alert_banner svg {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   animation: spin 10s linear infinite;
 }
 
@@ -843,6 +848,9 @@
   padding: 15px;
   border-radius: 12px;
   animation: pulse 3s infinite;
+  max-width: 90%;
+  margin-right: 70px;
+  margin-left: 70px;
 }
 
 .incidentresponder_scenariointro_warning_icon {
@@ -1958,6 +1966,76 @@
   100% { transform: rotate(360deg); }
 }
 
+
+.incidentresponder_header_section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--incidentresponder-accent);
+  position: relative;
+}
+
+.incidentresponder_header_main {
+  text-align: center;
+}
+
+.incidentresponder_user_stats {
+  display: flex;
+  gap: 20px;
+  margin: 15px 0;
+}
+
+.incidentresponder_stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--incidentresponder-bg-card, #232535);
+  padding: 8px 15px;
+  border-radius: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--incidentresponder-border);
+  transition: all 0.3s ease;
+}
+
+.incidentresponder_stat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+}
+
+.incidentresponder_stat_icon {
+  font-size: 1.1rem;
+}
+
+.incidentresponder_stat_icon.coins {
+  color: #ffd700;
+}
+
+.incidentresponder_stat_icon.xp {
+  color: #00a8ff;
+}
+
+.incidentresponder_stat_value {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .incidentresponder_user_stats {
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+
+
+
+
+
 /* ===========================
  * RESPONSIVE STYLES
  * =========================== */
@@ -1972,6 +2050,9 @@
     width: 100%;
   }
   
+  .incidentresponder_scenariointro_alert_banner {
+    margin-left: 80px;
+  }  
   .incidentresponder_score_container,
   .incidentresponder_rewards_container {
     max-width: 100%;
@@ -1984,6 +2065,10 @@
     font-size: 2rem;
   }
   
+  .incidentresponder_scenariointro_alert_banner {
+    margin-left: 40px;
+  }
+    
   .incidentresponder_scenariointro_header {
     flex-direction: column;
     align-items: flex-start;
@@ -2036,6 +2121,10 @@
 @media (max-width: 480px) {
   .incidentresponder_main_container {
     padding: 10px;
+  }
+  
+  .incidentresponder_scenariointro_alert_banner {
+    margin-left: 38px;
   }
   
   .incidentresponder_header_section h1 {
