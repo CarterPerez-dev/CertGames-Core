@@ -112,38 +112,37 @@ const ScenarioResults = ({ results, scenario, selectedActions, score, onRestart 
       <div className="incidentresponder_feedback_section">
         <h3><FaChartLine /> Response Analysis</h3>
         <div className="incidentresponder_feedback_summary">
-          <p>{feedbackSummary}</p>
+          {scenario.detailedFeedbackSummaries && (
+            <p>
+              {responseRating >= 90 && scenario.detailedFeedbackSummaries.excellent}
+              {responseRating >= 70 && responseRating < 90 && scenario.detailedFeedbackSummaries.good}
+              {responseRating >= 50 && responseRating < 70 && scenario.detailedFeedbackSummaries.fair}
+              {responseRating < 50 && scenario.detailedFeedbackSummaries.poor}
+            </p>
+          )}
+          {!scenario.detailedFeedbackSummaries && <p>{feedbackSummary}</p>}
         </div>
-        
-        <div className="incidentresponder_key_lessons">
-          <h4>Key Lessons:</h4>
-          <ul>
-            {keyLessons.map((lesson, index) => (
-              <li key={index}>{lesson}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
       
-      <div className="incidentresponder_response_timeline">
-        <h3><FaClipboardCheck /> Your Response Timeline</h3>
-        <div className="incidentresponder_timeline_container">
-          {results.actionDetails.map((action, index) => (
-            <div key={index} className="incidentresponder_timeline_item">
-              <div className="incidentresponder_timeline_step">{index + 1}</div>
-              <div className={`incidentresponder_timeline_content ${getActionQuality(action.id)}`}>
-                <div className="incidentresponder_timeline_action">{action.text}</div>
-                <div className="incidentresponder_timeline_outcome">
-                  {action.quality === 'best' || action.quality === 'good' ? (
-                    <FaCheck className="incidentresponder_positive_icon" />
-                  ) : (
-                    <FaExclamationTriangle className="incidentresponder_negative_icon" />
-                  )}
-                  <span>{action.outcome}</span>
+        <div className="incidentresponder_response_timeline">
+          <h3><FaClipboardCheck /> Your Response Timeline</h3>
+          <div className="incidentresponder_timeline_container">
+            {results.actionDetails.map((action, index) => (
+              <div key={index} className="incidentresponder_timeline_item">
+                <div className="incidentresponder_timeline_step">{index + 1}</div>
+                <div className={`incidentresponder_timeline_content ${getActionQuality(action.id)}`}>
+                  <div className="incidentresponder_timeline_action">{action.text}</div>
+                  <div className="incidentresponder_timeline_outcome">
+                    {action.quality === 'best' || action.quality === 'good' ? (
+                      <FaCheck className="incidentresponder_positive_icon" />
+                    ) : (
+                      <FaExclamationTriangle className="incidentresponder_negative_icon" />
+                    )}
+                    <span>{action.outcome}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
       
@@ -156,12 +155,12 @@ const ScenarioResults = ({ results, scenario, selectedActions, score, onRestart 
         </button>
         <div className="incidentresponder_share_container">
           <span>Share your results:</span>
-          <button className="incidentresponder_twitter_share">
+          <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="incidentresponder_twitter_share">
             <FaXTwitter />
-          </button>
-          <button className="incidentresponder_linkedin_share">
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="incidentresponder_linkedin_share">
             <FaLinkedin />
-          </button>
+          </a>
         </div>
       </div>
     </div>

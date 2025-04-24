@@ -149,7 +149,7 @@ def process_action():
     return jsonify({
         "action": action,
         "points": action.get('points', 0),
-        "nextStage": None  # The frontend will handle stage transitions
+        "nextStage": None  
     })
 
 @incident_bp.route('/complete', methods=['POST'])
@@ -337,45 +337,102 @@ def apply_difficulty(scenario, difficulty):
 
 def generate_key_lessons(scenario, selected_actions):
     """
-    Generate key lessons based on the scenario and selected actions.
+    Generate detailed key lessons based on the scenario and selected actions.
     """
     lessons = []
-    
-    # Include default lessons from scenario
-    if 'key_lessons' in scenario:
-        lessons.extend(scenario['key_lessons'])
-    
-    # Add lessons based on user performance
     poor_choices = 0
+    good_choices = 0
+    best_choices = 0
+    
+    # Analyze each stage and action
+    stage_analysis = {}
     for stage in scenario.get('stages', []):
         stage_id = stage.get('id')
+        stage_name = f"Stage {stage.get('order', '?')}: {stage.get('situation', '')[:30]}..."
+        
         if stage_id in selected_actions:
             action_id = selected_actions[stage_id]
             action = next((a for a in stage.get('actions', []) if a.get('id') == action_id), None)
+            
             if action:
                 max_points = max(a.get('points', 0) for a in stage.get('actions', []))
                 points = action.get('points', 0)
                 
-                if points < max_points * 0.4:
+                # Categorize choices
+                if points == max_points:
+                    best_choices += 1
+                    category = "best"
+                elif points >= max_points * 0.7:
+                    good_choices += 1
+                    category = "good"
+                elif points >= max_points * 0.4:
+                    category = "fair"
+                else:
                     poor_choices += 1
-                    if 'bestPractice' in action:
-                        lessons.append(action['bestPractice'])
+                    category = "poor"
+                
+                # Store analysis for this stage
+                stage_analysis[stage_id] = {
+                    "stage_name": stage_name,
+                    "category": category,
+                    "points": points,
+                    "max_points": max_points,
+                    "action": action
+                }
     
-    # Add general lessons if needed
-    if not lessons or len(lessons) < 3:
-        if scenario.get('type') == 'malware':
-            lessons.append("Always isolate affected systems before starting investigation to prevent lateral movement.")
-            lessons.append("Use trusted, write-protected tools for malware investigation to avoid tampering.")
-        elif scenario.get('type') == 'phishing':
-            lessons.append("Train users to verify suspicious email senders through out-of-band communications.")
-            lessons.append("Implement and regularly update email filtering solutions.")
-        elif scenario.get('type') == 'breach':
-            lessons.append("Document all breach investigation steps for potential legal reporting requirements.")
-            lessons.append("Change all credentials on affected systems, not just the ones known to be compromised.")
+    # Include default lessons from scenario
+    if 'key_lessons' in scenario:
+        # Add scenario-specific lessons first
+        for lesson in scenario.get('key_lessons', [])[:2]:  # Limit to 2
+            lessons.append(lesson)
     
-    # Limit to 5 lessons
+    # Add lessons based on user performance
+    for stage_id, analysis in stage_analysis.items():
+        if analysis['category'] == 'poor':
+            # Add best practice from poorly handled stages
+            if 'bestPractice' in analysis['action']:
+                lesson = f"[Stage {analysis['action'].get('id', '?')}] {analysis['action']['bestPractice']}"
+                lessons.append(lesson)
+        elif analysis['category'] == 'best' and 'explanation' in analysis['action']:
+            # Include insights from well-handled critical stages
+            if len(lessons) < 3 and random.random() < 0.5:  # Random selection
+                lesson = f"You correctly {analysis['action'].get('text', '').lower()[:30]}... Remember: {analysis['action'].get('explanation', '')}"
+                lessons.append(lesson)
+    
+    # Add general performance-based lessons
+    if poor_choices > (len(stage_analysis) / 2):
+        lessons.append("Consider a more methodical approach to incident response. Prioritize containment before investigation for active threats.")
+    elif best_choices > (len(stage_analysis) / 2):
+        lessons.append("Your excellent decision-making demonstrates a strong understanding of incident response best practices and appropriate risk management.")
+    
+    # Add scenario-type specific lessons
+    if scenario.get('type') == 'malware':
+        if not any("isolation" in lesson.lower() for lesson in lessons):
+            lessons.append("When dealing with malware incidents, appropriate system isolation is critical to prevent lateral movement while maintaining essential services.")
+    elif scenario.get('type') == 'phishing':
+        if not any("multi-factor" in lesson.lower() for lesson in lessons):
+            lessons.append("Multi-factor authentication provides significant protection against credential-based attacks like phishing. Implement it for all sensitive accounts.")
+    elif scenario.get('type') == 'breach':
+        if not any("notification" in lesson.lower() for lesson in lessons):
+            lessons.append("Data breach notification requirements often have strict timelines. Prepare communication plans in advance for more effective incident response.")
+    
+    # Ensure we have at least 3 but no more than 5 lessons
+    if len(lessons) < 3:
+        general_lessons = [
+            "Document all incident response activities thoroughly to support post-incident analysis and potential legal requirements.",
+            "Regular tabletop exercises significantly improve incident response effectiveness by practicing decision-making before real incidents occur.",
+            "Balance security controls with business continuity needs when responding to incidents in production environments."
+        ]
+        # Add general lessons until we have at least 3
+        for lesson in general_lessons:
+            if len(lessons) >= 3:
+                break
+            if not any(lesson.lower() in l.lower() for l in lessons):
+                lessons.append(lesson)
+    
+    # Return 5 lessons max, prioritizing scenario-specific and performance-based insights
     return lessons[:5]
-
+    
 @incident_bp.route('/bookmark', methods=['POST'])
 def toggle_bookmark():
     """

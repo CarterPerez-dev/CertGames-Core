@@ -1,0 +1,135 @@
+/* src/components/pages/games/IncidentResponder/GameInstructions.css */
+.ir_game_instructions_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.ir_game_instructions_container {
+  background-color: var(--incidentresponder-bg-card);
+  border-radius: 15px;
+  padding: 30px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--incidentresponder-border);
+}
+
+.ir_game_instructions_close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(var(--incidentresponder-accent-rgb), 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--incidentresponder-text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ir_game_instructions_close:hover {
+  background: rgba(var(--incidentresponder-accent-rgb), 0.3);
+  transform: rotate(90deg);
+}
+
+.ir_game_instructions_title {
+  font-size: 1.8rem;
+  color: var(--incidentresponder-accent-glow);
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 2px solid var(--incidentresponder-accent);
+  padding-bottom: 15px;
+}
+
+.ir_game_instructions_section {
+  margin-bottom: 25px;
+}
+
+.ir_game_instructions_section h3 {
+  font-size: 1.3rem;
+  color: var(--incidentresponder-accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ir_game_instructions_list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.ir_game_instructions_list li {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.ir_game_instructions_list li::before {
+  content: '•';
+  position: absolute;
+  left: 10px;
+  color: var(--incidentresponder-accent);
+}
+
+.ir_game_instructions_formula {
+  background-color: rgba(var(--incidentresponder-accent-rgb), 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  margin: 15px 0;
+  border-left: 3px solid var(--incidentresponder-accent);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .ir_game_instructions_container {
+    padding: 20px;
+    width: 95%;
+  }
+  
+  .ir_game_instructions_title {
+    font-size: 1.5rem;
+  }
+  
+  .ir_game_instructions_section h3 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ir_game_instructions_container {
+    padding: 15px;
+    width: 98%;
+  }
+  
+  .ir_game_instructions_title {
+    font-size: 1.3rem;
+  }
+  
+  .ir_game_instructions_section h3 {
+    font-size: 1.1rem;
+  }
+  
+  .ir_game_instructions_list li {
+    font-size: 0.9rem;
+  }
+}

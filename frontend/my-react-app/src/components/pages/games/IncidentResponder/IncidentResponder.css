@@ -2067,8 +2067,14 @@
 
 /* Add to IncidentResponder.css */
 
-/* Mute Button Styles */
-.incidentresponder_mute_button {
+/* Volume controls */
+.incidentresponder_volume_controls {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.incidentresponder_volume_button {
   background-color: rgba(var(--incidentresponder-accent-rgb), 0.1);
   color: var(--incidentresponder-text);
   border: 1px solid rgba(var(--incidentresponder-accent-rgb), 0.2);
@@ -2080,19 +2086,90 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-left: auto;
 }
 
-.incidentresponder_mute_button:hover {
+.incidentresponder_volume_button:hover {
   background-color: rgba(var(--incidentresponder-accent-rgb), 0.2);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.incidentresponder_back_button_container {
+.incidentresponder_volume_slider_container {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: var(--incidentresponder-bg-card);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  width: 120px;
+  border: 1px solid var(--incidentresponder-border);
+}
+
+.incidentresponder_volume_slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+  border-radius: 5px;
+  background: rgba(var(--incidentresponder-accent-rgb), 0.2);
+  outline: none;
+}
+
+.incidentresponder_volume_slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--incidentresponder-accent);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.incidentresponder_volume_slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(var(--incidentresponder-accent-rgb), 0.5);
+}
+
+.incidentresponder_volume_slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border: none;
+  border-radius: 50%;
+  background: var(--incidentresponder-accent);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.incidentresponder_volume_slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(var(--incidentresponder-accent-rgb), 0.5);
+}
+
+/* Instructions button */
+.incidentresponder_instructions_button {
+  position: absolute;
+  left: 20px;
+  top: 15px;
+  background-color: rgba(var(--incidentresponder-accent-rgb), 0.1);
+  color: var(--incidentresponder-text);
+  border: 1px solid rgba(var(--incidentresponder-accent-rgb), 0.2);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
   display: flex;
-  margin-bottom: 15px;
   align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.incidentresponder_instructions_button:hover {
+  background-color: rgba(var(--incidentresponder-accent-rgb), 0.2);
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Bookmark Button Styles */
@@ -2188,36 +2265,57 @@
   }
         
   .incidentresponder_scenariointro_alert_banner {
-    margin-left: 80px;
+    margin-left: 50px;
+    max-width: 90%;
   }  
+  
   .incidentresponder_score_container,
   .incidentresponder_rewards_container {
     max-width: 100%;
   }
+  
+  .incidentresponder_scenarios_grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  
+  .incidentresponder_scenario_meta_data {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  .incidentresponder_volume_slider_container {
+    width: 100px;
+  }
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
+  .incidentresponder_header_section h1 {
+    font-size: 2rem;
+  }
+  
+  .incidentresponder_header_section p {
+    font-size: 1rem;
+  }
+  
   .incidentresponder_user_stats {
     flex-direction: row;
     justify-content: center;
     width: 100%;
   }
-}
-
-
-/* Mobile styles */
-@media (max-width: 768px) {
-  .incidentresponder_header_section h1 {
-    font-size: 2rem;
+  
+  .incidentresponder_back_button_container {
+    flex-wrap: wrap;
   }
-
+  
   .incidentresponder_diffsel_options_container {
     flex-direction: column;
   }
       
   .incidentresponder_scenariointro_alert_banner {
-    margin-left: 40px;
+    margin-left: 20px;
+    max-width: 95%;
+    font-size: 0.9rem;
   }
     
   .incidentresponder_scenariointro_header {
@@ -2259,28 +2357,78 @@
   .incidentresponder_results_actions {
     flex-direction: column;
     align-items: stretch;
+    gap: 15px;
   }
   
   .incidentresponder_share_container {
     margin-left: 0;
     justify-content: center;
-    margin-top: 10px;
+    margin-top: 15px;
+  }
+  
+  .incidentresponder_instructions_button {
+    top: 10px;
+    left: 10px;
+  }
+  
+  .incidentresponder_volume_slider_container {
+    width: 80px;
+    top: 45px;
   }
 }
 
-/* Small mobile styles */
+@media (max-width: 576px) {
+  .incidentresponder_scenarios_grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .incidentresponder_type_buttons_row {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .incidentresponder_type_buttons_row button {
+    margin-bottom: 5px;
+  }
+  
+  .incidentresponder_timeline_container::before {
+    left: 12px;
+  }
+  
+  .incidentresponder_timeline_step {
+    width: 25px;
+    height: 25px;
+    font-size: 0.8rem;
+  }
+  
+  .incidentresponder_diffsel_indicators_area {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}
+
 @media (max-width: 480px) {
   .incidentresponder_main_container {
     padding: 10px;
   }
   
-  .incidentresponder_scenariointro_alert_banner {
-    margin-left: 38px;
-  }
-  
   .incidentresponder_header_section h1 {
     font-size: 1.5rem;
   }
+  
+  .incidentresponder_header_section p {
+    font-size: 0.9rem;
+    padding: 0 10px;
+  }
+  
+  .incidentresponder_scenariointro_alert_banner {
+    margin-left: 10px;
+    max-width: 100%;
+    font-size: 0.8rem;
+    padding: 10px;
+  }
+  
   .incidentresponder_diffsel_indicators_area {
     display: flex;
     gap: 1px;
@@ -2291,7 +2439,7 @@
   .incidentresponder_scenariointro_wrapper,
   .incidentresponder_stage_container,
   .incidentresponder_results_container {
-    padding: 15px;
+    padding: 15px 10px;
   }
   
   .incidentresponder_diffsel_options_container {
@@ -2309,5 +2457,76 @@
   
   .incidentresponder_timeline_container::before {
     display: none;
+  }
+  
+  .incidentresponder_action_button {
+    font-size: 0.9rem;
+    padding: 12px 15px;
+  }
+  
+  .incidentresponder_stage_header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .incidentresponder_feedback_section h3,
+  .incidentresponder_response_timeline h3,
+  .incidentresponder_achievements_earned h3 {
+    font-size: 1.2rem;
+  }
+  
+  .incidentresponder_rating_label {
+    font-size: 0.9rem;
+  }
+  
+  .incidentresponder_score_value {
+    font-size: 1.5rem;
+  }
+  
+  .incidentresponder_twitter_share,
+  .incidentresponder_linkedin_share {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+  
+  .incidentresponder_volume_slider_container {
+    right: -40px;
+  }
+  
+  .incidentresponder_instructions_button {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 320px) {
+  .incidentresponder_header_section h1 {
+    font-size: 1.3rem;
+  }
+  
+  .incidentresponder_stage_timer,
+  .incidentresponder_stage_score,
+  .incidentresponder_stage_step {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+  
+  .incidentresponder_action_selection h3,
+  .incidentresponder_selected_action h3 {
+    font-size: 1.1rem;
+  }
+  
+  .incidentresponder_volume_slider_container {
+    width: 70px;
+  }
+  
+  .incidentresponder_back_button,
+  .incidentresponder_volume_button {
+    padding: 5px;
+    font-size: 0.8rem;
+  }
+  
+  .incidentresponder_scenariointro_tab_content h3 {
+    font-size: 1.1rem;
   }
 }

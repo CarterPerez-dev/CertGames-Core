@@ -9,11 +9,12 @@ import {
   fetchBookmarks,
   toggleBookmark,
 } from '../../store/slice/incidentResponderSlice';
-import { FaShieldAlt, FaBug, FaExclamationTriangle, FaAward, FaClipboardCheck, FaStar, FaCoins, FaArrowLeft, FaTimes, FaVolumeUp, FaVolumeMute, FaBookmark, FaInfoCircle, FaRegBookmark } from 'react-icons/fa';
+import { FaShieldAlt, FaBug, FaExclamationTriangle, FaAward, FaClipboardCheck, FaStar, FaCoins, FaArrowLeft, FaTimes, FaVolumeUp, FaVolumeMute, FaBookmark, FaInfoCircle, FaRegBookmark, FaQuestion } from 'react-icons/fa';
 import ScenarioIntro from './ScenarioIntro';
 import ScenarioStage from './ScenarioStage';
 import ScenarioResults from './ScenarioResults';
 import DifficultySelector from './DifficultySelector';
+import GameInstructions from './GameInstructions';
 import './IncidentResponder.css';
 
 import themeMusic from '../../theme.mp3';
@@ -42,7 +43,8 @@ const IncidentResponder = () => {
   const [showInstructions, setShowInstructions] = useState(false);
   
   // Audio state
-  const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState(0.7); // Default volume (0.0 to 1.0)
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const audioRef = useRef(null);
   
   // Fetch scenarios when component mounts
@@ -60,7 +62,7 @@ const IncidentResponder = () => {
     }
   }, [scenarios]);
   
-  // Music control based on game status
+  // Music control based on game status and volume
   useEffect(() => {
     // Create audio element if it doesn't exist
     if (!audioRef.current) {
@@ -68,12 +70,22 @@ const IncidentResponder = () => {
       audioRef.current.loop = true;
     }
     
+    // Set the volume
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+    
     // Play music when game status is 'playing' or 'intro'
     if (gameStatus === 'playing' || gameStatus === 'intro') {
-      if (!isMuted && audioRef.current) {
+      if (volume > 0 && audioRef.current) {
         audioRef.current.play().catch(error => {
           console.log('Audio play failed:', error);
         });
+      } else {
+        // Volume is 0 or no audio element
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
       }
     } else {
       // Add a safety check before trying to pause
@@ -90,7 +102,7 @@ const IncidentResponder = () => {
         audioRef.current.currentTime = 0;
       }
     };
-  }, [gameStatus, isMuted]);
+  }, [gameStatus, volume]);
   
   // Fetch bookmarks when user ID changes
   useEffect(() => {
@@ -99,22 +111,29 @@ const IncidentResponder = () => {
     }
   }, [dispatch, userId]);
   
-  // Handle mute/unmute
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
+  // Handle volume change
+  const handleVolumeChange = (e) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    
+    // Update audio volume if audio element exists
     if (audioRef.current) {
-      if (isMuted) {
-        // Unmuting
-        if (gameStatus === 'playing' || gameStatus === 'intro') {
-          audioRef.current.play().catch(error => {
-            console.log('Audio play failed:', error);
-          });
-        }
-      } else {
-        // Muting
+      audioRef.current.volume = newVolume;
+      
+      // Play or pause based on volume
+      if (newVolume === 0) {
         audioRef.current.pause();
+      } else if (gameStatus === 'playing' || gameStatus === 'intro') {
+        audioRef.current.play().catch(error => {
+          console.log('Audio play failed:', error);
+        });
       }
     }
+  };
+  
+  // Toggle volume slider visibility
+  const toggleVolumeSlider = () => {
+    setShowVolumeSlider(!showVolumeSlider);
   };
 
   const handleToggleBookmark = (scenarioId, e) => {
@@ -193,6 +212,13 @@ const IncidentResponder = () => {
           <>
             <div className="incidentresponder_scenario_selection_container">
               <div className="incidentresponder_selection_header_block">
+                <button 
+                  className="incidentresponder_instructions_button" 
+                  onClick={() => setShowInstructions(true)}
+                  title="Game Instructions"
+                >
+                  <FaQuestion />
+                </button>
                 <h2>Select an Incident Scenario</h2>
                 <p>Test your incident response skills by handling various security incidents.</p>
               </div>
@@ -285,14 +311,30 @@ const IncidentResponder = () => {
                 <FaArrowLeft /> Back to Scenarios
               </button>
               
-              {/* Mute button */}
-              <button 
-                className="incidentresponder_mute_button" 
-                onClick={toggleMute}
-                title={isMuted ? "Unmute" : "Mute"}
-              >
-                {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
-              </button>
+              {/* Volume controls */}
+              <div className="incidentresponder_volume_controls">
+                <button 
+                  className="incidentresponder_volume_button" 
+                  onClick={toggleVolumeSlider}
+                  title="Volume Control"
+                >
+                  {volume === 0 ? <FaVolumeMute /> : <FaVolumeUp />}
+                </button>
+                
+                {showVolumeSlider && (
+                  <div className="incidentresponder_volume_slider_container">
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.1"
+                      value={volume}
+                      onChange={handleVolumeChange}
+                      className="incidentresponder_volume_slider"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
             <ScenarioIntro 
               scenario={currentScenario} 
@@ -312,14 +354,30 @@ const IncidentResponder = () => {
                 <FaArrowLeft /> Back to Scenarios
               </button>
               
-              {/* Mute button */}
-              <button 
-                className="incidentresponder_mute_button" 
-                onClick={toggleMute}
-                title={isMuted ? "Unmute" : "Mute"}
-              >
-                {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
-              </button>
+              {/* Volume controls */}
+              <div className="incidentresponder_volume_controls">
+                <button 
+                  className="incidentresponder_volume_button" 
+                  onClick={toggleVolumeSlider}
+                  title="Volume Control"
+                >
+                  {volume === 0 ? <FaVolumeMute /> : <FaVolumeUp />}
+                </button>
+                
+                {showVolumeSlider && (
+                  <div className="incidentresponder_volume_slider_container">
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.1"
+                      value={volume}
+                      onChange={handleVolumeChange}
+                      className="incidentresponder_volume_slider"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
             <ScenarioStage 
               stage={currentStage}
@@ -383,6 +441,9 @@ const IncidentResponder = () => {
       <div className="incidentresponder_content_area">
         {renderGameContent()}
       </div>
+      
+      {/* Game Instructions Modal */}
+      {showInstructions && <GameInstructions onClose={() => setShowInstructions(false)} />}
     </div>
   );
 };
