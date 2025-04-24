@@ -2088,6 +2088,10 @@
     width: 100%;
   }
   
+  .incidentresponder_diffsel_options_container {
+    flex-direction: column;
+  }
+        
   .incidentresponder_scenariointro_alert_banner {
     margin-left: 80px;
   }  
@@ -2102,7 +2106,11 @@
   .incidentresponder_header_section h1 {
     font-size: 2rem;
   }
-  
+
+  .incidentresponder_diffsel_options_container {
+    flex-direction: column;
+  }
+      
   .incidentresponder_scenariointro_alert_banner {
     margin-left: 40px;
   }
