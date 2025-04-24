@@ -7,7 +7,7 @@ import {
   selectAction,
   resetGame
 } from '../../store/slice/incidentResponderSlice';
-import { FaShieldAlt, FaBug, FaExclamationTriangle, FaAward, FaClipboardCheck, FaStar, FaCoins } from 'react-icons/fa';
+import { FaShieldAlt, FaBug, FaExclamationTriangle, FaAward, FaClipboardCheck, FaStar, FaCoins, FaArrowLeft, FaTimes } from 'react-icons/fa';
 import ScenarioIntro from './ScenarioIntro';
 import ScenarioStage from './ScenarioStage';
 import ScenarioResults from './ScenarioResults';
@@ -31,7 +31,7 @@ const IncidentResponder = () => {
   
   const [scenarioTypes, setScenarioTypes] = useState([]);
   const [selectedType, setSelectedType] = useState('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('medium');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   
   // Fetch scenarios when component mounts
   useEffect(() => {
@@ -52,7 +52,7 @@ const IncidentResponder = () => {
     dispatch(startScenario({ 
       scenarioId, 
       userId,
-      difficulty: selectedDifficulty
+      difficulty: selectedDifficulty === 'all' ? 'medium' : selectedDifficulty
     }));
   };
   
@@ -76,10 +76,32 @@ const IncidentResponder = () => {
     setSelectedDifficulty(difficulty);
   };
   
-  // Filter scenarios based on selected type
-  const filteredScenarios = selectedType === 'all' 
-    ? scenarios 
-    : scenarios.filter(scenario => scenario.type === selectedType);
+  const handleBackToMenu = () => {
+    if (window.confirm('Are you sure you want to abandon this incident response? Your progress will be lost.')) {
+      dispatch(resetGame());
+    }
+  };
+  
+  // Define difficulty mapping
+  const difficultyMapping = {
+    'easy': 1,
+    'medium': 2,
+    'hard': 3
+  };
+  
+  // Filter scenarios based on both selected type and difficulty
+  let filteredScenarios = scenarios;
+  
+  // Filter by type if not 'all'
+  if (selectedType !== 'all') {
+    filteredScenarios = filteredScenarios.filter(scenario => scenario.type === selectedType);
+  }
+  
+  // Filter by difficulty if not 'all'
+  if (selectedDifficulty !== 'all') {
+    const difficultyValue = difficultyMapping[selectedDifficulty];
+    filteredScenarios = filteredScenarios.filter(scenario => scenario.difficulty === difficultyValue);
+  }
   
   // Render different views based on game status
   const renderGameContent = () => {
@@ -115,52 +137,78 @@ const IncidentResponder = () => {
             </div>
             
             <div className="incidentresponder_scenarios_grid">
-              {filteredScenarios.map(scenario => (
-                <div
-                  key={scenario.id}
-                  className="incidentresponder_scenario_card"
-                  onClick={() => handleStartScenario(scenario.id)}
-                >
-                  <div className="incidentresponder_scenario_icon_wrapper">
-                    {scenario.type === 'malware' && <FaBug />}
-                    {scenario.type === 'breach' && <FaExclamationTriangle />}
-                    {scenario.type === 'phishing' && <FaShieldAlt />}
-                    {!['malware', 'breach', 'phishing'].includes(scenario.type) && <FaClipboardCheck />}
-                  </div>
-                  <div className="incidentresponder_scenario_info_section">
-                    <h3>{scenario.title}</h3>
-                    <div className="incidentresponder_scenario_meta_data">
-                      <span className="incidentresponder_scenario_type_label">{scenario.type}</span>
-                      <span className="incidentresponder_scenario_difficulty_rating">
-                        {Array(scenario.difficulty).fill('★').join('')}
-                      </span>
+              {filteredScenarios.length > 0 ? (
+                filteredScenarios.map(scenario => (
+                  <div
+                    key={scenario.id}
+                    className="incidentresponder_scenario_card"
+                    onClick={() => handleStartScenario(scenario.id)}
+                  >
+                    <div className="incidentresponder_scenario_icon_wrapper">
+                      {scenario.type === 'malware' && <FaBug />}
+                      {scenario.type === 'breach' && <FaExclamationTriangle />}
+                      {scenario.type === 'phishing' && <FaShieldAlt />}
+                      {!['malware', 'breach', 'phishing'].includes(scenario.type) && <FaClipboardCheck />}
                     </div>
-                    <p>{scenario.shortDescription}</p>
+                    <div className="incidentresponder_scenario_info_section">
+                      <h3>{scenario.title}</h3>
+                      <div className="incidentresponder_scenario_meta_data">
+                        <span className="incidentresponder_scenario_type_label">{scenario.type}</span>
+                        <span className="incidentresponder_scenario_difficulty_rating">
+                          {Array(scenario.difficulty).fill('★').join('')}
+                        </span>
+                      </div>
+                      <p>{scenario.shortDescription}</p>
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="incidentresponder_no_scenarios">
+                  <p>No scenarios match your selected filters. Try different criteria.</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         );
         
       case 'intro':
         return (
-          <ScenarioIntro 
-            scenario={currentScenario} 
-            onStart={() => dispatch(selectAction({ actionId: 'start', stageId: 'intro', userId }))}
-          />
+          <>
+            <div className="incidentresponder_back_button_container">
+              <button 
+                className="incidentresponder_back_button" 
+                onClick={handleBackToMenu}
+              >
+                <FaArrowLeft /> Back to Scenarios
+              </button>
+            </div>
+            <ScenarioIntro 
+              scenario={currentScenario} 
+              onStart={() => dispatch(selectAction({ actionId: 'start', stageId: 'intro', userId }))}
+            />
+          </>
         );
         
       case 'playing':
         return (
-          <ScenarioStage 
-            stage={currentStage}
-            scenarioTitle={currentScenario?.title}
-            selectedActions={selectedActions}
-            onSelectAction={handleSelectAction}
-            score={score}
-            difficulty={selectedDifficulty}
-          />
+          <>
+            <div className="incidentresponder_back_button_container">
+              <button 
+                className="incidentresponder_back_button" 
+                onClick={handleBackToMenu}
+              >
+                <FaArrowLeft /> Back to Scenarios
+              </button>
+            </div>
+            <ScenarioStage 
+              stage={currentStage}
+              scenarioTitle={currentScenario?.title}
+              selectedActions={selectedActions}
+              onSelectAction={handleSelectAction}
+              score={score}
+              difficulty={selectedDifficulty === 'all' ? 'medium' : selectedDifficulty}
+            />
+          </>
         );
         
       case 'completed':
@@ -195,7 +243,7 @@ const IncidentResponder = () => {
           <p>Test your cybersecurity incident response skills in realistic scenarios</p>
         </div>
         
-        {/* User stats display - NEW ADDITION */}
+        {/* User stats display */}
         {userId && (
           <div className="incidentresponder_user_stats">
             <div className="incidentresponder_stat">

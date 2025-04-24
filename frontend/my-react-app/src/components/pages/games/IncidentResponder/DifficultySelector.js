@@ -6,6 +6,13 @@ import './IncidentResponder.css';
 const DifficultySelector = ({ selectedDifficulty, onDifficultyChange }) => {
   const difficulties = [
     {
+      id: 'all',
+      name: 'All Levels',
+      description: 'Show all difficulty levels.',
+      timeMultiplier: 'Varies',
+      forgivenessLevel: 'All'
+    },
+    {
       id: 'easy',
       name: 'Easy',
       description: 'More time to respond, clearer indicators, and more forgiving scoring.',

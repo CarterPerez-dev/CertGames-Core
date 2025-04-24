@@ -2,9 +2,10 @@
 import React from 'react';
 import { 
   FaTrophy, FaRedo, FaHome, FaClipboardCheck, 
-  FaBookmark, FaTwitter, FaLinkedin, FaCheck, 
+  FaBookmark, FaLinkedin, FaCheck, 
   FaExclamationTriangle, FaChartLine
 } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import './IncidentResponder.css';
 
 const ScenarioResults = ({ results, scenario, selectedActions, score, onRestart }) => {
@@ -156,7 +157,7 @@ const ScenarioResults = ({ results, scenario, selectedActions, score, onRestart 
         <div className="incidentresponder_share_container">
           <span>Share your results:</span>
           <button className="incidentresponder_twitter_share">
-            <FaTwitter />
+            <FaXTwitter />
           </button>
           <button className="incidentresponder_linkedin_share">
             <FaLinkedin />
