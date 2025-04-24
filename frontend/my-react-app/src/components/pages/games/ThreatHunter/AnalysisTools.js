@@ -216,54 +216,58 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
               )}
               
               <div className="threathunter_analysistools_detected_threats">
-                <h4>Detected Threats ({detectedThreats.length})</h4>
+                <div className="threathunter_analysistools_threats_header">
+                  <h4>Detected Threats ({detectedThreats.length})</h4>
+                </div>
                 
-                {detectedThreats.length === 0 ? (
-                  <div className="threathunter_analysistools_no_threats">
-                    <p>No threats detected yet. Use the analysis tools and flag suspicious log lines to identify security threats.</p>
-                  </div>
-                ) : (
-                  <div className="threathunter_analysistools_threats_list">
-                    {detectedThreats.map(threat => (
-                      <div 
-                        key={threat.id} 
-                        className="threathunter_analysistools_threat_item"
-                        style={{ 
-                          borderLeft: `3px solid ${getThreatTypeColor(threat.type)}` 
-                        }}
-                      >
-                        <div className="threathunter_analysistools_threat_header">
-                          <div className="threathunter_analysistools_threat_type">
-                            <span style={{ color: getThreatTypeColor(threat.type) }}>
-                              {getThreatTypeIcon(threat.type)}
-                            </span>
-                            <span>{threatTypes.find(t => t.id === threat.type)?.name || 'Unknown Threat'}</span>
+                <div className="threathunter_analysistools_threats_content">
+                  {detectedThreats.length === 0 ? (
+                    <div className="threathunter_analysistools_no_threats">
+                      <p>No threats detected yet. Use the analysis tools and flag suspicious log lines to identify security threats.</p>
+                    </div>
+                  ) : (
+                    <div className="threathunter_analysistools_threats_list">
+                      {detectedThreats.map(threat => (
+                        <div 
+                          key={threat.id} 
+                          className="threathunter_analysistools_threat_item"
+                          style={{ 
+                            borderLeft: `3px solid ${getThreatTypeColor(threat.type)}` 
+                          }}
+                        >
+                          <div className="threathunter_analysistools_threat_header">
+                            <div className="threathunter_analysistools_threat_type">
+                              <span style={{ color: getThreatTypeColor(threat.type) }}>
+                                {getThreatTypeIcon(threat.type)}
+                              </span>
+                              <span>{threatTypes.find(t => t.id === threat.type)?.name || 'Unknown Threat'}</span>
+                            </div>
+                            <div className="threathunter_analysistools_threat_actions">
+                              <button 
+                                className="threathunter_analysistools_edit_threat" 
+                                onClick={() => showEditThreatForm(threat)}
+                                title="Edit threat"
+                              >
+                                <FaEdit />
+                              </button>
+                              <button 
+                                className="threathunter_analysistools_remove_threat" 
+                                onClick={() => handleRemoveThreat(threat.id)}
+                                title="Remove threat"
+                              >
+                                <FaTimes />
+                              </button>
+                            </div>
                           </div>
-                          <div className="threathunter_analysistools_threat_actions">
-                            <button 
-                              className="threathunter_analysistools_edit_threat" 
-                              onClick={() => showEditThreatForm(threat)}
-                              title="Edit threat"
-                            >
-                              <FaEdit />
-                            </button>
-                            <button 
-                              className="threathunter_analysistools_remove_threat" 
-                              onClick={() => handleRemoveThreat(threat.id)}
-                              title="Remove threat"
-                            >
-                              <FaTimes />
-                            </button>
+                          <div className="threathunter_analysistools_threat_body">
+                            <div className="threathunter_analysistools_threat_name">{threat.name}</div>
+                            <div className="threathunter_analysistools_threat_description">{threat.description}</div>
                           </div>
                         </div>
-                        <div className="threathunter_analysistools_threat_body">
-                          <div className="threathunter_analysistools_threat_name">{threat.name}</div>
-                          <div className="threathunter_analysistools_threat_description">{threat.description}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}

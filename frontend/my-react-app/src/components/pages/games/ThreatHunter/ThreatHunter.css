@@ -1412,9 +1412,10 @@
 
 /* Threat Detection Tool */
 .threathunter_analysistools_threat_detection_tool {
+  position: relative; /* Make sure position is relative */
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  width: 100%;
 }
 
 .threathunter_analysistools_tool_actions {
@@ -1449,7 +1450,6 @@
   border: 1px solid var(--threathunter-border-dark);
   margin-bottom: 15px;
   position: relative;
-  animation: slideDown 0.3s ease forwards;
 }
 
 .threathunter_analysistools_threat_form h4 {
@@ -1552,14 +1552,33 @@
   filter: brightness(1.1);
 }
 
+.threathunter_analysistools_detected_threats {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+}
+
 .threathunter_analysistools_detected_threats h4 {
+  position: static;
+  margin: 0 0 15px 0;
   font-size: 1.2rem;
   color: var(--threathunter-text);
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
+
+
+.threathunter_analysistools_threats_content {
+  width: 100%;
+}
+
+
+.threathunter_analysistools_threats_header {
+  width: 100%;
+  display: block;
+  margin-bottom: 15px;
+}
+
 
 .threathunter_analysistools_no_threats {
   background-color: var(--threathunter-bg-dark);
@@ -1577,6 +1596,8 @@
   gap: 10px;
   max-height: 320px;
   overflow-y: auto;
+  width: 100%;
+  position: relative;
 }
 
 .threathunter_analysistools_threat_item {
@@ -3265,6 +3286,41 @@
 .log-content::-webkit-scrollbar-thumb:hover,
 .analysis-panel::-webkit-scrollbar-thumb:hover {
   background-color: var(--threathunter-accent);
+}
+
+/* Add or modify these styles in your ThreatHunter.css file */
+.threathunter_analysistools_threat_detection_tool {
+  position: relative; /* Make sure position is relative */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.threathunter_analysistools_detected_threats {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.threathunter_analysistools_detected_threats h4 {
+  position: static;
+  margin: 0 0 15px 0;
+  font-size: 1.2rem;
+  color: var(--threathunter-text);
+}
+
+
+.threathunter_analysistools_threats_content {
+  width: 100%;
+}
+
+
+.threathunter_analysistools_threats_header {
+  width: 100%;
+  display: block;
+  margin-bottom: 15px;
 }
 
 /*===============================*/
