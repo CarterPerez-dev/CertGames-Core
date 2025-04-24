@@ -612,14 +612,6 @@ def generate_feedback_summary(response_rating, action_details):
     
     return "Your response needs significant improvement. Several decisions were suboptimal or contrary to best practices. This approach could potentially worsen the incident or delay recovery. Review the key lessons for guidance on improving your incident response skills."
 
-def generate_default_scenarios():
-    """
-    Generate default incident response scenarios.
-    """
-    # This function contains your existing scenario data which is quite large
-    # I'm keeping the function call but not including the full implementation 
-    # since you already have it in your codebase
-    return []  # In the actual code, this would return your scenarios array
 
 def generate_default_scenarios():
     """
