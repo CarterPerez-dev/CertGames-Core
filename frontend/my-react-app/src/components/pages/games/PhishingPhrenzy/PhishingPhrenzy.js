@@ -18,22 +18,22 @@ import './PhishingPhrenzy.css';
 
 const difficultySettings = {
   easy: { 
-    timeLimit: 69, 
-    penaltyTime: 4,
-    bonusTime: 11,
-    pointsPerCorrect: 10
-  },
-  medium: { 
-    timeLimit: 60, 
+    timeLimit: 100, 
     penaltyTime: 5,
     bonusTime: 7,
-    pointsPerCorrect: 15
+    pointsPerCorrect: 50
   },
-  hard: { 
+  medium: { 
     timeLimit: 55, 
     penaltyTime: 6,
     bonusTime: 5,
-    pointsPerCorrect: 20
+    pointsPerCorrect: 15
+  },
+  hard: { 
+    timeLimit: 50, 
+    penaltyTime: 9,
+    bonusTime: 5,
+    pointsPerCorrect: 22
   }
 };
 
@@ -321,7 +321,7 @@ const PhishingPhrenzy = () => {
         <div className="phishingphrenzy_start_screen">
           <h2>Ready to test your phishing detection skills?</h2>
           <p>You'll be shown various emails, messages, and websites. Quickly decide if they're legitimate or phishing attempts.</p>
-          
+          <p className="secondary-info"> 🅘 Pay close attention to the details — even the smallest signs could indicate phishing.</p>
           <div className="phishingphrenzy_difficulty_selector">
             <h3>Select Difficulty:</h3>
             <div className="phishingphrenzy_difficulty_buttons">
