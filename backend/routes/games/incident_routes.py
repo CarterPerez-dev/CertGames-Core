@@ -1,4 +1,5 @@
 # backend/routes/incident_routes.py
+# backend/routes/games/incident_routes.py
 from flask import Blueprint, request, jsonify, g
 from bson.objectid import ObjectId
 import time
@@ -296,6 +297,8 @@ def complete_scenario():
     
     # Check for achievements
     achievements = []
+    
+    # EXISTING ACHIEVEMENTS
     if response_rating >= 90:
         achievements.append({
             'name': 'Expert Responder',
@@ -311,6 +314,85 @@ def complete_scenario():
             'name': 'First Response',
             'description': f'Completed the "{scenario.get("title")}" incident scenario.'
         })
+    
+    # NEW ACHIEVEMENTS
+    
+    # Master of All Threats - Complete scenarios of each type
+    start_db = time.time()
+    # Get all completed scenario IDs for this user
+    completed_scenarios = list(incident_progress_collection.find(
+        {"userId": user_oid, "status": "completed"},
+        {"scenarioId": 1, "_id": 0}
+    ))
+    duration = time.time() - start_db
+    if hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator += duration
+
+    completed_scenario_ids = [doc.get("scenarioId") for doc in completed_scenarios]
+
+    # Get the types of all completed scenarios
+    completed_types = set()
+    for scenario_id in completed_scenario_ids:
+        start_db = time.time()
+        scenario_doc = incident_scenarios_collection.find_one({"id": scenario_id}, {"type": 1, "_id": 0})
+        duration = time.time() - start_db
+        if hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator += duration
+        
+        if scenario_doc and "type" in scenario_doc:
+            completed_types.add(scenario_doc["type"])
+
+    # Get all available scenario types
+    start_db = time.time()
+    all_types = set(incident_scenarios_collection.distinct("type"))
+    duration = time.time() - start_db
+    if hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator += duration
+
+    if all_types and completed_types and completed_types == all_types:
+        achievements.append({
+            'name': 'Master of All Threats',
+            'description': 'Completed scenarios of every incident type.'
+        })
+
+    # Perfect Decision Maker - Complete a scenario without any poor choices
+    all_good_choices = True
+    for detail in action_details:
+        if detail.get('quality') == 'poor':
+            all_good_choices = False
+            break
+
+    if all_good_choices and len(action_details) > 0:
+        achievements.append({
+            'name': 'Perfect Decision Maker',
+            'description': 'Completed a scenario without making any poor choices.'
+        })
+
+    # Battle-Hardened Responder - Complete a hard scenario with high score
+    if progress and progress.get("difficulty") == "hard" and response_rating >= 80:
+        achievements.append({
+            'name': 'Battle-Hardened Responder',
+            'description': 'Successfully completed a difficult scenario with a high score.'
+        })
+
+    # Elite Response Team - Get Expert Responder in multiple scenarios
+    if response_rating >= 90:
+        # Count how many scenarios user has completed with 90%+ rating
+        start_db = time.time()
+        high_rating_count = incident_progress_collection.count_documents({
+            "userId": user_oid, 
+            "status": "completed", 
+            "responseRating": {"$gte": 90}
+        })
+        duration = time.time() - start_db
+        if hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator += duration
+        
+        if high_rating_count >= 3:
+            achievements.append({
+                'name': 'Elite Response Team',
+                'description': 'Achieved Expert Responder status in 3 or more scenarios.'
+            })
     
     # Generate feedback summary
     feedback_summary = generate_feedback_summary(response_rating, action_details)
@@ -328,6 +410,74 @@ def complete_scenario():
     }
     
     return jsonify(results)
+
+@incident_bp.route('/bookmark', methods=['POST'])
+def toggle_bookmark():
+    """
+    Toggle bookmark status for a scenario.
+    """
+    data = request.json
+    user_id = data.get('userId')
+    scenario_id = data.get('scenarioId')
+    
+    if not user_id or not scenario_id:
+        return jsonify({"error": "userId and scenarioId are required"}), 400
+    
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user ID"}), 400
+    
+    # Find bookmarks collection or create if it doesn't exist
+    if 'incidentBookmarks' not in db.list_collection_names():
+        db.create_collection('incidentBookmarks')
+    
+    # Check if bookmark already exists
+    bookmark = db.incidentBookmarks.find_one({
+        "userId": user_oid,
+        "scenarioId": scenario_id
+    })
+    
+    if bookmark:
+        # Remove bookmark if it exists
+        db.incidentBookmarks.delete_one({
+            "userId": user_oid,
+            "scenarioId": scenario_id
+        })
+        bookmarked = False
+    else:
+        # Add bookmark if it doesn't exist
+        db.incidentBookmarks.insert_one({
+            "userId": user_oid,
+            "scenarioId": scenario_id,
+            "createdAt": datetime.utcnow()
+        })
+        bookmarked = True
+    
+    return jsonify({
+        "success": True,
+        "bookmarked": bookmarked
+    }), 200
+
+@incident_bp.route('/bookmarks/<user_id>', methods=['GET'])
+def get_bookmarks(user_id):
+    """
+    Get bookmarked scenarios for a user.
+    """
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user ID"}), 400
+    
+    # Find all bookmarks for this user
+    bookmarks = list(db.incidentBookmarks.find({"userId": user_oid}))
+    
+    # Extract scenario IDs
+    scenario_ids = [bookmark.get('scenarioId') for bookmark in bookmarks]
+    
+    return jsonify({
+        "bookmarkedScenarios": scenario_ids
+    }), 200
 
 def apply_difficulty(scenario, difficulty):
     """
@@ -446,76 +596,6 @@ def generate_key_lessons(scenario, selected_actions):
     
     # Return 5 lessons max, prioritizing scenario-specific and performance-based insights
     return lessons[:5]
-    
-@incident_bp.route('/bookmark', methods=['POST'])
-def toggle_bookmark():
-    """
-    Toggle bookmark status for a scenario.
-    """
-    data = request.json
-    user_id = data.get('userId')
-    scenario_id = data.get('scenarioId')
-    
-    if not user_id or not scenario_id:
-        return jsonify({"error": "userId and scenarioId are required"}), 400
-    
-    try:
-        user_oid = ObjectId(user_id)
-    except:
-        return jsonify({"error": "Invalid user ID"}), 400
-    
-    # Find bookmarks collection or create if it doesn't exist
-    if 'incidentBookmarks' not in db.list_collection_names():
-        db.create_collection('incidentBookmarks')
-    
-    # Check if bookmark already exists
-    bookmark = db.incidentBookmarks.find_one({
-        "userId": user_oid,
-        "scenarioId": scenario_id
-    })
-    
-    if bookmark:
-        # Remove bookmark if it exists
-        db.incidentBookmarks.delete_one({
-            "userId": user_oid,
-            "scenarioId": scenario_id
-        })
-        bookmarked = False
-    else:
-        # Add bookmark if it doesn't exist
-        db.incidentBookmarks.insert_one({
-            "userId": user_oid,
-            "scenarioId": scenario_id,
-            "createdAt": datetime.utcnow()
-        })
-        bookmarked = True
-    
-    return jsonify({
-        "success": True,
-        "bookmarked": bookmarked
-    }), 200
-
-@incident_bp.route('/bookmarks/<user_id>', methods=['GET'])
-def get_bookmarks(user_id):
-    """
-    Get bookmarked scenarios for a user.
-    """
-    try:
-        user_oid = ObjectId(user_id)
-    except:
-        return jsonify({"error": "Invalid user ID"}), 400
-    
-    # Find all bookmarks for this user
-    bookmarks = list(db.incidentBookmarks.find({"userId": user_oid}))
-    
-    # Extract scenario IDs
-    scenario_ids = [bookmark.get('scenarioId') for bookmark in bookmarks]
-    
-    return jsonify({
-        "bookmarkedScenarios": scenario_ids
-    }), 200
-
-
 
 def generate_feedback_summary(response_rating, action_details):
     """
@@ -531,6 +611,15 @@ def generate_feedback_summary(response_rating, action_details):
         return "Your response was adequate but inconsistent. You made some good decisions but missed important best practices in others. This approach would likely contain the incident but with potential for additional damage or longer recovery time."
     
     return "Your response needs significant improvement. Several decisions were suboptimal or contrary to best practices. This approach could potentially worsen the incident or delay recovery. Review the key lessons for guidance on improving your incident response skills."
+
+def generate_default_scenarios():
+    """
+    Generate default incident response scenarios.
+    """
+    # This function contains your existing scenario data which is quite large
+    # I'm keeping the function call but not including the full implementation 
+    # since you already have it in your codebase
+    return []  # In the actual code, this would return your scenarios array
 
 def generate_default_scenarios():
     """

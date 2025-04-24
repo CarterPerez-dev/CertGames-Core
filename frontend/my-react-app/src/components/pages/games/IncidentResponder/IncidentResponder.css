@@ -1979,7 +1979,7 @@
 .incidentresponder_no_scenarios {
   background-color: rgba(var(--incidentresponder-accent-rgb), 0.05);
   border-radius: 15px;
-  padding: 30px;
+  padding: 10px;
   text-align: center;
   border: 1px dashed rgba(var(--incidentresponder-accent-rgb), 0.2);
   grid-column: 1 / -1;

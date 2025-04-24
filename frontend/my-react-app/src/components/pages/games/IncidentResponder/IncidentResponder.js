@@ -66,7 +66,7 @@ const IncidentResponder = () => {
   const [showInstructions, setShowInstructions] = useState(false);
   
   // Audio state
-  const [volume, setVolume] = useState(0.7); // Default volume (0.0 to 1.0)
+  const [volume, setVolume] = useState(0.7); 
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const audioRef = useRef(null);
   
@@ -319,11 +319,9 @@ const IncidentResponder = () => {
                     </div>
                   </div>
                 ))}
-                ) : (
                   <div className="incidentresponder_no_scenarios">
-                    <p>No scenarios match your selected filters. Try different criteria.</p>
+                    <p>If no scenarios match your selected filters. Try different criteria.</p>
                   </div>
-                )}
               </div>
             </div>
           </>
