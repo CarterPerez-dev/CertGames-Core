@@ -30,7 +30,8 @@ import {
   FaLock, 
   FaUserCog, 
   FaDatabase, 
-  FaBitcoin 
+  FaBitcoin,
+  FaLinux
 } from 'react-icons/fa';
 
 import ScenarioIntro from './ScenarioIntro';
@@ -293,7 +294,8 @@ const IncidentResponder = () => {
                       {scenario.type === 'insider' && <FaUserSecret />}
                       {scenario.type === 'ransomware' && <FaLock />}        
                       {scenario.type === 'socialengineering' && <FaUserCog />} 
-                      {scenario.type === 'dataleak' && <FaDatabase />}     
+                      {scenario.type === 'dataleak' && <FaDatabase />}    
+                      {scenario.type === 'rootkit' && <FaLinux />} 
                       {scenario.type === 'cryptojacking' && <FaBitcoin />}  
                       {!['malware', 'breach', 'phishing', 'ddos', 'insider', 'ransomware', 'socialengineering', 'dataleak', 'cryptojacking'].includes(scenario.type) && <FaClipboardCheck />}
                     </div>
