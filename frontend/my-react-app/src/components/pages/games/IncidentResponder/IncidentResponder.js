@@ -279,47 +279,46 @@ const IncidentResponder = () => {
               </div>
               
               <div className="incidentresponder_scenarios_grid">
-                {filteredScenarios.length > 0 ? (
-                  filteredScenarios.map(scenario => (
-                    <div
-                      key={scenario.id}
-                      className="incidentresponder_scenario_card"
-                      onClick={() => handleStartScenario(scenario.id)}
-                    >
-                      <div className="incidentresponder_scenario_icon_wrapper">
-                          {scenario.type === 'malware' && <FaBug />}
-                          {scenario.type === 'breach' && <FaExclamationTriangle />}
-                          {scenario.type === 'phishing' && <FaShieldAlt />}
-                          {scenario.type === 'ddos' && <FaServer />}
-                          {scenario.type === 'insider' && <FaUserSecret />}
-                          {scenario.type === 'ransomware' && <FaLock />}        
-                          {scenario.type === 'socialengineering' && <FaUserCog />} 
-                          {scenario.type === 'dataleak' && <FaDatabase />}     
-                          {scenario.type === 'cryptojacking' && <FaBitcoin />}  
-                          {!['malware', 'breach', 'phishing', 'ddos', 'insider', 'ransomware', 'socialengineering', 'dataleak', 'cryptojacking'].includes(scenario.type) && <FaClipboardCheck />}
-                      </div>
-                        
-                        {/* Bookmark button */}
-                        <button
-                          className="incidentresponder_bookmark_button"
-                          onClick={(e) => handleToggleBookmark(scenario.id, e)}
-                          title={bookmarkedScenarios.includes(scenario.id) ? "Remove bookmark" : "Bookmark this scenario"}
-                        >
-                          {bookmarkedScenarios.includes(scenario.id) ? <FaBookmark /> : <FaRegBookmark />}
-                        </button>
-                      </div>
-                      <div className="incidentresponder_scenario_info_section">
-                        <h3>{scenario.title}</h3>
-                        <div className="incidentresponder_scenario_meta_data">
-                          <span className="incidentresponder_scenario_type_label">{scenario.type}</span>
-                          <span className="incidentresponder_scenario_difficulty_rating">
-                            {Array(scenario.difficulty).fill('★').join('')}
-                          </span>
-                        </div>
-                        <p>{scenario.shortDescription}</p>
-                      </div>
+                {filteredScenarios.map(scenario => (
+                  <div
+                    key={scenario.id}
+                    className="incidentresponder_scenario_card"
+                    onClick={() => handleStartScenario(scenario.id)}
+                  >
+                    <div className="incidentresponder_scenario_icon_wrapper">
+                      {scenario.type === 'malware' && <FaBug />}
+                      {scenario.type === 'breach' && <FaExclamationTriangle />}
+                      {scenario.type === 'phishing' && <FaShieldAlt />}
+                      {scenario.type === 'ddos' && <FaServer />}
+                      {scenario.type === 'insider' && <FaUserSecret />}
+                      {scenario.type === 'ransomware' && <FaLock />}        
+                      {scenario.type === 'socialengineering' && <FaUserCog />} 
+                      {scenario.type === 'dataleak' && <FaDatabase />}     
+                      {scenario.type === 'cryptojacking' && <FaBitcoin />}  
+                      {!['malware', 'breach', 'phishing', 'ddos', 'insider', 'ransomware', 'socialengineering', 'dataleak', 'cryptojacking'].includes(scenario.type) && <FaClipboardCheck />}
                     </div>
-                  ))
+                    
+                    {/* Bookmark button */}
+                    <button
+                      className="incidentresponder_bookmark_button"
+                      onClick={(e) => handleToggleBookmark(scenario.id, e)}
+                      title={bookmarkedScenarios.includes(scenario.id) ? "Remove bookmark" : "Bookmark this scenario"}
+                    >
+                      {bookmarkedScenarios.includes(scenario.id) ? <FaBookmark /> : <FaRegBookmark />}
+                    </button>
+                    
+                    <div className="incidentresponder_scenario_info_section">
+                      <h3>{scenario.title}</h3>
+                      <div className="incidentresponder_scenario_meta_data">
+                        <span className="incidentresponder_scenario_type_label">{scenario.type}</span>
+                        <span className="incidentresponder_scenario_difficulty_rating">
+                          {Array(scenario.difficulty).fill('★').join('')}
+                        </span>
+                      </div>
+                      <p>{scenario.shortDescription}</p>
+                    </div>
+                  </div>
+                ))}
                 ) : (
                   <div className="incidentresponder_no_scenarios">
                     <p>No scenarios match your selected filters. Try different criteria.</p>

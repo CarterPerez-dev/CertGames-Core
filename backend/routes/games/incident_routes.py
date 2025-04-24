@@ -162,7 +162,7 @@ def process_action():
         "nextStage": None  
     })
 
-python@incident_bp.route('/complete', methods=['POST'])
+@incident_bp.route('/complete', methods=['POST'])
 def complete_scenario():
     """
     Complete a scenario and calculate results.
