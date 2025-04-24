@@ -9,6 +9,7 @@ export const fetchScenarios = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch('/api/incident/scenarios');
+      
       if (!response.ok) {
         throw new Error('Failed to fetch incident scenarios');
       }
@@ -148,7 +149,21 @@ export const selectAction = createAsyncThunk(
         throw new Error('Failed to process action');
       }
       
-      return await response.json();
+      const data = await response.json();
+      
+      // FIXED: Handle stage transition locally since server returns nextStage: null
+      // Find the action from the current stage's actions array
+      const action = currentStage.actions.find(a => a.id === actionId);
+      
+      // Return enhanced data with the same stage (we'll show explanation before continuing)
+      return {
+        nextStage: currentStage,  // Keep same stage but show explanation
+        action: action || { id: actionId },
+        points: data.points || 0,
+        isComplete: false,
+        showExplanation: true  // Flag to show the explanation
+      };
+      
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -165,6 +180,7 @@ const initialState = {
   results: null,
   loading: false,
   error: null,
+  showExplanation: false  // NEW: Flag to track if we're showing explanation
 };
 
 const incidentResponderSlice = createSlice({
@@ -179,6 +195,7 @@ const incidentResponderSlice = createSlice({
       state.score = 0;
       state.results = null;
       state.error = null;
+      state.showExplanation = false;
     }
   },
   extraReducers: (builder) => {
@@ -209,6 +226,7 @@ const incidentResponderSlice = createSlice({
         state.selectedActions = {};
         state.score = 0;
         state.results = null;
+        state.showExplanation = false;
       })
       .addCase(startScenario.rejected, (state, action) => {
         state.loading = false;
@@ -231,6 +249,7 @@ const incidentResponderSlice = createSlice({
           // Update current stage and save selected action
           state.currentStage = action.payload.nextStage;
           state.gameStatus = 'playing';
+          state.showExplanation = action.payload.showExplanation;
           
           if (action.payload.action && action.payload.action.id !== 'start' && action.payload.action.id !== 'continue') {
             // Store the action for this stage
