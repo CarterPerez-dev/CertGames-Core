@@ -9,7 +9,30 @@ import {
   fetchBookmarks,
   toggleBookmark,
 } from '../../store/slice/incidentResponderSlice';
-import { FaShieldAlt, FaBug, FaExclamationTriangle, FaAward, FaClipboardCheck, FaStar, FaCoins, FaArrowLeft, FaTimes, FaVolumeUp, FaVolumeMute, FaBookmark, FaInfoCircle, FaRegBookmark, FaQuestion } from 'react-icons/fa';
+import { 
+  FaShieldAlt, 
+  FaBug, 
+  FaExclamationTriangle, 
+  FaAward, 
+  FaClipboardCheck, 
+  FaStar, 
+  FaCoins, 
+  FaArrowLeft, 
+  FaTimes, 
+  FaVolumeUp, 
+  FaVolumeMute, 
+  FaBookmark, 
+  FaInfoCircle, 
+  FaRegBookmark, 
+  FaQuestion, 
+  FaServer, 
+  FaUserSecret, 
+  FaLock, 
+  FaUserCog, 
+  FaDatabase, 
+  FaBitcoin 
+} from 'react-icons/fa';
+
 import ScenarioIntro from './ScenarioIntro';
 import ScenarioStage from './ScenarioStage';
 import ScenarioResults from './ScenarioResults';
@@ -264,10 +287,17 @@ const IncidentResponder = () => {
                       onClick={() => handleStartScenario(scenario.id)}
                     >
                       <div className="incidentresponder_scenario_icon_wrapper">
-                        {scenario.type === 'malware' && <FaBug />}
-                        {scenario.type === 'breach' && <FaExclamationTriangle />}
-                        {scenario.type === 'phishing' && <FaShieldAlt />}
-                        {!['malware', 'breach', 'phishing'].includes(scenario.type) && <FaClipboardCheck />}
+                          {scenario.type === 'malware' && <FaBug />}
+                          {scenario.type === 'breach' && <FaExclamationTriangle />}
+                          {scenario.type === 'phishing' && <FaShieldAlt />}
+                          {scenario.type === 'ddos' && <FaServer />}
+                          {scenario.type === 'insider' && <FaUserSecret />}
+                          {scenario.type === 'ransomware' && <FaLock />}        
+                          {scenario.type === 'socialengineering' && <FaUserCog />} 
+                          {scenario.type === 'dataleak' && <FaDatabase />}     
+                          {scenario.type === 'cryptojacking' && <FaBitcoin />}  
+                          {!['malware', 'breach', 'phishing', 'ddos', 'insider', 'ransomware', 'socialengineering', 'dataleak', 'cryptojacking'].includes(scenario.type) && <FaClipboardCheck />}
+                      </div>
                         
                         {/* Bookmark button */}
                         <button

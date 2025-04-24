@@ -81,7 +81,7 @@ const ScenarioStage = ({
     return (stage.order / stage.totalSteps) * 100;
   };
   
-  return (
+return (
     <div className="incidentresponder_stage_container">
       <div className="incidentresponder_stage_header">
         <h2>{scenarioTitle}</h2>
@@ -126,20 +126,39 @@ const ScenarioStage = ({
         )}
       </div>
       
+      {/* In the ScenarioStage.js component: */}
       {!showExplanation ? (
         <div className="incidentresponder_action_selection">
           <h3>Choose Your Response</h3>
           <div className="incidentresponder_actions_container">
-            {stage.actions.map(action => (
-              <button
-                key={action.id}
-                className="incidentresponder_action_button"
-                onClick={() => handleSelectAction(action.id)}
-                disabled={showExplanation}
-              >
-                {action.text}
-              </button>
-            ))}
+            {stage.actionShuffleOrder ? 
+              // Display actions in the shuffled order
+              stage.actionShuffleOrder.map(index => {
+                const action = stage.actions[index];
+                return (
+                  <button
+                    key={action.id}
+                    className="incidentresponder_action_button"
+                    onClick={() => handleSelectAction(action.id)}
+                    disabled={showExplanation}
+                  >
+                    {action.text}
+                  </button>
+                );
+              })
+              : 
+              // Fallback to unshuffled order if no shuffle order is provided
+              stage.actions.map(action => (
+                <button
+                  key={action.id}
+                  className="incidentresponder_action_button"
+                  onClick={() => handleSelectAction(action.id)}
+                  disabled={showExplanation}
+                >
+                  {action.text}
+                </button>
+              ))
+            }
           </div>
         </div>
       ) : (

@@ -65,6 +65,16 @@ def start_scenario():
     # Apply difficulty modifications
     apply_difficulty(scenario, difficulty)
     
+    # Generate shuffle orders for each stage's actions
+    import random
+    for stage in scenario.get('stages', []):
+        if 'actions' in stage:
+            action_count = len(stage['actions'])
+            # Create a shuffled list of indices
+            shuffle_order = list(range(action_count))
+            random.shuffle(shuffle_order)
+            stage['actionShuffleOrder'] = shuffle_order
+    
     # Record that the user started this scenario
     if user_id:
         try:
@@ -152,7 +162,7 @@ def process_action():
         "nextStage": None  
     })
 
-@incident_bp.route('/complete', methods=['POST'])
+python@incident_bp.route('/complete', methods=['POST'])
 def complete_scenario():
     """
     Complete a scenario and calculate results.
@@ -216,17 +226,21 @@ def complete_scenario():
     elif time_spent < 600:  # Less than 10 minutes
         time_bonus = 10
     
-    # Calculate rewards
-    xp_awarded = score + time_bonus
-    coins_awarded = score // 2 + time_bonus
-    
     # Check if scenario was already completed
     is_first_completion = True
     if progress and progress.get('completedAt'):
         is_first_completion = False
-        # Reduce rewards for replays
-        xp_awarded = max(10, xp_awarded // 4)
-        coins_awarded = max(5, coins_awarded // 4)
+    
+    # Calculate rewards based on percentages of total score
+    total_score = score + time_bonus
+    if is_first_completion:
+        # First time: XP = 40% of total score, Coins = 20% of total score
+        xp_awarded = round(total_score * 0.4)
+        coins_awarded = round(total_score * 0.2)
+    else:
+        # Replays: XP = 10% of total score, Coins = 5% of total score
+        xp_awarded = round(total_score * 0.1)
+        coins_awarded = round(total_score * 0.05)
     
     # Award XP and coins
     if xp_awarded > 0:
