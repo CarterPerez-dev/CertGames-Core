@@ -70,15 +70,17 @@ const IncidentResponder = () => {
     
     // Play music when game status is 'playing' or 'intro'
     if (gameStatus === 'playing' || gameStatus === 'intro') {
-      if (!isMuted) {
+      if (!isMuted && audioRef.current) {
         audioRef.current.play().catch(error => {
           console.log('Audio play failed:', error);
         });
       }
     } else {
-      // Stop music when game is not playing
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+      // Add a safety check before trying to pause
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
     }
     
     // Cleanup function
@@ -121,6 +123,7 @@ const IncidentResponder = () => {
   };
   
   const handleStartScenario = (scenarioId) => {
+    console.log("Starting scenario with ID:", scenarioId);
     dispatch(startScenario({ 
       scenarioId, 
       userId,

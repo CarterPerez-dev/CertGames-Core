@@ -62,7 +62,9 @@ export const selectAction = createAsyncThunk(
         return {
           nextStage: stages[0],
           action: { id: 'start' },
-          isComplete: false
+          isComplete: false,
+          stageId: 'intro',
+          actionId: 'start'
         };
       } else {
         return rejectWithValue('No stages found in scenario');
@@ -113,7 +115,10 @@ export const selectAction = createAsyncThunk(
           
           return {
             results,
-            isComplete: true
+            isComplete: true,
+            stageId: currentStage.id,
+            actionId: 'continue',
+            score
           };
         } catch (error) {
           return rejectWithValue(error.message);
@@ -123,14 +128,17 @@ export const selectAction = createAsyncThunk(
         return {
           nextStage: stages[currentIndex + 1],
           action: { id: 'continue' },
-          isComplete: false
+          isComplete: false,
+          stageId: currentStage.id,
+          actionId: 'continue',
+          score
         };
       }
     }
     
     // For regular actions, send to backend
     try {
-      const { currentStage, currentScenario } = getState().incidentResponder;
+      const { currentStage, currentScenario, score: currentScore } = getState().incidentResponder;
       
       const response = await fetch('/api/incident/action', {
         method: 'POST',
@@ -161,7 +169,10 @@ export const selectAction = createAsyncThunk(
         action: action || { id: actionId },
         points: data.points || 0,
         isComplete: false,
-        showExplanation: true  // Flag to show the explanation
+        showExplanation: true,  // Flag to show the explanation
+        stageId,
+        actionId,
+        score: currentScore + (data.points || 0)
       };
       
     } catch (error) {
@@ -279,20 +290,30 @@ const incidentResponderSlice = createSlice({
         state.error = action.payload;
       })
       
-      // Existing reducers for selectAction
+      // Fix the selectAction fulfilled case
       .addCase(selectAction.pending, (state) => {
         state.loading = true;
       })
       .addCase(selectAction.fulfilled, (state, action) => {
         state.loading = false;
         
-        const { actionId, stageId, nextStage, score, showExplanation } = action.payload;
+        // Properly destructure all needed values from the payload
+        const { 
+          nextStage, 
+          action: actionData, 
+          isComplete, 
+          showExplanation,
+          stageId,
+          actionId,
+          score,
+          results
+        } = action.payload;
         
         // Handle special action IDs
-        if (actionId === 'start') {
+        if (actionData && actionData.id === 'start') {
           state.gameStatus = 'playing';
-          state.currentStage = action.payload.stage;
-        } else if (actionId === 'continue') {
+          state.currentStage = nextStage;
+        } else if (actionData && actionData.id === 'continue') {
           if (nextStage) {
             state.currentStage = nextStage;
             state.showExplanation = false;
@@ -302,19 +323,25 @@ const incidentResponderSlice = createSlice({
           }
         } else {
           // Regular action selection
-          state.selectedActions[stageId] = actionId;
+          if (stageId && actionId) {
+            state.selectedActions[stageId] = actionId;
+          }
           state.showExplanation = showExplanation || false;
           if (score !== undefined) {
             state.score = score;
           }
+        }
+        
+        // Set results if we have them (for completed game)
+        if (isComplete && results) {
+          state.results = results;
+          state.gameStatus = 'completed';
         }
       })
       .addCase(selectAction.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      
-      // NEW CODE - Add these bookmark-related reducers
       
       // Toggle bookmark
       .addCase(toggleBookmark.pending, (state) => {
