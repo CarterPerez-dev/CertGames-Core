@@ -222,9 +222,9 @@ def complete_scenario():
     
     # Calculate time bonus
     time_bonus = 0
-    if time_spent > 0 and time_spent < 300:  # Less than 5 minutes
+    if time_spent > 0 and time_spent < 200:  # Less than 5 minutes
         time_bonus = 20
-    elif time_spent < 600:  # Less than 10 minutes
+    elif time_spent < 300:  # Less than 10 minutes
         time_bonus = 10
     
     # Check if scenario was already completed

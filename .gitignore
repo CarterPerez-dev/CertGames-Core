@@ -16,10 +16,7 @@ node_modules/
 # React build files (generated during production build, not needed in source control)
 my-react-app/build/
 
-# These are just images
-avatars/
-xp/
-/frontend/my-react-app/src/components/pages/Info/images/
+
 
 # Apple Ouath
 AuthKey_8VA5M37ZZZ.p8
@@ -37,7 +34,6 @@ ssh-key-2025-04-02.key.pub
 # Annoying
 nginx/logs/
 
-# Annoying
-**/*.mp4
+
 
 
