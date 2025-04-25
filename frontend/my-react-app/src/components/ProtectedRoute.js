@@ -63,7 +63,7 @@ const ProtectedRoute = ({ children, requiresPremium = false }) => {
   }
   
   // Check if this is a premium feature and user doesn't have premium
-  if (requiresPremium && !subscriptionActive && subscriptionType !== 'free') {
+  if (requiresPremium && (!subscriptionActive || subscriptionType === 'free')) {
      return <UpgradePrompt feature="premium" />;
   }
   

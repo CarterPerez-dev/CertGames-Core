@@ -114,7 +114,7 @@ def check_subscription_middleware():
                     subscription_type = jwt_data.get('subscriptionType', 'free')
                     
                     # Premium check using JWT claims
-                    if not subscription_active and subscription_type != 'free':
+                    if not subscription_active or subscription_type == 'free':
                         return jsonify({
                             "error": "Premium subscription required", 
                             "status": "subscription_required",
