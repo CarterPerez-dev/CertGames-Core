@@ -1,0 +1,201 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: backend_service
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - ./nginx/logs:/var/log/nginx
+    env_file:
+      - .env
+    networks:
+      - xploitcraft_network
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: '9G'
+        reservations:
+          cpus: '2'
+          memory: '7G'
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - redis
+
+  frontend:
+    container_name: frontend_service
+    build:
+      context: ./frontend/my-react-app
+      dockerfile: Dockerfile.frotnend
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    networks:
+      - xploitcraft_network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '4G'
+        reservations:
+          cpus: '1'
+          memory: '2G'
+    restart: unless-stopped
+
+  redis:
+    container_name: redis_service
+    image: redis:latest
+    ports:
+      - "6380:6379"
+    volumes:
+      - /mnt/storage/redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: >
+      redis-server /usr/local/etc/redis/redis.conf
+      --requirepass ${REDIS_PASSWORD}
+      --appendonly yes
+      --protected-mode yes
+      --bind 0.0.0.0
+    env_file:
+      - .env
+    networks:
+      - xploitcraft_network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '4G'
+        reservations:
+          cpus: '0.5'
+          memory: '2G'
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  apache:
+    container_name: apache_service
+    build:
+      context: ./apache
+      dockerfile: Dockerfile.apache
+    ports:
+      - "8080:8080"
+    networks:
+      - xploitcraft_network
+    volumes:
+      - ./apache/apache_server.conf:/usr/local/apache2/conf/extra/apache_server.conf
+      - ./apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '4G'
+        reservations:
+          cpus: '1'
+          memory: '2G'
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  nginx:
+    container_name: nginx_proxy
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+      - ./nginx/logs:/var/log/nginx/
+    networks:
+      - xploitcraft_network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '2G'
+        reservations:
+          cpus: '0.5'
+          memory: '1G'
+    depends_on:
+      - apache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  celery:
+    container_name: celery_worker
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    command: celery -A helpers.async_tasks worker --loglevel=info --concurrency=8
+    env_file:
+      - .env
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: '6G'
+        reservations:
+          cpus: '2'
+          memory: '3G'
+    depends_on:
+      - backend
+      - redis
+    networks:
+      - xploitcraft_network
+    restart: always
+    
+  celery_beat:
+    container_name: celery_beat_service
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    command: celery -A helpers.celery_app beat --loglevel=info
+    env_file:
+      - .env
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '2G'
+        reservations:
+          cpus: '0.5'
+          memory: '1G'
+    depends_on:
+      - backend
+      - redis
+    networks:
+      - xploitcraft_network
+    volumes:
+      - ./backend:/app  
+      - ./nginx/logs:/var/log/nginx   
+    restart: always
+
+networks:
+  xploitcraft_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
