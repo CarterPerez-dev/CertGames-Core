@@ -33,3 +33,4 @@ ssh-key-2025-04-02.key.pub
 # Annoying
 nginx/logs/
 
+docker-compose.yml
