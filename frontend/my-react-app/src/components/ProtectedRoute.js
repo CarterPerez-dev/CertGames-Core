@@ -11,7 +11,8 @@ const ProtectedRoute = ({ children, requiresPremium = false }) => {
     subscriptionActive, 
     subscriptionStatus, 
     practiceQuestionsRemaining, 
-    status 
+    status,
+    subscriptionType
   } = useSelector((state) => state.user);
   
   const [isChecking, setIsChecking] = useState(true);

@@ -1,11 +1,16 @@
 import time
 import logging
+import os
 from datetime import datetime, timedelta
 from flask import request, jsonify, g
 from functools import wraps
 from mongodb.database import db
 import ipaddress
 import hashlib
+from dotenv import load_dotenv
+
+# Ensure environment variables are loaded
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -17,16 +22,24 @@ class GlobalRateLimiter:
     Implements progressive rate limits (stricter limits after repeated violations).
     """
     
-    # Default limits for different categories, AINT NOBODY SPAMMIN MY SHIT IM UNHACKABLE!!!!
+       # NOT ONLY WILL YOU NOT SPAM MY API, YOU WONT EVEN BE ABLE TO FIGURE OUT THE RATE LIMITS OR LIMIT PENALTIES (to be fair a script could probbaly easily find the rate limit amounts, and i wouldnt even need to .env my rate limit amounts if I simply just made my github repo private, but we ballin)
     DEFAULT_LIMITS = {
-        'auth': {'calls': 25, 'period': 60},         
-        'password_reset': {'calls': 10, 'period': 300},  
-        'contact': {'calls': 10, 'period': 300},         
-        'general': {'calls': 180, 'period': 60}          
+        'auth': {'calls': int(os.getenv('RATE_LIMIT_AUTH', '25:60').split(':')[0]), 
+                'period': int(os.getenv('RATE_LIMIT_AUTH', '25:60').split(':')[1])},
+        'password_reset': {'calls': int(os.getenv('RATE_LIMIT_PASSWORD_RESET', '10:300').split(':')[0]), 
+                          'period': int(os.getenv('RATE_LIMIT_PASSWORD_RESET', '10:300').split(':')[1])},
+        'contact': {'calls': int(os.getenv('RATE_LIMIT_CONTACT', '10:300').split(':')[0]), 
+                   'period': int(os.getenv('RATE_LIMIT_CONTACT', '10:300').split(':')[1])},
+        'general': {'calls': int(os.getenv('RATE_LIMIT_GENERAL', '180:60').split(':')[0]), 
+                   'period': int(os.getenv('RATE_LIMIT_GENERAL', '180:60').split(':')[1])},
+        'fallback': {'calls': int(os.getenv('RATE_LIMIT_FALLBACK', '300:60').split(':')[0]), 
+                    'period': int(os.getenv('RATE_LIMIT_FALLBACK', '300:60').split(':')[1])}    
     }
     
-    # Penalty factors for repeated violations
-    PENALTY_PERIODS = [5, 10, 60, 240, 1440]  # Minutes to block after consecutive violations
+    # Load penalty periods from environment variables
+    PENALTY_PERIODS = [
+        int(x) for x in os.getenv('RATE_LIMIT_PENALTIES', '5,10,60,240,1440').split(',')
+    ]
     
     def __init__(self, limiter_type=None):
         """
@@ -34,10 +47,10 @@ class GlobalRateLimiter:
         
         Args:
             limiter_type: The type of endpoint being rate limited
-                         ('auth', 'password_reset', 'contact', 'general')
+                         ('auth', 'password_reset', 'contact', 'general', 'fallback')
         """
         self.limiter_type = limiter_type or 'general'
-        self.limits = self.DEFAULT_LIMITS.get(self.limiter_type, self.DEFAULT_LIMITS['general'])
+        self.limits = self.DEFAULT_LIMITS.get(self.limiter_type, self.DEFAULT_LIMITS['fallback'])
     
     def _get_client_identifier(self):
         """
@@ -73,40 +86,6 @@ class GlobalRateLimiter:
         
         return f"{ip}_{hashed_id[:12]}"  # Include more hash digits
     
-    def _check_ip_whitelist(self, ip):
-        """
-        Check if the IP is in the whitelist.
-        Allows for both exact IPs and CIDR notation.
-        
-        Args:
-            ip: IP address to check
-            
-        Returns:
-            bool: True if IP is whitelisted
-        """
-        # Define whitelisted IPs or ranges
-        whitelist = [
-            '127.0.0.1',        # Localhost
-            '192.168.1.0/24',   # Common local network
-            '10.0.0.0/8'        # Internal network
-        ]
-        
-        try:
-            client_ip = ipaddress.ip_address(ip)
-            
-            # Check exact IP matches and network ranges
-            for item in whitelist:
-                if '/' in item:  # CIDR notation
-                    if client_ip in ipaddress.ip_network(item):
-                        return True
-                else:  # Exact IP match
-                    if ip == item:
-                        return True
-            
-            return False
-        except ValueError:
-            return False
-    
     def is_rate_limited(self):
         """
         Check if the current client is rate limited for this endpoint.
@@ -116,13 +95,6 @@ class GlobalRateLimiter:
         """
         # Get client identifier
         client_id = self._get_client_identifier()
-        
-        # Extract IP part for whitelist checking
-        ip = client_id.split('_')[0] if '_' in client_id else client_id
-        
-        # Allow whitelisted IPs to bypass rate limiting (TRY TO SPOOF IT I DARE YOU)
-        if self._check_ip_whitelist(ip):
-            return False, self.limits['calls'], None, 0
         
         # Get current time
         now = datetime.utcnow()
@@ -265,7 +237,7 @@ def global_rate_limit(limiter_type):
     
     Args:
         limiter_type: The type of endpoint being rate limited
-                    ('auth', 'password_reset', 'contact', 'general')
+                    ('auth', 'password_reset', 'contact', 'general', 'fallback')
     
     Returns:
         Function decorator
@@ -328,11 +300,24 @@ def get_limiter_type_for_path(path, method=None):
         method: The HTTP method (GET, POST, etc.)
         
     Returns:
-        str: The limiter type or None if not a public endpoint
+        str: The limiter type or 'fallback' for routes that need the default protection
     """
     path = path.lower()
     method = method.upper() if method else request.method.upper()
     
+    # Check for exempt paths that should never be rate limited
+    exempt_paths = [
+        '/health',
+        '/static',
+        '/avatars',
+        '/.well-known',
+        '/favicon.ico',
+        '/api/socket.io'  # WebSocket connections should be exempt
+    ]
+    
+    # Skip rate limiting for exempt paths
+    if any(path.startswith(exempt) for exempt in exempt_paths):
+        return None
 
     if path == '/test/user' and method == 'POST':
         return 'auth'
@@ -349,7 +334,7 @@ def get_limiter_type_for_path(path, method=None):
     password_reset_paths = [
         '/password-reset/request-reset',
         '/password-reset/verify-token',
-        '/password-reset/reset-password'ac
+        '/password-reset/reset-password'
     ]
     
     contact_paths = [
@@ -369,27 +354,22 @@ def get_limiter_type_for_path(path, method=None):
         if path.startswith(contact_path):
             return 'contact'
     
-    # Protected paths that should NOT be rate limited
-    protected_paths = [
-        '/cracked/',       # Admin routes
-        '/api/socket.io',  # WebSocket connections
-        '/test/achievements', # Protected
-        '/test/shop', # Protected
+    # Protected paths that already have specific rate limits
+    already_rate_limited_paths = [
         '/analogy/',       # Already rate-limited 
         '/scenario/',      # Already rate-limited 
         '/grc/',           # Already rate-limited 
         '/payload/'        # Already rate-limited 
     ]
     
-    for protected_path in protected_paths:
+    for protected_path in already_rate_limited_paths:
         if path.startswith(protected_path):
             return None  
-    
 
     general_paths = [
         '/test/public-leaderboard',
         '/newsletter/',
-        '/support/'
+        '/support/',
         '/subscription/'
     ]
     
@@ -397,8 +377,9 @@ def get_limiter_type_for_path(path, method=None):
         if path.startswith(general_path):
             return 'general'
             
-
-    return None
+    # For any other path that wasn't explicitly exempt, apply the fallback limiter
+    # This ensures all routes have at least some level of protection
+    return 'fallback'
 
 def apply_global_rate_limiting():
     """
@@ -406,27 +387,13 @@ def apply_global_rate_limiting():
     rate limiting to all public API endpoints with advanced security inspection.
     """
     def check_rate_limit():
-        # skip for health checks, static files, and asset files
-        basic_excluded_paths = [
-            '/health',
-            '/static',
-            '/avatars',
-            '/.well-known',
-            '/favicon.ico'
-        ]
-        
         path = request.path
         
         # Skip non-API OPTIONS requests (CORS preflight)
         if request.method == 'OPTIONS':
             return
         
-        # Skip rate limiting for basic excluded paths
-        if any(path.startswith(excluded) for excluded in basic_excluded_paths):
-            return
-            
         # Check for suspicious request patterns
-
         
         # Check request size first (DOS protection)
         content_length = request.content_length or 0
@@ -539,7 +506,7 @@ def apply_global_rate_limiting():
         # Determine the limiter type based on the path
         limiter_type = get_limiter_type_for_path(path, request.method)
         
-        # If limiter_type is None, this is not a public endpoint that needs rate limiting
+        # If limiter_type is None, this path is explicitly exempt from rate limiting
         if limiter_type is None:
             return
         
