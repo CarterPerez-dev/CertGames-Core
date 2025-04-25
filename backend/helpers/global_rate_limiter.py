@@ -9,7 +9,7 @@ import ipaddress
 import hashlib
 from dotenv import load_dotenv
 from helpers.jwt_auth import jwt_optional_wrapper
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
 
 # Ensure environment variables are loaded
 load_dotenv()
@@ -58,11 +58,17 @@ class GlobalRateLimiter:
         """
         Enhanced client identification with JWT support.
         """
-        # Check for JWT identity first
-        user_id = get_jwt_identity()
-        if user_id:
-            return f"jwt_{user_id}"
-            
+        # Check for JWT identity first - with proper error handling
+        try:
+            # Optional verification - doesn't error if no token present
+            verify_jwt_in_request(optional=True)
+            user_id = get_jwt_identity()
+            if user_id:
+                return f"jwt_{user_id}"
+        except Exception as e:
+            # JWT verification failed, continue with other methods
+            pass
+                
         # Existing code for IP and fingerprinting
         ip = request.headers.get('X-Forwarded-For', request.remote_addr)
         if ip and ',' in ip:
@@ -320,7 +326,8 @@ def get_limiter_type_for_path(path, method=None):
         '/avatars',
         '/.well-known',
         '/favicon.ico',
-        '/api/socket.io'  # WebSocket connections should be exempt
+        '/api/socket.io',
+        '/test/leaderboard'
     ]
     
     # Skip rate limiting for exempt paths

@@ -295,7 +295,7 @@ def update_expired_subscriptions():
     expired_users = db.mainusers_collection.find({
         "subscriptionStatus": "canceling",
         "subscriptionEndDate": {"$lt": now},
-        "subscriptionActive": True
+        "subscriptionActive": True,
         "subscriptionType": {"$ne": "free"}  # free tier users
     })
     

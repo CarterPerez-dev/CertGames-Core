@@ -77,18 +77,19 @@ const CipherChallenge = () => {
           })
           .catch((error) => {
             if (!subscriptionErrorHandler.handleApiError(error, 'cipher')) {
-            console.error("Error fetching challenges:", error);
-            retryCount.current += 1;
-            // Only reset if we haven't exceeded max retries
-            if (retryCount.current < 3) {
-              challengesLoaded.current = false;
+              console.error("Error fetching challenges:", error);
+              retryCount.current += 1;
+              // Only reset if we haven't exceeded max retries
+              if (retryCount.current < 3) {
+                challengesLoaded.current = false;
+              }
             }
           });
       };
       
       fetchData();
     }
-  }, [dispatch, userId]);
+  }, [dispatch, userId, subscriptionErrorHandler]);
   
   // Reset user solution when current challenge changes
   useEffect(() => {
