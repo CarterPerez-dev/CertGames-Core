@@ -9,6 +9,7 @@ import {
   unlockNextLevel
 } from '../../store/slice/cipherChallengeSlice';
 import { fetchUserData } from '../../store/slice/userSlice';
+import SubscriptionErrorHandler from '../../../SubscriptionErrorHandler';
 import { 
   FaLock, 
   FaLockOpen, 
@@ -30,6 +31,7 @@ import CongratulationsModal from './CongratulationsModal';
 import './CipherChallenge.css';
 
 const CipherChallenge = () => {
+  const subscriptionErrorHandler = SubscriptionErrorHandler();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { 
@@ -42,7 +44,7 @@ const CipherChallenge = () => {
     hintUsed
   } = useSelector(state => state.cipherChallenge);
   const { userId, coins, xp } = useSelector(state => state.user);
-  
+
   // Ref to keep track if challenges have been loaded
   const challengesLoaded = useRef(false);
   // Ref to track retry count
@@ -74,6 +76,7 @@ const CipherChallenge = () => {
             setDataRefreshed(true);
           })
           .catch((error) => {
+            if (!subscriptionErrorHandler.handleApiError(error, 'cipher')) {
             console.error("Error fetching challenges:", error);
             retryCount.current += 1;
             // Only reset if we haven't exceeded max retries
@@ -270,6 +273,7 @@ const CipherChallenge = () => {
   
   return (
     <div className="cipher-challenge-container">
+      {subscriptionErrorHandler.render()}
       <div className="cipher-header">
         
         <div className="cipher-header-main">

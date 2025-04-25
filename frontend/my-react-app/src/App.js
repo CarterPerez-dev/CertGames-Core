@@ -252,7 +252,7 @@ function App() {
             </ProtectedRoute>
           }/>
           <Route path="/games/threat-hunter" element={
-            <ProtectedRoute requiresPremium={false}>
+            <ProtectedRoute requiresPremium={true}>
               <ThreatHunter />
             </ProtectedRoute>
           }/>
@@ -267,7 +267,7 @@ function App() {
             </ProtectedRoute>
           }/>
           <Route path="/games/cipher-challenge" element={
-            <ProtectedRoute requiresPremium={false}>
+            <ProtectedRoute requiresPremium={true}>
               <CipherChallenge />
             </ProtectedRoute>
           }/>          

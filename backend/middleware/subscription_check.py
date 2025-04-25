@@ -60,6 +60,8 @@ def check_subscription_middleware():
             '/scenario', # ScenarioSphere
             '/grc',      # GRC Wizard
             '/test/daily-question/answer',  # Answering daily questions
+            '/cipher',
+            '/threat-hunter'
         ]
         
         # Routes for limited access (free users with usage tracking)

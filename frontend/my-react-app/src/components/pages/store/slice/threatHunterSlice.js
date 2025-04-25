@@ -1,6 +1,7 @@
 // src/components/pages/store/slice/threatHunterSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchUserData } from './userSlice';
+import SubscriptionErrorHandler from '../../../SubscriptionErrorHandler';
 
 // Async thunks
 export const fetchLogScenarios = createAsyncThunk(

@@ -7,6 +7,7 @@ import {
   submitAnalysis,
   resetGame
 } from '../../store/slice/threatHunterSlice';
+import SubscriptionErrorHandler from '../../../SubscriptionErrorHandler';
 import { 
   FaSearch, 
   FaFileAlt, 
@@ -43,6 +44,8 @@ const ThreatHunter = () => {
   } = useSelector(state => state.threatHunter);
   const { userId, coins, xp } = useSelector(state => state.user);
   
+  const subscriptionErrorHandler = SubscriptionErrorHandler();
+  
   const [selectedThreatType, setSelectedThreatType] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all'); // Changed from 'medium' to 'all'
   const [showResults, setShowResults] = useState(false);
@@ -52,6 +55,8 @@ const ThreatHunter = () => {
   const [currentTimeLeft, setCurrentTimeLeft] = useState(null);
   const [timerRunning, setTimerRunning] = useState(false);
   const [shuffledThreatOptions, setShuffledThreatOptions] = useState([]); // New state for shuffled threats
+  const [localLoading, setLoading] = useState(false);
+  const [localError, setError] = useState(null);
   
   // Utility function to shuffle arrays
   const shuffleArray = (array) => {
@@ -73,9 +78,23 @@ const ThreatHunter = () => {
   // Fetch log scenarios when component mounts
   useEffect(() => {
     if (scenarios.length === 0) {
-      dispatch(fetchLogScenarios());
+      setLoading(true); // You should have a local loading state in your component
+      dispatch(fetchLogScenarios())
+        .unwrap() // This converts the Redux promise to a regular promise
+        .then((data) => {
+          // Success handling if needed
+          setLoading(false);
+        })
+        .catch((error) => {
+          // Check if this is a subscription error
+          if (!subscriptionErrorHandler.handleApiError(error, 'threat-hunter')) {
+            // Only set error state if not a subscription error
+            setError("Failed to fetch scenarios. Please try again.");
+          }
+          setLoading(false);
+        });
     }
-  }, [dispatch, scenarios.length]);
+  }, [dispatch, scenarios.length, subscriptionErrorHandler]);
   
   // Show results modal when game is completed
   useEffect(() => {
@@ -406,6 +425,7 @@ const ThreatHunter = () => {
   
   return (
     <div className="threat-hunter-container">
+      {subscriptionErrorHandler.render()}
       <div className="threat-hunter-header">
         <h1><FaSearch /> Threat Hunter</h1>
         <p>Analyze logs, detect suspicious patterns, and identify security threats.</p>

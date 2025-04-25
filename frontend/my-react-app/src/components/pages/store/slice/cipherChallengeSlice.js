@@ -1,6 +1,7 @@
 // src/components/pages/store/slice/cipherChallengeSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchUserData } from './userSlice';
+import SubscriptionErrorHandler from '../../../SubscriptionErrorHandler';
 
 // Fetch cipher challenges from the backend
 export const fetchCipherChallenges = createAsyncThunk(

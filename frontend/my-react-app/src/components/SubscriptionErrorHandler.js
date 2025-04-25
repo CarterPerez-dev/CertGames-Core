@@ -17,7 +17,7 @@ const SubscriptionErrorHandler = () => {
    * @returns {boolean} - True if the error was subscription-related and handled
    */
   const handleApiError = (error, feature = 'premium') => {
-    // Check for axios error format
+
     const errorData = error?.response?.data || error?.data || error;
     
     // Look for subscription-required status in error response
