@@ -159,12 +159,13 @@ function App() {
           
           // If subscription is no longer active AND we're not on an allowed page
           if (!data.subscriptionActive && 
+              data.subscriptionType !== 'free' &&  // not Redirecting if explicitly on free tier
               !window.location.pathname.includes('/subscription') && 
               !window.location.pathname.includes('/login') &&
               !allowedPaths.some(path => window.location.pathname.includes(path))) {
-            console.log('Subscription no longer active, redirecting');
-            // Instead of immediately logging out, redirect to subscription page
-            window.location.href = '/subscription?renewal=true';
+              console.log('Subscription no longer active, redirecting');
+              // redirect expired premium users
+              window.location.href = '/subscription?renewal=true';
           }
         }
       } catch (error) {

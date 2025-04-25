@@ -68,7 +68,7 @@ body, html {
 /* Sidebar Title */
 .sidebar-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 1.9em;
+  font-size: 1.95em;
   margin-bottom: 28px;
   color: var(--sidebar-accent);
   text-align: center;
@@ -106,6 +106,7 @@ body, html {
   gap: 10px;
   position: relative;
   overflow: hidden;
+  font-size: 1.15rem;
 }
 
 .sidebar-link::before {
@@ -162,6 +163,7 @@ body, html {
   transition: all 0.2s ease;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 5px;
+  font-size: 1.15rem;
 }
 
 .group-header-content {
@@ -206,14 +208,15 @@ body, html {
 }
 
 .sidebar-sublink {
-  color: var(--sidebar-text);
+  color: #f2f2f2;
   text-decoration: none;
   transition: all 0.2s ease;
   padding: 8px 10px;
   border-radius: 8px;
   display: block;
-  font-size: 0.9em;
+  font-size: 1.05rem;
   position: relative;
+  font-family: 'Raleway', 'Roboto', sans-serif;
 }
 
 .sidebar-sublink::before {
@@ -230,7 +233,7 @@ body, html {
 
 .sidebar-sublink:hover::before {
   content: ">>";
-  color: var(--sidebar-text-hover);
+  color: var(--sidebar-accent);
 }
 
 .sidebar-sublink.active-subtab {

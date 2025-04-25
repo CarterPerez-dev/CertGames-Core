@@ -340,8 +340,8 @@ const IncidentResponder = () => {
                 <FaArrowLeft /> Back to Scenarios
               </button>
               
-              {/* Volume controls */}
-              <div className="incidentresponder_volume_controls">
+              {/* Volume controls - now with enhanced-volume-control class */}
+              <div className="incidentresponder_volume_controls enhanced-volume-control">
                 <button 
                   className="incidentresponder_volume_button" 
                   onClick={toggleVolumeSlider}
@@ -375,7 +375,7 @@ const IncidentResponder = () => {
       case 'playing':
         return (
           <>
-            <div className="incidentresponder_back_button_container">
+            <div className="incidentresponder_stage_header_container">
               <button 
                 className="incidentresponder_back_button" 
                 onClick={handleBackToMenu}
@@ -383,8 +383,8 @@ const IncidentResponder = () => {
                 <FaArrowLeft /> Back to Scenarios
               </button>
               
-              {/* Volume controls */}
-              <div className="incidentresponder_volume_controls">
+              {/* Volume controls - repositioned with enhanced-volume-control class */}
+              <div className="incidentresponder_volume_controls enhanced-volume-control">
                 <button 
                   className="incidentresponder_volume_button" 
                   onClick={toggleVolumeSlider}

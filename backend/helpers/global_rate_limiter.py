@@ -19,14 +19,14 @@ class GlobalRateLimiter:
     
     # Default limits for different categories, AINT NOBODY SPAMMIN MY SHIT IM UNHACKABLE!!!!
     DEFAULT_LIMITS = {
-        'auth': {'calls': 150, 'period': 60},         # 10 calls per minute for authentication
-        'password_reset': {'calls': 100, 'period': 300},  # 5 calls per 5 minutes for password reset
-        'contact': {'calls': 100, 'period': 300},         # 5 calls per 5 minutes for contact form
-        'general': {'calls': 150, 'period': 60}          # 30 calls per minute for general endpoints
+        'auth': {'calls': 25, 'period': 60},         
+        'password_reset': {'calls': 10, 'period': 300},  
+        'contact': {'calls': 10, 'period': 300},         
+        'general': {'calls': 180, 'period': 60}          
     }
     
     # Penalty factors for repeated violations
-    PENALTY_PERIODS = [1, 5, 15, 30, 60]  # Minutes to block after consecutive violations
+    PENALTY_PERIODS = [5, 10, 60, 240, 1440]  # Minutes to block after consecutive violations
     
     def __init__(self, limiter_type=None):
         """
@@ -41,27 +41,29 @@ class GlobalRateLimiter:
     
     def _get_client_identifier(self):
         """
-        Get a unique identifier for the client, using multiple factors for reliability.
-        Uses a combination of IP, user agent, and session identifier if available.
-        
-        Returns:
-            str: A hashed identifier for the client
+        Enhanced client identification with more robust fingerprinting.
         """
         # Get IP address, handling proxies
         ip = request.headers.get('X-Forwarded-For', request.remote_addr)
         if ip and ',' in ip:  # Handle multiple IPs in X-Forwarded-For
             ip = ip.split(',')[0].strip()
             
-        # Try to get a more precise identifier
+        # Get more request data for fingerprinting
         session_id = request.cookies.get('session', '')
-        user_agent = request.headers.get('User-Agent', '')
+        user_agent = request.headers.get('User-Agent', '')[:100]  # Truncate 
+        accept_lang = request.headers.get('Accept-Language', '')[:20]
         
-        # Create a combined identifier
+        # Build a more comprehensive identifier
         identifier_parts = [ip]
         
-        # Only include session ID if it exists
         if session_id:
             identifier_parts.append(session_id)
+        
+        # Add fingerprint data if available (but keep IP as primary factor)
+        if user_agent:
+            identifier_parts.append(hashlib.md5(user_agent.encode()).hexdigest()[:8])
+        if accept_lang:
+            identifier_parts.append(hashlib.md5(accept_lang.encode()).hexdigest()[:6])
         
         # Build the identifier
         identifier = "_".join(identifier_parts)
@@ -69,7 +71,7 @@ class GlobalRateLimiter:
         # Hash the identifier to protect privacy and handle special characters
         hashed_id = hashlib.md5(identifier.encode()).hexdigest()
         
-        return f"{ip}_{hashed_id[:8]}"
+        return f"{ip}_{hashed_id[:12]}"  # Include more hash digits
     
     def _check_ip_whitelist(self, ip):
         """
@@ -317,33 +319,37 @@ def global_rate_limit(limiter_type):
         return decorated_function
     return decorator
 
-def get_limiter_type_for_path(path):
+def get_limiter_type_for_path(path, method=None):
     """
-    Determine the limiter type based on the request path.
+    Determine the limiter type based on the request path and method.
     
     Args:
         path: The request path
+        method: The HTTP method (GET, POST, etc.)
         
     Returns:
         str: The limiter type or None if not a public endpoint
     """
     path = path.lower()
+    method = method.upper() if method else request.method.upper()
     
 
+    if path == '/test/user' and method == 'POST':
+        return 'auth'
+        
+    # Other auth paths
     auth_paths = [
         '/test/login',
-        '/test/user',  
         '/oauth/login',
         '/oauth/auth',
         '/oauth/verify-google-token',
-
-
     ]
     
+  
     password_reset_paths = [
         '/password-reset/request-reset',
         '/password-reset/verify-token',
-        '/password-reset/reset-password'
+        '/password-reset/reset-password'ac
     ]
     
     contact_paths = [
@@ -369,40 +375,38 @@ def get_limiter_type_for_path(path):
         '/api/socket.io',  # WebSocket connections
         '/test/achievements', # Protected
         '/test/shop', # Protected
-        '/subscription/', # Protected
         '/analogy/',       # Already rate-limited 
         '/scenario/',      # Already rate-limited 
         '/grc/',           # Already rate-limited 
         '/payload/'        # Already rate-limited 
-        '/support/'
-        '/subscription/'
     ]
     
     for protected_path in protected_paths:
         if path.startswith(protected_path):
-            return None  # Skip rate limiting for these
+            return None  
     
 
     general_paths = [
         '/test/public-leaderboard',
         '/newsletter/',
+        '/support/'
+        '/subscription/'
     ]
     
     for general_path in general_paths:
         if path.startswith(general_path):
             return 'general'
             
-    # For other endpoints, we need to determine if they're public or not
-    # For now, let's assume routes not matched above don't need rate limiting
+
     return None
 
 def apply_global_rate_limiting():
     """
     Function to create a Flask before_request middleware that applies
-    rate limiting to all public API endpoints.
+    rate limiting to all public API endpoints with advanced security inspection.
     """
     def check_rate_limit():
-        # Always skip for health checks, static files, and asset files
+        # skip for health checks, static files, and asset files
         basic_excluded_paths = [
             '/health',
             '/static',
@@ -420,9 +424,120 @@ def apply_global_rate_limiting():
         # Skip rate limiting for basic excluded paths
         if any(path.startswith(excluded) for excluded in basic_excluded_paths):
             return
+            
+        # Check for suspicious request patterns
+
+        
+        # Check request size first (DOS protection)
+        content_length = request.content_length or 0
+        if content_length > 1024 * 1024:  # 1MB limit for public API endpoints
+            response = jsonify({
+                "error": "Request payload too large",
+                "type": "security_error"
+            })
+            response.status_code = 413  # Payload Too Large
+            logger.warning(f"Request payload too large: {content_length} bytes from {request.remote_addr}")
+            return response
+        
+        # UPDATED: Extensive list of suspicious patterns that are almost never legitimate
+        suspicious_patterns = [
+            # Script injection patterns
+            '<script>', '<?php', '<%=', '<svg/onload=', '<img/onerror=', 'javascript:',
+            'document.cookie', 'document.location', 'window.location', 'eval(',
+            'setTimeout(', 'setInterval(', 'Function(', 'fromCharCode(', 'atob(', 'btoa(',
+            
+            # SQL injection patterns
+            "' OR '1'='1", "' OR 1=1--", "OR 1=1--", ";--", "/**/", "UNION SELECT",
+            "' UNION SELECT", "INFORMATION_SCHEMA", "@@version", "sys.tables", 
+            "UTL_HTTP", "DBMS_LDAP", "xp_cmdshell", "sp_execute", 
+            
+            # NoSQL injection patterns
+            '{"$ne":', '{"$gt":', '{"$lt":', '{"$regex":', '{"$where":', 
+            
+            # Command injection patterns
+            '; ls', '; cat', '; pwd', '; id', '; curl', '& wget', '| bash', 
+            '$(', '`', '> /tmp/', '> /var/', '>/dev/', 
+            
+            # Path traversal patterns
+            '../../../', '..%2F..%2F', '/etc/passwd', '/etc/shadow', '/proc/self/',
+            'file:///', 'C:\\Windows\\', 'boot.ini', 'win.ini',
+            
+            # Crypto mining patterns
+            'coinhive', 'cryptonight', 'stratum+tcp', 'monero', 
+            
+            # XML/YAML attacks
+            '<!ENTITY', '<!DOCTYPE', 'SYSTEM "file:', '[<!ENTITY', '!YAML',
+            
+            # HTTP header injection
+            '\r\n', '%0d%0a', 'Set-Cookie:', 'Location:',
+            
+            # Unusual content types
+            'application/xml-dtd', 'text/xsl', 'text/cmd', 'text/x-shellscript',
+            
+            # Base64 encoded payloads with script indicators
+            'PHNjcmlwdD', 'eyJfaWQi', 'JGd0', 'KSB7',
+            
+            # Serialization attacks
+            'O:8:', 'rO0', 'YToy'
+        ]
+        
+        # Check query string, headers, and form data without affecting performance
+        # Using .lower() for case-insensitive matching
+        query_string = request.query_string.decode('utf-8', errors='ignore').lower()
+        
+        # Check query string (GET parameters)
+        for pattern in suspicious_patterns:
+            pattern_lower = pattern.lower()
+            if pattern_lower in query_string:
+                logger.warning(f"Suspicious pattern in query: {pattern} from {request.remote_addr}")
+                response = jsonify({
+                    "error": "Invalid request parameters",
+                    "type": "security_error"
+                })
+                response.status_code = 400
+                return response
+        
+        # Check common headers where attacks might hide
+        suspicious_headers = ['User-Agent', 'Referer', 'Cookie', 'X-Forwarded-For', 'X-Forwarded-Host']
+        for header in suspicious_headers:
+            header_value = request.headers.get(header, '').lower()
+            if header_value:
+                for pattern in suspicious_patterns:
+                    pattern_lower = pattern.lower()
+                    if pattern_lower in header_value:
+                        logger.warning(f"Suspicious pattern in {header} header: {pattern} from {request.remote_addr}")
+                        response = jsonify({
+                            "error": "Invalid request header",
+                            "type": "security_error"
+                        })
+                        response.status_code = 400
+                        return response
+        
+        # Check request body for POST/PUT/PATCH without affecting normal JSON
+        if request.is_json and request.method in ['POST', 'PUT', 'PATCH']:
+            try:
+                # Only inspect the raw input string, not the parsed JSON
+                raw_data = request.get_data(as_text=True).lower()
+                # Skip very large payloads to prevent DoS
+                if len(raw_data) < 50000:  # Only check reasonably sized payloads
+                    for pattern in suspicious_patterns:
+                        pattern_lower = pattern.lower()
+                        if pattern_lower in raw_data:
+                            logger.warning(f"Suspicious pattern in request body: {pattern} from {request.remote_addr}")
+                            response = jsonify({
+                                "error": "Invalid request data",
+                                "type": "security_error"
+                            })
+                            response.status_code = 400
+                            return response
+            except Exception as e:
+                # Don't block the request if our security check fails
+                logger.error(f"Error checking request body: {str(e)}")
+                pass
+        
         
         # Determine the limiter type based on the path
-        limiter_type = get_limiter_type_for_path(path)
+        limiter_type = get_limiter_type_for_path(path, request.method)
         
         # If limiter_type is None, this is not a public endpoint that needs rate limiting
         if limiter_type is None:

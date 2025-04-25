@@ -177,30 +177,29 @@ def aggregate_performance_metrics():
     avg_db_query_time = (total_db_time / total_requests) if total_requests else 0
     error_rate = (errors / total_requests) if total_requests else 0.0
 
-    # data_transfer_rate in MB/s (numeric float)
+
     data_transfer_rate_mb_s = 0.0
     if total_duration > 0:
         data_transfer_rate_mb_s = (total_bytes / (1024.0 * 1024.0)) / total_duration
 
-    # throughput => requests / 3min => convert to requests/min
-    # total_requests / 3.0 => requests per minute if I polled 3-min block.
+
     throughput = (total_requests / 3.0)
 
     doc = {
-        "avg_request_time": round(avg_request_time, 4),         # in seconds
-        "avg_db_query_time": round(avg_db_query_time, 4),       # also in seconds, store raw for now
-        "data_transfer_rate": round(data_transfer_rate_mb_s, 3),# float in MB/s, no label text
-        "throughput": round(throughput, 2),                     # requests/min
-        "error_rate": round(error_rate, 4),                     # fraction: 0.0 -> 1.0
+        "avg_request_time": round(avg_request_time, 4),         
+        "avg_db_query_time": round(avg_db_query_time, 4),       
+        "data_transfer_rate": round(data_transfer_rate_mb_s, 3),
+        "throughput": round(throughput, 2),                     
+        "error_rate": round(error_rate, 4),                   
         "timestamp": now
     }
     db.performanceMetrics.insert_one(doc)
 
-    # SPACE
+
     sixty_min_ago = now - timedelta(minutes=60)
     db.perfSamples.delete_many({"timestamp": {"$lt": sixty_min_ago}})
 
-    # SPACE
+
     two_hours_ago = now - timedelta(hours=2)
     db.performanceMetrics.delete_many({"timestamp": {"$lt": two_hours_ago}})
 
@@ -226,7 +225,6 @@ def check_api_health(self):
         
         return True
     except Exception as e:
-        # Log the failure and still save to DB
         db.apiHealth.insert_one({
             "checkedAt": datetime.utcnow(),
             "healthy": False,
@@ -298,6 +296,7 @@ def update_expired_subscriptions():
         "subscriptionStatus": "canceling",
         "subscriptionEndDate": {"$lt": now},
         "subscriptionActive": True
+        "subscriptionType": {"$ne": "free"}  # free tier users
     })
     
     updated_count = 0

@@ -150,6 +150,7 @@ def get_subscription_status():
             'subscriptionActive': is_active,
             'subscriptionStatus': status,
             'subscriptionPlatform': platform
+            'subscriptionType': user.get('subscriptionType', 'free')
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500

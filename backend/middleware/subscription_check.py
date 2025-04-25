@@ -115,7 +115,7 @@ def check_subscription_middleware():
                 
             # Check subscription status
             subscription_active = user.get('subscriptionActive', False)
-            if not subscription_active:
+            if not subscription_active and endpoint_requires_premium and subscription_type != 'free':
                 return jsonify({
                     "error": "Premium subscription required", 
                     "status": "subscription_required",

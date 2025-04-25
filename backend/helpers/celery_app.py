@@ -45,15 +45,15 @@ app.conf.update({
 app.conf.beat_schedule = {
     'check-api-health-every-10-min': {
         'task': 'helpers.async_tasks.check_api_health',
-        'schedule': crontab(minute='*/10')  
+        'schedule': crontab(minute='*/15')  
     },
     'aggregate-performance-every-3-mins': {
         'task': 'helpers.async_tasks.aggregate_performance_metrics',
-        'schedule': 300.0,
+        'schedule': 800.0,
     },
     'cleanup-logs-daily': {
         'task': 'helpers.async_tasks.cleanup_logs',
-        'schedule': crontab(hour=2, minute=0),
+        'schedule': crontab(hour=3, minute=0),
     },
     'update-expired-subscriptions': {
         'task': 'helpers.async_tasks.update_expired_subscriptions',
