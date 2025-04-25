@@ -13,6 +13,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import psutil
 from werkzeug.middleware.proxy_fix import ProxyFix
+from helpers.jwt_auth import init_jwt, jwt
 
 
 # routes
@@ -79,6 +80,11 @@ logger = logging.getLogger(__name__)
 #######################################
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
+
+
+# We locked in now baby
+init_jwt(app)
+
 
 # Setup CORS
 CORS(app, supports_credentials=True)

@@ -45,3 +45,4 @@ PyJWT
 bcrypt
 stripe
 cryptography
+flask-jwt-extended

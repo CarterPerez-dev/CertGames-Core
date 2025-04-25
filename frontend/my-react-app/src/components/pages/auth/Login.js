@@ -80,7 +80,14 @@ const Login = () => {
     try {
       const resultAction = await dispatch(loginUser({ usernameOrEmail, password }));
       if (loginUser.fulfilled.match(resultAction)) {
-        // Check subscription status
+        // Store tokens in localStorage
+        if (resultAction.payload.access_token) {
+          localStorage.setItem('accessToken', resultAction.payload.access_token);
+        }
+        if (resultAction.payload.refresh_token) {
+          localStorage.setItem('refreshToken', resultAction.payload.refresh_token);
+        }
+        
         const userId = resultAction.payload.user_id;
         const isSubscriptionActive = resultAction.payload.subscriptionActive;
         const subscriptionStatus = resultAction.payload.subscriptionStatus;

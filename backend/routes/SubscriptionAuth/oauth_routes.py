@@ -271,6 +271,15 @@ def google_auth():
         # Process OAuth user and get user_id and is_new_user flag
         user_id, is_new_user = process_oauth_user(email, name, 'google', google_id)
         
+        # Generate JWT tokens
+        tokens = generate_tokens(user_id, {
+            "email": email,
+            "oauth_provider": "google",
+            # Include subscription info if available
+            "subscriptionActive": False,  # Default for new users
+            "subscriptionType": "free"    # Default for new users
+        })
+        
         # Store in session
         session['userId'] = user_id
         
@@ -286,12 +295,13 @@ def google_auth():
         # Redirect based on whether this is a new user or existing user
         frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
         
+        # Include tokens in the redirect URL (they'll be extracted by frontend)
         if is_new_user:
             # New user needs to set a username
-            return redirect(f"{frontend_url}/create-username?provider=google&userId={user_id}")
+            return redirect(f"{frontend_url}/create-username?provider=google&userId={user_id}&access_token={tokens['access_token']}&refresh_token={tokens['refresh_token']}")
         else:
             # Existing user can go directly to profile or OAuth success page
-            return redirect(f"{frontend_url}/oauth/success?provider=google&userId={user_id}")
+            return redirect(f"{frontend_url}/oauth/success?provider=google&userId={user_id}&access_token={tokens['access_token']}&refresh_token={tokens['refresh_token']}")
         
     except Exception as e:
         current_app.logger.error(f"Error in Google auth: {str(e)}")

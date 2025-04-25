@@ -11,6 +11,36 @@ from models.test import (
 )
 from .utils import serialize_user, check_and_unlock_achievements
 from .blueprint import api_bp
+from flask_jwt_extended import (
+    jwt_required, get_jwt_identity, get_jwt, create_access_token
+)
+from helpers.jwt_auth import revoke_token, generate_tokens
+
+
+
+@api_bp.route('/token/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh_token():
+    """Refresh JWT access token using a valid refresh token"""
+    current_user_id = get_jwt_identity()
+    jwt_claims = get_jwt()
+    
+    # Generate a new access token
+    tokens = generate_tokens(current_user_id, {
+        # Preserve any existing claims from refresh token
+        "username": jwt_claims.get("username"),
+        "email": jwt_claims.get("email"),
+        "subscriptionActive": jwt_claims.get("subscriptionActive", False),
+        "subscriptionType": jwt_claims.get("subscriptionType", "free")
+    })
+    
+    return jsonify({
+        "access_token": tokens["access_token"],
+        "refresh_token": tokens["refresh_token"],
+        "expires_in": tokens["expires_in"]
+    }), 200
+
+
 
 @api_bp.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
@@ -52,19 +82,29 @@ def register_user():
             "total_questions_answered": 0,
         })
 
-        start_db = time.time()
         user_id = create_user(user_data)
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
+        
+        # Generate JWT tokens for the new user
+        tokens = generate_tokens(str(user_id), {
+            "username": user_data["username"],
+            "email": user_data.get("email", ""),
+            "subscriptionActive": user_data.get("subscriptionActive", False),
+            "subscriptionType": user_data.get("subscriptionType", "free")
+        })
 
-        return jsonify({"message": "User created", "user_id": str(user_id)}), 201
+        return jsonify({
+            "message": "User created", 
+            "user_id": str(user_id),
+            "access_token": tokens["access_token"],
+            "refresh_token": tokens["refresh_token"],
+            "expires_in": tokens["expires_in"]
+        }), 201
     except ValueError as ve:
         return jsonify({"error": str(ve)}), 400
     except Exception as e:
         return jsonify({"error": "Internal server error", "details": str(e)}), 500
-
+        
+        
 @api_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -142,7 +182,16 @@ def login():
 
     user = serialize_user(user)
 
-    # Important security best practice: don't return password in response
+    # Generate JWT tokens
+    user_id_str = str(user["_id"])
+    tokens = generate_tokens(user_id_str, {
+        "username": user["username"],
+        "email": user.get("email", ""),
+        "subscriptionActive": user.get("subscriptionActive", False),
+        "subscriptionType": user.get("subscriptionType", "free")
+    })
+    
+    
     return jsonify({
         "user_id": user["_id"],
         "username": user["username"],
@@ -156,8 +205,30 @@ def login():
         "nameColor": user.get("nameColor"),
         "purchasedItems": user.get("purchasedItems", []),
         "subscriptionActive": user.get("subscriptionActive", False),
-        "oauth_provider": user.get("oauth_provider", None)
+        "oauth_provider": user.get("oauth_provider", None),
+        # JWT
+        "access_token": tokens["access_token"],
+        "refresh_token": tokens["refresh_token"],
+        "expires_in": tokens["expires_in"]
     }), 200
+
+
+
+@api_bp.route('/logout', methods=['POST'])
+@jwt_required()
+def logout():
+    """Invalidate JWT tokens on logout"""
+    jti = get_jwt()["jti"]
+    revoke_token(jti)
+    
+    # Also handle traditional session logout
+    if 'userId' in session:
+        session.pop('userId')
+        
+    return jsonify({"message": "Successfully logged out"}), 200
+
+
+
 
 @api_bp.route('/user/<user_id>/add-xp', methods=['POST'])
 def add_xp_route(user_id):

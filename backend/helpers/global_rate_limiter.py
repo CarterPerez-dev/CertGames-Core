@@ -8,6 +8,8 @@ from mongodb.database import db
 import ipaddress
 import hashlib
 from dotenv import load_dotenv
+from helpers.jwt_auth import jwt_optional_wrapper
+from flask_jwt_extended import get_jwt_identity
 
 # Ensure environment variables are loaded
 load_dotenv()
@@ -54,16 +56,21 @@ class GlobalRateLimiter:
     
     def _get_client_identifier(self):
         """
-        Enhanced client identification with more robust fingerprinting.
+        Enhanced client identification with JWT support.
         """
-        # Get IP address, handling proxies
+        # Check for JWT identity first
+        user_id = get_jwt_identity()
+        if user_id:
+            return f"jwt_{user_id}"
+            
+        # Existing code for IP and fingerprinting
         ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-        if ip and ',' in ip:  # Handle multiple IPs in X-Forwarded-For
+        if ip and ',' in ip:
             ip = ip.split(',')[0].strip()
             
         # Get more request data for fingerprinting
         session_id = request.cookies.get('session', '')
-        user_agent = request.headers.get('User-Agent', '')[:100]  # Truncate 
+        user_agent = request.headers.get('User-Agent', '')[:100]
         accept_lang = request.headers.get('Accept-Language', '')[:20]
         
         # Build a more comprehensive identifier
@@ -72,7 +79,7 @@ class GlobalRateLimiter:
         if session_id:
             identifier_parts.append(session_id)
         
-        # Add fingerprint data if available (but keep IP as primary factor)
+        # Add fingerprint data if available
         if user_agent:
             identifier_parts.append(hashlib.md5(user_agent.encode()).hexdigest()[:8])
         if accept_lang:
@@ -81,10 +88,10 @@ class GlobalRateLimiter:
         # Build the identifier
         identifier = "_".join(identifier_parts)
         
-        # Hash the identifier to protect privacy and handle special characters
+        # Hash the identifier to protect privacy
         hashed_id = hashlib.md5(identifier.encode()).hexdigest()
         
-        return f"{ip}_{hashed_id[:12]}"  # Include more hash digits
+        return f"{ip}_{hashed_id[:12]}"
     
     def is_rate_limited(self):
         """
@@ -243,6 +250,7 @@ def global_rate_limit(limiter_type):
         Function decorator
     """
     def decorator(f):
+        @jwt_optional_wrapper 
         @wraps(f)
         def decorated_function(*args, **kwargs):
             # Create a rate limiter for this endpoint

@@ -55,7 +55,50 @@ const initialState = {
   status: 'idle',
   loading: false,
   error: null,
+  
+  // Add JWT token-related fields
+  isAuthenticated: false,
+  tokenExpiresAt: null,
 };
+
+// Add refresh token thunk
+export const refreshToken = createAsyncThunk(
+  'user/refreshToken',
+  async (_, { rejectWithValue }) => {
+    try {
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (!refreshToken) {
+        return rejectWithValue('No refresh token available');
+      }
+      
+      const response = await fetch('/api/test/token/refresh', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${refreshToken}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Token refresh failed');
+      }
+      
+      const data = await response.json();
+      
+      // Store new tokens in localStorage
+      if (data.access_token) {
+        localStorage.setItem('accessToken', data.access_token);
+      }
+      
+      if (data.refresh_token) {
+        localStorage.setItem('refreshToken', data.refresh_token);
+      }
+      
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Failed to refresh token');
+    }
+  }
+);
 
 // REGISTER
 export const registerUser = createAsyncThunk(
@@ -95,6 +138,15 @@ export const loginUser = createAsyncThunk(
       // Immediately fetch achievements + shop data after successful login
       dispatch(fetchAchievements());
       dispatch(fetchShopItems());
+      
+      // Store tokens in localStorage
+      if (data.access_token) {
+        localStorage.setItem('accessToken', data.access_token);
+      }
+      
+      if (data.refresh_token) {
+        localStorage.setItem('refreshToken', data.refresh_token);
+      }
 
       return data;
     } catch (err) {
@@ -277,7 +329,13 @@ const userSlice = createSlice({
       // Reset freemium fields
       state.practiceQuestionsRemaining = 100;
       state.subscriptionType = 'free';
+      // Clear auth state
+      state.isAuthenticated = false;
+      state.tokenExpiresAt = null;
+      // Clear storage
       localStorage.removeItem('userId');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     },
     setXPAndCoins(state, action) {
       const { xp, coins, newlyUnlocked } = action.payload;
@@ -296,6 +354,17 @@ const userSlice = createSlice({
     // Add this new action:
     clearAuthErrors(state) {
       state.error = null;
+    },
+    // Add token-related reducers
+    setTokens(state, action) {
+      state.isAuthenticated = true;
+      state.tokenExpiresAt = action.payload.expiresAt;
+    },
+    clearTokens(state) {
+      state.isAuthenticated = false;
+      state.tokenExpiresAt = null;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     }
   },
   extraReducers: (builder) => {
@@ -361,6 +430,14 @@ const userSlice = createSlice({
         state.subscriptionType = subscriptionType || 'free';
 
         localStorage.setItem('userId', user_id);
+        
+        // Handle tokens
+        if (action.payload.access_token) {
+          state.isAuthenticated = true;
+          if (action.payload.expires_in) {
+            state.tokenExpiresAt = Date.now() + (action.payload.expires_in * 1000);
+          }
+        }
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -488,9 +565,29 @@ const userSlice = createSlice({
       .addCase(decrementQuestions.rejected, (state, action) => {
         // Handle error but don't change question count if API call fails
         state.error = action.payload;
+      })
+      
+      // Add refresh token cases
+      .addCase(refreshToken.fulfilled, (state, action) => {
+        state.isAuthenticated = true;
+        if (action.payload.expires_in) {
+          state.tokenExpiresAt = Date.now() + (action.payload.expires_in * 1000);
+        }
+      })
+      .addCase(refreshToken.rejected, (state, action) => {
+        state.isAuthenticated = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { setCurrentUserId, logout, setXPAndCoins, clearAuthErrors } = userSlice.actions;
+export const { 
+  setCurrentUserId, 
+  logout, 
+  setXPAndCoins, 
+  clearAuthErrors,
+  setTokens,
+  clearTokens
+} = userSlice.actions;
+
 export default userSlice.reducer;
