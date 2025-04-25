@@ -84,7 +84,7 @@ import OAuthSuccess from './components/pages/auth/OAuthSuccess';
 // Global CSS import
 import './global.css';
 
-
+import ScrollToTop from './components/ScrollToTop';
 
 function HomeOrProfile() {
   const { userId, status } = useSelector((state) => state.user);
@@ -191,6 +191,7 @@ function App() {
     
   return (
     <div className="App">
+      <ScrollToTop />
       {userId && <Sidebar />}
       <ToastContainer 
         position="top-right"
