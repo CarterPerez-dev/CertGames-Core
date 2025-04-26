@@ -204,6 +204,9 @@ app.register_blueprint(phishing_bp, url_prefix='/phishing')
 app.register_blueprint(threat_hunter_bp, url_prefix='/threat-hunter')
 
 
+# Security
+app.register_blueprint(honey_bp, url_prefix='/honey')
+
 
 # AASA
 @app.route('/.well-known/apple-app-site-association')
