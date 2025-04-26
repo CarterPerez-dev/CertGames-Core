@@ -16,9 +16,18 @@ from mongodb.database import db
 from helpers.global_rate_limiter import GlobalRateLimiter
 from default_scan_paths import DEFAULT_SCAN_PATHS
 from honeypot_routes import register_routes_with_blueprint
+from proxy_detector import proxy_detector
+from geo_db_updater import download_and_extract_db
 
 # Create honeypot blueprint
 honeypot_bp = Blueprint('honeypot', __name__)
+
+
+ASN_DB_PATH = os.path.join("/path/to/geoip_db")
+COUNTRY_DB_PATH = os.path.join("/path/to/geoip_db")
+
+asn_reader = None
+country_reader = None
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -27,6 +36,27 @@ logger.setLevel(logging.INFO)
 
 HONEYPOT_RATE_LIMIT = 5  # requests per minute
 HONEYPOT_RATE_PERIOD = 60  # seconds
+
+
+def load_geoip_readers():
+    """Load or reload the GeoIP database readers"""
+    global asn_reader, country_reader
+    
+    try:
+        if os.path.exists(ASN_DB_PATH):
+            asn_reader = geoip2.database.Reader(ASN_DB_PATH)
+            
+        if os.path.exists(COUNTRY_DB_PATH):
+            country_reader = geoip2.database.Reader(COUNTRY_DB_PATH)
+            
+        return True
+    except Exception as e:
+        logger.error(f"Error loading GeoIP databases: {str(e)}")
+        return False
+
+# Load databases on module import
+load_geoip_readers()
+
 
 # List of paths we've seen scanned before (will be populated from DB at startup)
 COMMON_SCAN_PATHS = set()
@@ -138,31 +168,68 @@ def get_client_identifier():
 
 def extract_asn_from_ip(ip):
     """
-    Attempt to identify the ASN (Autonomous System Number) for the IP.
-    This can help identify the network owner.
-    In production, you would use an IP intelligence service or database.
+    Get ASN, organization, and country information for an IP address
+    using MaxMind GeoLite2 databases
     """
     try:
+        # Skip private, local, or invalid IPs
         if not ip or ip == "unknown_ip" or ip == "127.0.0.1":
             return {"asn": "Unknown", "org": "Unknown", "country": "Unknown"}
+            
+        # Make sure we're working with a valid IP
+        try:
+            ip_obj = ipaddress.ip_address(ip)
+            if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_multicast:
+                return {"asn": "Private", "org": "Private Network", "country": "Unknown"}
+        except ValueError:
+            return {"asn": "Invalid", "org": "Invalid IP", "country": "Unknown"}
+            
+        # Get ASN information
+        asn_info = {"asn": "Unknown", "org": "Unknown", "country": "Unknown"}
         
-        # For demonstration, return placeholder values
-        # In production, you would query an IP to ASN database or service
-        return {
-            "asn": "AS00000",
-            "org": "Example ISP",
-            "country": "Unknown"
-        }
+        # Try to get ASN and organization
+        if asn_reader:
+            try:
+                response = asn_reader.asn(ip)
+                asn_info["asn"] = f"AS{response.autonomous_system_number}"
+                asn_info["org"] = response.autonomous_system_organization
+            except geoip2.errors.AddressNotFoundError:
+                # IP not found in ASN database
+                pass
+                
+        # Try to get country
+        if country_reader:
+            try:
+                response = country_reader.country(ip)
+                asn_info["country"] = response.country.name or "Unknown"
+            except geoip2.errors.AddressNotFoundError:
+                # IP not found in Country database
+                pass
+                
+        return asn_info
+        
     except Exception as e:
-        logger.error(f"Error extracting ASN: {str(e)}")
+        logger.error(f"Error extracting ASN for IP {ip}: {str(e)}")
         return {"asn": "Error", "org": "Error", "country": "Unknown"}
 
 def detect_tor_or_proxy(ip):
     """
     Check if the IP is likely a Tor exit node or a known proxy service.
-    In production, you would check against actual Tor exit node lists.
+    Uses our ProxyDetector class that maintains a list of Tor nodes and proxies.
     """
-    return False  # Placeholder - implement actual check in production
+    if not ip or ip == "unknown_ip":
+        return False
+        
+    # Basic IP validation
+    try:
+        ip_obj = ipaddress.ip_address(ip)
+        if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_multicast:
+            return False
+    except ValueError:
+        return False
+        
+    # Check against our detector
+    return proxy_detector.is_tor_or_proxy(ip)
 
 def detect_bot_patterns(user_agent, request_info):
     """
@@ -218,6 +285,34 @@ def log_scan_attempt(path, method, params=None, data=None):
             ip = ip.split(',')[0].strip()
         
         user_agent = request.headers.get('User-Agent', '')
+        
+        # 1. Reverse DNS lookup for additional intelligence
+        hostname = None
+        try:
+            hostname = socket.gethostbyaddr(ip)[0]
+        except:
+            hostname = None
+        
+        # 2. Check for port scanning attempts
+        is_port_scan = any(scan_term in path.lower() for scan_term in [
+            'port', 'scan', 'nmap', 'masscan', 'shodan', 'censys'
+        ])
+        
+        # 3. Check for common vulnerability scanners in user agent
+        ua_lower = user_agent.lower() if user_agent else ""
+        scanner_signs = ['nmap', 'nikto', 'sqlmap', 'acunetix', 'nessus', 
+                        'zap', 'burp', 'whatweb', 'qualys', 'openvas']
+        is_scanner = any(sign in ua_lower for sign in scanner_signs)
+        
+        # 4. Check for suspicious request parameters
+        suspicious_params = False
+        if params and request.args:
+            param_checks = ['sleep', 'benchmark', 'exec', 'eval', 'union', 
+                          'select', 'update', 'delete', 'insert', 'script']
+            for param, value in request.args.items():
+                if any(check in value.lower() for check in param_checks):
+                    suspicious_params = True
+                    break
         
         # Parse the user agent string for more details
         ua_info = {}
@@ -278,6 +373,10 @@ def log_scan_attempt(path, method, params=None, data=None):
             "cookies": {key: value for key, value in request.cookies.items()},
             "is_tor_or_proxy": is_tor_or_proxy,
             "bot_indicators": bot_indicators,
+            "hostname": hostname,
+            "is_port_scan": is_port_scan,
+            "is_scanner": is_scanner,
+            "suspicious_params": suspicious_params,
             "notes": []
         }
         
@@ -326,6 +425,12 @@ def log_scan_attempt(path, method, params=None, data=None):
             severity += 1
         if scan_log["notes"]:
             severity += len(scan_log["notes"])
+        if is_port_scan:
+            severity += 2
+        if is_scanner:
+            severity += 3
+        if suspicious_params:
+            severity += 2
         
         # Update the watchlist
         db.watchList.update_one(
@@ -348,6 +453,7 @@ def log_scan_attempt(path, method, params=None, data=None):
         logger.error(f"Error logging scan attempt: {str(e)}")
         logger.error(traceback.format_exc())
         return None
+
 
 def is_rate_limited(client_id):
     """
@@ -615,3 +721,22 @@ def honeypot_analytics():
         "top_ips": top_ips,
         "recent_activity": recent_activity
     })
+
+
+def ensure_ttl_indexes():
+    """Ensure TTL indexes exist on collections that need automatic cleanup"""
+    try:
+        # Create TTL index on ai_usage_logs
+        db.ai_usage_logs.create_index("expiresAt", expireAfterSeconds=0)
+        
+        # Create TTL index on userQuotas
+        db.userQuotas.create_index("expiresAt", expireAfterSeconds=0)
+        
+        # Create TTL index on anonymousQuotas
+        db.anonymousQuotas.create_index("expiresAt", expireAfterSeconds=0)
+        
+        logger.info("Ensured TTL indexes for AI guardrails collections")
+    except Exception as e:
+        logger.error(f"Error creating TTL indexes: {str(e)}")
+
+

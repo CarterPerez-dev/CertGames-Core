@@ -324,3 +324,20 @@ def update_expired_subscriptions():
     
     logger.info(f"Updated {updated_count} expired subscriptions")
     return f"Updated {updated_count} expired subscriptions"
+
+
+
+@shared_task
+def cleanup_rate_limits():
+    """
+    Remove rate limit records older than 7 days to prevent database growth.
+    Runs weekly per the schedule in celery_app.
+    """
+    now = datetime.utcnow()
+    cutoff = now - timedelta(days=7)
+    
+    # Delete old rate limit records
+    result = db.globalRateLimits.delete_many({"updatedAt": {"$lt": cutoff}})
+    
+    logger.info(f"Cleaned up {result.deleted_count} old rate limit records")
+    return f"Deleted {result.deleted_count} old rate limit records"

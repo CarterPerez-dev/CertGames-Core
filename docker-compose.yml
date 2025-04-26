@@ -11,6 +11,8 @@ services:
     volumes:
       - ./backend:/app
       - ./nginx/logs:/var/log/nginx
+      - ./backend/proxy_cache:/app/proxy_cache
+      - ./backend/geoip_db:/app/geoip_db      
     env_file:
       - .env
     networks:

@@ -14,6 +14,8 @@ from dotenv import load_dotenv
 import psutil
 from werkzeug.middleware.proxy_fix import ProxyFix
 from helpers.jwt_auth import init_jwt, jwt
+from routes.security.geo_db_updater import download_and_extract_db, start_scheduler
+import threading
 
 
 # routes
@@ -102,6 +104,14 @@ app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379, db=0, p
 Session(app)
 
 oauth.init_app(app) 
+
+ensure_ttl_indexes()
+
+def start_geoip_updater():
+    threading.Thread(target=start_scheduler, daemon=True).start()
+
+
+start_geoip_updater()
 
 
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)

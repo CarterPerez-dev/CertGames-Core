@@ -63,7 +63,13 @@ app.conf.beat_schedule = {
         'task': 'helpers.async_tasks.cleanup_logs',
         'schedule': crontab(hour=2, minute=0, day_of_month='*/2'), 
     },
-}
+    'cleanup-rate-limits-weekly': {
+        'task': 'helpers.async_tasks.cleanup_rate_limits',
+        'schedule': crontab(hour=2, minute=30, day_of_week=1),  # Run at 2:30 AM every Monday
+        'args': (),
+    },
+}    
+
 
 
 
