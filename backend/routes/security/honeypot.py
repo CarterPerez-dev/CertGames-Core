@@ -14,19 +14,37 @@ import traceback
 from pymongo import UpdateOne
 from mongodb.database import db
 from helpers.global_rate_limiter import GlobalRateLimiter
-from default_scan_paths import DEFAULT_SCAN_PATHS
-from honeypot_routes import register_routes_with_blueprint
-from proxy_detector import proxy_detector
-from geo_db_updater import download_and_extract_db
+from routes.security.honeypot_routes import register_routes_with_blueprint
+from routes.security.proxy_detector import proxy_detector
+from routes.security.geo_db_updater import download_and_extract_db
 import geoip2.database
 import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Create honeypot blueprint
 honeypot_bp = Blueprint('honeypot', __name__)
 
+DEFAULT_SCAN_PATHS = {
+    "/admin",
+    "/admin/login",
+    "/wp-admin",
+    "/wp-login.php",
+    "/administrator",
+    "/login",
+    "/administrator/index.php"
+}
 
-ASN_DB_PATH = os.path.join(os.environ.get('DB_DIRECTORY') 
-COUNTRY_DB_PATH = os.path.join(os.environ.get('DB_DIRECTORY')
+
+DB_DIRECTORY = os.environ.get('DB_DIRECTORY')
+LICENSE_KEY = os.environ.get('MAXMIND_LICENSE_KEY')
+geoip_dir = os.environ.get('DB_DIRECTORY', '/app/geoip_db')
+
+# Complete the paths with proper filenames
+ASN_DB_PATH = os.path.join(geoip_dir, 'GeoLite2-ASN.mmdb')
+COUNTRY_DB_PATH = os.path.join(geoip_dir, 'GeoLite2-Country.mmdb')
 asn_reader = None
 country_reader = None
 
@@ -649,32 +667,6 @@ def honeypot_handler():
     
     return resp
 
-# Add scheduled tasks
-@honeypot_bp.before_app_first_request
-def setup_honeypot_analytics():
-    """Setup regular analytics for honeypot data"""
-    # This would typically be done with Celery or similar
-    # For now, we'll just initialize some data
-    
-    # Create indexes for better performance
-    db.scanAttempts.create_index("timestamp")
-    db.scanAttempts.create_index("clientId")
-    db.scanAttempts.create_index("path")
-    db.watchList.create_index("clientId")
-    db.securityBlocklist.create_index("clientId")
-    db.securityBlocklist.create_index("blockUntil")
-
-
-# Default handler for all
-def default_honeypot_handler():
-    return honeypot_handler()
-
-register_routes_with_blueprint(honeypot_bp, default_honeypot_handler)
-
-# Add a catch-all for all the above routes
-for endpoint in honeypot_bp.url_map._rules_by_endpoint:
-    if 'honeypot_bp.' in endpoint and not endpoint.endswith('default_honeypot_handler'):
-        honeypot_bp.view_functions[endpoint] = default_honeypot_handler
 
 # Analytics route for admin dashboard
 @honeypot_bp.route('/analytics', methods=['GET'])
@@ -722,22 +714,4 @@ def honeypot_analytics():
         "top_ips": top_ips,
         "recent_activity": recent_activity
     })
-
-
-def ensure_ttl_indexes():
-    """Ensure TTL indexes exist on collections that need automatic cleanup"""
-    try:
-        # Create TTL index on ai_usage_logs
-        db.ai_usage_logs.create_index("expiresAt", expireAfterSeconds=0)
-        
-        # Create TTL index on userQuotas
-        db.userQuotas.create_index("expiresAt", expireAfterSeconds=0)
-        
-        # Create TTL index on anonymousQuotas
-        db.anonymousQuotas.create_index("expiresAt", expireAfterSeconds=0)
-        
-        logger.info("Ensured TTL indexes for AI guardrails collections")
-    except Exception as e:
-        logger.error(f"Error creating TTL indexes: {str(e)}")
-
-
+    

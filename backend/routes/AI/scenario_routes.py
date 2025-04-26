@@ -6,7 +6,7 @@ from helpers.scenario_helper import (
     generate_interactive_questions
 )
 from helpers.rate_limiter import rate_limit
-from ai_utils import get_current_user_id
+from helpers.ai_utils import get_current_user_id
 
 scenario_bp = Blueprint('scenario_bp', __name__)
 logger = logging.getLogger(__name__)
@@ -40,8 +40,8 @@ def stream_scenario_endpoint():
 
     def generate_chunks():
          scenario_generator = generate_scenario(industry, attack_type, skill_level, threat_intensity, user_id)
-        for chunk in scenario_generator:
-            yield chunk
+         for chunk in scenario_generator:
+             yield chunk
 
     response = Response(generate_chunks(), mimetype='text/plain')
     if hasattr(g, 'rate_limit_remaining'):

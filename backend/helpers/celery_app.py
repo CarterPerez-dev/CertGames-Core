@@ -68,6 +68,10 @@ app.conf.beat_schedule = {
         'schedule': crontab(hour=2, minute=30, day_of_week=1),  # Run at 2:30 AM every Monday
         'args': (),
     },
+    'update-geoip-dbs-monday-3am': {
+        'task': 'tasks.update_geoip_dbs', 
+        'schedule': crontab(minute='0', hour='3', day_of_week='1'), 
+    },
 }    
 
 

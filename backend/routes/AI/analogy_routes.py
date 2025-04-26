@@ -9,7 +9,7 @@ from helpers.async_tasks import (
 from helpers.analogy_stream_helper import generate_analogy_stream
 # Import rate limiter
 from helpers.rate_limiter import rate_limit
-from ai_utils import get_current_user_id
+from helpers.ai_utils import get_current_user_id
 
 analogy_bp = Blueprint('analogy_bp', __name__)
 logger = logging.getLogger(__name__)

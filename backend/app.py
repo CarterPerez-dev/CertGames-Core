@@ -55,8 +55,7 @@ from models.test import create_user, get_user_by_id, update_user_fields
 from mongodb.database import db
 
 # Security
-from routes.security.geo_db_updater import download_and_extract_db, start_scheduler
-from routes.security.honey import honey_bp
+from routes.security.honeypot import honeypot_bp
 
 from helpers.global_rate_limiter import apply_global_rate_limiting, setup_rate_limit_headers
 from middleware.subscription_check import check_subscription_middleware
@@ -95,7 +94,7 @@ CORS(app, supports_credentials=True)
 # Setup SocketIO
 socketio = SocketIO(app, cors_allowed_origins="*", path="/api/socket.io")
 
-# Setup Redis-based sessions. Password for my session is Password123!.....KIDDDDDING YOU AINT HACKIN SHITTTT
+# Setup Redis-based sessions
 app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_PERMANENT'] = True
 app.config['SESSION_USE_SIGNER'] = True
@@ -106,22 +105,16 @@ Session(app)
 
 oauth.init_app(app) 
 
-ensure_ttl_indexes()
-
-def start_geoip_updater():
-    threading.Thread(target=start_scheduler, daemon=True).start()
-
-
-start_geoip_updater()
 
 
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
 
 
-app.config['JSON_SORT_KEYS'] = False  # Better JSON performance
+app.config['JSON_SORT_KEYS'] = False  
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = False
-# Make socketio accessible from other files (avoiding circular imports)
+
+
 app.extensions['socketio'] = socketio
 
 @app.route('/health')
@@ -139,7 +132,7 @@ def log_api_request():
     if request.path.startswith('/static/') or request.path == '/health':
         return
     
-    # Create a log entry
+
     log_entry = {
         "type": "api",
         "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
@@ -149,7 +142,7 @@ def log_api_request():
         "user_agent": request.headers.get('User-Agent', 'Unknown')
     }
     
-    # Add to our log buffer
+
     api_logs.add(log_entry)
 
 
@@ -206,7 +199,7 @@ app.register_blueprint(threat_hunter_bp, url_prefix='/threat-hunter')
 
 
 # Security
-app.register_blueprint(honey_bp, url_prefix='/honey')
+app.register_blueprint(honeypot_bp, url_prefix='/honeypot')
 
 
 # AASA

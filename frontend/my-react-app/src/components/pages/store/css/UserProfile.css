@@ -1379,6 +1379,67 @@
 }
 
 
+:root[data-theme="silver"] .achievement-page-container {
+  --achievement-accent: #c0c0c0;
+  --achievement-accent-glow: #94a3b8;
+  --achievement-accent-secondary: #c0c0c0;
+  --achievement-bg-dark: #121215;
+  --achievement-bg-card: #0d0d0d;
+  --achievement-gradient-primary: #c0c0c0;
+  --achievement-gradient-secondary: linear-gradient(135deg, #db2777, #ec4899);
+}
+
+:root[data-theme="midnight"] .achievement-page-container {
+  --achievement-accent: #312e81;
+  --achievement-accent-glow: #4338ca;
+  --achievement-accent-secondary: #ec4899;
+  --achievement-bg-dark: #0c0b1a;
+  --achievement-bg-card: #0d0d0d;
+  --achievement-gradient-primary: linear-gradient(135deg, #312e81, #4338ca);
+  --achievement-gradient-secondary: linear-gradient(135deg, #ec4899, #f472b6);
+}
+
+:root[data-theme="chocolate"] .achievement-page-container {
+  --achievement-accent: #854d0e;
+  --achievement-accent-glow: #a16207;
+  --achievement-accent-secondary: #3b82f6;
+  --achievement-bg-dark: #14100a;
+  --achievement-bg-card: #0d0d0d;
+  --achievement-gradient-primary: linear-gradient(135deg, #854d0e, #a16207);
+  --achievement-gradient-secondary: linear-gradient(135deg, #3b82f6, #60a5fa);
+}
+
+/* Fix for Leaderboard Page */
+:root[data-theme="silver"] .leaderboard-container {
+  --leaderboard-accent: #c0c0c0;
+  --leaderboard-accent-glow: #94a3b8;
+  --leaderboard-accent-secondary: #c0c0c0;
+  --leaderboard-bg-dark: #121215;
+  --leaderboard-bg-card: #0d0d0d;
+  --leaderboard-gradient-primary: #c0c0c0;
+  --leaderboard-gradient-secondary: linear-gradient(135deg, #db2777, #ec4899);
+}
+
+:root[data-theme="midnight"] .leaderboard-container {
+  --leaderboard-accent: #312e81;
+  --leaderboard-accent-glow: #4338ca;
+  --leaderboard-accent-secondary: #ec4899;
+  --leaderboard-bg-dark: #0c0b1a;
+  --leaderboard-bg-card: #0d0d0d;
+  --leaderboard-gradient-primary: linear-gradient(135deg, #312e81, #4338ca);
+  --leaderboard-gradient-secondary: linear-gradient(135deg, #ec4899, #f472b6);
+}
+
+:root[data-theme="chocolate"] .leaderboard-container {
+  --leaderboard-accent: #854d0e;
+  --leaderboard-accent-glow: #a16207;
+  --leaderboard-accent-secondary: #3b82f6;
+  --leaderboard-bg-dark: #14100a;
+  --leaderboard-bg-card: #0d0d0d;
+  --leaderboard-gradient-primary: linear-gradient(135deg, #854d0e, #a16207);
+  --leaderboard-gradient-secondary: linear-gradient(135deg, #3b82f6, #60a5fa);
+}
+
 /* Global theme mapping for all prefixes used across your application */
 :root,
 :root[data-theme="default"],

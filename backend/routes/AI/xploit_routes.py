@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, Response
 from helpers.xploitcraft_helper import Xploits
 from helpers.rate_limiter import rate_limit
 import logging
-from ai_utils import get_current_user_id
+from helpers.ai_utils import get_current_user_id
 
 logger = logging.getLogger(__name__)
 

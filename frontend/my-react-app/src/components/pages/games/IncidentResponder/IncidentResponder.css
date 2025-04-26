@@ -2134,6 +2134,7 @@
   background: white;
   border: 2px solid #8a58fc;
   box-shadow: 0 0 8px rgba(240, 240, 240, 0.6);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .enhanced-volume-control .incidentresponder_volume_slider::-moz-range-thumb:hover {
@@ -2232,6 +2233,39 @@
 .incidentresponder_scenario_icon_wrapper {
   position: relative;
 }
+
+
+
+.enhanced-volume-control .incidentresponder_volume_slider {
+  height: 6px;
+  background: linear-gradient(to right, #0d1294, #030666);
+  cursor: pointer; 
+  touch-action: manipulation; 
+  -webkit-appearance: none; 
+  appearance: none;
+  width: 100%; 
+  border-radius: 3px;
+  outline: none;
+}
+
+
+/* Ensure thumb styles target appearance override */
+.enhanced-volume-control .incidentresponder_volume_slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Required */
+  appearance: none;
+  width: 18px; /* Existing size */
+  height: 18px; /* Existing size */
+  background: white;
+  border: 2px solid #8a58fc;
+  border-radius: 50%; /* Make it circular */
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(240, 240, 240, 0.6);
+  transition: transform 0.1s ease, box-shadow 0.1s ease; /* Smoother hover */
+}
+
+
+
+
 /* ===========================
  * ANIMATIONS
  * =========================== */
@@ -2289,7 +2323,7 @@
   
   /* Updated volume control styles */
   .enhanced-volume-control .incidentresponder_volume_slider_container {
-    width: 100px;
+    width: -40px;
   }
 }
 
@@ -2496,7 +2530,7 @@
   
   /* Updated volume control styles */
   .enhanced-volume-control .incidentresponder_volume_slider_container {
-    right: -40px;
+    right: 60px;
   }
   
   .incidentresponder_instructions_button {
@@ -2509,7 +2543,7 @@
   .incidentresponder_header_section h1 {
     font-size: 1.3rem;
   }
-  
+
   .incidentresponder_stage_timer,
   .incidentresponder_stage_score,
   .incidentresponder_stage_step {
@@ -2539,5 +2573,155 @@
   
   .incidentresponder_scenariointro_tab_content h3 {
     font-size: 1.1rem;
+  }
+}
+
+
+/* In your tablet styles section */
+@media (max-width: 992px) {
+  /* Other styles remain the same */
+  
+  /* Fix the negative width value */
+  .enhanced-volume-control .incidentresponder_volume_slider_container {
+    width: 120px; /* Changed from -40px to a positive value */
+  }
+}
+
+/* Keep your existing adjustments for smaller screens */
+@media (max-width: 768px) {
+  /* Other styles remain the same */
+  
+  .enhanced-volume-control .incidentresponder_volume_slider_container {
+    width: 80px;
+    top: 45px;
+  }
+}
+
+/* Add slightly more granular control for very small screens */
+@media (max-width: 480px) {
+  /* Other styles remain the same */
+  
+  .enhanced-volume-control .incidentresponder_volume_slider_container {
+    width: 70px;
+    right: 60px;
+  }
+  
+  /* Make the slider itself smaller */
+  .enhanced-volume-control .incidentresponder_volume_slider {
+    height: 4px; /* Slightly smaller height */
+  }
+  
+  /* Make the thumb smaller too */
+  .enhanced-volume-control .incidentresponder_volume_slider::-webkit-slider-thumb {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .enhanced-volume-control .incidentresponder_volume_slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  /* Other styles remain the same */
+  
+  .enhanced-volume-control .incidentresponder_volume_slider_container {
+    width: 60px; /* Even smaller for tiny screens */
+    right: 0;
+  }
+  
+  /* Make buttons smaller */
+  .enhanced-volume-control .incidentresponder_volume_button {
+    width: 32px;
+    height: 32px;
+    padding: 5px;
+    font-size: 0.8rem;
+  }
+  
+  /* Even smaller thumb for very small screens */
+  .enhanced-volume-control .incidentresponder_volume_slider::-webkit-slider-thumb {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .enhanced-volume-control .incidentresponder_volume_slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* Mobile volume slider - with !important flags to override globals */
+@media (max-width: 992px) {
+  .enhanced-volume-control .incidentresponder_volume_slider_container {
+    width: 120px !important; 
+  }
+}
+
+@media (max-width: 768px) {
+  .enhanced-volume-control .incidentresponder_volume_slider_container {
+    width: 80px !important;
+    top: 45px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .enhanced-volume-control .incidentresponder_volume_slider_container {
+    width: 70px !important;
+    right: 0 !important;
+    padding: 2px !important;
+  }
+  
+  /* Fix the slider height */
+  .enhanced-volume-control .incidentresponder_volume_slider {
+    height: 4px !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    border-radius: 2px !important;
+  }
+  
+  /* Override any global input styling */
+  .enhanced-volume-control .incidentresponder_volume_slider::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    width: 14px !important;
+    height: 14px !important;
+    background: white !important;
+    border: 2px solid #8a58fc !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 8px rgba(240, 240, 240, 0.6) !important;
+  }
+  
+  .enhanced-volume-control .incidentresponder_volume_slider::-moz-range-thumb {
+    width: 14px !important;
+    height: 14px !important;
+    background: white !important;
+    border: 2px solid #8a58fc !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 8px rgba(240, 240, 240, 0.6) !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .enhanced-volume-control .incidentresponder_volume_slider_container {
+    width: 60px !important;
+    right: 0 !important;
+  }
+  
+  .enhanced-volume-control .incidentresponder_volume_button {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 5px !important;
+  }
+  
+  .enhanced-volume-control .incidentresponder_volume_slider::-webkit-slider-thumb {
+    width: 12px !important;
+    height: 12px !important;
+  }
+  
+  .enhanced-volume-control .incidentresponder_volume_slider::-moz-range-thumb {
+    width: 12px !important;
+    height: 12px !important;
   }
 }

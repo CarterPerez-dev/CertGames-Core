@@ -17,6 +17,8 @@ from helpers.scenario_helper import (
 from helpers.xploitcraft_helper import Xploits
 from helpers.grc_stream_helper import generate_grc_question, generate_grc_questions_stream
 
+from routes.security.geo_db_updater import download_and_extract_db
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
@@ -341,3 +343,27 @@ def cleanup_rate_limits():
     
     logger.info(f"Cleaned up {result.deleted_count} old rate limit records")
     return f"Deleted {result.deleted_count} old rate limit records"
+    
+    
+    
+@shared_task(name='tasks.update_geoip_dbs') 
+def update_geoip_dbs_task():
+    """
+    Celery task defined in async_tasks to trigger GeoIP DB update.
+    Calls the actual logic function from geo_db_updater.
+    """
+    logger.info("Celery task 'update_geoip_dbs_task' triggered.")
+    try:
+        success = download_and_extract_db()
+        if success:
+            logger.info("GeoIP update function completed successfully via Celery task.")
+        else:
+            logger.error("GeoIP update function reported failure via Celery task.")
+        return success 
+    except Exception as e:
+        logger.exception(f"Error executing GeoIP update via Celery task: {e}")
+
+        raise
+
+
+
