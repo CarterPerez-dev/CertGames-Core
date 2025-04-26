@@ -84,6 +84,23 @@ const LogViewer = ({ logs, selectedLog, flaggedLines = {}, onSelectLog, onFlagLi
   const applyLogSyntaxHighlighting = (text) => {
     if (!text) return '';
     
+
+    let cleanedText = text.replace(/<\/span>/g, '');
+    
+    cleanedText = cleanedText.replace(/ssh">/g, '');
+    // Remove other malformed HTML fragments
+
+    cleanedText = cleanedText.replace(/smtp">/g, '');
+    cleanedText = cleanedText.replace(/"Mozilla">/g, '');
+    cleanedText = cleanedText.replace(/"AppleWebKit">/g, '');
+    cleanedText = cleanedText.replace(/<">\//g, '');
+    cleanedText = cleanedText.replace(/"http-method-[a-z]+">/g, '');
+    cleanedText = cleanedText.replace(/id<\/span>/g, 'id');
+    
+    // More comprehensive approach to catch any remaining HTML-like tags
+    cleanedText = cleanedText.replace(/<[^>]*>/g, '');
+    cleanedText = cleanedText.replace(/[a-z0-9_-]+">/g, '');
+  
     // Create a temporary div element to hold the text for manipulation
     const tempElement = document.createElement('div');
     tempElement.textContent = text;
