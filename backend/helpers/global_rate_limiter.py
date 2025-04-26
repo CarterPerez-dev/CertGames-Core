@@ -448,7 +448,7 @@ def apply_global_rate_limiting():
             'coinhive', 'cryptonight', 'stratum+tcp', 'monero', 
             
             # XML/YAML attacks
-            '<!ENTITY', '<!DOCTYPE', 'SYSTEM "file:', '[<!ENTITY', '!YAML',
+            '<!ENTITY', 'SYSTEM "file:', '[<!ENTITY', '!YAML',
             
             # HTTP header injection
             '\r\n', '%0d%0a', 'Set-Cookie:', 'Location:',
