@@ -13,7 +13,7 @@ class RateLimiter:
     Tracks usage in MongoDB and enforces limits per user per endpoint.
     """
     
-    # Default limits for different generator types. OH MY GOD YOU BYPASSED MY API PROTECTION...... WELL YOUR STILL FUCKED BUDDY
+    # Default limits for different generator types. OH MY GOD YOU BYPASSED MY API PROTECTION...... Doesnt matter....oh this too somehow?.....well dont worry I have my ai_guard....oh that too?.....you honestly deserve it at that point...
     DEFAULT_LIMITS = {
         'analogy': {'calls': 25, 'period': 3600},  # 15 calls per hour
         'scenario': {'calls': 18, 'period': 3600},  # 10 calls per hour
@@ -130,17 +130,15 @@ def rate_limit(limiter_type):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            # Create a rate limiter for this endpoint
-            limiter = RateLimiter(limiter_type)
-            
-            # Check if rate limited
+
+            limiter = RateLimiter(limiter_type)          
+
             is_limited, remaining, reset_time = limiter.is_rate_limited()
             
-            # If limited, return 429 Too Many Requests
             if is_limited:
                 reset_msg = ""
                 if reset_time:
-                    # Calculate seconds until reset
+
                     seconds_to_reset = (reset_time - datetime.utcnow()).total_seconds()
                     minutes_to_reset = max(1, int(seconds_to_reset / 60))
                     reset_msg = f" Try again in {minutes_to_reset} minutes."
@@ -153,13 +151,12 @@ def rate_limit(limiter_type):
                 response.status_code = 429
                 return response
             
-            # Record the usage
-            limiter.increment_usage()
-            
-            # Set headers for rate limit info
+
+            limiter.increment_usage()           
+
             g.rate_limit_remaining = remaining - 1
             
-            # Continue with the original function
+
             return f(*args, **kwargs)
         return decorated_function
     return decorator

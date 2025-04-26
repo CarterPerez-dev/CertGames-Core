@@ -1,5 +1,5 @@
 ##################################
-# mongodb/database.py (mostly same)
+# mongodb/database.py 
 ##################################
 from flask import Flask
 from flask_pymongo import PyMongo
@@ -10,6 +10,8 @@ app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 mongo = PyMongo(app)
 db = mongo.db
 
+
+# I only decided to define these in this file not all the other colelctions though
 mainusers_collection = db.mainusers
 shop_collection = db.shopItems
 achievements_collection = db.achievements
@@ -19,6 +21,5 @@ correctAnswers_collection = db.correctAnswers
 dailyQuestions_collection = db.dailyQuestions
 dailyAnswers_collection = db.dailyAnswers
 supportThreads_collection = db.supportThreads
-# For suspicious activity....unhackable is my last name
 auditLogs_collection = db.auditLogs
 

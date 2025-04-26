@@ -46,3 +46,4 @@ bcrypt
 stripe
 cryptography
 flask-jwt-extended
+user-agents

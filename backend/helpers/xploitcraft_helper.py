@@ -2,6 +2,7 @@ import logging
 from API.AI import client
 from flask import Response  
 import re
+from helpers.ai_guardrails import apply_ai_guardrails, get_streaming_error_generator
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +71,11 @@ class Xploits:
         """
         logger.debug(f"Generating non-streaming payload with prompt: {prompt}")
 
+
+        proceed, prompt, error_message = apply_ai_guardrails(prompt, 'xploit', user_id)
+        if not proceed:
+            return error_message  
+            
         attempts = 0
         while attempts < retry_attempts:
             try:
@@ -97,6 +103,10 @@ class Xploits:
         This returns a generator that yields partial text chunks as they arrive.
         """
         logger.debug(f"Generating streaming payload with prompt: {prompt}")
+
+        proceed, prompt, error_message = apply_ai_guardrails(prompt, 'xploit', user_id)
+        if not proceed:
+            return get_streaming_error_generator(error_message)
 
         try:
             response = client.chat.completions.create(

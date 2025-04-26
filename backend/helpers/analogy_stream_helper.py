@@ -2,6 +2,7 @@
 import logging
 from API.AI import client
 import json
+from helpers.ai_guardrails import apply_ai_guardrails, get_streaming_error_generator
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -57,6 +58,11 @@ def generate_analogy_stream(analogy_type, concept1, concept2=None, concept3=None
     
     logger.debug(f"Analogy stream prompt: {prompt[:100]}...")
     
+    
+    proceed, prompt, error_message = apply_ai_guardrails(prompt, 'analogy', user_id)
+    if not proceed:
+        return get_streaming_error_generator(error_message)
+        
     try:
         response = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],

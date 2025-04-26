@@ -9,6 +9,7 @@ from helpers.async_tasks import (
 from helpers.analogy_stream_helper import generate_analogy_stream
 # Import rate limiter
 from helpers.rate_limiter import rate_limit
+from ai_utils import get_current_user_id
 
 analogy_bp = Blueprint('analogy_bp', __name__)
 logger = logging.getLogger(__name__)
@@ -24,6 +25,11 @@ def generate_analogy():
     data = request.get_json()
     if not data:
         return jsonify({"error": "Request must contain data"}), 400
+
+    user_id = get_current_user_id()
+    if not user_id:
+        return jsonify({"error": "Authentication required"}), 401
+
 
     analogy_type = data.get("analogy_type")
     category = data.get("category")
@@ -63,6 +69,10 @@ def stream_analogy():
     NEW route that streams analogy text. Only used by front-end now.
     """
     data = request.get_json() or {}
+    user_id = get_current_user_id()
+    if not user_id:
+        return jsonify({"error": "Authentication required"}), 401
+            
     analogy_type = data.get("analogy_type", "single")
     category = data.get("category", "real-world")
     concept1 = data.get("concept1", "")

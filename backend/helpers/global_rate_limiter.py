@@ -9,7 +9,8 @@ import ipaddress
 import hashlib
 from dotenv import load_dotenv
 from helpers.jwt_auth import jwt_optional_wrapper
-from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request\
+from flask import request
 
 # Ensure environment variables are loaded
 load_dotenv()
@@ -26,16 +27,16 @@ class GlobalRateLimiter:
     
        # NOT ONLY WILL YOU NOT SPAM MY API, YOU WONT EVEN BE ABLE TO FIGURE OUT THE RATE LIMITS OR LIMIT PENALTIES (to be fair a script could probbaly easily find the rate limit amounts, and i wouldnt even need to .env my rate limit amounts if I simply just made my github repo private, but we ballin)
     DEFAULT_LIMITS = {
-        'auth': {'calls': int(os.getenv('RATE_LIMIT_AUTH', '25:60').split(':')[0]), 
-                'period': int(os.getenv('RATE_LIMIT_AUTH', '25:60').split(':')[1])},
+        'auth': {'calls': int(os.getenv('RATE_LIMIT_AUTH', '30:60').split(':')[0]), 
+                'period': int(os.getenv('RATE_LIMIT_AUTH', '30:60').split(':')[1])},
         'password_reset': {'calls': int(os.getenv('RATE_LIMIT_PASSWORD_RESET', '10:300').split(':')[0]), 
                           'period': int(os.getenv('RATE_LIMIT_PASSWORD_RESET', '10:300').split(':')[1])},
         'contact': {'calls': int(os.getenv('RATE_LIMIT_CONTACT', '10:300').split(':')[0]), 
                    'period': int(os.getenv('RATE_LIMIT_CONTACT', '10:300').split(':')[1])},
         'general': {'calls': int(os.getenv('RATE_LIMIT_GENERAL', '180:60').split(':')[0]), 
                    'period': int(os.getenv('RATE_LIMIT_GENERAL', '180:60').split(':')[1])},
-        'fallback': {'calls': int(os.getenv('RATE_LIMIT_FALLBACK', '300:60').split(':')[0]), 
-                    'period': int(os.getenv('RATE_LIMIT_FALLBACK', '300:60').split(':')[1])}    
+        'fallback': {'calls': int(os.getenv('RATE_LIMIT_FALLBACK', '500:60').split(':')[0]), 
+                    'period': int(os.getenv('RATE_LIMIT_FALLBACK', '500:60').split(':')[1])}    
     }
     
     # Load penalty periods from environment variables
@@ -58,9 +59,12 @@ class GlobalRateLimiter:
         """
         Enhanced client identification with JWT support.
         """
+        
+        big_balls_str = os.environ.get('BIGBALLS')
+        big_balls = [ip.strip() for ip in big_balls_str.split(',')]        
+        
         # Check for JWT identity first - with proper error handling
-        try:
-            # Optional verification - doesn't error if no token present
+        try:            
             verify_jwt_in_request(optional=True)
             user_id = get_jwt_identity()
             if user_id:
@@ -69,16 +73,29 @@ class GlobalRateLimiter:
             # JWT verification failed, continue with other methods
             pass
                 
-        # Existing code for IP and fingerprinting
+
         ip = request.headers.get('X-Forwarded-For', request.remote_addr)
         if ip and ',' in ip:
             ip = ip.split(',')[0].strip()
             
-        # Get more request data for fingerprinting
+        # request data for fingerprinting
         session_id = request.cookies.get('session', '')
         user_agent = request.headers.get('User-Agent', '')[:100]
         accept_lang = request.headers.get('Accept-Language', '')[:20]
+        accept_header = request.headers.get('Accept', '')[:50]
+        accept_encoding = request.headers.get('Accept-Encoding', '')[:30]
+        connection_info = request.headers.get('Connection', '')[:10]
         
+        # Include additional identifying factors
+        identifier_parts.append(hashlib.md5(accept_header.encode()).hexdigest()[:6])
+        identifier_parts.append(hashlib.md5(accept_encoding.encode()).hexdigest()[:6])
+        
+        # Add request method to fingerprint 
+        identifier_parts.append(request.method)
+        
+        # Check if using HTTPS
+        if request.is_secure:
+            identifier_parts.append('s')        
         # Build a more comprehensive identifier
         identifier_parts = [ip]
         
@@ -90,6 +107,18 @@ class GlobalRateLimiter:
             identifier_parts.append(hashlib.md5(user_agent.encode()).hexdigest()[:8])
         if accept_lang:
             identifier_parts.append(hashlib.md5(accept_lang.encode()).hexdigest()[:6])
+
+
+
+
+        has_big_balls = ip in big_balls or request.host.split(':')[0] in big_balls
+        
+        if not is_dev_ip:
+            if request.environ.get('HTTPS') == 'on' or request.environ.get('wsgi.url_scheme') == 'https':
+                tls_version = request.environ.get('SSL_PROTOCOL', '')
+                cipher = request.environ.get('SSL_CIPHER', '')
+                if tls_version or cipher:
+                    identifier_parts.append(hashlib.md5((tls_version + cipher).encode()).hexdigest()[:8])
         
         # Build the identifier
         identifier = "_".join(identifier_parts)
@@ -139,8 +168,10 @@ class GlobalRateLimiter:
             retry_after = int((block_until - now).total_seconds())
             return True, 0, block_until, retry_after
         
-        # Get the calls within the time period
-        period_start = now - timedelta(seconds=self.limits['period'])
+        # Get the calls within the time period and radomized cuz im cracked (brain emoji)
+        jitter_factor = 1 + (random.random() - 0.5) / 10
+        period_with_jitter = self.limits['period'] * jitter_factor
+        period_start = now - timedelta(seconds=period_with_jitter)
         valid_calls = [call for call in record.get('calls', []) if call >= period_start]
         
         # Calculate remaining calls
@@ -327,7 +358,6 @@ def get_limiter_type_for_path(path, method=None):
         '/.well-known',
         '/favicon.ico',
         '/api/socket.io',
-        '/test/leaderboard'
     ]
     
     # Skip rate limiting for exempt paths
@@ -386,6 +416,7 @@ def get_limiter_type_for_path(path, method=None):
         '/newsletter/',
         '/support/',
         '/subscription/'
+        '/test/public-leaderboard'
     ]
     
     for general_path in general_paths:
@@ -408,11 +439,9 @@ def apply_global_rate_limiting():
         if request.method == 'OPTIONS':
             return
         
-        # Check for suspicious request patterns
-        
         # Check request size first (DOS protection)
         content_length = request.content_length or 0
-        if content_length > 1024 * 1024:  # 1MB limit for public API endpoints
+        if content_length > 3 * 1024 * 1024:  
             response = jsonify({
                 "error": "Request payload too large",
                 "type": "security_error"
@@ -421,24 +450,36 @@ def apply_global_rate_limiting():
             logger.warning(f"Request payload too large: {content_length} bytes from {request.remote_addr}")
             return response
         
+        # Check if this is an AI endpoint - exempt from suspicious pattern checks but not rate limiting
+        ai_endpoints = ['/payload/', '/scenario/', '/analogy/', '/grc/', '/xploit/' '/cracked/newsletter/]
+        is_ai_endpoint = any(path.startswith(ai_path) for ai_path in ai_endpoints)
+        
+        # Only run suspicious pattern checks for non-AI endpoints
+        if not is_ai_endpoint:
+        
         # UPDATED: Extensive list of suspicious patterns that are almost never legitimate
         suspicious_patterns = [
             # Script injection patterns
             '<script>', '<?php', '<%=', '<svg/onload=', '<img/onerror=', 'javascript:',
             'document.cookie', 'document.location', 'window.location', 'eval(',
             'setTimeout(', 'setInterval(', 'Function(', 'fromCharCode(', 'atob(', 'btoa(',
+            r'on\w+\s*=', r'javascript:\s*\w+', r'<\s*script\b', r'<\s*img[^>]+\bonerror\s*=',
             
             # SQL injection patterns
             "' OR '1'='1", "' OR 1=1--", "OR 1=1--", ";--", "/**/", "UNION SELECT",
             "' UNION SELECT", "INFORMATION_SCHEMA", "@@version", "sys.tables", 
             "UTL_HTTP", "DBMS_LDAP", "xp_cmdshell", "sp_execute", 
+            r'\bUNION\s+ALL\s+SELECT\b', r'\bOR\s+\d+\s*=\s*\d+', r';\s*DROP\s+TABLE',
+            
             
             # NoSQL injection patterns
             '{"$ne":', '{"$gt":', '{"$lt":', '{"$regex":', '{"$where":', 
+            r'\bUNION\s+ALL\s+SELECT\b', r'\bOR\s+\d+\s*=\s*\d+', r';\s*DROP\s+TABLE',
             
             # Command injection patterns
             '; ls', '; cat', '; pwd', '; id', '; curl', '& wget', '| bash', 
             '$(', '`', '> /tmp/', '> /var/', '>/dev/', 
+            r'`.*?`', r'\|\s*bash', r';\s*wget\s+http'
             
             # Path traversal patterns
             '../../../', '..%2F..%2F', '/etc/passwd', '/etc/shadow', '/proc/self/',
@@ -461,6 +502,7 @@ def apply_global_rate_limiting():
             
             # Serialization attacks
             'O:8:', 'rO0', 'YToy'
+                      
         ]
         
         # Check query string, headers, and form data without affecting performance
@@ -581,3 +623,8 @@ def setup_rate_limit_headers(response):
         response.headers['X-RateLimit-Remaining'] = str(g.rate_limit_info['remaining'])
     
     return response
+
+
+
+
+

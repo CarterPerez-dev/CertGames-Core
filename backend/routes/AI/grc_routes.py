@@ -3,6 +3,7 @@ import logging
 from helpers.async_tasks import generate_grc_question_task
 from helpers.grc_stream_helper import generate_grc_question, generate_grc_questions_stream
 from helpers.rate_limiter import rate_limit
+from ai_utils import get_current_user_id
 
 grc_bp = Blueprint('grc', __name__)
 logger = logging.getLogger(__name__)
@@ -23,7 +24,13 @@ def generate_question():
         data = request.get_json()
         if not data:
             return jsonify({"error": "Request must contain JSON data"}), 400
-
+            
+            
+       user_id = get_current_user_id()
+       if not user_id:
+           return jsonify({"error": "Authentication required"}), 401
+           
+           
         category = data.get('category', 'Random')
         difficulty = data.get('difficulty', 'Easy')
 
@@ -53,6 +60,12 @@ def stream_question():
         data = request.get_json()
         if not data:
             return jsonify({"error": "Request must contain JSON data"}), 400
+
+            
+       user_id = get_current_user_id()
+       if not user_id:
+           return jsonify({"error": "Authentication required"}), 401
+
 
         category = data.get('category', 'Random')
         difficulty = data.get('difficulty', 'Easy')

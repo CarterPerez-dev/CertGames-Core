@@ -2,6 +2,7 @@ import json
 import logging
 import re
 from API.AI import client  
+from helpers.ai_guardrails import apply_ai_guardrails, get_streaming_error_generator
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,14 @@ def generate_scenario(industry, attack_type, skill_level, threat_intensity):
             "then mitigation steps in another paragraph (at least 3 sentences). Use paragraph breaks (new lines '\\n') between each section, "
             "so it is easy to read. Each section should be easy to understand but also in depth, technical, and educational."
         )
-
+        
+        
+        proceed, prompt, error_message = apply_ai_guardrails(prompt, 'analogy', user_id)
+        if not proceed:
+            return get_streaming_error_generator(error_message)
+            
+            
+            
         response = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
             model="gpt-4o",
@@ -163,6 +171,11 @@ Example format:
 
 Nothing else.
 """
+
+    proceed, prompt, error_message = apply_ai_guardrails(prompt, 'analogy', user_id)
+    if not proceed:
+        return get_streaming_error_generator(error_message)
+            
 
     try:
         response = client.chat.completions.create(

@@ -3,6 +3,7 @@ import json
 import logging
 import re
 from API.AI import client
+from helpers.ai_guardrails import apply_ai_guardrails, get_streaming_error_generator
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +65,10 @@ EXAMPLE FORMAT (this is not real content, just structure, make sure to use all t
 
 Now generate the JSON object following these instructions.
 """
+
+    proceed, prompt, error_message = apply_ai_guardrails(prompt, 'analogy', user_id)
+    if not proceed:
+        return error_message
 
     try:
         response = client.chat.completions.create(
@@ -139,6 +144,12 @@ Now generate the JSON object following these instructions.
 Remember: Provide ONLY valid JSON, nothing else.
 """
 
+
+    proceed, prompt, error_message = apply_ai_guardrails(prompt, 'analogy', user_id)
+    if not proceed:
+        return get_streaming_error_generator(error_message)
+        
+        
     try:
         # Make the streaming request
         response = client.chat.completions.create(

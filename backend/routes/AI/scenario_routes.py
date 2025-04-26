@@ -6,6 +6,7 @@ from helpers.scenario_helper import (
     generate_interactive_questions
 )
 from helpers.rate_limiter import rate_limit
+from ai_utils import get_current_user_id
 
 scenario_bp = Blueprint('scenario_bp', __name__)
 logger = logging.getLogger(__name__)
@@ -14,12 +15,17 @@ logger.setLevel(logging.DEBUG)
 @scenario_bp.route('/stream_scenario', methods=['POST'])
 @rate_limit('scenario')
 def stream_scenario_endpoint():
+
     data = request.get_json() or {}
     required_fields = ["industry", "attack_type", "skill_level", "threat_intensity"]
     missing = [f for f in required_fields if f not in data]
     if missing:
         logger.error(f"Missing required fields: {missing}")
         return jsonify({"error": f"Missing required fields: {missing}"}), 400
+
+    user_id = get_current_user_id()
+    if not user_id:
+        return jsonify({"error": "Authentication required"}), 401
 
     industry = data["industry"]
     attack_type = data["attack_type"]
@@ -46,6 +52,10 @@ def stream_scenario_endpoint():
 @rate_limit('scenario')
 def stream_questions_endpoint():
     data = request.get_json() or {}
+    
+    if not user_id:
+        return jsonify({"error": "Authentication required"}), 401
+            
     scenario_text = data.get("scenario_text", "")
     if not scenario_text:
         logger.error("Missing scenario_text in the request.")
@@ -54,11 +64,8 @@ def stream_questions_endpoint():
     logger.debug(f"Received scenario_text: {scenario_text[:100]}...")
 
     def generate_json_chunks():
-        # The function below returns a streaming generator
-        # that yields partial JSON text
+
         questions = generate_interactive_questions(scenario_text)
-        # If 'questions' is already a list, we yield one chunk,
-        # but typically it's a generator
         if isinstance(questions, list):
             logger.debug("Questions are a list. Serializing to JSON.")
             yield json.dumps(questions)
