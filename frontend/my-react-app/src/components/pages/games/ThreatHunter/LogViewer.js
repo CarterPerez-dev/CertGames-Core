@@ -80,32 +80,36 @@ const LogViewer = ({ logs, selectedLog, flaggedLines = {}, onSelectLog, onFlagLi
     }
   };
 
-  // Enhanced syntax highlighting function
+  // Enhanced syntax highlighting function with aggressive HTML cleaning
   const applyLogSyntaxHighlighting = (text) => {
     if (!text) return '';
     
-
-    let cleanedText = text.replace(/<\/span>/g, '');
+    // STEP 1: Completely strip ALL HTML tags and entities
+    const stripAllHTML = (str) => {
+      // First convert the string to a plain text
+      const tempDiv = document.createElement('div');
+      tempDiv.textContent = str;
+      let plainText = tempDiv.textContent;
+      
+      // Additionally remove any remaining HTML-like constructs
+      plainText = plainText.replace(/<[^>]*>/g, ''); // Remove anything that looks like a tag
+      plainText = plainText.replace(/&[a-z0-9]+;/gi, ''); // Remove HTML entities
+      plainText = plainText.replace(/ssh">/g, ''); // Remove specific problematic fragments
+      plainText = plainText.replace(/smtp">/g, '');
+      plainText = plainText.replace(/"Mozilla">/g, '');
+      plainText = plainText.replace(/"AppleWebKit">/g, '');
+      plainText = plainText.replace(/<">\//g, '');
+      plainText = plainText.replace(/"http-method-[a-z]+">/g, '');
+      plainText = plainText.replace(/id<\/span>/g, 'id');
+      plainText = plainText.replace(/<\/span>/g, ''); // Remove closing spans
+      
+      return plainText;
+    };
     
-    cleanedText = cleanedText.replace(/ssh">/g, '');
-    // Remove other malformed HTML fragments
-
-    cleanedText = cleanedText.replace(/smtp">/g, '');
-    cleanedText = cleanedText.replace(/"Mozilla">/g, '');
-    cleanedText = cleanedText.replace(/"AppleWebKit">/g, '');
-    cleanedText = cleanedText.replace(/<">\//g, '');
-    cleanedText = cleanedText.replace(/"http-method-[a-z]+">/g, '');
-    cleanedText = cleanedText.replace(/id<\/span>/g, 'id');
+    // Get a completely clean text to work with
+    const cleanedText = stripAllHTML(text);
     
-    // More comprehensive approach to catch any remaining HTML-like tags
-    cleanedText = cleanedText.replace(/<[^>]*>/g, '');
-    cleanedText = cleanedText.replace(/[a-z0-9_-]+">/g, '');
-  
-    // Create a temporary div element to hold the text for manipulation
-    const tempElement = document.createElement('div');
-    tempElement.textContent = text;
-    let highlightedText = tempElement.textContent;
-    
+    // Now we can safely apply our syntax highlighting to clean text
     // Define regex patterns for different elements
     const patterns = {
       // HTTP Methods
@@ -201,6 +205,7 @@ const LogViewer = ({ logs, selectedLog, flaggedLines = {}, onSelectLog, onFlagLi
     };
     
     // Replace each match with HTML span tags
+    let highlightedText = cleanedText;
     
     // HTTP Methods
     highlightedText = highlightedText.replace(patterns.httpMethod, (match) => {

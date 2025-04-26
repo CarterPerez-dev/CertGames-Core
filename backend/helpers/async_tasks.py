@@ -366,4 +366,101 @@ def update_geoip_dbs_task():
         raise
 
 
+@app.task
+def cleanup_performance_data():
+    """
+    Remove old performance samples and metrics to prevent database growth.
+    Keeps the last 30 days of data.
+    """
+    try:
+        cutoff = datetime.utcnow() - timedelta(days=30)
+        
+        # Delete old performance samples
+        result1 = db.perfSamples.delete_many({
+            "timestamp": {"$lt": cutoff}
+        })
+        
+        # Delete old performance metrics
+        result2 = db.performanceMetrics.delete_many({
+            "timestamp": {"$lt": cutoff}
+        })
+        
+        return f"Deleted {result1.deleted_count} perf samples and {result2.deleted_count} perf metrics"
+    except Exception as e:
+        logger.error(f"Error cleaning up performance data: {str(e)}")
+        return f"Error: {str(e)}"
 
+@app.task
+def cleanup_honeypot_data():
+    """
+    Clean up old honeypot scan attempts and watchlist entries.
+    Keeps the last 60 days of scan data and removes inactive watchlist entries.
+    """
+    try:
+        cutoff = datetime.utcnow() - timedelta(days=60)
+        inactive_cutoff = datetime.utcnow() - timedelta(days=90)
+        
+        # Delete old scan attempts
+        result1 = db.scanAttempts.delete_many({
+            "timestamp": {"$lt": cutoff}
+        })
+        
+        # Delete inactive watchlist entries
+        result2 = db.watchList.delete_many({
+            "lastSeen": {"$lt": inactive_cutoff}
+        })
+        
+        # Clean up expired blocks
+        result3 = db.securityBlocklist.delete_many({
+            "blockUntil": {"$lt": datetime.utcnow()}
+        })
+        
+        return f"Deleted {result1.deleted_count} scan attempts, {result2.deleted_count} watchlist entries, and {result3.deleted_count} expired blocks"
+    except Exception as e:
+        logger.error(f"Error cleaning up honeypot data: {str(e)}")
+        return f"Error: {str(e)}"
+
+@app.task
+def cleanup_audit_logs():
+    """
+    Remove old audit logs to prevent database growth.
+    Keeps successful logins for 60 days and failed attempts for 90 days for security analysis.
+    """
+    try:
+        success_cutoff = datetime.utcnow() - timedelta(days=60)
+        failure_cutoff = datetime.utcnow() - timedelta(days=90)
+        
+        # Delete old successful logins
+        result1 = db.auditLogs.delete_many({
+            "success": True,
+            "timestamp": {"$lt": success_cutoff}
+        })
+        
+        # Keep failed login attempts longer for security analysis
+        result2 = db.auditLogs.delete_many({
+            "success": False,
+            "timestamp": {"$lt": failure_cutoff}
+        })
+        
+        return f"Deleted {result1.deleted_count} successful and {result2.deleted_count} failed audit logs"
+    except Exception as e:
+        logger.error(f"Error cleaning up audit logs: {str(e)}")
+        return f"Error: {str(e)}"
+
+@app.task
+def cleanup_web_vitals():
+    """
+    Remove old web vitals metrics data to prevent database growth.
+    Keeps the last 30 days of data.
+    """
+    try:
+        cutoff = datetime.utcnow() - timedelta(days=30)
+        
+        result = db.webVitals.delete_many({
+            "timestamp": {"$lt": cutoff}
+        })
+        
+        return f"Deleted {result.deleted_count} web vitals records"
+    except Exception as e:
+        logger.error(f"Error cleaning up web vitals: {str(e)}")
+        return f"Error: {str(e)}"

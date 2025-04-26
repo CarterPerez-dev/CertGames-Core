@@ -72,6 +72,22 @@ app.conf.beat_schedule = {
         'task': 'tasks.update_geoip_dbs', 
         'schedule': crontab(minute='0', hour='3', day_of_week='1'), 
     },
+    'cleanup-performance-data-weekly': {
+        'task': 'helpers.async_tasks.cleanup_performance_data',
+        'schedule': crontab(hour=1, minute=0, day_of_week=1),  # Run at 1:00 AM every Monday
+    },
+    'cleanup-honeypot-data-weekly': {
+        'task': 'helpers.async_tasks.cleanup_honeypot_data',
+        'schedule': crontab(hour=2, minute=0, day_of_week=2),  # Run at 2:00 AM every Tuesday
+    },
+    'cleanup-audit-logs-weekly': {
+        'task': 'helpers.async_tasks.cleanup_audit_logs',
+        'schedule': crontab(hour=3, minute=0, day_of_week=3),  # Run at 3:00 AM every Wednesday
+    },
+    'cleanup-web-vitals-weekly': {
+        'task': 'helpers.async_tasks.cleanup_web_vitals',
+        'schedule': crontab(hour=4, minute=0, day_of_week=4),  # Run at 4:00 AM every Thursday
+    }    
 }    
 
 
