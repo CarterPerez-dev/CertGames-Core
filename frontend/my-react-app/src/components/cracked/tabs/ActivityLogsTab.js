@@ -1,82 +1,112 @@
 // Updated ActivityLogsTab.js
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  FaHistory, FaSync, FaSpinner, FaExclamationTriangle
-} from "react-icons/fa";
+import { FaShieldAlt, FaUserSecret, FaExclamationTriangle, FaSpinner, FaSearch } from "react-icons/fa";
+import { adminFetch } from "../csrfHelper";
 
-const ActivityLogsTab = () => {
-  const [activityLogs, setActivityLogs] = useState([]);
-  const [activityLoading, setActivityLoading] = useState(false);
-  const [activityError, setActivityError] = useState(null);
-  
-  const fetchActivityLogs = useCallback(async () => {
-    setActivityLoading(true);
-    setActivityError(null);
+const AdminAccessLogSection = () => {
+  const [adminLogs, setAdminLogs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [filterText, setFilterText] = useState("");
+
+  const fetchAdminAccessLogs = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      const res = await fetch("/api/cracked/activity-logs", { credentials: "include" });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch activity logs");
+      const response = await adminFetch("/api/cracked/admin-access-logs");
+      if (!response.ok) {
+        throw new Error("Failed to fetch admin access logs");
       }
-      if (data.logs) {
-        setActivityLogs(data.logs);
-      }
+      const data = await response.json();
+      setAdminLogs(data.logs || []);
     } catch (err) {
-      setActivityError(err.message);
+      setError(err.message);
     } finally {
-      setActivityLoading(false);
+      setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
-    fetchActivityLogs();
-  }, [fetchActivityLogs]);
+    fetchAdminAccessLogs();
+  }, []);
+
+  const filteredLogs = adminLogs.filter(log => {
+    if (!filterText) return true;
+    const searchText = filterText.toLowerCase();
+    return (
+      (log.ip && log.ip.toLowerCase().includes(searchText)) ||
+      (log.email && log.email.toLowerCase().includes(searchText)) ||
+      (log.reason && log.reason.toLowerCase().includes(searchText)) ||
+      (log.timestamp && log.timestamp.toLowerCase().includes(searchText))
+    );
+  });
 
   return (
-    <div className="admin-tab-content activity-tab">
-      <div className="admin-content-header">
-        <h2><FaHistory /> Failed Login Attempts</h2>
-        <button className="admin-refresh-btn" onClick={fetchActivityLogs}>
-          <FaSync /> Refresh Logs
-        </button>
+    <div className="admin-section admin-access-logs">
+      <div className="admin-section-header">
+        <h3><FaUserSecret /> Admin Access Logs</h3>
+        <div className="admin-filter">
+          <input
+            type="text"
+            placeholder="Filter logs..."
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+          />
+          <button onClick={fetchAdminAccessLogs} className="admin-refresh-btn">
+            <FaSearch />
+          </button>
+        </div>
       </div>
 
-      {activityLoading && (
+      {loading && (
         <div className="admin-loading">
           <FaSpinner className="admin-spinner" />
-          <p>Loading activity logs...</p>
+          <p>Loading access logs...</p>
         </div>
       )}
 
-      {activityError && (
-        <div className="admin-error-message">
-          <FaExclamationTriangle /> Error: {activityError}
+      {error && (
+        <div className="admin-error">
+          <FaExclamationTriangle />
+          <p>{error}</p>
         </div>
       )}
 
-      <div className="admin-data-table-container">
-        <table className="admin-data-table">
+      <div className="admin-logs-table">
+        <table>
           <thead>
             <tr>
-              <th>Time</th>
-              <th>IP</th>
-              <th>User ID (last 5)</th>
+              <th>Timestamp</th>
+              <th>IP Address</th>
+              <th>Email</th>
+              <th>Status</th>
               <th>Reason</th>
+              <th>Provider</th>
             </tr>
           </thead>
           <tbody>
-            {activityLogs.length > 0 ? (
-              activityLogs.map((log) => (
-                <tr key={log._id} className="error-row">
+            {filteredLogs.length > 0 ? (
+              filteredLogs.map((log, index) => (
+                <tr key={index} className={log.success ? "success-row" : "failure-row"}>
                   <td>{log.timestamp}</td>
-                  <td>{log.ip}</td>
-                  <td>{log.userId || ""}</td>
-                  <td>{log.reason || "Unknown reason"}</td>
+                  <td>{log.ip || "N/A"}</td>
+                  <td>{log.email || "N/A"}</td>
+                  <td>
+                    {log.success ? (
+                      <span className="success-status">Success</span>
+                    ) : (
+                      <span className="failure-status">Failed</span>
+                    )}
+                  </td>
+                  <td>{log.reason || "N/A"}</td>
+                  <td>{log.provider || "Direct"}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="admin-no-data">No failed login attempts found</td>
+                <td colSpan="6" className="no-data">
+                  No access logs found
+                </td>
               </tr>
             )}
           </tbody>

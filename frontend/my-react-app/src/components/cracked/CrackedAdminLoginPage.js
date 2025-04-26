@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { FaLock, FaGoogle, FaShieldAlt, FaKey, FaUserSecret, FaEye, FaEyeSlash, FaExclamationCircle, FaLaptopCode } from "react-icons/fa";
 import "./styles/CrackedAdminLogin.css";
 
+import { adminFetch, setCsrfToken } from './csrfHelper';
+
 function CrackedAdminLoginPage() {
   const navigate = useNavigate();
 
@@ -26,27 +28,37 @@ function CrackedAdminLoginPage() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-
+  
     try {
-      const response = await fetch("/api/cracked/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ adminKey, role }),
-        credentials: "include",
+      // First, get a CSRF token
+      const tokenResponse = await fetch('/api/cracked/csrf-token', {
+        credentials: 'include'
       });
-
+      
+      if (tokenResponse.ok) {
+        const tokenData = await tokenResponse.json();
+        setCsrfToken(tokenData.csrf_token);
+      }
+      
+      // Now login with CSRF protection
+      const response = await adminFetch('/api/cracked/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminKey, role })
+      });
+  
       const data = await response.json();
       if (!response.ok) {
         setLoginAttempts(prev => prev + 1);
         setError(data.error || "Unable to log in");
       } else {
         // On success, navigate to the admin dashboard
-        navigate("/cracked/dashboard");
+        navigate('/cracked/dashboard');
       }
     } catch (err) {
-      console.error("Admin login error:", err);
+      console.error('Admin login error:', err);
       setLoginAttempts(prev => prev + 1);
-      setError("Network error or server unavailable");
+      setError('Network error or server unavailable');
     } finally {
       setLoading(false);
     }

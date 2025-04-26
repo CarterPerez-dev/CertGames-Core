@@ -598,7 +598,7 @@ def verify_google_token():
 
 
 
-# Add these routes to your oauth_routes.py file
+
 
 @oauth_bp.route('/admin-login/google')
 def admin_google_login():
@@ -606,15 +606,15 @@ def admin_google_login():
     Google OAuth login specifically for admin dashboard.
     Only allows access for authorized admin emails.
     """
-    # Generate and store a state parameter
+
     state = secrets.token_urlsafe(16)
     session['admin_oauth_state'] = state
     
-    # Use the external URL with /api prefix for your reverse proxy
+
     base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
     redirect_uri = f"{base_url}/api/oauth/admin-auth/google"
     
-    # Manual authorize redirect with state parameter
+
     params = {
         'client_id': google.client_id,
         'redirect_uri': redirect_uri,
@@ -627,10 +627,10 @@ def admin_google_login():
     auth_url = google.authorize_url
     separator = '?' if '?' not in auth_url else '&'
     
-    # Build the query string
+
     query = '&'.join([f"{key}={value}" for key, value in params.items()])
     
-    # Full authorization URL
+
     full_url = f"{auth_url}{separator}{query}"
     
     return redirect(full_url)
@@ -639,88 +639,122 @@ def admin_google_login():
 def admin_google_auth():
     """
     Handle the Google OAuth callback for admin authentication.
-    Only allows access for authorized admin emails (support@certgames.com).
+    Only allows access for authorized admin emails.
     """
     try:
-        # Check state parameter to prevent CSRF
         expected_state = session.pop('admin_oauth_state', None)
         received_state = request.args.get('state')
         
         if not expected_state or expected_state != received_state:
             current_app.logger.error(f"Admin OAuth state mismatch: expected={expected_state}, received={received_state}")
-            return jsonify({"error": "Invalid state parameter"}), 400
+            
+
+            db.auditLogs.insert_one({
+                "timestamp": datetime.utcnow(),
+                "ip": request.remote_addr or "unknown",
+                "success": False,
+                "adminLogin": True,
+                "reason": "oauth_state_mismatch"
+            })
+    
+
+            frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
+            return redirect(f"{frontend_url}/cracked?error=authentication_failed")
         
-        # Use the external URL with /api prefix for your reverse proxy
+
         base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
         redirect_uri = f"{base_url}/api/oauth/admin-auth/google"
         
-        # Manual token exchange
+
         code = request.args.get('code')
         if not code:
             return jsonify({"error": "No authorization code received"}), 400
         
-        # Exchange code for token
+
         token_data = google.fetch_access_token(code=code, redirect_uri=redirect_uri)
         if not token_data or 'access_token' not in token_data:
             return jsonify({"error": "Failed to obtain access token"}), 400
-        
-        # Get user info from Google
-        userinfo_response = requests.get(
-            'https://www.googleapis.com/oauth2/v1/userinfo',
-            headers={'Authorization': f"Bearer {token_data['access_token']}"}
-        )
-        
-        if not userinfo_response.ok:
-            return jsonify({"error": "Failed to get user info from Google"}), 400
             
-        user_info = userinfo_response.json()
+
+        id_token = token_data.get('id_token')
+        if not id_token:
+            current_app.logger.error("No ID token in Google OAuth response")
+            return jsonify({"error": "Missing ID token in OAuth response"}), 400
+            
+
+        try:
+
+            userinfo_response = requests.get(
+                'https://www.googleapis.com/oauth2/v1/userinfo',
+                headers={'Authorization': f"Bearer {token_data['access_token']}"}
+            )
+            
+            if not userinfo_response.ok:
+                return jsonify({"error": "Failed to get user info from Google"}), 400
+                
+            user_info = userinfo_response.json()
+            
+
+            email = user_info.get('email')
+            if not email:
+                return jsonify({"error": "Email not provided by Google"}), 400
+            
+
+            AUTHORIZED_ADMIN_EMAILS = ['support@certgames.com']
+            
+
+            if email not in AUTHORIZED_ADMIN_EMAILS or not user_info.get('verified_email', False):
+
+                current_app.logger.warning(f"Unauthorized admin login attempt from: {email}")
         
-        # Get email and check if it's an authorized admin email
-        email = user_info.get('email')
-        if not email:
-            return jsonify({"error": "Email not provided by Google"}), 400
+
+                db.auditLogs.insert_one({
+                    "timestamp": datetime.utcnow(),
+                    "email": email,
+                    "ip": request.remote_addr or "unknown",
+                    "success": False,
+                    "adminLogin": True,
+                    "reason": "unauthorized_email"
+                })
         
-        # List of authorized admin emails
-        AUTHORIZED_ADMIN_EMAILS = ['support@certgames.com']
-        
-        # Check if email is authorized
-        if email not in AUTHORIZED_ADMIN_EMAILS:
-            # Log the unauthorized attempt
-            current_app.logger.warning(f"Unauthorized admin login attempt from: {email}")
-    
-            # Log to database as well
+
+                frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
+                return redirect(f"{frontend_url}/cracked?error=unauthorized")
+            
+         
+            session['cracked_admin_logged_in'] = True
+            session['cracked_admin_role'] = 'superadmin'  
+            session['cracked_admin_email'] = email
+            session['admin_last_active'] = datetime.utcnow().isoformat()
+            session['admin_ip'] = request.remote_addr
+            
+
+            user_agent = request.headers.get('User-Agent', 'Unknown')
+            session_fingerprint = hashlib.sha256(f"{email}:{user_agent}".encode()).hexdigest()
+            session['admin_fingerprint'] = session_fingerprint
+            
+
             db.auditLogs.insert_one({
                 "timestamp": datetime.utcnow(),
                 "email": email,
                 "ip": request.remote_addr or "unknown",
-                "success": False,
-                "adminLogin": True,
-                "reason": "unauthorized_email"
+                "success": True,
+                "provider": "google",
+                "adminLogin": True
             })
-    
-            # Redirect to login page with error
+            
+
             frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
-            return redirect(f"{frontend_url}/cracked?error=unauthorized")
+            return redirect(f"{frontend_url}/cracked/dashboard")
         
-        # Email is authorized, set admin session
-        session['cracked_admin_logged_in'] = True
-        session['cracked_admin_role'] = 'superadmin'  
-        session['cracked_admin_email'] = email
-        
-        # Log the successful admin login
-        db.auditLogs.insert_one({
-            "timestamp": datetime.utcnow(),
-            "email": email,
-            "ip": request.remote_addr or "unknown",
-            "success": True,
-            "provider": "google",
-            "adminLogin": True
-        })
-        
-        # Redirect to admin dashboard
+        except Exception as e:
+            current_app.logger.error(f"Error validating Google OAuth credentials: {str(e)}")
+            return jsonify({"error": "Failed to validate OAuth credentials"}), 500
+            
+    except Exception as e:
+        current_app.logger.error(f"Error in admin Google auth: {str(e)}")
         frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
-        return redirect(f"{frontend_url}/cracked/dashboard")
-        
+        return redirect(f"{frontend_url}/cracked?error=authentication_failed")
     except Exception as e:
         current_app.logger.error(f"Error in admin Google auth: {str(e)}")
         frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')

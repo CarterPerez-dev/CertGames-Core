@@ -23,6 +23,7 @@ import psutil
 import socket
 cracked_bp = Blueprint('cracked', __name__, url_prefix='/cracked')
 ADMIN_PASS = os.getenv('CRACKED_ADMIN_PASSWORD', 'authkey')
+from middleware.csrf_protection import generate_csrf_token
 
 load_dotenv()
 
@@ -226,16 +227,121 @@ def admin_api_logs():
 ##################################################################
 # ADMIN LOGIN / LOGOUT
 ##################################################################
-@cracked_bp.route('/login', methods=['POST'])
 def cracked_admin_login():
     data = request.json or {}
     adminKey = data.get('adminKey', '')
     input_role = data.get('role', 'basic')
+    
+    # Get client identifier for rate limiting
+    client_ip = request.remote_addr
+    
+    # Check if this IP is currently blocked for login attempts
+    now = datetime.utcnow()
+    ip_block = db.admin_login_attempts.find_one({
+        "ip": client_ip,
+        "blockUntil": {"$gt": now}
+    })
+    
+    if ip_block:
+        # Calculate time remaining in the block
+        block_time = ip_block["blockUntil"] - now
+        minutes_remaining = math.ceil(block_time.total_seconds() / 60)
+        
+        # Log the blocked attempt
+        db.auditLogs.insert_one({
+            "timestamp": now,
+            "ip": client_ip,
+            "success": False,
+            "reason": "IP blocked",
+            "adminLogin": True
+        })
+        
+        return jsonify({
+            "error": f"Too many failed login attempts. Try again in {minutes_remaining} minutes."
+        }), 429
+    
+    # Not blocked, proceed with login check
     if adminKey == ADMIN_PASS:
+        # Successful login, clear any failed attempts
+        db.admin_login_attempts.delete_many({"ip": client_ip})
+        
+        # Set session
         session['cracked_admin_logged_in'] = True
         session['cracked_admin_role'] = input_role
+        session['admin_last_active'] = now.isoformat()
+        session['admin_ip'] = client_ip
+        
+        # Log successful login
+        db.auditLogs.insert_one({
+            "timestamp": now,
+            "ip": client_ip,
+            "success": True,
+            "adminLogin": True
+        })
+        
         return jsonify({"message": "Authorization successful"}), 200
     else:
+        # Failed login attempt
+        # Get previous failed attempts
+        failed_attempts = db.admin_login_attempts.find_one({"ip": client_ip})
+        
+        if failed_attempts:
+            # Increment attempts
+            attempts = failed_attempts.get("attempts", 0) + 1
+            
+            # Check if we should block now
+            if attempts >= 5:
+                # Block for progressively longer times based on number of attempts
+                block_minutes = min(1440, 5 * (2 ** (attempts - 5)))  # Exponential backoff, cap at 1 day
+                block_until = now + timedelta(minutes=block_minutes)
+                
+                db.admin_login_attempts.update_one(
+                    {"ip": client_ip},
+                    {"$set": {
+                        "attempts": attempts,
+                        "lastAttempt": now,
+                        "blockUntil": block_until
+                    }}
+                )
+                
+                # Log the blocked attempt
+                db.auditLogs.insert_one({
+                    "timestamp": now,
+                    "ip": client_ip,
+                    "success": False,
+                    "reason": "Blocked due to too many attempts",
+                    "adminLogin": True
+                })
+                
+                return jsonify({
+                    "error": f"Too many failed login attempts. Try again in {block_minutes} minutes."
+                }), 429
+            else:
+                # Update attempts
+                db.admin_login_attempts.update_one(
+                    {"ip": client_ip},
+                    {"$set": {
+                        "attempts": attempts,
+                        "lastAttempt": now
+                    }}
+                )
+        else:
+            # First failed attempt
+            db.admin_login_attempts.insert_one({
+                "ip": client_ip,
+                "attempts": 1,
+                "lastAttempt": now
+            })
+        
+        # Log the failed attempt
+        db.auditLogs.insert_one({
+            "timestamp": now,
+            "ip": client_ip,
+            "success": False,
+            "reason": "Invalid admin password",
+            "adminLogin": True
+        })
+        
         return jsonify({"error": "Invalid admin password"}), 403
 
 @cracked_bp.route('/logout', methods=['POST'])
@@ -1932,6 +2038,52 @@ def admin_rate_limits():
             "rate_limits": processed_limits,
             "endpoint_summary": endpoint_summary
         }), 200
+
+
+
+
+@cracked_bp.route('/csrf-token', methods=['GET'])
+def get_csrf_token():
+    """Generate and return a CSRF token"""
+    # Import the token generation function
+    from middleware.csrf_protection import generate_csrf_token
+    
+    # Generate a token and save it in the session
+    token = generate_csrf_token()
+    
+    return jsonify({"csrf_token": token}), 200
+
+
+# Add to backend/routes/admin/cracked_admin.py
+
+@cracked_bp.route('/admin-access-logs', methods=['GET'])
+def admin_access_logs():
+    """Retrieve admin access logs for the admin dashboard"""
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+    
+    try:
+
+        logs = db.auditLogs.find({"adminLogin": True}).sort("timestamp", -1).limit(200)
         
+        results = []
+        est_tz = pytz.timezone('America/New_York')
+        
+        for log in logs:
+            # Convert _id to string
+            log['_id'] = str(log['_id'])
+            
+            # Convert userId to string if it exists and is ObjectId
+            if 'userId' in log and log['userId']:
+                log['userId'] = str(log['userId'])
+            
+            # Format timestamp
+            if isinstance(log.get('timestamp'), datetime):
+                log['timestamp'] = log['timestamp'].astimezone(est_tz).strftime("%Y-%m-%d %H:%M:%S")
+            
+            results.append(log)
+        
+        return jsonify({"logs": results}), 200
+    
     except Exception as e:
-        return jsonify({"error": f"Failed to retrieve rate limits: {str(e)}"}), 500
+        return jsonify({"error": f"Error retrieving admin access logs: {str(e)}"}), 500
