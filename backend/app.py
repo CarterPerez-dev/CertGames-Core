@@ -14,7 +14,6 @@ from dotenv import load_dotenv
 import psutil
 from werkzeug.middleware.proxy_fix import ProxyFix
 from helpers.jwt_auth import init_jwt, jwt
-from routes.security.geo_db_updater import download_and_extract_db, start_scheduler
 import threading
 
 
@@ -55,7 +54,9 @@ from models.test import create_user, get_user_by_id, update_user_fields
 # Database
 from mongodb.database import db
 
-
+# Security
+from routes.security.geo_db_updater import download_and_extract_db, start_scheduler
+from routes.security.honey import honey_bp
 
 from helpers.global_rate_limiter import apply_global_rate_limiting, setup_rate_limit_headers
 from middleware.subscription_check import check_subscription_middleware

@@ -18,14 +18,15 @@ from default_scan_paths import DEFAULT_SCAN_PATHS
 from honeypot_routes import register_routes_with_blueprint
 from proxy_detector import proxy_detector
 from geo_db_updater import download_and_extract_db
+import geoip2.database
+import os
 
 # Create honeypot blueprint
 honeypot_bp = Blueprint('honeypot', __name__)
 
 
-ASN_DB_PATH = os.path.join("/path/to/geoip_db")
-COUNTRY_DB_PATH = os.path.join("/path/to/geoip_db")
-
+ASN_DB_PATH = os.path.join(os.environ.get('DB_DIRECTORY') 
+COUNTRY_DB_PATH = os.path.join(os.environ.get('DB_DIRECTORY')
 asn_reader = None
 country_reader = None
 

@@ -13,7 +13,6 @@ class ProxyDetector:
     def __init__(self, cache_dir=None):
         # Use environment variable with fallback
         self.cache_dir = cache_dir or os.environ.get('PROXY_CACHE_PATH') # .env variable for /pathtp/proxy_cache_path
-        self.cache_dir = cache_dir
         self.tor_exit_nodes = set()
         self.known_proxies = set()
         self.last_update = datetime.utcnow() - timedelta(days=1)  

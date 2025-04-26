@@ -40,7 +40,7 @@ def generate_question():
             return jsonify({"error": "Invalid difficulty"}), 400
 
         # Celery call
-        task_result = generate_grc_question_task.delay(category, difficulty)
+        task_result = generate_grc_question_task.delay(category, difficulty, user_id)
         question_data = task_result.get(timeout=120)
 
         return jsonify(question_data), 200
@@ -77,7 +77,7 @@ def stream_question():
 
         def generate():
             # Get the streaming generator
-            stream_gen = generate_grc_questions_stream(category, difficulty)
+            stream_gen = generate_grc_questions_stream(category, difficulty, user_id)
             for chunk in stream_gen:
                 yield chunk
 

@@ -2,7 +2,8 @@ import logging
 from API.AI import client
 from flask import Response  
 import re
-from helpers.ai_guardrails import apply_ai_guardrails, get_streaming_error_generator
+from helpers.ai_guard import apply_ai_guardrails, get_streaming_error_generator
+from ai_utils import get_current_user_id
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,8 @@ class Xploits:
         """
         logger.info("Initializing Xploits")
 
-    def generate_exploit_payload(self, vulnerability: str = "", evasion_technique: str = "", stream: bool = False):
+    def generate_exploit_payload(self, vulnerability: str = "", evasion_technique: str = "", stream: bool = False, user_id = None):
+
         """
         Generate a payload for a given vulnerability and/or evasion technique.
 

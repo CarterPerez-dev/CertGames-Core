@@ -31,8 +31,8 @@ def generate_payload_endpoint():
 
     try:
         if stream_requested:
-            def generate():
-                for chunk in xploit.generate_exploit_payload(vulnerability, evasion_technique, stream=True):
+            def generate():            
+                for chunk in xploit.generate_exploit_payload(vulnerability, evasion_technique, stream=True, user_id=user_id):
                     yield chunk
 
             return Response(generate(), mimetype='text/plain')

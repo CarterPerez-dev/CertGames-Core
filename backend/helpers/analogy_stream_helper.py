@@ -2,12 +2,13 @@
 import logging
 from API.AI import client
 import json
-from helpers.ai_guardrails import apply_ai_guardrails, get_streaming_error_generator
+from helpers.ai_guard import apply_ai_guardrails, get_streaming_error_generator
+from ai_utils import get_current_user_id
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-def generate_analogy_stream(analogy_type, concept1, concept2=None, concept3=None, category="real-world"):
+def generate_analogy_stream(analogy_type, concept1, concept2=None, concept3=None, category="real-world", user_id=None):
     """
     Generate an analogy and stream the results token by token.
     Returns a generator that yields partial text chunks as they're generated.

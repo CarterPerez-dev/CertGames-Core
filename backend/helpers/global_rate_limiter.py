@@ -11,6 +11,8 @@ from dotenv import load_dotenv
 from helpers.jwt_auth import jwt_optional_wrapper
 from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request\
 from flask import request
+import random
+
 
 # Ensure environment variables are loaded
 load_dotenv()

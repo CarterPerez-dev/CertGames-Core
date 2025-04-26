@@ -3,11 +3,12 @@ import json
 import logging
 import re
 from API.AI import client
-from helpers.ai_guardrails import apply_ai_guardrails, get_streaming_error_generator
+from helpers.ai_guard import apply_ai_guardrails, get_streaming_error_generator
+from ai_utils import get_current_user_id
 
 logger = logging.getLogger(__name__)
 
-def generate_grc_question(category, difficulty):
+def generate_grc_question(category, difficulty, user_id=None):
     """
     Generates a GRC-related multiple-choice question in JSON format.
     The model returns a JSON object with keys:
@@ -97,7 +98,7 @@ Now generate the JSON object following these instructions.
         logger.error(f"Error generating GRC question: {str(e)}")
         raise
 
-def generate_grc_questions_stream(category, difficulty):
+def generate_grc_questions_stream(category, difficulty, user_id=None):
     """
     Streams the GRC question JSON response chunk by chunk.
     Instead of returning a complete JSON object, it returns a generator

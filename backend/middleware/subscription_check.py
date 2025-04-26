@@ -1,4 +1,4 @@
-import functools
+from functools import wraps
 from flask import session, jsonify, request, redirect, current_app
 from mongodb.database import db
 from models.test import get_user_by_id

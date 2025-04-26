@@ -39,7 +39,7 @@ def stream_scenario_endpoint():
         return jsonify({"error": "threat_intensity must be an integer"}), 400
 
     def generate_chunks():
-        scenario_generator = generate_scenario(industry, attack_type, skill_level, threat_intensity)
+         scenario_generator = generate_scenario(industry, attack_type, skill_level, threat_intensity, user_id)
         for chunk in scenario_generator:
             yield chunk
 
@@ -65,7 +65,7 @@ def stream_questions_endpoint():
 
     def generate_json_chunks():
 
-        questions = generate_interactive_questions(scenario_text)
+        questions = generate_interactive_questions(scenario_text, user_id=user_id)
         if isinstance(questions, list):
             logger.debug("Questions are a list. Serializing to JSON.")
             yield json.dumps(questions)

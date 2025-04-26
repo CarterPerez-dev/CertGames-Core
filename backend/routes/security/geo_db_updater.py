@@ -11,9 +11,8 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-
-ASN_DB_PATH = os.path.join("/path/to/geoip_db", "GeoLite2-ASN.mmdb")
-COUNTRY_DB_PATH = os.path.join("/path/to/geoip_db", "GeoLite2-Country.mmdb")
+ASN_DB_PATH = os.path.join(os.environ.get('DB_DIRECTORY')
+COUNTRY_DB_PATH = os.path.join(os.environ.get('DB_DIRECTORY')
 
 def download_and_extract_db():
     """Download and extract the latest MaxMind GeoLite2 databases"""

@@ -2,11 +2,12 @@ import json
 import logging
 import re
 from API.AI import client  
-from helpers.ai_guardrails import apply_ai_guardrails, get_streaming_error_generator
+from helpers.ai_guard import apply_ai_guardrails, get_streaming_error_generator
+from ai_utils import get_current_user_id
 
 logger = logging.getLogger(__name__)
 
-def generate_scenario(industry, attack_type, skill_level, threat_intensity):
+def generate_scenario(industry, attack_type, skill_level, threat_intensity, user_id=None):
     """
     Streams a scenario chunk-by-chunk from the LLM.
     """
@@ -126,7 +127,7 @@ def extract_mitigation(scenario_text):
     mitigations = [step[1] for step in mitigation_match]
     return mitigations if mitigations else ["Mitigation steps not found."]
 
-def generate_interactive_questions(scenario_text, retry_count=0):
+def generate_interactive_questions(scenario_text, retry_count=0, user_id=None):
     """
     Generate EXACTLY THREE advanced multiple-choice questions in JSON array form.
     We stream partial chunks as they arrive, but also accumulate them. 

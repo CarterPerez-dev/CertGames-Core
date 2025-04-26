@@ -81,7 +81,7 @@ def stream_analogy():
 
     try:
         def generate():
-            stream_gen = generate_analogy_stream(analogy_type, concept1, concept2, concept3, category)
+            stream_gen = generate_analogy_stream(analogy_type, concept1, concept2, concept3, category, user_id)
             for chunk in stream_gen:
                 yield chunk
 
