@@ -37,7 +37,7 @@ const SupportTab = () => {
       if (threadStatusFilter) {
         params.set("status", threadStatusFilter);
       }
-      const res = await fetch(`/api/cracked/supportThreads?${params.toString()}`, {
+      const res = await adminFetch(`/api/cracked/supportThreads?${params.toString()}`, {
         credentials: "include"
       });
       const data = await res.json();
@@ -129,7 +129,7 @@ const SupportTab = () => {
 
   const handleViewThread = async (threadId) => {
     try {
-      const res = await fetch(`/api/cracked/supportThreads/${threadId}`, {
+      const res = await adminFetch(`/api/cracked/supportThreads/${threadId}`, {
         credentials: "include"
       });
       const data = await res.json();
@@ -173,7 +173,7 @@ const SupportTab = () => {
         });
       }
 
-      const res = await fetch(`/api/cracked/supportThreads/${currentThread._id}/reply`, {
+      const res = await adminFetch(`/api/cracked/supportThreads/${currentThread._id}/reply`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -229,7 +229,7 @@ const SupportTab = () => {
     const resolution = window.prompt("Enter a resolution note:", "Issue resolved.");
     if (resolution === null) return;
     try {
-      const res = await fetch(`/api/cracked/supportThreads/${threadId}/close`, {
+      const res = await adminFetch(`/api/cracked/supportThreads/${threadId}/close`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -250,7 +250,7 @@ const SupportTab = () => {
   const handleClearClosedThreads = async () => {
     if (!window.confirm("Are you sure you want to permanently delete all closed threads?")) return;
     try {
-      const res = await fetch("/api/cracked/supportThreads/clear-closed", {
+      const res = await adminFetch("/api/cracked/supportThreads/clear-closed", {
         method: "DELETE",
         credentials: "include"
       });
@@ -276,7 +276,7 @@ const SupportTab = () => {
         userId: adminTargetUserId,
         initialMessage: adminInitialMsg
       };
-      const res = await fetch("/api/cracked/supportThreads/createFromAdmin", {
+      const res = await adminFetch("/api/cracked/supportThreads/createFromAdmin", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

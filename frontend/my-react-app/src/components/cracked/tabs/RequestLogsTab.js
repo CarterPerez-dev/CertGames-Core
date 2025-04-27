@@ -33,7 +33,7 @@ const RequestLogsTab = () => {
     setApiLogsError(null);
     try {
       const url = `/api/cracked/request-logs/api${appliedApiFilter ? `?filter=${encodeURIComponent(appliedApiFilter)}` : ''}`;
-      const res = await fetch(url, { credentials: "include" });
+      const res = await adminFetch(url, { credentials: "include" });
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch API logs");
@@ -52,7 +52,7 @@ const RequestLogsTab = () => {
     setNginxLogsError(null);
     try {
       const url = `/api/cracked/request-logs/nginx${appliedNginxFilter ? `?filter=${encodeURIComponent(appliedNginxFilter)}` : ''}${refresh ? '&refresh=true' : ''}`;
-      const res = await fetch(url, { credentials: "include" });
+      const res = await adminFetch(url, { credentials: "include" });
       
       // Check content type first
       const contentType = res.headers.get("content-type");

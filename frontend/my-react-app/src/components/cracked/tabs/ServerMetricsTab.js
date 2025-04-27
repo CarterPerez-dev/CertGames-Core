@@ -36,7 +36,7 @@ const ServerMetricsTab = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/cracked/server-metrics", {
+      const res = await adminFetch("/api/cracked/server-metrics", {
         credentials: "include"
       });
       const data = await res.json();

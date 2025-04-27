@@ -34,7 +34,7 @@ const RateLimitsTab = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/cracked/rate-limits", {
+      const res = await adminFetch("/api/cracked/rate-limits", {
         credentials: "include"
       });
       const data = await res.json();

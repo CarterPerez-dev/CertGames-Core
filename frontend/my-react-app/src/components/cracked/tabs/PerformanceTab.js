@@ -68,23 +68,23 @@ const PerformanceTab = () => {
     setPerfLoading(true);
     setPerfError(null);
     try {
-      // Fetch main performance metrics
-      const res = await fetch("/api/cracked/performance", { credentials: "include" });
+      // Fetch main performance metrics - using adminFetch
+      const res = await adminFetch("/api/cracked/performance");
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch performance metrics");
       }
       setPerformanceData(data);
 
-      // Fetch web vitals data
-      const vitalsRes = await fetch("/api/cracked/web-vitals", { credentials: "include" });
+      // Fetch web vitals data - using adminFetch
+      const vitalsRes = await adminFetch("/api/cracked/web-vitals");
       const vitalsData = await vitalsRes.json();
       if (vitalsRes.ok) {
         setWebVitals(vitalsData);
       }
 
-      // Fetch recent errors
-      const errorRes = await fetch("/api/cracked/recent-errors", { credentials: "include" });
+      // Fetch recent errors - using adminFetch
+      const errorRes = await adminFetch("/api/cracked/recent-errors");
       const errorData = await errorRes.json();
       if (errorRes.ok) {
         setErrorLogs(errorData.errors || []);
