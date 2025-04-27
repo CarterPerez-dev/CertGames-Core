@@ -2073,17 +2073,21 @@ def admin_rate_limits():
 
 @cracked_bp.route('/csrf-token', methods=['GET'])
 def get_csrf_token():
-    """Generate and return a CSRF token"""
-    # Import the token generation function
-    from middleware.csrf_protection import generate_csrf_token
-    
-    # Generate a token and save it in the session
+    """
+    Generate and return a CSRF token.
+    """
+
+    if not require_cracked_admin():
+         return jsonify({"error": "Admin authentication required to get CSRF token"}), 401
+
     token = generate_csrf_token()
-    
-    return jsonify({"csrf_token": token}), 200
 
+    session['csrf_token'] = token
 
-# Add to backend/routes/admin/cracked_admin.py
+    response = make_response(jsonify({"csrf_token": token}), 200)
+
+    return response
+
 
 @cracked_bp.route('/admin-access-logs', methods=['GET'])
 def admin_access_logs():
