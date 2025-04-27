@@ -2067,36 +2067,20 @@ def admin_rate_limits():
             "rate_limits": processed_limits,
             "endpoint_summary": endpoint_summary
         }), 200
-
-
+    except Exception as e:
+        return jsonify({"error": f"Failed to retrieve rate limits: {str(e)}"}), 500
 
 
 @cracked_bp.route('/csrf-token', methods=['GET'])
 def get_csrf_token():
-    """
-    Generate and return a CSRF token.
-    """
-    try:
-        # Check if admin is authenticated
-        if not require_cracked_admin():
-            return jsonify({"error": "Admin authentication required to get CSRF token"}), 401
-        
-        # Generate a new CSRF token
-        token = generate_csrf_token()
-        
-        # Store token in session
-        session['csrf_token'] = token
-        
-        # Create and return response
-        return jsonify({"csrf_token": token}), 200
+    """Generate and return a CSRF token"""
+    # Import the token generation function
+    from middleware.csrf_protection import generate_csrf_token
     
-    except Exception as e:
-        # Log the error
-        current_app.logger.error(f"Error generating CSRF token: {str(e)}")
-        
-        # Return error response
-        return jsonify({"error": "Failed to generate CSRF token"}), 500
-        
+    # Generate a token and save it in the session
+    token = generate_csrf_token()
+    
+    return jsonify({"csrf_token": token}), 200
         
 @cracked_bp.route('/admin-access-logs', methods=['GET'])
 def admin_access_logs():
