@@ -39,9 +39,7 @@ const UsersTab = () => {
         page: userPage.toString(),
         limit: userLimit.toString()
       });
-      const res = await fetch(`/api/cracked/users?${params.toString()}`, {
-        credentials: "include"
-      });
+      const res = await adminFetch(`/api/cracked/users?${params.toString()}`);
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch users");
@@ -78,9 +76,8 @@ const UsersTab = () => {
   const handleUserUpdateSubmit = async () => {
     if (!editUserId) return;
     try {
-      const res = await fetch(`/api/cracked/users/${editUserId}`, {
+      const res = await adminFetch(`/api/cracked/users/${editUserId}`, {
         method: "PUT",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editUserData)
       });
@@ -117,9 +114,8 @@ const UsersTab = () => {
     if (deleteConfirmStep === 2) {
       // Proceed with deletion
       try {
-        const res = await fetch(`/api/cracked/users/${deleteUserId}`, {
-          method: "DELETE",
-          credentials: "include"
+        const res = await adminFetch(`/api/cracked/users/${deleteUserId}`, {
+          method: "DELETE"
         });
         const data = await res.json();
         if (!res.ok) {
@@ -167,9 +163,8 @@ const UsersTab = () => {
     
     // Proceed with the action
     try {
-      const res = await fetch(`/api/cracked/users/${toggleSubscriptionId}/toggle-subscription`, {
+      const res = await adminFetch(`/api/cracked/users/${toggleSubscriptionId}/toggle-subscription`, {
         method: "POST",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           active: toggleSubscriptionAction === "activate" 
@@ -202,9 +197,8 @@ const UsersTab = () => {
   const handleResetPassword = async (userId) => {
     if (!window.confirm("Reset this user's password to a random token?")) return;
     try {
-      const res = await fetch(`/api/cracked/users/${userId}/reset-password`, {
+      const res = await adminFetch(`/api/cracked/users/${userId}/reset-password`, {
         method: "POST",
-        credentials: "include",
         headers: { "Content-Type": "application/json" }
       });
       const data = await res.json();
