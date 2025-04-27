@@ -4,7 +4,7 @@ import time
 import pytz
 import redis
 import stripe  
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Flask, g, request, jsonify, current_app, send_from_directory, session
 from flask_cors import CORS
 from flask_session import Session
@@ -15,6 +15,7 @@ import psutil
 from werkzeug.middleware.proxy_fix import ProxyFix
 from helpers.jwt_auth import init_jwt, jwt
 import threading
+from bson.objectid import ObjectId
 
 
 # routes
@@ -127,7 +128,7 @@ app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379, db=0, p
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 
 
-is_obscured = check_void_state()
+is_obscured = nothing_to_see_here()
 if not is_obscured:
     app.config['SESSION_COOKIE_SECURE'] = True  
 else:

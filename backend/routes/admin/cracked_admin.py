@@ -17,12 +17,14 @@ import re
 import subprocess
 from collections import deque
 import threading
-import time
 from mongodb.database import db
 import psutil
 import socket
+from routes.security.unhackable import secure_admin_login, sanitize_admin_key, sanitize_role
+
 cracked_bp = Blueprint('cracked', __name__, url_prefix='/cracked')
 ADMIN_PASS = os.getenv('CRACKED_ADMIN_PASSWORD', 'authkey')
+
 from middleware.csrf_protection import generate_csrf_token
 
 load_dotenv()

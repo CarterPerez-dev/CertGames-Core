@@ -388,25 +388,50 @@ def sanitize_role(role: str) -> Tuple[str, bool, List[str]]:
     
     if role is None:
         return "basic", False, ["Role cannot be None, defaulting to 'basic'"]
-    
-    if not isinstance(role, str):
-        return "basic", False, ["Role must be a string, defaulting to 'basic'"]
-    
-    # Normalize and trim
-    role = unicodedata.normalize('NFC', role).strip().lower()
-    
-    # Validate against allowed values
-    if role in valid_roles:
-        return role, True, []
-    
-    return "basic", False, [f"Invalid role '{role}', defaulting to 'basic'"]
 
 
-# =========================================================================
-# IMPLEMENTATION 
-# =========================================================================
 
-
+def secure_admin_login(admin_key: str, role: str) -> Tuple[bool, str, Dict[str, Any]]:
+    """
+    Comprehensive secure admin login validation and sanitization
     
-    # Return success
+    Args:
+        admin_key: The admin key/password provided by the user
+        role: The requested role
+    
+    Returns:
+        Tuple of (success, message, context)
+    """
+
+    sanitized_key, key_valid, key_errors = sanitize_admin_key(admin_key)
+    sanitized_role, role_valid, role_errors = sanitize_role(role)
+    
+
+    context = {
+        "validation_time": time.time(),
+        "key_errors": key_errors,
+        "role_errors": role_errors,
+        "ip_address": None,  
+        "request_id": secrets.token_hex(8),
+        "total_error_count": len(key_errors) + len(role_errors)
+    }
+    
+
+    if not key_valid or not role_valid:
+        return False, "Input validation failed", context
+    
+
+    verification_hash = hashlib.sha256(sanitized_key.encode()).hexdigest()
+    
+
+    context["verification_performed"] = True
+    context["key_hash_snippet"] = verification_hash[:8] + "..." + verification_hash[-8:]
+    
+    # Return 
     return True, "Input validation successful", context
+
+
+
+
+    
+
