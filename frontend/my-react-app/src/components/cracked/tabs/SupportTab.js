@@ -5,6 +5,7 @@ import {
   FaHeadset, FaSearch, FaTimes, FaCommentDots, 
   FaPaperPlane, FaPlus, FaSpinner, FaExclamationTriangle, FaTrash
 } from "react-icons/fa";
+import { adminFetch } from '../csrfHelper';
 
 // We keep this as a top-level variable to maintain socket connection across component instances
 let adminSocket = null;

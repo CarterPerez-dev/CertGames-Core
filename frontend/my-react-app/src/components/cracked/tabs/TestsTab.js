@@ -4,6 +4,7 @@ import {
   FaClipboardList, FaSearch, FaTrash, FaPlus, FaEdit,
   FaSpinner, FaExclamationTriangle, FaSave, FaTimes
 } from "react-icons/fa";
+import { adminFetch } from '../csrfHelper';
 
 const TestsTab = () => {
   const [tests, setTests] = useState([]);

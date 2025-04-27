@@ -9,6 +9,7 @@ import {
 import { SiMongodb, SiSendgrid, SiCloudflare, SiGooglecloud, SiGoogleadsense, 
   SiAppstore, SiOpenai, SiStripe, SiOracle, SiExpo, SiCanva, SiChatbot, 
   SiGnometerminal, SiX, SiClaude, SiChainguard, SiGmail } from "react-icons/si";
+import { adminFetch } from '../csrfHelper';
 
 const ToolsTab = () => {
   // Tool categories with their respective tools

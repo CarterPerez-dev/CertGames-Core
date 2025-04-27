@@ -5,6 +5,7 @@ import {
   FaSpinner, FaExclamationTriangle, FaToggleOn, FaToggleOff, FaCircle,
   FaApple, FaGoogle, FaFacebook, FaWindowMaximize, FaMobileAlt, FaInfo
 } from "react-icons/fa";
+import { adminFetch } from '../csrfHelper';
 
 const UsersTab = () => {
   const [users, setUsers] = useState([]);

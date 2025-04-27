@@ -5,6 +5,7 @@ import {
   FaSpinner, FaExclamationTriangle, FaEye, FaTimes
 } from "react-icons/fa";
 import FormattedQuestion from "../../FormattedQuestion";
+import { adminFetch } from '../csrfHelper';
 
 const DailyTab = () => {
   const [dailyList, setDailyList] = useState([]);
