@@ -27,7 +27,7 @@ const RevenueTab = () => {
     setError(null);
     try {
       // Fetch revenue overview
-      const overviewRes = await fetch("/api/cracked/revenue/overview", { credentials: "include" });
+      const overviewRes = await adminFetch("/api/cracked/revenue/overview");
       if (!overviewRes.ok) {
         const errData = await overviewRes.json();
         throw new Error(errData.error || "Failed to fetch revenue overview");
@@ -36,7 +36,7 @@ const RevenueTab = () => {
       setRevenueOverview(overviewData);
 
       // Fetch signup metrics
-      const signupsRes = await fetch("/api/cracked/revenue/signups", { credentials: "include" });
+      const signupsRes = await adminFetch("/api/cracked/revenue/signups");
       if (!signupsRes.ok) {
         const errData = await signupsRes.json();
         throw new Error(errData.error || "Failed to fetch signup metrics");
@@ -45,7 +45,7 @@ const RevenueTab = () => {
       setSignupMetrics(signupsData);
 
       // Fetch cancellation metrics
-      const cancellationRes = await fetch("/api/cracked/revenue/cancellation", { credentials: "include" });
+      const cancellationRes = await adminFetch("/api/cracked/revenue/cancellation");
       if (!cancellationRes.ok) {
         const errData = await cancellationRes.json();
         throw new Error(errData.error || "Failed to fetch cancellation metrics");
@@ -54,7 +54,7 @@ const RevenueTab = () => {
       setCancellationMetrics(cancellationData);
 
       // Fetch recent signups
-      const recentRes = await fetch("/api/cracked/revenue/recent-signups", { credentials: "include" });
+      const recentRes = await adminFetch("/api/cracked/revenue/recent-signups");
       if (!recentRes.ok) {
         const errData = await recentRes.json();
         throw new Error(errData.error || "Failed to fetch recent signups");
@@ -73,7 +73,7 @@ const RevenueTab = () => {
     
     // Refresh recent signups every 60 seconds
     const intervalId = setInterval(() => {
-      fetch("/api/cracked/revenue/recent-signups", { credentials: "include" })
+      adminFetch("/api/cracked/revenue/recent-signups")
         .then(res => {
           if (res.ok) return res.json();
           return null;

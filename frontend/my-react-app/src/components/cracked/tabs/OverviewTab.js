@@ -55,7 +55,7 @@ const OverviewTab = () => {
     setLoading(prev => ({ ...prev, overview: true }));
     setError(null);
     try {
-      const res = await fetch("/api/cracked/dashboard", { credentials: "include" });
+      const res = await adminFetch("/api/cracked/dashboard");
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch dashboard");
@@ -72,7 +72,7 @@ const OverviewTab = () => {
   const fetchPerformanceData = useCallback(async () => {
     setLoading(prev => ({ ...prev, performance: true }));
     try {
-      const res = await fetch("/api/cracked/performance", { credentials: "include" });
+      const res = await adminFetch("/api/cracked/performance");
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch performance metrics");
@@ -89,7 +89,7 @@ const OverviewTab = () => {
   const fetchHealthData = useCallback(async () => {
     setLoading(prev => ({ ...prev, health: true }));
     try {
-      const res = await fetch("/api/cracked/api-health-check", { credentials: "include" });
+      const res = await adminFetch("/api/cracked/api-health-check");
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch health check");
@@ -106,7 +106,7 @@ const OverviewTab = () => {
   const fetchRevenueData = useCallback(async () => {
     setLoading(prev => ({ ...prev, revenue: true }));
     try {
-      const res = await fetch("/api/cracked/revenue/overview", { credentials: "include" });
+      const res = await adminFetch("/api/cracked/revenue/overview");
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch revenue data");
@@ -123,7 +123,7 @@ const OverviewTab = () => {
   const fetchActivityData = useCallback(async () => {
     setLoading(prev => ({ ...prev, activity: true }));
     try {
-      const res = await fetch("/api/cracked/activity-logs", { credentials: "include" });
+      const res = await adminFetch("/api/cracked/activity-logs");
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch activity logs");
