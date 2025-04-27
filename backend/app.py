@@ -224,7 +224,97 @@ def log_api_request():
       
         if not session_ip:
             session['admin_ip'] = current_ip
-            
+
+
+@app.before_request
+def track_unique_requests():
+    """Track unique user requests with a 5-minute cooldown period"""
+
+    if request.path.startswith(('/static/', '/health', '/favicon.ico')):
+        return
+    
+    # Get timestamps
+    now = datetime.utcnow()
+    five_minutes_ago = now - timedelta(minutes=5)
+    
+    # Extract user identification information
+    username = None
+    user_id = None
+    session_id = None
+    x_user_id = None
+    ip_address = request.remote_addr
+    
+
+    if 'userId' in session:
+        user_id = session.get('userId')
+        # Try to find username from user_id
+        user = db.mainusers.find_one({"_id": ObjectId(user_id)})
+        if user:
+            username = user.get("username")
+    
+    # Try to get x-user-id header if no session user_id
+    if not user_id:
+        x_user_id = request.headers.get('X-User-Id')
+        if x_user_id:
+            # Try to find username from x_user_id
+            try:
+                user = db.mainusers.find_one({"_id": ObjectId(x_user_id)})
+                if user:
+                    username = user.get("username")
+            except:
+                pass
+    
+    # Get session ID if available
+    if session and hasattr(session, 'sid'):
+        session_id = session.sid
+    
+    # Determine identifier type 
+    identifier_type = "ipOnly"
+    identifier_value = ip_address
+    
+    if username:
+        identifier_type = "username"
+        identifier_value = username
+    elif user_id:
+        identifier_type = "userId"
+        identifier_value = user_id
+    elif x_user_id:
+        identifier_type = "xUserId"
+        identifier_value = x_user_id
+    elif session_id:
+        identifier_type = "sessionId"
+        identifier_value = session_id
+    
+    # Generate a unique request key
+    request_key = f"{identifier_value}_{request.path}"
+    
+    # Check if this request hasn't been seen in the last 5 minutes
+    existing_request = db.uniqueUserRequests.find_one({
+        "requestKey": request_key,
+        "timestamp": {"$gte": five_minutes_ago}
+    })
+    
+    if not existing_request:
+        # Get geolocation info if available
+        geo_info = {}
+        try:
+            from routes.security.honeypot import extract_asn_from_ip
+            geo_info = extract_asn_from_ip(ip_address)
+        except:
+            geo_info = {"asn": "Unknown", "org": "Unknown", "country": "Unknown"}
+        
+        # Store this request
+        db.uniqueUserRequests.insert_one({
+            "requestKey": request_key,
+            "path": request.path,
+            "method": request.method,
+            "timestamp": now,
+            "identifierType": identifier_type,
+            "identifierValue": identifier_value,
+            "ipAddress": ip_address,
+            "geoInfo": geo_info,
+            "userAgent": request.headers.get('User-Agent', 'Unknown')
+        })            
 
 @app.before_request
 def check_global_rate_limits():

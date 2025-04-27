@@ -2076,19 +2076,28 @@ def get_csrf_token():
     """
     Generate and return a CSRF token.
     """
-
-    if not require_cracked_admin():
-         return jsonify({"error": "Admin authentication required to get CSRF token"}), 401
-
-    token = generate_csrf_token()
-
-    session['csrf_token'] = token
-
-    response = make_response(jsonify({"csrf_token": token}), 200)
-
-    return response
-
-
+    try:
+        # Check if admin is authenticated
+        if not require_cracked_admin():
+            return jsonify({"error": "Admin authentication required to get CSRF token"}), 401
+        
+        # Generate a new CSRF token
+        token = generate_csrf_token()
+        
+        # Store token in session
+        session['csrf_token'] = token
+        
+        # Create and return response
+        return jsonify({"csrf_token": token}), 200
+    
+    except Exception as e:
+        # Log the error
+        current_app.logger.error(f"Error generating CSRF token: {str(e)}")
+        
+        # Return error response
+        return jsonify({"error": "Failed to generate CSRF token"}), 500
+        
+        
 @cracked_bp.route('/admin-access-logs', methods=['GET'])
 def admin_access_logs():
     """Retrieve admin access logs for the admin dashboard"""
@@ -2120,3 +2129,55 @@ def admin_access_logs():
     
     except Exception as e:
         return jsonify({"error": f"Error retrieving admin access logs: {str(e)}"}), 500
+
+
+
+@cracked_bp.route('/user-requests', methods=['GET'])
+def admin_user_requests():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Get user requests from the last week
+        one_week_ago = datetime.utcnow() - timedelta(days=7)
+        
+        # Retrieve unique requests with various identifiers
+        requests = list(db.uniqueUserRequests.find({
+            "timestamp": {"$gte": one_week_ago}
+        }).sort("timestamp", -1))
+        
+        # Process the requests for display
+        processed_requests = []
+        est_tz = pytz.timezone('America/New_York')
+        
+        for req in requests:
+            # Convert ObjectId to string
+            req['_id'] = str(req['_id'])
+            
+            # Format timestamp to EST
+            if isinstance(req.get('timestamp'), datetime):
+                req['timestamp'] = req['timestamp'].astimezone(est_tz).isoformat()
+            
+            processed_requests.append(req)
+        
+        # Group by identifier type
+        grouped_requests = {
+            "username": [],
+            "userId": [],
+            "sessionId": [],
+            "xUserId": [],
+            "ipOnly": []
+        }
+        
+        for req in processed_requests:
+            identifier_type = req.get('identifierType', 'ipOnly')
+            if identifier_type in grouped_requests:
+                grouped_requests[identifier_type].append(req)
+        
+        return jsonify({
+            "requests": processed_requests,
+            "grouped": grouped_requests
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": f"Failed to retrieve user requests: {str(e)}"}), 500
