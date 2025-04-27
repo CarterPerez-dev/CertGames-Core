@@ -16,14 +16,15 @@ import "./styles/tabstyles/HealthCheckTab.css";
 import "./styles/tabstyles/RevenueTab.css"; 
 import "./styles/tabstyles/RateLimitsTab.css";
 import "./styles/tabstyles/ServerMetricsTab.css"; 
-import "./styles/tabstyles/ToolsTab.css"; // Add import for Tools Tab CSS
+import "./styles/tabstyles/ToolsTab.css"; 
+import "./styles/tabstyles/LogIp.css";
 
 import { 
   FaHome, FaUsers, FaClipboardList, FaCalendarDay, FaHeadset, 
   FaChartLine, FaHistory, FaDatabase, FaTerminal, FaHeartbeat, 
   FaEnvelope, FaChevronRight, FaChevronDown, FaBars, FaTimes, 
   FaSignOutAlt, FaMoneyBillWave, FaChessKnight, FaSpider, 
-  FaHatWizard, FaEye, FaLinux, FaFingerprint, FaTools, FaDragon, FaFighterJet
+  FaHatWizard, FaEye, FaLinux, FaFingerprint, FaTools, FaDragon, FaFighterJet, FaGlobe
 } from "react-icons/fa";
 
 // Import tab components
@@ -41,7 +42,9 @@ import HealthChecksTab from "./tabs/HealthChecksTab";
 import RevenueTab from "./tabs/RevenueTab"; 
 import RateLimitsTab from "./tabs/RateLimitsTab";
 import ServerMetricsTab from "./tabs/ServerMetricsTab";
-import ToolsTab from "./tabs/ToolsTab"; // Import the Tools Tab component
+import ToolsTab from "./tabs/ToolsTab"; 
+import LogIpTab from "./tabs/LogIp";
+
 
 function CrackedAdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -88,8 +91,10 @@ function CrackedAdminDashboard() {
       case 'healthChecks': return <HealthChecksTab />;
       case 'serverMetrics': return <ServerMetricsTab />;
       case 'rateLimits': return <RateLimitsTab />;
-      case 'tools': return <ToolsTab />; // Add case for Tools tab
+      case 'tools': return <ToolsTab />; 
+      case 'logIp': return <LogIpTab />;
       default: return <OverviewTab />;
+      
     }
   };
 
@@ -196,6 +201,12 @@ function CrackedAdminDashboard() {
                 <span>Server Metrics</span>
               </button>
             </li>
+            <li className={activeTab === "logIp" ? "active" : ""}>
+              <button onClick={() => switchTab("logIp")}>
+                <FaGlobe />
+                <span>User Requests</span>
+              </button>
+            </li>                        
             <li className={activeTab === "rateLimits" ? "active" : ""}>
               <button onClick={() => switchTab("rateLimits")}>
                 <FaFingerprint />
@@ -301,6 +312,11 @@ function CrackedAdminDashboard() {
                 <FaLinux /> Server Metrics
               </button>
             </li>
+            <li>
+              <button onClick={() => switchTab("logIp")}>
+                <FaGlobe /> User Requests
+              </button>
+            </li>             
             <li>
               <button onClick={() => switchTab("rateLimits")}>
                 <FaFingerprint /> Rate Limits

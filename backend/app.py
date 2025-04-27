@@ -61,6 +61,9 @@ from middleware.csrf_protection import generate_csrf_token
 from helpers.global_rate_limiter import apply_global_rate_limiting, setup_rate_limit_headers
 from middleware.subscription_check import check_subscription_middleware
 
+# Honey Pots
+from routes.security.honeypot_pages import honeypot_pages_bp
+
 
 load_dotenv()
 # You aint gettin shii
@@ -374,6 +377,10 @@ app.register_blueprint(threat_hunter_bp, url_prefix='/threat-hunter')
 
 # Security
 app.register_blueprint(honeypot_bp, url_prefix='/honeypot')
+
+# Honey pot pages
+app.register_blueprint(honeypot_pages_bp)
+
 
 
 # AASA

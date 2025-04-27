@@ -22,4 +22,5 @@ dailyQuestions_collection = db.dailyQuestions
 dailyAnswers_collection = db.dailyAnswers
 supportThreads_collection = db.supportThreads
 auditLogs_collection = db.auditLogs
+honeypot_interactions = db.get_collection("honeypot_interactions")
 
