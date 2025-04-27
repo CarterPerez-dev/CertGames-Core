@@ -4,6 +4,7 @@ import {
   FaClipboardList, FaSync, FaSpinner, FaExclamationTriangle,
   FaFilter, FaServer, FaNetworkWired, FaTimes, FaSearch
 } from "react-icons/fa";
+import { adminFetch } from '../csrfHelper';
 
 const RequestLogsTab = () => {
   // State for API logs

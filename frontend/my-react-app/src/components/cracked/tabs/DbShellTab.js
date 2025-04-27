@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {
   FaTerminal, FaSpinner, FaExclamationTriangle
 } from "react-icons/fa";
+import { adminFetch } from '../csrfHelper';
 
 const DbShellTab = () => {
   const [dbShellCollection, setDbShellCollection] = useState("");
@@ -22,9 +23,8 @@ const DbShellTab = () => {
         filterText: dbShellFilter,
         limit: dbShellLimit
       };
-      const res = await fetch("/api/cracked/db-shell/read", {
+      const res = await adminFetch("/api/cracked/db-shell/read", {
         method: "POST",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
       });

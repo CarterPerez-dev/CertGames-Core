@@ -9,6 +9,7 @@ import {
   Tooltip, Legend, ResponsiveContainer, BarChart, Bar,
   LineChart, Line, PieChart, Pie, Cell, ScatterChart, Scatter
 } from "recharts";
+import { adminFetch } from '../csrfHelper';
 
 const PerformanceTab = () => {
   const [performanceData, setPerformanceData] = useState(null);

@@ -5,6 +5,7 @@ import {
   FaPaperPlane, FaPlus, FaTimes, FaSpinner, FaExclamationTriangle,
   FaTrash // Added for delete functionality
 } from "react-icons/fa";
+import { adminFetch } from '../csrfHelper';
 
 const NewsletterTab = () => {
   const [subscribers, setSubscribers] = useState([]);

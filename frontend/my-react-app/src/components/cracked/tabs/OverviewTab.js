@@ -10,6 +10,7 @@ import {
   AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from "recharts";
+import { adminFetch } from '../csrfHelper';
 
 const OverviewTab = () => {
   const [overviewData, setOverviewData] = useState(null);

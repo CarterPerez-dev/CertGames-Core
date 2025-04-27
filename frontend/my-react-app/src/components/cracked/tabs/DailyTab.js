@@ -27,7 +27,7 @@ const DailyTab = () => {
     setDailyLoading(true);
     setDailyError(null);
     try {
-      const res = await fetch("/api/cracked/daily", { credentials: "include" });
+      const res = await adminFetch("/api/cracked/daily");
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch daily PBQs");
@@ -54,9 +54,8 @@ const DailyTab = () => {
         options: newDaily.options,
         examTip: newDaily.examTip || "" // Include exam tip in the request
       };
-      const res = await fetch("/api/cracked/daily", {
+      const res = await adminFetch("/api/cracked/daily", {
         method: "POST",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
       });
@@ -83,9 +82,8 @@ const DailyTab = () => {
   const handleDeleteDaily = async (pbq) => {
     if (!window.confirm(`Delete daily PBQ: ${pbq.prompt}?`)) return;
     try {
-      const res = await fetch(`/api/cracked/daily/${pbq._id}`, {
-        method: "DELETE",
-        credentials: "include"
+      const res = await adminFetch(`/api/cracked/daily/${pbq._id}`, {
+        method: "DELETE"
       });
       const data = await res.json();
       if (!res.ok) {

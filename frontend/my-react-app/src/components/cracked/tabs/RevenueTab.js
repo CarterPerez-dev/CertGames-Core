@@ -9,6 +9,7 @@ import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, 
   Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell
 } from "recharts";
+import { adminFetch } from '../csrfHelper';
 
 const RevenueTab = () => {
   const [revenueOverview, setRevenueOverview] = useState(null);

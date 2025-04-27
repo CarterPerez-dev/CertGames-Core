@@ -8,6 +8,7 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, 
   Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell
 } from "recharts";
+import { adminFetch } from '../csrfHelper';
 
 const ServerMetricsTab = () => {
   const [metrics, setMetrics] = useState(null);

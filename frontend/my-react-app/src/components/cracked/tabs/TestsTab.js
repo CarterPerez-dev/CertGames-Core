@@ -30,9 +30,7 @@ const TestsTab = () => {
       if (testCategory) {
         params.set("category", testCategory);
       }
-      const res = await fetch(`/api/cracked/tests?${params.toString()}`, {
-        credentials: "include"
-      });
+      const res = await adminFetch(`/api/cracked/tests?${params.toString()}`);
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch tests");
@@ -57,9 +55,8 @@ const TestsTab = () => {
         testName: newTestData.testName,
         questions: []
       };
-      const res = await fetch("/api/cracked/tests", {
+      const res = await adminFetch("/api/cracked/tests", {
         method: "POST",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
       });
@@ -79,9 +76,8 @@ const TestsTab = () => {
   const handleDeleteTest = async (testObj) => {
     if (!window.confirm(`Delete test: ${testObj.testName}?`)) return;
     try {
-      const res = await fetch(`/api/cracked/tests/${testObj._id}`, {
-        method: "DELETE",
-        credentials: "include"
+      const res = await adminFetch(`/api/cracked/tests/${testObj._id}`, {
+        method: "DELETE"
       });
       const data = await res.json();
       if (!res.ok) {
@@ -106,9 +102,8 @@ const TestsTab = () => {
     if (!editingTestId) return;
     
     try {
-      const res = await fetch(`/api/cracked/tests/${editingTestId}/update-name`, {
+      const res = await adminFetch(`/api/cracked/tests/${editingTestId}/update-name`, {
         method: "PUT",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ testName: editingTestName })
       });

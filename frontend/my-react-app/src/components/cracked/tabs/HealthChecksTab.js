@@ -4,6 +4,7 @@ import {
   FaHeartbeat, FaDatabase, FaCheckCircle, FaSync,
   FaSpinner, FaExclamationTriangle, FaServer, FaBolt
 } from "react-icons/fa";
+import { adminFetch } from '../csrfHelper';
 
 const HealthChecksTab = () => {
   const [apiStatus, setApiStatus] = useState({
@@ -20,8 +21,7 @@ const HealthChecksTab = () => {
     const startTime = performance.now();
     
     try {
-      const res = await fetch("/api/cracked/api-health-check", { 
-        credentials: "include",
+      const res = await adminFetch("/api/cracked/api-health-check", { 
         // Cache-busting to ensure fresh results
         headers: { "Cache-Control": "no-cache" }
       });

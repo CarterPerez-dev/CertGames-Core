@@ -8,6 +8,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, 
   Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell
 } from "recharts";
+import { adminFetch } from '../csrfHelper';
 
 const RateLimitsTab = () => {
   const [rateLimits, setRateLimits] = useState(null);
