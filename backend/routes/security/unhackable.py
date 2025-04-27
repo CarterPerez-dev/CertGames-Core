@@ -385,9 +385,27 @@ def sanitize_role(role: str) -> Tuple[str, bool, List[str]]:
         Tuple of (sanitized_role, is_valid, error_messages)
     """
     valid_roles = {"basic", "supervisor", "superadmin"}
+    errors = []
     
     if role is None:
         return "basic", False, ["Role cannot be None, defaulting to 'basic'"]
+    
+    if not isinstance(role, str):
+        return "basic", False, ["Role must be a string, defaulting to 'basic'"]
+        
+    # Trim whitespace and convert to lowercase for case-insensitive comparison
+    sanitized_role = role.strip().lower()
+    
+    # Map any variant to the correct casing
+    if sanitized_role == "basic" or sanitized_role == "supervisor" or sanitized_role == "superadmin":
+        sanitized_role = sanitized_role  # Keep as is
+    else:
+        errors.append(f"Invalid role '{role}'. Must be one of: basic, supervisor, superadmin")
+        sanitized_role = "basic"  # Default to basic if invalid
+    
+    is_valid = len(errors) == 0
+    
+    return sanitized_role, is_valid, errors
 
 
 

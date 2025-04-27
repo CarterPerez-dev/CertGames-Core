@@ -20,7 +20,8 @@ import threading
 from mongodb.database import db
 import psutil
 import socket
-from routes.security.unhackable import secure_admin_login, sanitize_admin_key, sanitize_role
+import secrets
+from routes.security.unhackable import sanitize_admin_key, sanitize_role
 
 cracked_bp = Blueprint('cracked', __name__, url_prefix='/cracked')
 ADMIN_PASS = os.getenv('CRACKED_ADMIN_PASSWORD', 'authkey')
@@ -263,26 +264,19 @@ def cracked_admin_login():
             "error": f"Too many failed login attempts. Try again in {minutes_remaining} minutes."
         }), 429
     
-    # Apply comprehensive input validation and sanitization
-    validation_success, validation_message, validation_context = secure_admin_login(raw_admin_key, raw_role)
+    # Get sanitized inputs directly without using secure_admin_login
+    sanitized_key, key_valid, key_errors = sanitize_admin_key(raw_admin_key)
+    sanitized_role, role_valid, role_errors = sanitize_role(raw_role)
     
-    # Add IP to the validation context
-    validation_context['ip_address'] = client_ip
-    
-    # If validation failed, log it but continue with normal failed login flow
-    if not validation_success:
-        # Log validation failure with context but don't expose details to client
-        db.validationLogs.insert_one({
-            "timestamp": now,
-            "ip": client_ip,
-            "endpoint": "admin_login",
-            "success": False,
-            "context": validation_context
-        })
-    
-    # Get sanitized inputs
-    sanitized_key, _, _ = sanitize_admin_key(raw_admin_key)
-    sanitized_role, _, _ = sanitize_role(raw_role)
+    # Create validation context manually
+    validation_context = {
+        "validation_time": time.time(),
+        "key_errors": key_errors,
+        "role_errors": role_errors,
+        "ip_address": client_ip,
+        "request_id": secrets.token_hex(8),
+        "total_error_count": len(key_errors) + len(role_errors)
+    }
     
     # Not blocked, proceed with login check
     if sanitized_key and sanitized_key == ADMIN_PASS:
@@ -321,7 +315,7 @@ def cracked_admin_login():
                 block_until = now + timedelta(minutes=block_minutes)
                 
                 db.admin_login_attempts.update_one(
-                    {"ip": client_ip},
+                    {"_id": failed_attempts["_id"]},
                     {"$set": {
                         "attempts": attempts,
                         "lastAttempt": now,
@@ -346,7 +340,7 @@ def cracked_admin_login():
             else:
                 # Update attempts
                 db.admin_login_attempts.update_one(
-                    {"ip": client_ip},
+                    {"_id": failed_attempts["_id"]},
                     {"$set": {
                         "attempts": attempts,
                         "lastAttempt": now,
