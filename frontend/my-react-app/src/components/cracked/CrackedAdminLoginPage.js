@@ -8,6 +8,7 @@ import { adminFetch, setCsrfToken } from './csrfHelper';
 function CrackedAdminLoginPage() {
   const navigate = useNavigate();
 
+
   const [adminKey, setAdminKey] = useState("");
   const [role, setRole] = useState("basic");
   const [error, setError] = useState(null);
@@ -15,11 +16,11 @@ function CrackedAdminLoginPage() {
   const [oauthLoading, setOauthLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loginAttempts, setLoginAttempts] = useState(0);
-  const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const [showEasterEgg, setShowEasterEgg] = useState(false); 
 
   useEffect(() => {
-    // Easter egg - show funny message after 3 failed attempts
-    if (loginAttempts >= 3) {
+
+    if (loginAttempts >= 10) {
       setShowEasterEgg(true);
     }
   }, [loginAttempts]);
@@ -50,15 +51,19 @@ function CrackedAdminLoginPage() {
       const data = await response.json();
       if (!response.ok) {
         setLoginAttempts(prev => prev + 1);
-        setError(data.error || "Unable to log in");
+        
+
+        setError("NO, You're BANNED from Google, IP added to every blocklist EVER, and EXACT location is LOGGED 💀");
+        
+
+        console.debug("Actual error:", data.error);
       } else {
-        // On success, navigate to the admin dashboard
         navigate('/cracked/dashboard');
       }
     } catch (err) {
       console.error('Admin login error:', err);
       setLoginAttempts(prev => prev + 1);
-      setError('Network error or server unavailable');
+      setError('Connection error. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -101,7 +106,7 @@ function CrackedAdminLoginPage() {
 
           {showEasterEgg && (
             <div className="admin-easter-egg">
-              <p>👾 Nice try! But this isn't where you upload SQL injections...</p>
+              <p>🤮 You’re out here “hacking” like a brain-dead troll humping a router in a Wi-Fi-less void. Your dreams are in witness protection, hiding from your sorry ass. Give up, you monumental clusterfuck, before you crash the internet out of sheer stupidity!</p>
               <p>Maybe try "hunter2" as the password? Everyone knows that works!</p>
             </div>
           )}

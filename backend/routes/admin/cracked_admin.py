@@ -227,10 +227,11 @@ def admin_api_logs():
 ##################################################################
 # ADMIN LOGIN / LOGOUT
 ##################################################################
+@cracked_bp.route('/login', methods=['POST'])
 def cracked_admin_login():
     data = request.json or {}
-    adminKey = data.get('adminKey', '')
-    input_role = data.get('role', 'basic')
+    raw_admin_key = data.get('adminKey', '')
+    raw_role = data.get('role', 'basic')
     
     # Get client identifier for rate limiting
     client_ip = request.remote_addr
@@ -260,14 +261,35 @@ def cracked_admin_login():
             "error": f"Too many failed login attempts. Try again in {minutes_remaining} minutes."
         }), 429
     
+    # Apply comprehensive input validation and sanitization
+    validation_success, validation_message, validation_context = secure_admin_login(raw_admin_key, raw_role)
+    
+    # Add IP to the validation context
+    validation_context['ip_address'] = client_ip
+    
+    # If validation failed, log it but continue with normal failed login flow
+    if not validation_success:
+        # Log validation failure with context but don't expose details to client
+        db.validationLogs.insert_one({
+            "timestamp": now,
+            "ip": client_ip,
+            "endpoint": "admin_login",
+            "success": False,
+            "context": validation_context
+        })
+    
+    # Get sanitized inputs
+    sanitized_key, _, _ = sanitize_admin_key(raw_admin_key)
+    sanitized_role, _, _ = sanitize_role(raw_role)
+    
     # Not blocked, proceed with login check
-    if adminKey == ADMIN_PASS:
+    if sanitized_key and sanitized_key == ADMIN_PASS:
         # Successful login, clear any failed attempts
         db.admin_login_attempts.delete_many({"ip": client_ip})
         
         # Set session
         session['cracked_admin_logged_in'] = True
-        session['cracked_admin_role'] = input_role
+        session['cracked_admin_role'] = sanitized_role
         session['admin_last_active'] = now.isoformat()
         session['admin_ip'] = client_ip
         
@@ -276,7 +298,8 @@ def cracked_admin_login():
             "timestamp": now,
             "ip": client_ip,
             "success": True,
-            "adminLogin": True
+            "adminLogin": True,
+            "role": sanitized_role
         })
         
         return jsonify({"message": "Authorization successful"}), 200
@@ -300,7 +323,8 @@ def cracked_admin_login():
                     {"$set": {
                         "attempts": attempts,
                         "lastAttempt": now,
-                        "blockUntil": block_until
+                        "blockUntil": block_until,
+                        "validation_errors": validation_context.get("key_errors", [])
                     }}
                 )
                 
@@ -310,7 +334,8 @@ def cracked_admin_login():
                     "ip": client_ip,
                     "success": False,
                     "reason": "Blocked due to too many attempts",
-                    "adminLogin": True
+                    "adminLogin": True,
+                    "validation_context": validation_context
                 })
                 
                 return jsonify({
@@ -322,7 +347,8 @@ def cracked_admin_login():
                     {"ip": client_ip},
                     {"$set": {
                         "attempts": attempts,
-                        "lastAttempt": now
+                        "lastAttempt": now,
+                        "validation_errors": validation_context.get("key_errors", [])
                     }}
                 )
         else:
@@ -330,7 +356,8 @@ def cracked_admin_login():
             db.admin_login_attempts.insert_one({
                 "ip": client_ip,
                 "attempts": 1,
-                "lastAttempt": now
+                "lastAttempt": now,
+                "validation_errors": validation_context.get("key_errors", [])
             })
         
         # Log the failed attempt
@@ -339,9 +366,11 @@ def cracked_admin_login():
             "ip": client_ip,
             "success": False,
             "reason": "Invalid admin password",
-            "adminLogin": True
+            "adminLogin": True,
+            "validation_context": validation_context
         })
         
+        # Don't leak info about the validation errors to client
         return jsonify({"error": "Invalid admin password"}), 403
 
 @cracked_bp.route('/logout', methods=['POST'])

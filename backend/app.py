@@ -118,8 +118,6 @@ CORS(app, supports_credentials=True)
 socketio = SocketIO(app, cors_allowed_origins="*", path="/api/socket.io")
 
 
-
-
 # Setup Redis-based sessions
 app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_PERMANENT'] = True
