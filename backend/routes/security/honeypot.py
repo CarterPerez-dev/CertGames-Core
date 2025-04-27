@@ -490,71 +490,7 @@ def is_rate_limited(client_id):
     
     return count >= HONEYPOT_RATE_LIMIT
 
-def render_fake_response(path, method):
-    """
-    Return a fake but convincing response based on the requested path.
-    Routes are checked against categories in the honeypot_routes dictionary.
-    """
-    # Get routes dictionary
-    routes = get_honeypot_routes()
-    
-    # Check which category the path belongs to
-    category = None
-    for cat, paths in routes.items():
-        if any(path == p for p in paths):
-            category = cat
-            break
-    
-    # Return appropriate template based on category
-    if category == "wordpress":
-        return render_template('honeypot/wp-login.html')
-    elif category == "admin_panels":
-        return render_template('honeypot/admin-login.html')
-    elif category == "e_commerce":
-        return render_template('honeypot/ecommerce-login.html')
-    elif category == "additional_cms":
-        return render_template('honeypot/cms-login.html')
-    elif category == "forums_and_boards":
-        return render_template('honeypot/forum-login.html')
-    elif category == "file_sharing":
-        return render_template('honeypot/filesharing-login.html')
-    elif category == "database_endpoints":
-        return render_template('honeypot/database-login.html')
-    elif category == "mail_servers":
-        return render_template('honeypot/mail-login.html')
-    elif category == "remote_access":
-        return render_template('honeypot/remote-access.html')
-    elif category == "iot_devices":
-        return render_template('honeypot/iot-admin.html')
-    elif category == "devops_tools":
-        return render_template('honeypot/devops-login.html')
-    elif category == "web_frameworks":
-        return render_template('honeypot/framework-admin.html')
-    elif category == "logs_and_debug":
-        return render_template('honeypot/debug-console.html')
-    elif category == "backdoors_and_shells":
-        return render_template('honeypot/shell.html')
-    elif category == "injection_attempts":
-        return render_template('honeypot/generic-page.html')
-    elif category == "mobile_endpoints":
-        return render_template('honeypot/mobile-api.html')
-    elif category == "cloud_services":
-        return render_template('honeypot/cloud-login.html')
-    elif category == "monitoring_tools":
-        return render_template('honeypot/monitoring-login.html')
-    
-    # Fallback for string matching if exact path not found
-    if 'wp-login' in path or 'wp-admin' in path:
-        return render_template('honeypot/wp-login.html')
-    elif 'phpmyadmin' in path or 'pma' in path:
-        return render_template('honeypot/phpmyadmin.html')
-    elif 'cpanel' in path:
-        return render_template('honeypot/cpanel.html')
-    elif 'admin' in path:
-        return render_template('honeypot/admin-login.html')
-    
-    # Default - generic login page
-    return render_template('honeypot/generic-login.html')
+
 
 def get_threat_score(client_id):
     """
@@ -714,4 +650,37 @@ def honeypot_analytics():
         "top_ips": top_ips,
         "recent_activity": recent_activity
     })
+ 
+
+def log_honeypot_interaction(category, action, details=None):
+    """Log interactions with honeypot pages
     
+    Args:
+        category (str): Category of honeypot (wordpress, admin, etc.)
+        action (str): Type of interaction (page_view, login_attempt, etc.)
+        details (dict, optional): Additional details about the interaction
+    """
+    from flask import request, current_app
+    from datetime import datetime
+    from mongodb.database import db
+    
+    # Create log entry
+    log_entry = {
+        "category": category,
+        "action": action,
+        "timestamp": datetime.utcnow(),
+        "ip": request.remote_addr,
+        "user_agent": request.headers.get('User-Agent', 'Unknown'),
+        "path": request.path,
+        "method": request.method
+    }
+    
+    # Add additional details if provided
+    if details:
+        log_entry.update(details)
+    
+    # Insert into database
+    db.honeypotLogs.insert_one(log_entry)
+    
+    # Log to application logger
+    current_app.logger.info(f"Honeypot interaction: {category} - {action} from {request.remote_addr}")   
