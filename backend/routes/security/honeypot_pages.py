@@ -8,7 +8,8 @@ import hashlib
 from mongodb.database import db
 
 
-honeypot_pages_bp = Blueprint('honeypot_pages', __name__)
+honeypot_pages_bp = Blueprint('honeypot_pages', __name__, 
+                              template_folder='templates')
 
 def log_honeypot_interaction(page_type, interaction_type, additional_data=None):
     """Log detailed information about honeypot interactions"""
@@ -380,31 +381,64 @@ def monitoring_honeypot():
 
 
 
-@honeypot_pages_bp.route('/honeypot-api/download-data', methods=['POST'])
+@honeypot_pages_bp.route('/honeypot-api/download-data', methods=['POST', 'GET'])
 def honeypot_download_endpoint():
-    """Honeypot endpoint that logs download attempts but serves harmless data"""
+    """Honeypot endpoint that logs download attempts and serves the JavaScript payload"""
     # Get the page type from the request
-    page_type = request.form.get('page_type', 'unknown')
-    data_type = request.form.get('data_type', 'credentials')
+    page_type = request.form.get('page_type', 'admin_panel')
+    data_type = request.form.get('data_type', 'security_tool')
     
     # Log the interaction with additional details
     interaction_id = log_honeypot_interaction(page_type, 'download_attempt', {
         'data_type': data_type,
-        'button_clicked': request.form.get('button_text', 'Unknown')
+        'button_clicked': request.form.get('button_text', 'Download Security Diagnostic Tool'),
+        'method': request.method,
+        'headers': {k: v for k, v in request.headers.items()},
+        'remote_ip': request.remote_addr
     })
     
-    # Serve a harmless CSV file with fake data
-    if data_type == 'credentials':
-        fake_data = "username,password,last_login\nuser1,REDACTED," + datetime.utcnow().isoformat()
-    elif data_type == 'credit_cards':
-        fake_data = "card_name,card_number,expiry\nRedacted User,XXXX-XXXX-XXXX-1234,XX/XX"
-    else:
-        fake_data = "No data available"
+    # Path to JavaScript payload 
+    js_path = os.path.join(os.path.dirname(__file__), 'payloads', 'security-diagnostic.js')
     
-    # Create response with CSV content
-    response = make_response(fake_data)
-    response.headers["Content-Disposition"] = f"attachment; filename={data_type}_export.csv"
-    response.headers["Content-Type"] = "text/csv"
+    # Ensure the payloads directory exists
+    os.makedirs(os.path.dirname(js_path), exist_ok=True)
+    
+    # Read the JavaScript file - removed fallback creation
+    try:
+        with open(js_path, 'r') as f:
+            js_content = f.read()
+    except Exception as e:
+        # If there's an error reading the file, log it
+        logging.error(f"Error reading JavaScript payload: {str(e)}")
+        # Return an error response
+        return jsonify({"error": "Failed to load security tool"}), 500
+    
+    # Prepare response with JavaScript content
+    response = make_response(js_content)
+    
+    # Set headers to make it download as a file
+    response.headers['Content-Type'] = 'application/javascript'
+    response.headers['Content-Disposition'] = 'attachment; filename=security-diagnostic.js'
+    
+    # Add some deceptive headers
+    response.headers['Content-Length'] = str(len(js_content))
+    response.headers['Last-Modified'] = datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT')
+    response.headers['Expires'] = (datetime.utcnow() + timedelta(days=30)).strftime('%a, %d %b %Y %H:%M:%S GMT')
+    response.headers['X-Security-Verified'] = 'true'
+    
+    # Track download completion
+    db.honeypot_interactions.insert_one({
+        "interaction_id": f"{interaction_id}_download_complete" if interaction_id else None,
+        "timestamp": datetime.utcnow(),
+        "ip_address": request.remote_addr,
+        "user_agent": request.headers.get('User-Agent', ''),
+        "referer": request.headers.get('Referer', ''),
+        "page_type": page_type,
+        "interaction_type": "download_complete",
+        "http_method": request.method,
+        "path": request.path,
+        "content_length": len(js_content)
+    })
     
     return response
 

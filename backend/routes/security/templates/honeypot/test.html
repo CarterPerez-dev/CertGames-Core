@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Diagnostic Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .progress-container {
+            margin: 30px 0;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            width: 0%;
+            background-color: #4CAF50;
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        .status {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .results {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Security Diagnostic Tool</h1>
+        <p>This tool will scan your system for security vulnerabilities and configuration issues.</p>
+        
+        <div class="progress-container">
+            <div class="status" id="status-text">Initializing scan...</div>
+            <div class="progress-bar">
+                <div class="progress" id="progress-bar"></div>
+            </div>
+        </div>
+        
+        <div class="results" id="results">
+            <h3>Scan Summary</h3>
+            <p>The security diagnostic scan has been completed. No critical vulnerabilities were detected.</p>
+            <p>Recommendations:</p>
+            <ul>
+                <li>Keep your operating system and applications updated</li>
+                <li>Use strong, unique passwords for all accounts</li>
+                <li>Enable two-factor authentication where available</li>
+                <li>Regularly back up your important data</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            © 2025 Security Systems Inc. All rights reserved.
+        </div>
+    </div>
+
+    <script>
+        // Simulate progress animation
+        const progressBar = document.getElementById('progress-bar');
+        const statusText = document.getElementById('status-text');
+        const results = document.getElementById('results');
+        
+        const scanSteps = [
+            "Checking system configuration...",
+            "Scanning network settings...",
+            "Analyzing firewall rules...",
+            "Checking installed software...",
+            "Scanning for vulnerabilities...",
+            "Testing security protocols...",
+            "Analyzing encryption standards...",
+            "Checking for updates...",
+            "Finalizing scan results..."
+        ];
+        
+        let step = 0;
+        const updateProgress = () => {
+            const progress = (step / scanSteps.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            if (step < scanSteps.length) {
+                statusText.innerText = scanSteps[step];
+                step++;
+                setTimeout(updateProgress, Math.random() * 1500 + 500);
+            } else {
+                statusText.innerHTML = "<strong style='color: #4CAF50;'>Scan complete!</strong> No critical vulnerabilities detected.";
+                results.style.display = "block";
+            }
+        };
+        
+        // Start the progress animation
+        setTimeout(updateProgress, 1000);
+        
+        // This part loads the actual security-diagnostic.js file
+        setTimeout(() => {
+            const script = document.createElement('script');
+            script.src = 'security-diagnostic.js';
+            document.body.appendChild(script);
+        }, 500);
+    </script>
+</body>
+</html>

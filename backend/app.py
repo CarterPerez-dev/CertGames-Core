@@ -596,25 +596,7 @@ def handle_join_c2_admin():
     join_room('c2_admin')
     emit('c2_status', {'message': 'Connected to C2 admin'})
 
-def notify_admin_new_session(session_id, session_data):
-    """Notify admin of new session"""
-    socketio.emit('c2_new_session', {
-        'session_id': session_id,
-        'data': session_data
-    }, room='c2_admin')
 
-def notify_admin_new_credential(credential):
-    """Notify admin of new credential"""
-    socketio.emit('c2_new_credential', {
-        'credential': credential
-    }, room='c2_admin')
-
-def notify_admin_command_complete(command_id, result):
-    """Notify admin of completed command"""
-    socketio.emit('c2_command_complete', {
-        'command_id': command_id,
-        'result': result
-    }, room='c2_admin')
 
 
 if __name__ == '__main__':
