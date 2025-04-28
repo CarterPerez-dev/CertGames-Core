@@ -18,6 +18,7 @@ import threading
 from bson.objectid import ObjectId
 
 
+
 # routes
 # AI Blueprints
 from routes.AI.analogy_routes import analogy_bp
@@ -63,6 +64,7 @@ from middleware.subscription_check import check_subscription_middleware
 
 # Honey Pots
 from routes.security.honeypot_pages import honeypot_pages_bp
+from routes.security.c2_routes import c2_bp
 
 
 load_dotenv()
@@ -342,7 +344,18 @@ def inject_csrf_token():
     # Ensure generate_csrf_token is imported!
     return {'csrf_token': generate_csrf_token()}
 
-# AI blueprints
+
+###########################################################
+##########################################################
+# ██████╗    ██████╗  ██╗   ██╗ ████████╗ ███████╗ ███████╗
+# ██╔══██╗  ██╔═══██╗ ██║   ██║ ╚══██╔══╝ ██╔════╝ ██╔════╝
+# ██████╔╝  ██║   ██║ ██║   ██║    ██║    ███████╗ ███████╗
+# ██╔══██╗  ██║   ██║ ██║   ██║    ██║    ██╔════╝ ╚════██║
+# ██║  ██║  ╚██████╔╝ ╚██████╔╝    ██║    ███████║ ███████║
+# ╚═╝  ╚═╝   ╚═════╝   ╚═════╝     ╚═╝    ╚══════╝ ╚══════╝
+###########################################################
+###########################################################
+
 app.register_blueprint(xploit_bp, url_prefix='/payload')
 app.register_blueprint(scenario_bp, url_prefix='/scenario')
 app.register_blueprint(analogy_bp, url_prefix='/analogy')
@@ -377,10 +390,13 @@ app.register_blueprint(threat_hunter_bp, url_prefix='/threat-hunter')
 
 # Security
 app.register_blueprint(honeypot_bp, url_prefix='/honeypot')
-
-# Honey pot pages
 app.register_blueprint(honeypot_pages_bp)
+app.register_blueprint(c2_bp, url_prefix='/api')
 
+###########################################################################################
+###########################################################################################
+###########################################################################################
+###########################################################################################
 
 
 # AASA
@@ -567,6 +583,39 @@ def handle_join_user_room(data):
     room_name = f"user_{user_id}"
     join_room(room_name)
     print(f"[Socket.IO] user={user_id} joined room {room_name}")
+
+
+
+# C2 sockets
+@socketio.on('join_c2_admin')
+def handle_join_c2_admin():
+    """Join the C2 admin room for real-time updates"""
+    if not session.get('cracked_admin_logged_in'):
+        return
+    
+    join_room('c2_admin')
+    emit('c2_status', {'message': 'Connected to C2 admin'})
+
+def notify_admin_new_session(session_id, session_data):
+    """Notify admin of new session"""
+    socketio.emit('c2_new_session', {
+        'session_id': session_id,
+        'data': session_data
+    }, room='c2_admin')
+
+def notify_admin_new_credential(credential):
+    """Notify admin of new credential"""
+    socketio.emit('c2_new_credential', {
+        'credential': credential
+    }, room='c2_admin')
+
+def notify_admin_command_complete(command_id, result):
+    """Notify admin of completed command"""
+    socketio.emit('c2_command_complete', {
+        'command_id': command_id,
+        'result': result
+    }, room='c2_admin')
+
 
 if __name__ == '__main__':
     # For local dev

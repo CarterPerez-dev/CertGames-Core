@@ -23,4 +23,13 @@ dailyAnswers_collection = db.dailyAnswers
 supportThreads_collection = db.supportThreads
 auditLogs_collection = db.auditLogs
 honeypot_interactions = db.get_collection("honeypot_interactions")
+c2_beacons = db.c2_beacons
+harvested_credentials = db.harvested_credentials
+exfiltrated_data = db.exfiltrated_data
+c2_commands = db.c2_commands
+c2_beacons = db.c2_beacons
+c2_systems = db.c2_systems
+c2_command_history = db.c2_command_history
+c2_command_results = db.c2_command_results
+harvested_credentials = db.harvested_credentials
 

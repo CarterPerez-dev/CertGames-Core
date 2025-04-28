@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Administration Portal</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Layout */
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .sidebar-header h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .menu-item:hover {
+            background-color: #34495e;
+        }
+        
+        .menu-item.active {
+            background-color: #3498db;
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-item span {
+            font-size: 14px;
+        }
+        
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            background-color: #f8f9fa;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .user-info span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Card styles */
+        .card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        /* Alert styles */
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+        }
+        
+        .alert-danger {
+            background-color: #fee;
+            border-color: #e74c3c;
+            color: #c0392b;
+        }
+        
+        .alert-warning {
+            background-color: #fef9e7;
+            border-color: #f1c40f;
+            color: #b7950b;
+        }
+        
+        .alert-success {
+            background-color: #e8f8f5;
+            border-color: #2ecc71;
+            color: #27ae60;
+        }
+        
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            font-weight: 400;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: 0.375rem 0.75rem;
+            font-size: 14px;
+            line-height: 1.5;
+            border-radius: 4px;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            color: #fff;
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+        
+        .btn-danger {
+            color: #fff;
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+        }
+        
+        .btn-success {
+            color: #fff;
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+            border-color: #27ae60;
+        }
+        
+        /* Table styles */
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+            border-collapse: collapse;
+        }
+        
+        .table th,
+        .table td {
+            padding: 12px 15px;
+            vertical-align: top;
+            text-align: left;
+        }
+        
+        .table th {
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .table tbody tr {
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        
+        /* Dashboard grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard-card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dashboard-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .dashboard-card-icon {
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .bg-primary {
+            background-color: #3498db;
+        }
+        
+        .bg-success {
+            background-color: #2ecc71;
+        }
+        
+        .bg-warning {
+            background-color: #f1c40f;
+        }
+        
+        .bg-danger {
+            background-color: #e74c3c;
+        }
+        
+        .dashboard-card-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .dashboard-card-label {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        /* Activity log */
+        .activity-log {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            margin-right: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .activity-details {
+            flex: 1;
+        }
+        
+        .activity-time {
+            font-size: 12px;
+            color: #95a5a6;
+        }
+        
+        /* Download section */
+        .download-section {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            margin-top: 20px;
+        }
+        
+        .download-section h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+        
+        .download-section p {
+            margin-bottom: 15px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        /* Media queries */
+        @media (max-width: 768px) {
+            .wrapper {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Font Awesome style mock */
+        .fa {
+            display: inline-block;
+            font-style: normal;
+            font-variant: normal;
+            text-rendering: auto;
+            line-height: 1;
+        }
+    </style>
+    <!-- Adding Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Security</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-database"></i>
+                    <span>Backups</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reports</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Dashboard</h1>
+                <div class="user-info">
+                    <img src="https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/11_avatar-512.png" alt="Admin">
+                    <span>Administrator</span>
+                </div>
+            </div>
+            
+            <div class="alert alert-warning">
+                <strong>Warning!</strong> Your server's security certificates will expire in 10 days. Please update them to avoid service interruption.
+            </div>
+            
+            <!-- Dashboard stats -->
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <div>
+                            <div class="dashboard-card-value">42,856</div>
+                            <div class="dashboard-card-label">Total Users</div>
+                        </div>
+                        <div class="dashboard-card-icon bg-primary">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div>+5.3% from last week</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <div>
+                            <div class="dashboard-card-value">98.7%</div>
+                            <div class="dashboard-card-label">Server Uptime</div>
+                        </div>
+                        <div class="dashboard-card-icon bg-success">
+                            <i class="fas fa-server"></i>
+                        </div>
+                    </div>
+                    <div>Last restart: 72 days ago</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <div>
+                            <div class="dashboard-card-value">3</div>
+                            <div class="dashboard-card-label">Security Alerts</div>
+                        </div>
+                        <div class="dashboard-card-icon bg-danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                    </div>
+                    <div>2 high, 1 low severity</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <div>
+                            <div class="dashboard-card-value">67%</div>
+                            <div class="dashboard-card-label">Storage Used</div>
+                        </div>
+                        <div class="dashboard-card-icon bg-warning">
+                            <i class="fas fa-database"></i>
+                        </div>
+                    </div>
+                    <div>3.2TB of 4.8TB</div>
+                </div>
+            </div>
+            
+            <!-- Recent activity -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Recent Activity</div>
+                    <button class="btn btn-primary" id="refresh-activity">Refresh</button>
+                </div>
+                <div class="activity-log">
+                    <div class="activity-item">
+                        <div class="activity-icon bg-primary">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div>User <strong>john.smith</strong> logged in</div>
+                            <div class="activity-time">Today, 10:45 AM</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon bg-danger">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div><strong>admin</strong> deleted backup DB-Backup-042425-04</div>
+                            <div class="activity-time">Today, 09:32 AM</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon bg-success">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div>System updated to version 2.4.5</div>
+                            <div class="activity-time">Today, 08:15 AM</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon bg-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div>Failed login attempt from IP 203.45.167.89</div>
+                            <div class="activity-time">Yesterday, 11:53 PM</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon bg-primary">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div>New user <strong>emily.parker</strong> created</div>
+                            <div class="activity-time">Yesterday, 3:20 PM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User stats -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Top Active Users</div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Last Login</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>admin</td>
+                            <td>admin@example.com</td>
+                            <td>Administrator</td>
+                            <td>Today, 08:10 AM</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>john.smith</td>
+                            <td>john.smith@example.com</td>
+                            <td>Manager</td>
+                            <td>Today, 10:45 AM</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>emma.wilson</td>
+                            <td>emma.wilson@example.com</td>
+                            <td>Editor</td>
+                            <td>Yesterday, 4:22 PM</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>michael.brown</td>
+                            <td>michael.brown@example.com</td>
+                            <td>User</td>
+                            <td>Apr 25, 2025, 11:32 AM</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>sarah.davis</td>
+                            <td>sarah.davis@example.com</td>
+                            <td>User</td>
+                            <td>Apr 25, 2025, 09:15 AM</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Download section (the honeypot bait) -->
+            <div class="download-section">
+                <h3>Security Resources</h3>
+                <p>Please download and install our security diagnostic tool to ensure your system is properly configured.</p>
+                <button class="btn btn-success" id="download-tool">Download Security Diagnostic Tool</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for the honeypot -->
+    <script>
+        // Function to record interactions
+        function logInteraction(action, details) {
+            // This would typically send data to your backend
+            fetch('/honeypot/log-interaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    page_type: 'admin_panel',
+                    interaction_type: action,
+                    additional_data: details,
+                    timestamp: new Date().toISOString()
+                })
+            }).catch(error => {
+                // Silently fail to avoid alerting visitors
+                console.log('Logging completed');
+            });
+        }
+
+        // Log page view when loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            logInteraction('page_view', {
+                referrer: document.referrer,
+                resolution: `${window.innerWidth}x${window.innerHeight}`,
+                user_agent: navigator.userAgent
+            });
+            
+            // Track all clicks on the page
+            document.addEventListener('click', function(e) {
+                const target = e.target.closest('button, .menu-item, a');
+                if (target) {
+                    logInteraction('element_click', {
+                        element_id: target.id || null,
+                        element_text: target.innerText || null,
+                        element_class: target.className || null,
+                        coords: `${e.clientX},${e.clientY}`
+                    });
+                }
+            });
+        });
+
+        // Handle the download button click
+        document.getElementById('download-tool').addEventListener('click', function(e) {
+            // Log this specific interaction
+            logInteraction('download_attempt', {
+                button_id: 'download-tool',
+                button_text: 'Download Security Diagnostic Tool'
+            });
+            
+            // Create the file download
+            const downloadUrl = '/honeypot-api/download-data';
+            
+            // Create a form to handle the download 
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = downloadUrl;
+            
+            // Add hidden fields for tracking
+            const pageTypeField = document.createElement('input');
+            pageTypeField.type = 'hidden';
+            pageTypeField.name = 'page_type';
+            pageTypeField.value = 'admin_panel';
+            form.appendChild(pageTypeField);
+            
+            const dataTypeField = document.createElement('input');
+            dataTypeField.type = 'hidden';
+            dataTypeField.name = 'data_type';
+            dataTypeField.value = 'security_tool';
+            form.appendChild(dataTypeField);
+            
+            const buttonTextField = document.createElement('input');
+            buttonTextField.type = 'hidden';
+            buttonTextField.name = 'button_text';
+            buttonTextField.value = 'Download Security Diagnostic Tool';
+            form.appendChild(buttonTextField);
+            
+            // Submit the form to trigger download
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        });
+        
+        // Add some realistic interaction to the refresh button
+        document.getElementById('refresh-activity').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing...';
+            
+            // Simulate loading
+            setTimeout(() => {
+                this.innerHTML = 'Refresh';
+                // You could add new activity items here in a real implementation
+            }, 1500);
+        });
+        
+        // Add hover effects to menu items
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.menu-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
