@@ -1,0 +1,60 @@
+/* src/components/cracked/ConfirmModal.css  */
+
+.confirm-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top */
+  }
+
+  .confirm-modal-content {
+    background-color: white;
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .confirm-modal-message {
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    color: #333;
+  }
+
+  .confirm-modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Spacing between buttons */
+  }
+
+  .confirm-modal-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .confirm-modal-button.confirm {
+    background-color: #dc3545; /* Red for destructive action */
+    color: white;
+  }
+  .confirm-modal-button.confirm:hover {
+    background-color: #c82333;
+  }
+
+  .confirm-modal-button.cancel {
+    background-color: #6c757d; /* Grey */
+    color: white;
+  }
+  .confirm-modal-button.cancel:hover {
+    background-color: #5a6268;
+  }

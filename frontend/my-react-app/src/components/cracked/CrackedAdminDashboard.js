@@ -18,13 +18,16 @@ import "./styles/tabstyles/RateLimitsTab.css";
 import "./styles/tabstyles/ServerMetricsTab.css"; 
 import "./styles/tabstyles/ToolsTab.css"; 
 import "./styles/tabstyles/LogIp.css";
+import "./styles/tabstyles/C2Tab.css";
+import "./styles/tabstyles/HoneypotTab.css";
+import "./styles/tabstyles/CredentialsTab.css";
 
 import { 
   FaHome, FaUsers, FaClipboardList, FaCalendarDay, FaHeadset, 
   FaChartLine, FaHistory, FaDatabase, FaTerminal, FaHeartbeat, 
   FaEnvelope, FaChevronRight, FaChevronDown, FaBars, FaTimes, 
   FaSignOutAlt, FaMoneyBillWave, FaChessKnight, FaSpider, 
-  FaHatWizard, FaEye, FaLinux, FaFingerprint, FaTools, FaDragon, FaFighterJet, FaGlobe, FaBattleNet, FaGhost, FaGitkraken
+  FaHatWizard, FaEye, FaLinux, FaFingerprint, FaTools, FaDragon, FaFighterJet, FaGlobe, FaGhost, FaGitkraken, FaBattleNet
 } from "react-icons/fa";
 
 // Import tab components
@@ -44,6 +47,9 @@ import RateLimitsTab from "./tabs/RateLimitsTab";
 import ServerMetricsTab from "./tabs/ServerMetricsTab";
 import ToolsTab from "./tabs/ToolsTab"; 
 import LogIpTab from "./tabs/LogIp";
+import C2Tab from "./tabs/C2Tab";
+import HoneypotTab from "./tabs/HoneypotTab"; 
+import CredentialsTab from "./tabs/CredentialsTab";
 
 
 function CrackedAdminDashboard() {
@@ -194,17 +200,20 @@ function CrackedAdminDashboard() {
             </li>             
             <li className={activeTab === "honeypot" ? "active" : ""}>
               <button onClick={() => switchTab("honeypot")}>
-                <FaBattleNet /> Honeypot
+                <FaBattleNet/> 
+                <span>Honeypot</span>                
               </button>
             </li>
             <li className={activeTab === "c2" ? "active" : ""}>
               <button onClick={() => switchTab("c2")}>
-                <FaGitkraken /> C2 Panel
+                <FaGitkraken /> 
+                <span>C2 Server</span>
               </button>
             </li>          
             <li className={activeTab === "credentials" ? "active" : ""}>
               <button onClick={() => switchTab("credentials")}>
-                <FaGhost /> Credentials
+                <FaGhost /> 
+                <span>Extracted</span>
               </button>
             </li>     
            <li className={activeTab === "rateLimits" ? "active" : ""}>
@@ -322,17 +331,17 @@ function CrackedAdminDashboard() {
             </li>                    
             <li>
               <button onClick={() => switchTab("honeypot")}>
-                <FaFaBattleNet/> Rate Limits
+                <FaBattleNet/> Honeypot
               </button>
             </li>                
             <li>
               <button onClick={() => switchTab("c2")}>
-                <FaGitkraken /> Rate Limits
+                <FaGitkraken /> C2 Server
               </button>
             </li>                               
             <li>
               <button onClick={() => switchTab("credentials")}>
-                <FaGhost/> Request Logs
+                <FaGhost/> Extracted
               </button>
             </li>
             <li>

@@ -870,7 +870,7 @@
 .c2-tab .c2-refresh-creds-btn:hover:not(:disabled),
 .c2-tab .c2-export-creds-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .c2-tab .c2-refresh-creds-btn:disabled,
@@ -983,4 +983,102 @@
   font-size: 14px;
 }
 
-.c2-tab
+.c2-tab .c2-credential-time {
+  color: var(--admin-text-secondary);
+  font-size: 13px;
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+  .c2-tab .c2-content {
+    grid-template-columns: 220px 1fr;
+  }
+  
+  .c2-tab .c2-system-info-cards {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
+}
+
+@media (max-width: 992px) {
+  .c2-tab .c2-content {
+    grid-template-columns: 180px 1fr;
+  }
+  
+  .c2-tab .c2-stats-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .c2-tab .c2-system-stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .c2-tab .c2-content {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  
+  .c2-tab .c2-systems-sidebar {
+    max-height: 300px;
+  }
+  
+  .c2-tab .c2-stats-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .c2-tab .c2-system-info-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .c2-tab .c2-command-input-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .c2-tab .c2-command-description {
+    margin-top: 5px;
+  }
+  
+  .c2-tab .c2-credentials-filter {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .c2-tab .c2-filter-input-wrapper {
+    width: 100%;
+    min-width: 0;
+  }
+  
+  .c2-tab .c2-credentials-header,
+  .c2-tab .c2-credentials-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .c2-tab .c2-header-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .c2-tab .c2-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .c2-tab .c2-tab-btn {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .c2-tab .c2-details-table td {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+}

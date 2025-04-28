@@ -88,11 +88,11 @@
 }
 
 .nav-collapsed .admin-sidebar {
-  width: 60px;
+  width: 70px;
 }
 
 .admin-sidebar-header {
-  padding: 20px 15px;
+  padding: 13px 13px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -128,7 +128,7 @@
 .admin-collapse-btn {
   background: none;
   border: none;
-  color: var(--admin-text-secondary);
+  color: #820303;
   cursor: pointer;
   padding: 5px;
   display: flex;
@@ -136,16 +136,18 @@
   justify-content: center;
   border-radius: 50%;
   transition: all 0.2s;
+  font-size: 1rem;
+  margin-left: -10px;
 }
 
 .admin-collapse-btn:hover {
   background: var(--admin-input-bg);
-  color: var(--admin-text);
+  color: #b00000;
 }
 
 .admin-nav {
   flex: 1;
-  padding: 20px 0;
+  padding: 10px 0;
 }
 
 .admin-nav-list {

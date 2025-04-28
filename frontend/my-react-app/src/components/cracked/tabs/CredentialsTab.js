@@ -7,6 +7,7 @@ import {
   FaDesktop, FaGlobe, FaEye, FaEyeSlash, FaUserSecret
 } from "react-icons/fa";
 import { adminFetch } from '../csrfHelper';
+import showConfirmModal from '../modals/ConfirmModal';
 
 const CredentialsTab = () => {
   // State for credentials
@@ -214,36 +215,46 @@ const CredentialsTab = () => {
 
   // Delete a credential (admin only)
   const deleteCredential = async (id) => {
-    if (!confirm("Are you sure you want to delete this credential? This action cannot be undone.")) {
-      return;
-    }
-    
     try {
+      await showConfirmModal("Are you sure you want to delete this credential? This action cannot be undone.");
+
+
       const response = await adminFetch(`/api/cracked/c2/credentials/${id}`, {
         method: "DELETE"
       });
-      
+
       if (!response.ok) {
-        throw new Error("Failed to delete credential");
+        let errorMsg = "Failed to delete credential";
+        try {
+           const errorData = await response.json();
+           errorMsg = errorData.message || errorMsg;
+        } catch(e) { /* Ignore parsing error */ }
+        throw new Error(errorMsg);
       }
-      
-      // Remove from state
+
+
       setCredentials(prev => prev.filter(cred => cred._id !== id));
       setFilteredCredentials(prev => prev.filter(cred => cred._id !== id));
-      
-      // If this was the selected credential, clear selection
+
+
       if (selectedCredential && selectedCredential._id === id) {
         setSelectedCredential(null);
       }
-      
-      // Update stats
+
+
       setStats(prev => ({
         ...prev,
-        total: prev.total - 1
+        total: Math.max(0, prev.total - 1)
       }));
+
+
     } catch (err) {
-      console.error("Error deleting credential:", err);
-      alert(`Failed to delete credential: ${err.message}`);
+      if (err && err.message && err.message.startsWith('User cancelled')) {
+         console.log("Deletion cancelled by user."); 
+      } else {
+         console.error("Error deleting credential:", err);
+         alert(`Failed to delete credential: ${err.message}`);
+      }
     }
   };
 

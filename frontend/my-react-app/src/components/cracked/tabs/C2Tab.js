@@ -5,12 +5,13 @@ import {
   FaStop, FaCopy, FaDownload, FaTerminal, FaDesktop, FaNetworkWired,
   FaKey, FaChevronDown, FaChevronRight, FaCircle, FaLock, FaInfoCircle,
   FaCode, FaDatabase, FaCogs, FaEye, FaTimes, FaLaptopCode, FaFingerprint,
-  FaSave, FaHistory, FaGlobe, FaCheckCircle, FaTrash, FaClock
+  FaSave, FaHistory, FaGlobe, FaCheckCircle, FaTrash, FaClock, FaSearch, FaChartBar
 } from "react-icons/fa";
 import { adminFetch } from '../csrfHelper';
 import { v4 as uuidv4 } from 'uuid';
 
-// Socket.io needs to be imported and configured in your project
+
+
 import io from 'socket.io-client';
 
 const C2Tab = () => {
