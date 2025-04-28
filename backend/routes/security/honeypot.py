@@ -679,8 +679,25 @@ def log_honeypot_interaction(category, action, details=None):
     if details:
         log_entry.update(details)
     
-    # Insert into database
-    db.honeypotLogs.insert_one(log_entry)
+    # Insert into database and get ID
+    result = db.honeypotLogs.insert_one(log_entry)
     
     # Log to application logger
     current_app.logger.info(f"Honeypot interaction: {category} - {action} from {request.remote_addr}")   
+    return str(result.inserted_id)
+    
+    
+@honeypot_bp.route('/log-interaction', methods=['POST'])
+def log_client_side_interaction():
+    """Endpoint for logging client-side interactions via AJAX"""
+    if not request.is_json:
+        return jsonify({"status": "error", "message": "Expected JSON data"}), 400
+        
+    data = request.get_json()
+    page_type = data.get('page_type', 'unknown')
+    interaction_type = data.get('interaction_type', 'unknown')
+    additional_data = data.get('additional_data', {})
+    
+    interaction_id = log_honeypot_interaction(page_type, interaction_type, additional_data)
+    
+    return jsonify({"status": "success", "interaction_id": interaction_id})

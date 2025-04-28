@@ -191,7 +191,6 @@ def cpanel_honeypot():
 # Admin panel routes
 
 @honeypot_pages_bp.route('/admin/login', methods=['GET', 'POST'])
-@honeypot_pages_bp.route('/administrator', methods=['GET', 'POST'])
 @honeypot_pages_bp.route('/admin/dashboard', methods=['GET', 'POST'])
 @honeypot_pages_bp.route('/adminpanel', methods=['GET', 'POST'])
 def admin_honeypot():
@@ -442,20 +441,6 @@ def honeypot_download_endpoint():
     
     return response
 
-@honeypot_pages_bp.route('/honeypot/log-interaction', methods=['POST'])
-def log_client_side_interaction():
-    """Endpoint for logging client-side interactions via AJAX"""
-    if not request.is_json:
-        return jsonify({"status": "error", "message": "Expected JSON data"}), 400
-        
-    data = request.get_json()
-    page_type = data.get('page_type', 'unknown')
-    interaction_type = data.get('interaction_type', 'unknown')
-    additional_data = data.get('additional_data', {})
-    
-    interaction_id = log_honeypot_interaction(page_type, interaction_type, additional_data)
-    
-    return jsonify({"status": "success", "interaction_id": interaction_id})
 
 
 @honeypot_pages_bp.route('/<path:path>', methods=['GET', 'POST'])
