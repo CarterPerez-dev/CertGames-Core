@@ -81,7 +81,7 @@ const CredentialsTab = () => {
       }
       
       // Make the API call
-      const response = await adminFetch(`/api/cracked/c2/credentials?${queryParams.toString()}`);
+      const response = await adminFetch(`/api/api/c2/credentials?${queryParams.toString()}`);
       
       if (!response.ok) {
         throw new Error("Failed to fetch credentials");
@@ -219,7 +219,7 @@ const CredentialsTab = () => {
       await showConfirmModal("Are you sure you want to delete this credential? This action cannot be undone.");
 
 
-      const response = await adminFetch(`/api/cracked/c2/credentials/${id}`, {
+      const response = await adminFetch(`/api/api/c2/credentials/${id}`, {
         method: "DELETE"
       });
 

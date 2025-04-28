@@ -701,3 +701,111 @@ def log_client_side_interaction():
     interaction_id = log_honeypot_interaction(page_type, interaction_type, additional_data)
     
     return jsonify({"status": "success", "interaction_id": interaction_id})
+    
+    
+    
+@honeypot_bp.route('/detailed-stats', methods=['GET'])
+def honeypot_detailed_stats():
+    """Return detailed statistics about honeypot activity"""
+    from flask import session, jsonify, current_app
+    from routes.admin.cracked_admin import require_cracked_admin
+    from datetime import datetime, timedelta
+    
+    # Check admin authentication
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authorized"}), 403
+    
+    try:
+        # Get time frames for stats
+        now = datetime.utcnow()
+        yesterday = now - timedelta(days=1)
+        last_week = now - timedelta(days=7)
+        last_month = now - timedelta(days=30)
+        
+        # Get threats detected (interactions with certain patterns)
+        threats_detected = db.honeypot_interactions.count_documents({
+            "$or": [
+                {"suspicious_params": True},
+                {"is_scanner": True},
+                {"is_port_scan": True}
+            ]
+        })
+        
+        # Get unique page types and counts
+        page_types = db.honeypot_interactions.aggregate([
+            {"$group": {"_id": "$page_type", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}}
+        ])
+        page_type_stats = {doc["_id"]: doc["count"] for doc in page_types if doc["_id"]}
+        
+        # Get interaction types
+        interaction_types = db.honeypot_interactions.aggregate([
+            {"$group": {"_id": "$interaction_type", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}}
+        ])
+        interaction_stats = {doc["_id"]: doc["count"] for doc in interaction_types if doc["_id"]}
+        
+        # Get time-based stats
+        today_count = db.honeypot_interactions.count_documents({
+            "timestamp": {"$gte": yesterday}
+        })
+        
+        week_count = db.honeypot_interactions.count_documents({
+            "timestamp": {"$gte": last_week}
+        })
+        
+        month_count = db.honeypot_interactions.count_documents({
+            "timestamp": {"$gte": last_month}
+        })
+        
+        # Get top interactors (IPs with most interactions)
+        top_interactors = list(db.honeypot_interactions.aggregate([
+            {"$group": {"_id": "$ip_address", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 10}
+        ]))
+        
+        # Get most downloaded payloads
+        payload_downloads = list(db.honeypot_interactions.aggregate([
+            {"$match": {"interaction_type": "download_attempt"}},
+            {"$group": {"_id": "$page_type", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 5}
+        ]))
+        
+        # Get geographical distribution
+        countries = list(db.honeypot_interactions.aggregate([
+            {"$match": {"geoInfo.country": {"$exists": True}}},
+            {"$group": {"_id": "$geoInfo.country", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 10}
+        ]))
+        
+        # Combine all stats
+        stats = {
+            "threats_detected": threats_detected,
+            "unique_page_types": len(page_type_stats),
+            "unique_interaction_types": len(interaction_stats),
+            "today_interactions": today_count,
+            "week_interactions": week_count,
+            "month_interactions": month_count,
+            "page_type_stats": page_type_stats,
+            "interaction_stats": interaction_stats,
+            "top_interactors": top_interactors,
+            "payload_downloads": payload_downloads,
+            "geographic_stats": countries,
+            "timestamp": now.isoformat()
+        }
+        
+        return jsonify(stats), 200
+        
+    except Exception as e:
+        current_app.logger.error(f"Error getting honeypot stats: {str(e)}")
+        return jsonify({
+            "error": "Failed to retrieve honeypot statistics",
+            "details": str(e)
+        }), 500
+
+
+
+

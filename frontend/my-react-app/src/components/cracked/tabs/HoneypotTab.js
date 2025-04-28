@@ -38,7 +38,7 @@ const HoneypotTab = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await adminFetch("/api/cracked/honeypot/analytics");
+      const response = await adminFetch("/api/honeypot/analytics");
       if (!response.ok) {
         throw new Error("Failed to fetch honeypot analytics");
       }
@@ -57,7 +57,7 @@ const HoneypotTab = () => {
   const fetchDetailedStats = useCallback(async () => {
     setStatsLoading(true);
     try {
-      const response = await adminFetch("/api/cracked/honeypot/detailed-stats");
+      const response = await adminFetch("/api/honeypot/detailed-stats");
       if (!response.ok) {
         throw new Error("Failed to fetch detailed statistics");
       }

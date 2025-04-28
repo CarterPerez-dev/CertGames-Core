@@ -17,3 +17,30 @@
   padding: 20px;
   color: var(--admin-text-secondary);
 }
+
+
+.admin-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--admin-accent);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 10px 10px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 15px;
+}
+
+.admin-action-btn:hover {
+  background: var(--admin-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--admin-glow);
+}
+
+.admin-action-btn svg {
+  font-size: 14px;
+}

@@ -1,6 +1,7 @@
 # backend/middleware/csrf_protection.py
 import secrets
 from flask import request, session, jsonify, abort
+from functools import wraps
 
 def generate_csrf_token():
     """Generate a secure CSRF token and store it in the session"""

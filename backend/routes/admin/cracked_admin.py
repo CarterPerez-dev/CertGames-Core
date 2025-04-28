@@ -2206,3 +2206,7 @@ def view_honeypot_interactions():
         }), 200
     except Exception as e:
         return jsonify({"error": f"Failed to retrieve user requests: {str(e)}"}), 500
+        
+        
+        
+
