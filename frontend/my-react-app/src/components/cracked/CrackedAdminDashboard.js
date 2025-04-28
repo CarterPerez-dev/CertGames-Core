@@ -24,7 +24,7 @@ import {
   FaChartLine, FaHistory, FaDatabase, FaTerminal, FaHeartbeat, 
   FaEnvelope, FaChevronRight, FaChevronDown, FaBars, FaTimes, 
   FaSignOutAlt, FaMoneyBillWave, FaChessKnight, FaSpider, 
-  FaHatWizard, FaEye, FaLinux, FaFingerprint, FaTools, FaDragon, FaFighterJet, FaGlobe
+  FaHatWizard, FaEye, FaLinux, FaFingerprint, FaTools, FaDragon, FaFighterJet, FaGlobe, FaBattleNet, FaGhost, FaGitkraken
 } from "react-icons/fa";
 
 // Import tab components
@@ -85,14 +85,17 @@ function CrackedAdminDashboard() {
       case 'newsletter': return <NewsletterTab />;
       case 'revenue': return <RevenueTab />; 
       case 'performance': return <PerformanceTab />;
+      case 'tools': return <ToolsTab />;      
       case 'activity': return <ActivityLogsTab />;
       case 'dbLogs': return <RequestLogsTab />;
+      case 'logIp': return <LogIpTab />;   
+      case 'honeypot': return <HoneypotTab />;
+      case 'c2': return <C2Tab />;
+      case 'credentials': return <CredentialsTab />;        
+      case 'rateLimits': return <RateLimitsTab />;         
       case 'dbShell': return <DbShellTab />;
       case 'healthChecks': return <HealthChecksTab />;
       case 'serverMetrics': return <ServerMetricsTab />;
-      case 'rateLimits': return <RateLimitsTab />;
-      case 'tools': return <ToolsTab />; 
-      case 'logIp': return <LogIpTab />;
       default: return <OverviewTab />;
       
     }
@@ -183,12 +186,39 @@ function CrackedAdminDashboard() {
                 <span>Requests</span>
               </button>
             </li>
+            <li className={activeTab === "logIp" ? "active" : ""}>
+              <button onClick={() => switchTab("logIp")}>
+                <FaGlobe />
+                <span>User Requests</span>
+              </button>
+            </li>             
+            <li className={activeTab === "honeypot" ? "active" : ""}>
+              <button onClick={() => switchTab("honeypot")}>
+                <FaBattleNet /> Honeypot
+              </button>
+            </li>
+            <li className={activeTab === "c2" ? "active" : ""}>
+              <button onClick={() => switchTab("c2")}>
+                <FaGitkraken /> C2 Panel
+              </button>
+            </li>          
+            <li className={activeTab === "credentials" ? "active" : ""}>
+              <button onClick={() => switchTab("credentials")}>
+                <FaGhost /> Credentials
+              </button>
+            </li>     
+           <li className={activeTab === "rateLimits" ? "active" : ""}>
+              <button onClick={() => switchTab("rateLimits")}>
+                <FaFingerprint />
+                <span>Rate Limits</span>
+              </button>
+            </li>                               
             <li className={activeTab === "dbShell" ? "active" : ""}>
               <button onClick={() => switchTab("dbShell")}>
                 <FaTerminal />
                 <span>DB Shell</span>
               </button>
-            </li>
+            </li>              
             <li className={activeTab === "healthChecks" ? "active" : ""}>
               <button onClick={() => switchTab("healthChecks")}>
                 <FaHeartbeat />
@@ -200,22 +230,10 @@ function CrackedAdminDashboard() {
                 <FaLinux />
                 <span>Server Metrics</span>
               </button>
-            </li>
-            <li className={activeTab === "logIp" ? "active" : ""}>
-              <button onClick={() => switchTab("logIp")}>
-                <FaGlobe />
-                <span>User Requests</span>
-              </button>
-            </li>                        
-            <li className={activeTab === "rateLimits" ? "active" : ""}>
-              <button onClick={() => switchTab("rateLimits")}>
-                <FaFingerprint />
-                <span>Rate Limits</span>
-              </button>
-            </li>            
+            </li>                              
           </ul>
-        </nav>
-        
+        </nav>            
+                       
         <div className="admin-sidebar-footer">
           <button className="admin-logout-btn" onClick={handleLogout}>
             <FaFighterJet />
@@ -298,6 +316,31 @@ function CrackedAdminDashboard() {
               </button>
             </li>
             <li>
+              <button onClick={() => switchTab("logIp")}>
+                <FaGlobe /> User Requests
+              </button>
+            </li>                    
+            <li>
+              <button onClick={() => switchTab("honeypot")}>
+                <FaFaBattleNet/> Rate Limits
+              </button>
+            </li>                
+            <li>
+              <button onClick={() => switchTab("c2")}>
+                <FaGitkraken /> Rate Limits
+              </button>
+            </li>                               
+            <li>
+              <button onClick={() => switchTab("credentials")}>
+                <FaGhost/> Request Logs
+              </button>
+            </li>
+            <li>
+              <button onClick={() => switchTab("rateLimits")}>
+                <FaFingerprint /> Rate Limits
+              </button>
+            </li>            
+            <li>
               <button onClick={() => switchTab("dbShell")}>
                 <FaTerminal /> DB Shell
               </button>
@@ -310,16 +353,6 @@ function CrackedAdminDashboard() {
             <li>
               <button onClick={() => switchTab("serverMetrics")}>
                 <FaLinux /> Server Metrics
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("logIp")}>
-                <FaGlobe /> User Requests
-              </button>
-            </li>             
-            <li>
-              <button onClick={() => switchTab("rateLimits")}>
-                <FaFingerprint /> Rate Limits
               </button>
             </li>
             <li>

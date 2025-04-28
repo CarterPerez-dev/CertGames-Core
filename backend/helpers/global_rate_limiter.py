@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from helpers.jwt_auth import jwt_optional_wrapper
 from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
 import random
-
+import re
 
 # Ensure environment variables are loaded
 load_dotenv()
@@ -279,67 +279,242 @@ class GlobalRateLimiter:
             }
         )
 
-def global_rate_limit(limiter_type):
+def apply_global_rate_limiting():
     """
-    Decorator to apply rate limiting to a route.
-    
-    Args:
-        limiter_type: The type of endpoint being rate limited
-                    ('auth', 'password_reset', 'contact', 'general', 'fallback')
-    
-    Returns:
-        Function decorator
+    Function to create a Flask before_request middleware that applies
+    rate limiting to all public API endpoints with advanced security inspection.
+    Uses stricter regex matching for suspicious patterns.
     """
-    def decorator(f):
-        @jwt_optional_wrapper 
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            # Create a rate limiter for this endpoint
-            limiter = GlobalRateLimiter(limiter_type)
-            
-            # Check if rate limited
-            is_limited, remaining, reset_time, retry_after = limiter.is_rate_limited()
-            
-            # If limited, return 429 Too Many Requests
-            if is_limited:
-                reset_msg = ""
-                if reset_time:
-                    # Calculate seconds until reset
-                    seconds_to_reset = max(1, int((reset_time - datetime.utcnow()).total_seconds()))
-                    minutes_to_reset = max(1, seconds_to_reset // 60)
-                    reset_msg = f" Try again in {minutes_to_reset} minutes."
-                
-                response = jsonify({
-                    "error": f"Rate limit exceeded for {limiter_type} endpoint.{reset_msg}",
-                    "remaining": remaining,
-                    "type": "rate_limit_error"
-                })
-                response.status_code = 429
-                
-                # Set headers for rate limit info
-                response.headers['X-RateLimit-Limit'] = str(limiter.limits['calls'])
-                response.headers['X-RateLimit-Remaining'] = str(remaining)
-                if reset_time:
-                    response.headers['X-RateLimit-Reset'] = str(int(reset_time.timestamp()))
-                if retry_after > 0:
-                    response.headers['Retry-After'] = str(retry_after)
-                
-                return response
-            
-            # Record the usage
-            limiter.increment_usage()
-            
-            # Store rate limit info for setting headers in after_request
-            g.rate_limit_info = {
-                'limit': limiter.limits['calls'],
-                'remaining': remaining - 1
-            }
-            
-            # Continue with the original function
-            return f(*args, **kwargs)
-        return decorated_function
-    return decorator
+    def check_rate_limit():
+        path = request.path
 
+        # Skip non-API OPTIONS requests (CORS preflight)
+        if request.method == 'OPTIONS':
+            return
+
+        # Check request size first (DOS protection)
+        content_length = request.content_length or 0
+        # Using 3MB limit as in the original example
+        if content_length > 3 * 1024 * 1024:
+            response = jsonify({
+                "error": "Request payload too large",
+                "type": "security_error"
+            })
+            response.status_code = 413  # Payload Too Large
+            logger.warning(f"Request payload too large: {content_length} bytes from {request.remote_addr} for path {path}")
+            return response
+
+
+        ai_endpoints = ['/payload/', '/scenario/', '/analogy/', '/grc/', '/xploit/', '/cracked/newsletter/']
+        is_ai_endpoint = any(path.startswith(ai_path) for ai_path in ai_endpoints)
+
+
+        if not is_ai_endpoint:
+
+
+            suspicious_patterns = [
+                # Script injection patterns
+                '<script>', '<?php', '<%=', '<svg/onload=', '<img/onerror=', 'javascript:',
+                'document.cookie', 'document.location', 'window.location', 'eval(',
+                'setTimeout(', 'setInterval(', 'Function(', 'fromCharCode(', 'atob(', 'btoa(',
+                r'on\w+\s*=', r'javascript:\s*\w+', r'<\s*script\b', r'<\s*img[^>]+\bonerror\s*=',
+
+                # SQL injection patterns
+                "' OR '1'='1", "' OR 1=1--", "OR 1=1--", ";--", "/**/", "UNION SELECT",
+                "' UNION SELECT", "INFORMATION_SCHEMA", "@@version", "sys.tables",
+                "UTL_HTTP", "DBMS_LDAP", "xp_cmdshell", "sp_execute",
+                r'\bUNION\s+ALL\s+SELECT\b', r'\bOR\s+\d+\s*=\s*\d+', r';\s*DROP\s+TABLE',
+
+
+                '{"$ne":', '{"$gt":', '{"$lt":', '{"$regex":', '{"$where":',
+                r'`.*?`', r'\|\s*bash', r';\s*wget\s+http',
+
+                # Path traversal patterns
+                '../../../', '..%2F..%2F', '/etc/passwd', '/etc/shadow', '/proc/self/',
+                'file:///', 'C:\\Windows\\', 'boot.ini', 'win.ini',
+
+                # Crypto mining patterns
+                'coinhive', 'cryptonight', 'stratum+tcp', 'monero',
+
+                # XML/YAML attacks
+                '<!ENTITY', 'SYSTEM "file:', '[<!ENTITY', '!YAML',
+
+                # HTTP header injection
+                '%0d%0a', 'Set-Cookie:', 'Location:',
+
+                # Unusual content types (usually less relevant in query/body, but kept)
+                'application/xml-dtd', 'text/xsl', 'text/cmd', 'text/x-shellscript',
+
+                # Base64 encoded payloads with script indicators 
+                'PHNjcmlwdD', 'eyJfaWQi', 'JGd0', 'KSB7',
+
+                # Serialization attacks
+                'O:8:', 'rO0', 'YToy'
+            ]
+
+            # Helper function for stricter pattern checking using regex
+            def check_suspicious_exact(text_to_check, source_name):
+                """
+                Checks text against suspicious patterns using regex for stricter matching.
+                Uses word boundaries (\b) for alphanumeric patterns for "exact word" match.
+                Uses direct escaped matching for patterns with symbols.
+                Uses raw regex patterns as is.
+                Performs case-insensitive search.
+                """
+                if not text_to_check: # Skip empty strings
+                    return None
+
+                for pattern in suspicious_patterns:
+                    try:
+                        regex_to_use = pattern
+                        is_raw = False
+
+                        if pattern.startswith(('r"', "r'")):
+                            regex_to_use = pattern[1:-1] # Remove r'' or r""
+                            is_raw = True
+                        else:
+                            escaped_pattern = re.escape(pattern)
+                            # Apply word boundaries (\b) only if it does
+                            if pattern and pattern[0].isalnum() and pattern[-1].isalnum():
+                                regex_to_use = r'\b' + escaped_pattern + r'\b'
+                            else:
+                                regex_to_use = escaped_pattern
+
+                        # Perform case-insensitive search
+                        if re.search(regex_to_use, text_to_check, re.IGNORECASE):
+                            logger.warning(
+                                f"Strict suspicious pattern found in {source_name}. "
+                                f"Pattern='{pattern}', Regex Used='{regex_to_use}', "
+                                f"Client={request.remote_addr}, Path={path}"
+                            )
+                            response = jsonify({
+                                "error": f"Invalid request content detected in {source_name}.",
+                                "type": "security_error"
+                            })
+                            response.status_code = 422 # Specific unique code to know if I accidenly block a real request (other than logging ofcourse)
+                            return response # Block the request
+
+                    except re.error as e:
+                        # Log regex compilation/matching errors but don't block requests
+                        logger.error(f"Regex error processing pattern '{pattern}' in {source_name}: {e}")
+                        continue 
+
+                return None # No suspicious pattern found
+
+            # --- Apply the check ---
+
+            # Check query string
+            query_string_original = request.query_string.decode('utf-8', errors='ignore')
+            block_response = check_suspicious_exact(query_string_original, "query string")
+            if block_response:
+                return block_response
+
+
+            # More headers that might carry payloads
+            suspicious_headers = [
+                'X-Forwarded-Host', 'Accept-Language',
+                'X-Api-Key', 'X-Csrf-Token' 
+            ]
+            for header_name in suspicious_headers:
+                header_value_original = request.headers.get(header_name, '')
+                block_response = check_suspicious_exact(header_value_original, f"'{header_name}' header")
+                if block_response:
+                    return block_response
+
+
+            if request.method in ['POST', 'PUT', 'PATCH']:
+                try:
+                    raw_data_bytes = request.get_data()
+                    # Only inspect reasonably sized bodies to prevent DoS on the check itself
+                    if 0 < len(raw_data_bytes) < 50000: # 50KB limit for inspection
+                         # Decode assuming UTF-8, ignore errors for robustness
+                         raw_data_original = raw_data_bytes.decode('utf-8', errors='ignore')
+                         block_response = check_suspicious_exact(raw_data_original, "request body")
+                         if block_response:
+                             return block_response
+                    elif len(raw_data_bytes) >= 50000:
+                         # Log if body is too large to inspect fully, but don't block here
+                         # Size limit check earlier handles blocking truly huge payloads
+                         logger.info(f"Request body size ({len(raw_data_bytes)} bytes) exceeds inspection limit (50000 bytes) for path {path}, client {request.remote_addr}. Skipping detailed pattern check.")
+
+                except Exception as e:
+                    # Don't block the request if reading or checking the body fails
+                    logger.error(f"Error reading/checking request body for suspicious patterns: {str(e)}")
+                    pass # Continue processing the request
+
+        # --- End of Suspicious Pattern Check Logic ---
+
+
+        # --- Rate Limiting Logic (Runs regardless of pattern check outcome if not blocked) ---
+
+        # Determine the limiter type based on the path
+        # Assumes get_limiter_type_for_path is defined elsewhere and returns type or None
+        limiter_type = get_limiter_type_for_path(path, request.method)
+
+        # If limiter_type is None, this path is explicitly exempt from rate limiting
+        if limiter_type is None:
+            # Path is exempt, proceed to the actual route handler
+            return # No rate limiting applied
+
+        # Create a rate limiter for this endpoint type
+        # Assumes GlobalRateLimiter class is defined elsewhere
+        limiter = GlobalRateLimiter(limiter_type)
+
+        # Check if rate limited
+        is_limited, remaining, reset_time, retry_after = limiter.is_rate_limited()
+
+        # If limited, return 429 Too Many Requests
+        if is_limited:
+            reset_msg = ""
+            if reset_time:
+                # Calculate seconds until reset (ensure positive)
+                seconds_to_reset = max(1, int((reset_time - datetime.utcnow()).total_seconds()))
+                # Provide user-friendly minutes
+                minutes_to_reset = max(1, (seconds_to_reset + 59) // 60) # Round up minutes
+                reset_msg = f" Please try again in {minutes_to_reset} minute{'s' if minutes_to_reset > 1 else ''}."
+
+            response = jsonify({
+                "error": f"Rate limit exceeded.{reset_msg}", # Simplified message
+                "remaining": 0, # Explicitly 0 when limited
+                "type": "rate_limit_error",
+                "limit_type": limiter_type # Add type for context
+            })
+            response.status_code = 429
+
+            # Set standard rate limit headers
+            response.headers['X-RateLimit-Limit'] = str(limiter.limits['calls'])
+            response.headers['X-RateLimit-Remaining'] = '0'
+            if reset_time:
+                # Reset time as UNIX timestamp
+                response.headers['X-RateLimit-Reset'] = str(int(reset_time.timestamp()))
+            if retry_after > 0:
+                # Retry-After header in seconds
+                response.headers['Retry-After'] = str(int(retry_after))
+
+            # Log rate limit events
+            logger.warning(f"Rate limit exceeded: Type='{limiter_type}', Path='{path}', Client='{limiter._get_client_identifier()}'")
+
+            return response # Return the 429 response
+
+        # If NOT rate limited:
+        # Record the usage *before* proceeding to the view function
+        limiter.increment_usage()
+
+        # Store rate limit info in Flask's 'g' object for setting headers later (in after_request)
+        # Calculate remaining *after* incrementing usage
+        g.rate_limit_info = {
+            'limit': limiter.limits['calls'],
+            'remaining': max(0, remaining - 1), # Decrement remaining count for the current request
+            'reset_time': reset_time # Store reset time if needed for headers later
+        }
+
+        # If no security block and not rate limited, proceed to the actual route handler
+        # Returning None from a before_request function allows the request to continue
+        return None
+
+    # apply_global_rate_limiting returns the inner check_rate_limit function
+    # This function will be registered with Flask's @app.before_request
+    return check_rate_limit
 def get_limiter_type_for_path(path, method=None):
     """
     Determine the limiter type based on the request path and method.
@@ -481,8 +656,7 @@ def apply_global_rate_limiting():
                 r'\bUNION\s+ALL\s+SELECT\b', r'\bOR\s+\d+\s*=\s*\d+', r';\s*DROP\s+TABLE',
                 
                 # Command injection patterns
-                '; ls', '; cat', '; pwd', '; id', '; curl', '& wget', '| bash', 
-                '$(', '`', '> /tmp/', '> /var/', '>/dev/', 
+                '; ls', '; cat', '; pwd','; curl', '& wget', '| bash',
                 r'`.*?`', r'\|\s*bash', r';\s*wget\s+http'
                 
                 # Path traversal patterns
