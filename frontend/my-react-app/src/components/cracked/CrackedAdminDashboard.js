@@ -53,10 +53,26 @@ import CredentialsTab from "./tabs/CredentialsTab";
 
 
 function CrackedAdminDashboard() {
-  const [activeTab, setActiveTab] = useState("overview");
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
+
+
+  const [activeTab, setActiveTab] = useState(() => {
+    // Try to get saved tab from localStorage, default to "overview" if not found
+    return localStorage.getItem('adminActiveTab') || "overview";
+  });
+  
+  // Modify the switchTab function to save the selection to localStorage
+  const switchTab = (tabName) => {
+    // Save to localStorage
+    localStorage.setItem('adminActiveTab', tabName);
+    
+    // Update state as before
+    setActiveTab(tabName);
+    setMobileNavOpen(false);
+  };
+  
   /*****************************************
    * LOGOUT 
    *****************************************/
@@ -72,13 +88,6 @@ function CrackedAdminDashboard() {
     }
   };
 
-  /*****************************************
-   * TAB SWITCH
-   *****************************************/
-  const switchTab = (tabName) => {
-    setActiveTab(tabName);
-    setMobileNavOpen(false);
-  };
 
   // Render the appropriate tab component based on activeTab
   const renderTabContent = () => {

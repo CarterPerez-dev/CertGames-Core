@@ -407,7 +407,7 @@ const Sidebar = () => {
               <li>
                 <NavLink to="/dailycyberbrief" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
                   {getIcon('/dailycyberbrief')}
-                  <span className="sidebar-link-text">-Daily CyberBrief</span>
+                  <span className="sidebar-link-text">-CyberBrief</span>
                 </NavLink>
               </li>
             </ul>

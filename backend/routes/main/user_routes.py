@@ -411,13 +411,12 @@ def delete_user_account(user_id):
         return jsonify({"error": "Invalid user ID"}), 400
 
     try:
-
+        # Use mainusers_collection as before
         result = mainusers_collection.delete_one({"_id": user_oid})
         
-   
-        testAttempts_collection.delete_many({"userId": user_oid})
-        achievements_collection.delete_many({"userId": user_oid})
-
+        # Use db object instead
+        db.testAttempts.delete_many({"userId": user_oid})
+        db.achievements.delete_many({"userId": user_oid})
 
         if result.deleted_count > 0:
             return jsonify({"message": "Account deleted successfully"}), 200
