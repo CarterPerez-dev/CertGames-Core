@@ -19,6 +19,7 @@ from routes.security.proxy_detector import proxy_detector
 from routes.security.geo_db_updater import download_and_extract_db
 import geoip2.database
 import os
+from routes.admin.cracked_admin import require_cracked_admin
 
 from dotenv import load_dotenv
 
@@ -604,45 +605,52 @@ def honeypot_handler():
     return resp
 
 
-# Analytics route for admin dashboard
 @honeypot_bp.route('/analytics', methods=['GET'])
 def honeypot_analytics():
     """Return analytics about honeypot activity"""
-    if not require_cracked_admin:
+    if not require_cracked_admin():  
         return jsonify({"error": "Not authorized"}), 403
     
-    # Get overall statistics
-    total_attempts = db.scanAttempts.count_documents({})
-    unique_ips = len(db.scanAttempts.distinct("ip"))
-    unique_clients = len(db.scanAttempts.distinct("clientId"))
-    
-    # Most common paths
-    top_paths_pipeline = [
-        {"$group": {"_id": "$path", "count": {"$sum": 1}}},
-        {"$sort": {"count": -1}},
-        {"$limit": 10}
-    ]
-    top_paths = list(db.scanAttempts.aggregate(top_paths_pipeline))
-    
-    # Most common IPs
-    top_ips_pipeline = [
-        {"$group": {"_id": "$ip", "count": {"$sum": 1}}},
-        {"$sort": {"count": -1}},
-        {"$limit": 10}
-    ]
-    top_ips = list(db.scanAttempts.aggregate(top_ips_pipeline))
-    
-    # Recent activity
-    recent_activity = list(db.scanAttempts.find()
-                          .sort("timestamp", -1)
-                          .limit(20))
-    
-    # Format for JSON response
-    for activity in recent_activity:
-        activity["_id"] = str(activity["_id"])
-        activity["timestamp"] = activity["timestamp"].isoformat()
-    
-        return jsonify({...}), 200
+    try:
+
+        total_attempts = db.scanAttempts.count_documents({})
+        unique_ips = len(db.scanAttempts.distinct("ip"))
+        unique_clients = len(db.scanAttempts.distinct("clientId"))
+        
+
+        top_paths_pipeline = [
+            {"$group": {"_id": "$path", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 10}
+        ]
+        top_paths = list(db.scanAttempts.aggregate(top_paths_pipeline))
+        
+
+        top_ips_pipeline = [
+            {"$group": {"_id": "$ip", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 10}
+        ]
+        top_ips = list(db.scanAttempts.aggregate(top_ips_pipeline))
+        
+
+        recent_activity = list(db.scanAttempts.find()
+                              .sort("timestamp", -1)
+                              .limit(20))
+        
+
+        for activity in recent_activity:
+            activity["_id"] = str(activity["_id"])
+            activity["timestamp"] = activity["timestamp"].isoformat()
+        
+        return jsonify({
+            "total_attempts": total_attempts,
+            "unique_ips": unique_ips,
+            "unique_clients": unique_clients,
+            "top_paths": top_paths,
+            "top_ips": top_ips,
+            "recent_activity": recent_activity
+        }), 200
     except Exception as e:
         current_app.logger.error(f"Error in honeypot analytics: {str(e)}")
         return jsonify({
@@ -652,8 +660,7 @@ def honeypot_analytics():
             "top_paths": [],
             "top_ips": [],
             "recent_activity": []
-        }), 200  # Return 200 with empty data
- 
+        }), 200  
 
 def log_honeypot_interaction(category, action, details=None):
     """Log interactions with honeypot pages
