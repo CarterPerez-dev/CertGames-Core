@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecureSystem - Credential Storage</title>
+    <title>Security Credentials</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -58,272 +58,127 @@
             margin: 0 8px;
             font-size: 12px;
         }
-        .alert {
-            padding: 15px;
+        .credentials-panel {
+            background-color: #fff;
             border-radius: 5px;
-            margin-bottom: 20px;
-            border-left: 4px solid;
-        }
-        .alert-danger {
-            background-color: #fdedec;
-            border-color: #e74c3c;
-            color: #c0392b;
-        }
-        .alert i {
-            margin-right: 10px;
-        }
-        .main {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 30px;
             margin-top: 20px;
-        }
-        .sidebar {
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar-menu li {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-        }
-        .sidebar-menu li.active {
-            background-color: #3498db;
-            color: white;
-        }
-        .sidebar-menu li:hover:not(.active) {
-            background-color: #f9f9f9;
-        }
-        .sidebar-menu li i {
-            margin-right: 10px;
-            width: 20px;
             text-align: center;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .content {
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 20px;
+        .credentials-icon {
+            font-size: 48px;
+            color: #c0392b;
+            margin-bottom: 20px;
         }
         h1 {
             font-size: 24px;
             margin-bottom: 20px;
             color: #2c3e50;
         }
-        .filters {
-            display: flex;
+        .credentials-description {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+        .security-alert {
+            background-color: #fcf8e3;
+            border-left: 4px solid #f39c12;
+            padding: 10px 15px;
             margin-bottom: 20px;
-            align-items: center;
-            gap: 10px;
+            text-align: left;
+            color: #8a6d3b;
         }
-        .filters input {
-            padding: 8px 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            flex: 1;
-            font-size: 14px;
+        .security-alert i {
+            margin-right: 10px;
         }
-        .filters select {
-            padding: 8px 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            min-width: 150px;
+        .credentials-form {
+            text-align: left;
+            margin: 25px 0;
         }
-        .button {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 4px;
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
             font-weight: 500;
+            color: #34495e;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             font-size: 14px;
+        }
+        .form-group input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: white;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+        .back-button {
+            background-color: #95a5a6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background-color 0.2s;
             cursor: pointer;
             border: none;
+        }
+        .back-button:hover {
+            background-color: #7f8c8d;
+        }
+        .continue-button {
+            background-color: #c0392b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
             transition: background-color 0.2s;
+            cursor: pointer;
+            border: none;
         }
-        .button-primary {
-            background-color: #3498db;
-            color: white;
+        .continue-button:hover {
+            background-color: #a93226;
         }
-        .button-success {
-            background-color: #2ecc71;
-            color: white;
-        }
-        .button-danger {
-            background-color: #e74c3c;
-            color: white;
-        }
-        .button-warning {
-            background-color: #f39c12;
-            color: white;
-        }
-        .credential-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+        .security-badge {
+            display: inline-block;
+            background-color: #f2dede;
+            color: #a94442;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
             margin-top: 20px;
         }
-        .credential-card {
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            padding: 20px;
-            border: 1px solid #e9ecef;
-            position: relative;
-        }
-        .credential-card h3 {
-            font-size: 16px;
-            margin-top: 0;
-            margin-bottom: 10px;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-        }
-        .credential-card h3 i {
-            margin-right: 8px;
-            color: #3498db;
-        }
-        .credential-type {
-            background-color: #e9ecef;
-            border-radius: 3px;
-            padding: 3px 6px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #495057;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
-        .credential-field {
-            margin-bottom: 10px;
-        }
-        .credential-field .label {
-            font-size: 12px;
-            color: #6c757d;
-            margin-bottom: 3px;
-        }
-        .credential-field .value {
-            background-color: #fff;
-            border: 1px solid #e9ecef;
-            border-radius: 3px;
-            padding: 6px 10px;
-            font-family: monospace;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .credential-field .value .masked {
-            width: 80%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .credential-field .value .btn-copy {
-            background: none;
-            border: none;
-            color: #3498db;
-            cursor: pointer;
-            padding: 0;
-            font-size: 14px;
-        }
-        .credential-footer {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-            font-size: 12px;
-            color: #6c757d;
-        }
-        .credential-actions {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            display: flex;
-            gap: 5px;
-        }
-        .credential-actions button {
-            background: none;
-            border: none;
-            color: #6c757d;
-            cursor: pointer;
-            padding: 0;
-            font-size: 16px;
-        }
-        .credential-actions button:hover {
-            color: #3498db;
-        }
-        .credential-meta {
-            margin-top: 10px;
-            font-size: 12px;
-            color: #6c757d;
-        }
-        .credential-meta div {
-            margin-bottom: 3px;
-        }
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 30px;
-        }
-        .pagination a {
-            display: inline-block;
-            padding: 8px 12px;
-            margin: 0 5px;
-            border-radius: 4px;
-            background-color: #f1f1f1;
-            color: #333;
-            text-decoration: none;
-        }
-        .pagination a.active {
-            background-color: #3498db;
-            color: white;
+        .security-badge i {
+            margin-right: 5px;
         }
         .footer {
             text-align: center;
             margin-top: 50px;
             color: #7f8c8d;
             font-size: 14px;
-            padding: 20px 0;
-            border-top: 1px solid #eee;
-        }
-        .security-notice {
-            background-color: #fdedec;
-            border-left: 4px solid #e74c3c;
-            padding: 15px;
-            margin-top: 30px;
-            font-size: 13px;
-            color: #c0392b;
-        }
-        .access-button {
-            display: inline-block;
-            background-color: #e74c3c;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 16px;
-            text-decoration: none;
-            transition: background-color 0.2s;
-            margin-top: 20px;
-            cursor: pointer;
-            text-align: center;
-        }
-        .access-button:hover {
-            background-color: #c0392b;
-        }
-        .system-badge {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background-color: #3498db;
-            color: white;
-            padding: 5px 10px;
-            font-size: 12px;
-            font-weight: 500;
-            border-top-right-radius: 5px;
-            border-bottom-left-radius: 5px;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -344,329 +199,64 @@
         <div class="breadcrumb">
             <a href="#"><i class="fas fa-home"></i> Home</a>
             <i class="fas fa-chevron-right"></i>
-            <a href="#">Access Control</a>
+            <a href="#">User Management</a>
             <i class="fas fa-chevron-right"></i>
-            <span>Credential Storage</span>
+            <a href="#">Access Privileges</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>Security Credentials</span>
         </div>
         
-        <div class="alert alert-danger">
-            <i class="fas fa-exclamation-triangle"></i>
-            <strong>High Security Area:</strong> All actions in this section are logged and monitored. Unauthorized access will trigger security alerts.
-        </div>
-        
-        <div class="main">
-            <div class="sidebar">
-                <ul class="sidebar-menu">
-                    <li><i class="fas fa-tachometer-alt"></i> Dashboard</li>
-                    <li><i class="fas fa-users"></i> User Management</li>
-                    <li><i class="fas fa-user-shield"></i> Access Control</li>
-                    <li class="active"><i class="fas fa-key"></i> Credential Storage</li>
-                    <li><i class="fas fa-user-lock"></i> Vault Management</li>
-                    <li><i class="fas fa-fingerprint"></i> Authentication</li>
-                    <li><i class="fas fa-history"></i> Access Logs</li>
-                    <li><i class="fas fa-cog"></i> Settings</li>
-                    <li><i class="fas fa-sign-out-alt"></i> Logout</li>
-                </ul>
+        <div class="credentials-panel">
+            <div class="credentials-icon">
+                <i class="fas fa-fingerprint"></i>
             </div>
-            <div class="content">
-                <h1><i class="fas fa-key"></i> Credential Storage System</h1>
+            <h1>Security Credentials</h1>
+            <p class="credentials-description">Provide additional credentials to access the password vault.</p>
+            
+            <div class="security-alert">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Warning:</strong> This action will be logged and requires advanced clearance.
+            </div>
+            
+            <form class="credentials-form">
+                <div class="form-group">
+                    <label for="security-level">Security Clearance Level:</label>
+                    <select id="security-level">
+                        <option value="1">Level 1 - Basic</option>
+                        <option value="2">Level 2 - Standard</option>
+                        <option value="3" selected>Level 3 - Advanced</option>
+                        <option value="4">Level 4 - Administrative</option>
+                        <option value="5">Level 5 - Root</option>
+                    </select>
+                </div>
                 
-                <div class="filters">
-                    <input type="text" placeholder="Search credentials...">
-                    <select>
-                        <option>All Categories</option>
-                        <option>Server Access</option>
-                        <option>Database</option>
-                        <option>API Keys</option>
-                        <option>Service Accounts</option>
-                    </select>
-                    <select>
-                        <option>All Access Levels</option>
-                        <option>Critical</option>
-                        <option>High</option>
-                        <option>Medium</option>
-                        <option>Low</option>
-                    </select>
-                    <button class="button button-primary">
-                        <i class="fas fa-plus"></i> Add New
+                <div class="form-group">
+                    <label for="security-key">Security Key:</label>
+                    <input type="password" id="security-key" placeholder="Enter your security key" value="••••••••">
+                </div>
+                
+                <div class="form-group">
+                    <label for="verification-code">Verification Code:</label>
+                    <input type="text" id="verification-code" placeholder="Enter verification code">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="back-button" id="back-btn">
+                        <i class="fas fa-arrow-left"></i> Back
                     </button>
+                    <a href="/system/vault/passwords" class="continue-button" id="access-vault-btn">
+                        Access Vault <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
-                
-                <div class="credential-grid">
-                    <div class="credential-card">
-                        <div class="system-badge">Production</div>
-                        <h3><i class="fas fa-database"></i> Main Database</h3>
-                        <span class="credential-type">Database Credentials</span>
-                        
-                        <div class="credential-field">
-                            <div class="label">Username</div>
-                            <div class="value">
-                                <div class="masked">db_admin_prod</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-field">
-                            <div class="label">Password</div>
-                            <div class="value">
-                                <div class="masked">••••••••••••••••</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-field">
-                            <div class="label">Connection String</div>
-                            <div class="value">
-                                <div class="masked">postgresql://db_admin_prod:******@prod-db.example.com:5432/maindb</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-meta">
-                            <div><strong>Last Updated:</strong> 2025-04-15</div>
-                            <div><strong>Expiration:</strong> 2025-07-15</div>
-                            <div><strong>Access Level:</strong> Critical</div>
-                        </div>
-                        
-                        <div class="credential-actions">
-                            <button><i class="fas fa-eye"></i></button>
-                            <button><i class="fas fa-edit"></i></button>
-                            <button><i class="fas fa-history"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="credential-card">
-                        <div class="system-badge">Production</div>
-                        <h3><i class="fas fa-server"></i> Primary Web Server</h3>
-                        <span class="credential-type">SSH Credentials</span>
-                        
-                        <div class="credential-field">
-                            <div class="label">Username</div>
-                            <div class="value">
-                                <div class="masked">admin_web01</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-field">
-                            <div class="label">Private Key</div>
-                            <div class="value">
-                                <div class="masked">-----BEGIN RSA PRIVATE KEY----- ••••••••••••••••</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-field">
-                            <div class="label">Host</div>
-                            <div class="value">
-                                <div class="masked">web01.prod.example.com</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-meta">
-                            <div><strong>Last Updated:</strong> 2025-03-20</div>
-                            <div><strong>Expiration:</strong> 2025-09-20</div>
-                            <div><strong>Access Level:</strong> Critical</div>
-                        </div>
-                        
-                        <div class="credential-actions">
-                            <button><i class="fas fa-eye"></i></button>
-                            <button><i class="fas fa-edit"></i></button>
-                            <button><i class="fas fa-history"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="credential-card">
-                        <div class="system-badge">Development</div>
-                        <h3><i class="fas fa-code"></i> API Gateway</h3>
-                        <span class="credential-type">API Credentials</span>
-                        
-                        <div class="credential-field">
-                            <div class="label">Client ID</div>
-                            <div class="value">
-                                <div class="masked">api_client_3f8a92e5</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-field">
-                            <div class="label">Client Secret</div>
-                            <div class="value">
-                                <div class="masked">••••••••••••••••••••••••••</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-field">
-                            <div class="label">API Endpoint</div>
-                            <div class="value">
-                                <div class="masked">https://api-dev.example.com/v2/</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-meta">
-                            <div><strong>Last Updated:</strong> 2025-04-10</div>
-                            <div><strong>Expiration:</strong> 2025-10-10</div>
-                            <div><strong>Access Level:</strong> High</div>
-                        </div>
-                        
-                        <div class="credential-actions">
-                            <button><i class="fas fa-eye"></i></button>
-                            <button><i class="fas fa-edit"></i></button>
-                            <button><i class="fas fa-history"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="credential-card">
-                        <div class="system-badge">Production</div>
-                        <h3><i class="fas fa-lock"></i> Certificate Authority</h3>
-                        <span class="credential-type">SSL Certificates</span>
-                        
-                        <div class="credential-field">
-                            <div class="label">Admin Username</div>
-                            <div class="value">
-                                <div class="masked">ca_admin</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-field">
-                            <div class="label">Root Password</div>
-                            <div class="value">
-                                <div class="masked">••••••••••••••••••••</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-field">
-                            <div class="label">CA Endpoint</div>
-                            <div class="value">
-                                <div class="masked">https://ca.example.com/admin</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-meta">
-                            <div><strong>Last Updated:</strong> 2025-02-15</div>
-                            <div><strong>Expiration:</strong> 2025-08-15</div>
-                            <div><strong>Access Level:</strong> Critical</div>
-                        </div>
-                        
-                        <div class="credential-actions">
-                            <button><i class="fas fa-eye"></i></button>
-                            <button><i class="fas fa-edit"></i></button>
-                            <button><i class="fas fa-history"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="credential-card">
-                        <div class="system-badge">Production</div>
-                        <h3><i class="fas fa-cloud"></i> Cloud Provider</h3>
-                        <span class="credential-type">Service Account</span>
-                        
-                        <div class="credential-field">
-                            <div class="label">Account ID</div>
-                            <div class="value">
-                                <div class="masked">sa-prod-infra-admin</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-field">
-                            <div class="label">Access Key</div>
-                            <div class="value">
-                                <div class="masked">••••••••••••••••••••••••••</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-field">
-                            <div class="label">Secret Key</div>
-                            <div class="value">
-                                <div class="masked">••••••••••••••••••••••••••</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-meta">
-                            <div><strong>Last Updated:</strong> 2025-04-01</div>
-                            <div><strong>Expiration:</strong> 2025-07-01</div>
-                            <div><strong>Access Level:</strong> Critical</div>
-                        </div>
-                        
-                        <div class="credential-actions">
-                            <button><i class="fas fa-eye"></i></button>
-                            <button><i class="fas fa-edit"></i></button>
-                            <button><i class="fas fa-history"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="credential-card">
-                        <div class="system-badge">Testing</div>
-                        <h3><i class="fas fa-exchange-alt"></i> Payment Gateway</h3>
-                        <span class="credential-type">API Credentials</span>
-                        
-                        <div class="credential-field">
-                            <div class="label">Merchant ID</div>
-                            <div class="value">
-                                <div class="masked">merch_test_45692</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-field">
-                            <div class="label">API Key</div>
-                            <div class="value">
-                                <div class="masked">••••••••••••••••••••••••••</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-field">
-                            <div class="label">Webhook Secret</div>
-                            <div class="value">
-                                <div class="masked">••••••••••••••••••••••••••</div>
-                                <button class="btn-copy"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="credential-meta">
-                            <div><strong>Last Updated:</strong> 2025-03-30</div>
-                            <div><strong>Expiration:</strong> 2025-06-30</div>
-                            <div><strong>Access Level:</strong> Medium</div>
-                        </div>
-                        
-                        <div class="credential-actions">
-                            <button><i class="fas fa-eye"></i></button>
-                            <button><i class="fas fa-edit"></i></button>
-                            <button><i class="fas fa-history"></i></button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="pagination">
-                    <a href="#">&laquo;</a>
-                    <a href="#" class="active">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">&raquo;</a>
-                </div>
-                
-                <div class="security-notice">
-                    <strong>Security Notice:</strong> All credential access is logged with IP address, timestamp, and user details. Attempting to access credentials without proper authorization will trigger security alerts and may result in account lockout.
-                </div>
-                
-                <a href="/system/vault/passwords" class="access-button">
-                    Access Password Vault
-                </a>
+            </form>
+            
+            <div class="security-badge">
+                <i class="fas fa-shield-alt"></i> Enhanced security zone
             </div>
         </div>
         
         <div class="footer">
             &copy; 2025 SecureSystem Enterprise Solutions. All rights reserved.
-            <div>Version 3.5.2 | Build 20250424-01</div>
         </div>
     </div>
 
@@ -675,74 +265,49 @@
             // Log the page view to honeypot system
             logInteraction('page_view');
             
-            // Add click handlers for copy buttons
-            document.querySelectorAll('.btn-copy').forEach(button => {
-                button.addEventListener('click', function() {
-                    const valueElement = this.parentElement.querySelector('.masked');
-                    const credentialType = this.closest('.credential-field').querySelector('.label').textContent;
-                    const cardTitle = this.closest('.credential-card').querySelector('h3').textContent.trim();
-                    
-                    // Log the copy attempt
-                    logInteraction('credential_copy', {
-                        credential: cardTitle,
-                        field: credentialType
-                    });
-                    
-                    // Show a fake "copied" tooltip
-                    const tooltip = document.createElement('div');
-                    tooltip.textContent = 'Copied!';
-                    tooltip.style.position = 'absolute';
-                    tooltip.style.backgroundColor = '#2ecc71';
-                    tooltip.style.color = 'white';
-                    tooltip.style.padding = '5px 10px';
-                    tooltip.style.borderRadius = '3px';
-                    tooltip.style.fontSize = '12px';
-                    tooltip.style.zIndex = '100';
-                    
-                    // Position the tooltip next to the button
-                    const rect = button.getBoundingClientRect();
-                    tooltip.style.top = `${rect.top - 30}px`;
-                    tooltip.style.left = `${rect.left - 20}px`;
-                    
-                    document.body.appendChild(tooltip);
-                    
-                    // Remove the tooltip after a short delay
-                    setTimeout(() => {
-                        document.body.removeChild(tooltip);
-                    }, 1500);
+            // Generate a random verification code
+            const verificationInput = document.getElementById('verification-code');
+            verificationInput.value = generateRandomCode(6);
+            
+            // Add event listeners to form fields
+            document.getElementById('security-level').addEventListener('change', function() {
+                logInteraction('dropdown_change', {
+                    field: 'security_level',
+                    value: this.value
                 });
             });
             
-            // Add click handlers for credential action buttons
-            document.querySelectorAll('.credential-actions button').forEach(button => {
-                button.addEventListener('click', function() {
-                    const action = this.innerHTML.includes('fa-eye') ? 'view' : 
-                                  this.innerHTML.includes('fa-edit') ? 'edit' : 'history';
-                    const cardTitle = this.closest('.credential-card').querySelector('h3').textContent.trim();
-                    
-                    logInteraction('credential_action', {
-                        credential: cardTitle,
-                        action: action
-                    });
+            document.getElementById('security-key').addEventListener('input', function() {
+                logInteraction('text_input', {
+                    field: 'security_key',
+                    length: this.value.length
                 });
             });
             
-            // Add click handler for search and filters
-            document.querySelector('.filters input').addEventListener('input', function() {
-                logInteraction('search_credentials', {
-                    search_term: this.value
+            document.getElementById('verification-code').addEventListener('input', function() {
+                logInteraction('text_input', {
+                    field: 'verification_code',
+                    length: this.value.length
                 });
             });
             
-            document.querySelectorAll('.filters select').forEach(select => {
-                select.addEventListener('change', function() {
-                    logInteraction('filter_credentials', {
-                        filter: select.options[0].textContent,
-                        value: select.options[select.selectedIndex].textContent
-                    });
-                });
+            // Back button event
+            document.getElementById('back-btn').addEventListener('click', function() {
+                logInteraction('back_button_click');
+                // We don't actually go back to prevent users from leaving the trap
+                alert('Cannot return to previous page. Please continue with the current process.');
             });
         });
+        
+        // Generate random alphanumeric code
+        function generateRandomCode(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
         
         // Function to log interactions with the honeypot
         function logInteraction(interactionType, details = {}) {
@@ -752,7 +317,7 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    page_type: 'credential_storage',
+                    page_type: 'security_credentials',
                     interaction_type: interactionType,
                     additional_data: {
                         ...details,
@@ -766,9 +331,13 @@
             });
         }
         
-        // Log when the access button is clicked
-        document.querySelector('.access-button').addEventListener('click', function() {
-            logInteraction('access_button_click');
+        // Log when the access vault button is clicked
+        document.getElementById('access-vault-btn').addEventListener('click', function() {
+            logInteraction('button_click', {
+                button: 'access_vault',
+                security_level: document.getElementById('security-level').value,
+                verification_code: document.getElementById('verification-code').value
+            });
         });
     </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecureSystem - Password Vault</title>
+    <title>Password Vault Access</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -58,185 +58,147 @@
             margin: 0 8px;
             font-size: 12px;
         }
-        .security-banner {
-            background-color: #e74c3c;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            font-weight: 500;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .security-banner i {
-            margin-right: 10px;
-            font-size: 18px;
-        }
-        .vault-container {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 20px;
-        }
-        .vault-navigation {
+        .vault-panel {
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 20px;
-        }
-        .vault-categories {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .vault-categories li {
-            padding: 12px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-        }
-        .vault-categories li.active {
-            background-color: #3498db;
-            color: white;
-        }
-        .vault-categories li:hover:not(.active) {
-            background-color: #f9f9f9;
-        }
-        .vault-categories li i {
-            margin-right: 10px;
-            width: 20px;
+            padding: 30px;
+            margin-top: 20px;
             text-align: center;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .search-box {
-            position: relative;
+        .vault-icon {
+            font-size: 48px;
+            color: #8e44ad;
             margin-bottom: 20px;
         }
-        .search-box input {
-            width: 100%;
-            padding: 10px 15px 10px 35px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #2c3e50;
         }
-        .search-box i {
-            position: absolute;
-            left: 12px;
-            top: 12px;
+        .vault-description {
             color: #7f8c8d;
+            margin-bottom: 25px;
         }
-        .vault-content {
-            background-color: #fff;
+        .vault-access {
+            background-color: #f5f5f5;
             border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             padding: 20px;
+            text-align: left;
         }
-        .vault-header {
+        .vault-access h2 {
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #34495e;
+        }
+        .password-list {
+            margin-bottom: 20px;
+        }
+        .password-entry {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            position: relative;
+            background-color: #fff;
+            transition: all 0.2s ease;
+        }
+        .password-entry:hover {
+            border-color: #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .password-entry-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        .vault-title {
-            font-size: 20px;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-        }
-        .vault-title i {
-            margin-right: 10px;
-            color: #3498db;
-        }
-        .vault-actions {
-            display: flex;
-            gap: 10px;
-        }
-        .button {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-weight: 500;
-            font-size: 14px;
             cursor: pointer;
-            border: none;
-            transition: background-color 0.2s;
         }
-        .button-primary {
-            background-color: #3498db;
-            color: white;
-        }
-        .button-success {
-            background-color: #2ecc71;
-            color: white;
-        }
-        .button-warning {
-            background-color: #f39c12;
-            color: white;
-        }
-        .button-danger {
-            background-color: #e74c3c;
-            color: white;
-        }
-        .vault-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .vault-table th, .vault-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        .vault-table th {
-            background-color: #f9f9f9;
+        .entry-title {
             font-weight: 600;
             color: #2c3e50;
         }
-        .vault-table tbody tr:hover {
-            background-color: #f9f9f9;
-        }
-        .password-cell {
-            font-family: monospace;
-            position: relative;
-        }
-        .masked-password {
-            letter-spacing: 2px;
-        }
-        .password-actions {
-            display: flex;
-            gap: 5px;
-        }
-        .password-actions button {
-            background: none;
-            border: none;
+        .entry-icon {
             color: #7f8c8d;
-            cursor: pointer;
             font-size: 14px;
         }
-        .password-actions button:hover {
-            color: #3498db;
+        .password-details {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            display: none;
         }
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 50px;
-            font-size: 12px;
+        .password-details.visible {
+            display: block;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .detail-label {
             font-weight: 500;
+            color: #7f8c8d;
+        }
+        .detail-value {
+            font-family: monospace;
+            background-color: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        .note {
+            font-size: 12px;
+            color: #95a5a6;
+            font-style: italic;
+            margin-top: 3px;
+        }
+        .vault-message {
+            margin-top: 25px;
+            padding: 10px 15px;
+            background-color: #e8f4fc;
+            border-radius: 5px;
             text-align: center;
+            color: #2980b9;
         }
-        .badge-success {
-            background-color: #d4f7e6;
-            color: #27ae60;
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
         }
-        .badge-warning {
-            background-color: #fdf3d8;
-            color: #f39c12;
+        .secondary-button {
+            background-color: #7f8c8d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            cursor: pointer;
         }
-        .badge-danger {
-            background-color: #fcded9;
+        .secondary-button:hover {
+            background-color: #6c7a7a;
+        }
+        .primary-button {
+            background-color: #8e44ad;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+        .primary-button:hover {
+            background-color: #703688;
+        }
+        .security-timer {
+            margin-top: 25px;
+            font-size: 14px;
             color: #e74c3c;
         }
         .footer {
@@ -244,96 +206,6 @@
             margin-top: 50px;
             color: #7f8c8d;
             font-size: 14px;
-            padding: 20px 0;
-            border-top: 1px solid #eee;
-        }
-        .password-generator {
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            padding: 15px;
-            margin-top: 30px;
-        }
-        .password-generator h3 {
-            margin-top: 0;
-            font-size: 16px;
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
-        .password-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        .password-option {
-            display: flex;
-            align-items: center;
-        }
-        .password-option input[type="checkbox"] {
-            margin-right: 5px;
-        }
-        .password-option label {
-            font-size: 14px;
-        }
-        .password-length {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .password-length label {
-            font-size: 14px;
-        }
-        .password-length input {
-            width: 60px;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-        }
-        .generated-password {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            font-family: monospace;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .generated-password button {
-            background: none;
-            border: none;
-            color: #3498db;
-            cursor: pointer;
-        }
-        .session-info {
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            padding: 15px;
-            margin-top: 30px;
-            font-size: 13px;
-            color: #7f8c8d;
-        }
-        .session-info div {
-            margin-bottom: 5px;
-        }
-        .access-button {
-            display: inline-block;
-            background-color: #e74c3c;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 16px;
-            text-decoration: none;
-            transition: background-color 0.2s;
-            margin-top: 20px;
-            cursor: pointer;
-            text-align: center;
-        }
-        .access-button:hover {
-            background-color: #c0392b;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -354,373 +226,155 @@
         <div class="breadcrumb">
             <a href="#"><i class="fas fa-home"></i> Home</a>
             <i class="fas fa-chevron-right"></i>
-            <a href="#">Security</a>
+            <a href="#">User Management</a>
             <i class="fas fa-chevron-right"></i>
-            <a href="#">Credential Storage</a>
+            <a href="#">Security Credentials</a>
             <i class="fas fa-chevron-right"></i>
             <span>Password Vault</span>
         </div>
         
-        <div class="security-banner">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span>RESTRICTED ACCESS AREA - All activities are logged and monitored</span>
-        </div>
-        
-        <div class="vault-container">
-            <div class="vault-navigation">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search vault...">
+        <div class="vault-panel">
+            <div class="vault-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h1>Master Password Vault</h1>
+            <p class="vault-description">Secure storage for system administrator credentials.</p>
+            
+            <div class="vault-access">
+                <h2>Stored Credentials</h2>
+                <div class="password-list">
+                    <div class="password-entry">
+                        <div class="password-entry-header" onclick="togglePasswordDetails('password-1')">
+                            <span class="entry-title">Database Administrator</span>
+                            <span class="entry-icon"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div class="password-details" id="password-1">
+                            <div class="detail-row">
+                                <span class="detail-label">Username:</span>
+                                <span class="detail-value">db_admin</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Password:</span>
+                                <span class="detail-value">•••••••••••••</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Last Changed:</span>
+                                <span class="detail-value">2025-03-14</span>
+                            </div>
+                            <div class="note">Note: Primary database access credentials</div>
+                        </div>
+                    </div>
+                    
+                    <div class="password-entry">
+                        <div class="password-entry-header" onclick="togglePasswordDetails('password-2')">
+                            <span class="entry-title">Network Administrator</span>
+                            <span class="entry-icon"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div class="password-details" id="password-2">
+                            <div class="detail-row">
+                                <span class="detail-label">Username:</span>
+                                <span class="detail-value">net_admin</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Password:</span>
+                                <span class="detail-value">•••••••••••••</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Last Changed:</span>
+                                <span class="detail-value">2025-02-22</span>
+                            </div>
+                            <div class="note">Note: Network infrastructure access</div>
+                        </div>
+                    </div>
+                    
+                    <div class="password-entry">
+                        <div class="password-entry-header" onclick="togglePasswordDetails('password-3')">
+                            <span class="entry-title">API Service User</span>
+                            <span class="entry-icon"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div class="password-details" id="password-3">
+                            <div class="detail-row">
+                                <span class="detail-label">Username:</span>
+                                <span class="detail-value">api_service</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Password:</span>
+                                <span class="detail-value">•••••••••••••</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Last Changed:</span>
+                                <span class="detail-value">2025-03-28</span>
+                            </div>
+                            <div class="note">Note: Used for automated API operations</div>
+                        </div>
+                    </div>
                 </div>
                 
-                <h3>Categories</h3>
-                <ul class="vault-categories">
-                    <li class="active"><i class="fas fa-server"></i> Server Credentials</li>
-                    <li><i class="fas fa-database"></i> Database Passwords</li>
-                    <li><i class="fas fa-cloud"></i> Cloud Services</li>
-                    <li><i class="fas fa-key"></i> API Keys</li>
-                    <li><i class="fas fa-credit-card"></i> Payment Systems</li>
-                    <li><i class="fas fa-lock"></i> Encryption Keys</li>
-                    <li><i class="fas fa-users"></i> User Accounts</li>
-                    <li><i class="fas fa-shield-alt"></i> Security Systems</li>
-                    <li><i class="fas fa-globe"></i> Domain Registrars</li>
-                </ul>
-                
-                <h3>Recently Accessed</h3>
-                <ul class="vault-categories">
-                    <li><i class="fas fa-clock"></i> Main Database (2 mins ago)</li>
-                    <li><i class="fas fa-clock"></i> API Gateway (1 hour ago)</li>
-                    <li><i class="fas fa-clock"></i> Payment Processor (3 hours ago)</li>
-                </ul>
+                <div class="vault-message">
+                    <i class="fas fa-info-circle"></i>
+                    Additional authentication required to view unobscured password data
+                </div>
             </div>
             
-            <div class="vault-content">
-                <div class="vault-header">
-                    <div class="vault-title">
-                        <i class="fas fa-server"></i> Server Credentials
-                    </div>
-                    <div class="vault-actions">
-                        <button class="button button-primary"><i class="fas fa-plus"></i> Add Password</button>
-                        <button class="button button-success"><i class="fas fa-file-export"></i> Export</button>
-                        <button class="button button-warning"><i class="fas fa-history"></i> History</button>
-                    </div>
-                </div>
-                
-                <table class="vault-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Username</th>
-                            <th>Password</th>
-                            <th>Last Modified</th>
-                            <th>Strength</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Production Web Server</td>
-                            <td>admin_web01</td>
-                            <td class="password-cell">
-                                <span class="masked-password">••••••••••••••••</span>
-                            </td>
-                            <td>2025-04-15</td>
-                            <td><span class="badge badge-success">Strong</span></td>
-                            <td class="password-actions">
-                                <button><i class="fas fa-eye"></i></button>
-                                <button><i class="fas fa-copy"></i></button>
-                                <button><i class="fas fa-edit"></i></button>
-                                <button><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Backup Server</td>
-                            <td>backup_admin</td>
-                            <td class="password-cell">
-                                <span class="masked-password">••••••••••••••••</span>
-                            </td>
-                            <td>2025-03-20</td>
-                            <td><span class="badge badge-success">Strong</span></td>
-                            <td class="password-actions">
-                                <button><i class="fas fa-eye"></i></button>
-                                <button><i class="fas fa-copy"></i></button>
-                                <button><i class="fas fa-edit"></i></button>
-                                <button><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Load Balancer</td>
-                            <td>lb_admin</td>
-                            <td class="password-cell">
-                                <span class="masked-password">••••••••••••••••</span>
-                            </td>
-                            <td>2025-04-02</td>
-                            <td><span class="badge badge-warning">Medium</span></td>
-                            <td class="password-actions">
-                                <button><i class="fas fa-eye"></i></button>
-                                <button><i class="fas fa-copy"></i></button>
-                                <button><i class="fas fa-edit"></i></button>
-                                <button><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Monitoring System</td>
-                            <td>monitor_user</td>
-                            <td class="password-cell">
-                                <span class="masked-password">••••••••••••••••</span>
-                            </td>
-                            <td>2025-02-10</td>
-                            <td><span class="badge badge-danger">Weak</span></td>
-                            <td class="password-actions">
-                                <button><i class="fas fa-eye"></i></button>
-                                <button><i class="fas fa-copy"></i></button>
-                                <button><i class="fas fa-edit"></i></button>
-                                <button><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Development VM</td>
-                            <td>dev_admin</td>
-                            <td class="password-cell">
-                                <span class="masked-password">••••••••••••••••</span>
-                            </td>
-                            <td>2025-04-10</td>
-                            <td><span class="badge badge-success">Strong</span></td>
-                            <td class="password-actions">
-                                <button><i class="fas fa-eye"></i></button>
-                                <button><i class="fas fa-copy"></i></button>
-                                <button><i class="fas fa-edit"></i></button>
-                                <button><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>CI/CD Server</td>
-                            <td>jenkins_admin</td>
-                            <td class="password-cell">
-                                <span class="masked-password">••••••••••••••••</span>
-                            </td>
-                            <td>2025-03-15</td>
-                            <td><span class="badge badge-success">Strong</span></td>
-                            <td class="password-actions">
-                                <button><i class="fas fa-eye"></i></button>
-                                <button><i class="fas fa-copy"></i></button>
-                                <button><i class="fas fa-edit"></i></button>
-                                <button><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>File Storage</td>
-                            <td>storage_admin</td>
-                            <td class="password-cell">
-                                <span class="masked-password">••••••••••••••••</span>
-                            </td>
-                            <td>2025-01-25</td>
-                            <td><span class="badge badge-warning">Medium</span></td>
-                            <td class="password-actions">
-                                <button><i class="fas fa-eye"></i></button>
-                                <button><i class="fas fa-copy"></i></button>
-                                <button><i class="fas fa-edit"></i></button>
-                                <button><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <div class="password-generator">
-                    <h3><i class="fas fa-random"></i> Password Generator</h3>
-                    <div class="password-options">
-                        <div class="password-option">
-                            <input type="checkbox" id="uppercase" checked>
-                            <label for="uppercase">Uppercase Letters</label>
-                        </div>
-                        <div class="password-option">
-                            <input type="checkbox" id="lowercase" checked>
-                            <label for="lowercase">Lowercase Letters</label>
-                        </div>
-                        <div class="password-option">
-                            <input type="checkbox" id="numbers" checked>
-                            <label for="numbers">Numbers</label>
-                        </div>
-                        <div class="password-option">
-                            <input type="checkbox" id="symbols" checked>
-                            <label for="symbols">Special Symbols</label>
-                        </div>
-                    </div>
-                    
-                    <div class="password-length">
-                        <label for="length">Password Length:</label>
-                        <input type="number" id="length" min="8" max="64" value="16">
-                        <button class="button button-primary" id="generate-btn">Generate</button>
-                    </div>
-                    
-                    <div class="generated-password">
-                        <span id="generated-password">K8$p2Lm!X7@zFv9q</span>
-                        <button id="copy-generated"><i class="fas fa-copy"></i></button>
-                    </div>
-                </div>
-                
-                <div class="session-info">
-                    <div><strong>Session ID:</strong> SESS-2856793-A</div>
-                    <div><strong>IP Address:</strong> 192.168.1.45</div>
-                    <div><strong>Last Access:</strong> 2025-04-30 10:32:15</div>
-                    <div><strong>2FA Verification:</strong> Completed at 2025-04-30 10:30:12</div>
-                </div>
-                
-                <a href="/system/auth/tokens" class="access-button">
-                    View Security Tokens
+            <div class="security-timer">
+                <i class="fas fa-clock"></i> Session expires in: <span id="timer">04:59</span>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="secondary-button" id="export-btn">
+                    <i class="fas fa-file-export"></i> Export Data
+                </button>
+                <a href="/system/auth/tokens" class="primary-button" id="auth-tokens-btn">
+                    <i class="fas fa-key"></i> Authentication Tokens
                 </a>
             </div>
         </div>
         
         <div class="footer">
             &copy; 2025 SecureSystem Enterprise Solutions. All rights reserved.
-            <div>Version 3.5.2 | Build 20250424-01</div>
         </div>
     </div>
 
     <script>
+        // Timer countdown
+        let timeLeft = 299; // 4:59 in seconds
+        const timerElement = document.getElementById('timer');
+        
+        const timerInterval = setInterval(function() {
+            timeLeft--;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert("Session expired. You will be redirected to the login page.");
+                // In a real system, this would redirect to login
+                // We'll keep them here for the honeypot
+            }
+            
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+        
+        // Toggle password details
+        function togglePasswordDetails(id) {
+            const element = document.getElementById(id);
+            element.classList.toggle('visible');
+            
+            // Log the interaction
+            logInteraction('toggle_password_details', {
+                entry_id: id,
+                visible: element.classList.contains('visible')
+            });
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Log the page view to honeypot system
             logInteraction('page_view');
             
-            // Handle category switching
-            document.querySelectorAll('.vault-categories li').forEach(item => {
-                item.addEventListener('click', function() {
-                    // Log the category click
-                    logInteraction('category_click', {
-                        category: this.textContent.trim()
-                    });
-                    
-                    // Update active state
-                    document.querySelectorAll('.vault-categories li').forEach(li => {
-                        li.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                });
-            });
-            
-            // Handle password reveal/copy buttons
-            document.querySelectorAll('.password-actions button').forEach(button => {
-                button.addEventListener('click', function() {
-                    const action = this.innerHTML.includes('fa-eye') ? 'view' : 
-                                  this.innerHTML.includes('fa-copy') ? 'copy' : 
-                                  this.innerHTML.includes('fa-edit') ? 'edit' : 'delete';
-                    
-                    const row = this.closest('tr');
-                    const serverName = row.cells[0].textContent;
-                    
-                    // Log the action
-                    logInteraction('password_action', {
-                        action: action,
-                        server: serverName
-                    });
-                    
-                    // If it's view or copy, simulate the action
-                    if (action === 'view') {
-                        const passwordCell = row.querySelector('.masked-password');
-                        const isVisible = passwordCell.textContent.includes('•');
-                        
-                        if (isVisible) {
-                            // Generate a fake password
-                            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
-                            let fakePassword = '';
-                            for (let i = 0; i < 16; i++) {
-                                fakePassword += chars.charAt(Math.floor(Math.random() * chars.length));
-                            }
-                            passwordCell.textContent = fakePassword;
-                            this.innerHTML = '<i class="fas fa-eye-slash"></i>';
-                        } else {
-                            passwordCell.textContent = '••••••••••••••••';
-                            this.innerHTML = '<i class="fas fa-eye"></i>';
-                        }
-                    } else if (action === 'copy') {
-                        // Show a tooltip
-                        const tooltip = document.createElement('div');
-                        tooltip.textContent = 'Copied!';
-                        tooltip.style.position = 'absolute';
-                        tooltip.style.backgroundColor = '#2ecc71';
-                        tooltip.style.color = 'white';
-                        tooltip.style.padding = '5px 10px';
-                        tooltip.style.borderRadius = '3px';
-                        tooltip.style.fontSize = '12px';
-                        tooltip.style.zIndex = '100';
-                        
-                        // Position the tooltip
-                        const rect = button.getBoundingClientRect();
-                        tooltip.style.top = `${rect.top - 30}px`;
-                        tooltip.style.left = `${rect.left - 20}px`;
-                        
-                        document.body.appendChild(tooltip);
-                        
-                        // Remove after a delay
-                        setTimeout(() => {
-                            document.body.removeChild(tooltip);
-                        }, 1500);
-                    }
-                });
-            });
-            
-            // Handle password generator
-            document.getElementById('generate-btn').addEventListener('click', function() {
-                const length = parseInt(document.getElementById('length').value);
-                const uppercase = document.getElementById('uppercase').checked;
-                const lowercase = document.getElementById('lowercase').checked;
-                const numbers = document.getElementById('numbers').checked;
-                const symbols = document.getElementById('symbols').checked;
-                
-                logInteraction('generate_password', {
-                    length: length,
-                    options: {uppercase, lowercase, numbers, symbols}
-                });
-                
-                // Generate a random password
-                let chars = '';
-                if (uppercase) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                if (lowercase) chars += 'abcdefghijklmnopqrstuvwxyz';
-                if (numbers) chars += '0123456789';
-                if (symbols) chars += '!@#$%^&*()_+~`|}{[]:;?><,./-=';
-                
-                let password = '';
-                for (let i = 0; i < length; i++) {
-                    password += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                
-                document.getElementById('generated-password').textContent = password;
-            });
-            
-            // Handle copy generated password
-            document.getElementById('copy-generated').addEventListener('click', function() {
-                logInteraction('copy_generated_password');
-                
-                // Show a tooltip
-                const tooltip = document.createElement('div');
-                tooltip.textContent = 'Copied!';
-                tooltip.style.position = 'absolute';
-                tooltip.style.backgroundColor = '#2ecc71';
-                tooltip.style.color = 'white';
-                tooltip.style.padding = '5px 10px';
-                tooltip.style.borderRadius = '3px';
-                tooltip.style.fontSize = '12px';
-                tooltip.style.zIndex = '100';
-                
-                // Position the tooltip
-                const rect = this.getBoundingClientRect();
-                tooltip.style.top = `${rect.top - 30}px`;
-                tooltip.style.left = `${rect.left - 20}px`;
-                
-                document.body.appendChild(tooltip);
-                
-                // Remove after a delay
-                setTimeout(() => {
-                    document.body.removeChild(tooltip);
-                }, 1500);
-            });
-            
-            // Handle search
-            document.querySelector('.search-box input').addEventListener('input', function() {
-                logInteraction('search', {
-                    term: this.value
-                });
+            // Add event listener to export button
+            document.getElementById('export-btn').addEventListener('click', function() {
+                logInteraction('export_button_click');
+                alert("Error: Export functionality requires additional authorization.");
             });
         });
         
@@ -746,9 +400,11 @@
             });
         }
         
-        // Log when the access button is clicked
-        document.querySelector('.access-button').addEventListener('click', function() {
-            logInteraction('access_button_click');
+        // Log when the auth tokens button is clicked
+        document.getElementById('auth-tokens-btn').addEventListener('click', function() {
+            logInteraction('button_click', {
+                button: 'auth_tokens'
+            });
         });
     </script>
 </body>
