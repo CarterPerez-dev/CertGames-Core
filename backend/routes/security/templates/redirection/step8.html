@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureSystem - Encryption Key Storage</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        .logo i {
+            margin-right: 10px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .breadcrumb {
+            margin: 20px 0;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        .breadcrumb a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .breadcrumb i {
+            margin: 0 8px;
+            font-size: 12px;
+        }
+        .security-banner {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .security-banner i {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        .key-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+        }
+        .sidebar {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-menu li {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .sidebar-menu li.active {
+            background-color: #3498db;
+            color: white;
+        }
+        .sidebar-menu li:hover:not(.active) {
+            background-color: #f9f9fa;
+        }
+        .sidebar-menu li i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            color: #856404;
+        }
+        .warning-box i {
+            margin-right: 10px;
+        }
+        .content {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .content-title {
+            font-size: 22px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        .content-title i {
+            margin-right: 10px;
+            color: #e74c3c;
+        }
+        .content-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .button {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+        }
+        .button-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        .button-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .button-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        .button-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .key-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .key-card {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            position: relative;
+        }
+        .key-card h3 {
+            font-size: 16px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        .key-card h3 i {
+            margin-right: 8px;
+            color: #3498db;
+        }
+        .key-type {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 3px;
+            background-color: #3498db;
+            color: white;
+        }
+        .key-info {
+            margin-bottom: 15px;
+        }
+        .key-info .label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        .key-info .value {
+            font-family: monospace;
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: 3px;
+            padding: 8px;
+            font-size: 14px;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .key-info .value .text {
+            width: 85%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .key-info .value button {
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .key-meta {
+            font-size: 13px;
+            color: #6c757d;
+            margin-top: 15px;
+        }
+        .key-meta div {
+            margin-bottom: 3px;
+        }
+        .key-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .key-actions button {
+            font-size: 13px;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: #495057;
+        }
+        .tab.active {
+            border-bottom-color: #3498db;
+            color: #3498db;
+        }
+        .tab:hover:not(.active) {
+            background-color: #f8f9fa;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table th, table td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 7px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .badge-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .badge-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .badge-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .key-viewer {
+            margin-top: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .key-viewer h3 {
+            font-size: 16px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .key-content {
+            background-color: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 3px;
+            padding: 15px;
+            font-family: monospace;
+            max-height: 250px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            color: #343a40;
+        }
+        .key-fingerprint {
+            margin-top: 15px;
+            font-family: monospace;
+            color: #6c757d;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #7f8c8d;
+            font-size: 14px;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+        }
+        .access-button {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            margin-top: 20px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .access-button:hover {
+            background-color: #c0392b;
+        }
+        .certificate-details {
+            margin-top: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .cert-header {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            font-weight: 600;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .cert-body {
+            padding: 15px;
+        }
+        .cert-field {
+            margin-bottom: 10px;
+            display: flex;
+        }
+        .cert-field .cert-label {
+            width: 150px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+        .cert-field .cert-value {
+            flex: 1;
+            font-family: monospace;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+            SecureSystem
+        </div>
+        <div class="user-info">
+            <img src="https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/11_avatar-512.png" alt="Admin">
+            <span class="username">System Administrator</span>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="#"><i class="fas fa-home"></i> Home</a>
+            <i class="fas fa-chevron-right"></i>
+            <a href="#">Security</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>Encryption Key Storage</span>
+        </div>
+        
+        <div class="security-banner">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+                <strong>CRITICAL SECURITY AREA</strong>
+                This system stores encryption keys used to protect sensitive data. All actions are logged and monitored.
+            </div>
+        </div>
+        
+        <div class="warning-box">
+            <i class="fas fa-info-circle"></i>
+            Security Policy: Encryption keys should only be exported in emergency situations. All key exports require dual authorization and are logged for compliance purposes.
+        </div>
+        
+        <div class="key-container">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="active"><i class="fas fa-key"></i> Encryption Keys</li>
+                    <li><i class="fas fa-certificate"></i> Certificates</li>
+                    <li><i class="fas fa-signature"></i> Signing Keys</li>
+                    <li><i class="fas fa-fingerprint"></i> Key Management</li>
+                    <li><i class="fas fa-history"></i> Key History</li>
+                    <li><i class="fas fa-sync-alt"></i> Key Rotation</li>
+                    <li><i class="fas fa-shield-alt"></i> Key Security</li>
+                    <li><i class="fas fa-cog"></i> Settings</li>
+                </ul>
+            </div>
+            
+            <div class="content">
+                <div class="content-header">
+                    <div class="content-title">
+                        <i class="fas fa-key"></i> Encryption Key Management
+                    </div>
+                    <div class="content-actions">
+                        <button class="button button-primary"><i class="fas fa-plus"></i> Generate Key</button>
+                        <button class="button button-warning"><i class="fas fa-upload"></i> Import</button>
+                        <button class="button button-danger"><i class="fas fa-download"></i> Export</button>
+                    </div>
+                </div>
+                
+                <div class="tabs">
+                    <div class="tab active" data-tab="asymmetric">Asymmetric Keys</div>
+                    <div class="tab" data-tab="symmetric">Symmetric Keys</div>
+                    <div class="tab" data-tab="certificates">Certificates</div>
+                    <div class="tab" data-tab="hsm">HSM Managed</div>
+                </div>
+                
+                <div class="key-cards">
+                    <div class="key-card">
+                        <span class="key-type">RSA-4096</span>
+                        <h3><i class="fas fa-lock"></i> API Signing Key</h3>
+                        
+                        <div class="key-info">
+                            <div class="label">Key ID</div>
+                            <div class="value">
+                                <div class="text">rsa-4096-api-sign-8f62a5c9d3e7</div>
+                                <button><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-info">
+                            <div class="label">Public Key Fingerprint</div>
+                            <div class="value">
+                                <div class="text">7C:35:8D:E7:9B:C6:4A:D8:5F:2E:10:3D:61:A8:F9:BE:83:7A:92:C5</div>
+                                <button><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-info">
+                            <div class="label">Private Key Status</div>
+                            <div class="value">
+                                <div class="text">Protected • • • • • • • •</div>
+                                <button><i class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-meta">
+                            <div><strong>Created:</strong> 2025-02-15</div>
+                            <div><strong>Last Used:</strong> 2025-04-30 09:45:12</div>
+                            <div><strong>Rotation Due:</strong> 2025-08-15</div>
+                        </div>
+                        
+                        <div class="key-actions">
+                            <button class="button button-primary">View Details</button>
+                            <button class="button button-warning">Rotate</button>
+                            <button class="button button-danger">Revoke</button>
+                        </div>
+                    </div>
+                    
+                    <div class="key-card">
+                        <span class="key-type">ECC-P256</span>
+                        <h3><i class="fas fa-lock"></i> Database Encryption</h3>
+                        
+                        <div class="key-info">
+                            <div class="label">Key ID</div>
+                            <div class="value">
+                                <div class="text">ecc-p256-db-enc-3e9f7d2b6a5c</div>
+                                <button><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-info">
+                            <div class="label">Public Key Fingerprint</div>
+                            <div class="value">
+                                <div class="text">3A:F1:82:C7:D5:9E:4B:1F:0A:8D:6E:2C:5B:9A:7E:3D:1F:5C:8B:4A</div>
+                                <button><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-info">
+                            <div class="label">Private Key Status</div>
+                            <div class="value">
+                                <div class="text">Protected • • • • • • • •</div>
+                                <button><i class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-meta">
+                            <div><strong>Created:</strong> 2025-03-10</div>
+                            <div><strong>Last Used:</strong> 2025-04-30 10:12:45</div>
+                            <div><strong>Rotation Due:</strong> 2025-09-10</div>
+                        </div>
+                        
+                        <div class="key-actions">
+                            <button class="button button-primary">View Details</button>
+                            <button class="button button-warning">Rotate</button>
+                            <button class="button button-danger">Revoke</button>
+                        </div>
+                    </div>
+                    
+                    <div class="key-card">
+                        <span class="key-type">RSA-2048</span>
+                        <h3><i class="fas fa-lock"></i> Legacy System Key</h3>
+                        
+                        <div class="key-info">
+                            <div class="label">Key ID</div>
+                            <div class="value">
+                                <div class="text">rsa-2048-legacy-1a2b3c4d5e6f</div>
+                                <button><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-info">
+                            <div class="label">Public Key Fingerprint</div>
+                            <div class="value">
+                                <div class="text">5E:2F:9A:1B:7D:3C:8E:6A:4F:0D:5B:2C:9E:1A:7F:8D:3E:9B:2C:5A</div>
+                                <button><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-info">
+                            <div class="label">Private Key Status</div>
+                            <div class="value">
+                                <div class="text">Protected • • • • • • • •</div>
+                                <button><i class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-meta">
+                            <div><strong>Created:</strong> 2024-10-05</div>
+                            <div><strong>Last Used:</strong> 2025-04-29 16:37:20</div>
+                            <div><strong>Rotation Due:</strong> <span style="color: #e74c3c;">OVERDUE (2025-04-05)</span></div>
+                        </div>
+                        
+                        <div class="key-actions">
+                            <button class="button button-primary">View Details</button>
+                            <button class="button button-warning">Rotate</button>
+                            <button class="button button-danger">Revoke</button>
+                        </div>
+                    </div>
+                    
+                    <div class="key-card">
+                        <span class="key-type">ECC-P384</span>
+                        <h3><i class="fas fa-lock"></i> Payment Encryption</h3>
+                        
+                        <div class="key-info">
+                            <div class="label">Key ID</div>
+                            <div class="value">
+                                <div class="text">ecc-p384-payment-7f8e9d6c5b4a</div>
+                                <button><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-info">
+                            <div class="label">Public Key Fingerprint</div>
+                            <div class="value">
+                                <div class="text">9B:7A:2C:5E:1D:8F:3A:6E:4C:0F:5D:2B:9A:7E:3C:1F:8D:3E:5A:2B</div>
+                                <button><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-info">
+                            <div class="label">Private Key Status</div>
+                            <div class="value">
+                                <div class="text">Protected • • • • • • • •</div>
+                                <button><i class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-meta">
+                            <div><strong>Created:</strong> 2025-01-20</div>
+                            <div><strong>Last Used:</strong> 2025-04-30 09:17:36</div>
+                            <div><strong>Rotation Due:</strong> 2025-07-20</div>
+                        </div>
+                        
+                        <div class="key-actions">
+                            <button class="button button-primary">View Details</button>
+                            <button class="button button-warning">Rotate</button>
+                            <button class="button button-danger">Revoke</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-viewer">
+                    <h3>Selected Key Details</h3>
+                    <div class="key-content">
+-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA5PgvGlFVdV/G6+WZ9z3u
+Tp/PuHi9jgI2GgZQnxhL0uTJeL/59zs12U7QuNr2UC4AZOZOzO/E0Tl1BYL+HP1s
+JO9ZlR+wq3RtKbYr1C6z+EI8Mtp/rAgFOQEYs+JmQRiR8G+Z2UPvPL92i5AExxXD
+CZzBG2NBi0juNiJQpQs0+099zNxJ9MQiua6wZpFuJQ5qxQ2GxhHCHjrJbLUSAZiT
+TsNcOyVxH3wh37K28NPGwPfQH4Ir0eKtKjFq5cS1lV0tZSXJoCHf/wV2+Jy1lqWH
+RYC1FF7VvQ9zuB4r5BU3OWEhFKvCqBiuGpGZZyM0eZYvGKJfR0ytJ8bO8G7Ikq6U
+SB8gAOtXnEbCZHQowXB9rKUfUOG29g9iC/QWcZ2H3RUkwJbCf9NlQjJNuKZYcaZh
+dBtbZmvYJm4j51mZUQna0TzKlf/kvCi/PmuVqcLCpHbG5ZjNYMYmQlMZ+6E/D+H1
+EYdOWOQlHu3pOxJ0hV9oJrXLd68sy0UQlT9GNUjJZEMIyXpbZ+6sXJZfMnOCVwsN
+8efhF5Q/EABCDuSWz5wGRBoYFHJgX5tRJZ8jkVxRTIHf95KSWN0B++92cW695BeT
+kPbhIm6NXI5QxKjjO9iyeOOGYPRJ//9L16Y2/Ga6+sMoqHMvj6ABJ3BmOhx7RQZL
+v+MXJ17I/LQPsVSqLIiD6CcCAwEAAQ==
+-----END PUBLIC KEY-----
+                    </div>
+                    <div class="key-fingerprint">
+                        SHA256: jw9K1PgudJhEyZF8gw9FfdZVrHWVDsS+fMm1Jn2hOEw=
+                    </div>
+                </div>
+                
+                <div class="certificate-details">
+                    <div class="cert-header">
+                        Certificate Information
+                    </div>
+                    <div class="cert-body">
+                        <div class="cert-field">
+                            <div class="cert-label">Subject:</div>
+                            <div class="cert-value">CN=api.example.com, O=SecureSystem Inc., L=San Francisco, ST=California, C=US</div>
+                        </div>
+                        <div class="cert-field">
+                            <div class="cert-label">Issuer:</div>
+                            <div class="cert-value">CN=SecureSystem Enterprise CA, O=SecureSystem Inc., C=US</div>
+                        </div>
+                        <div class="cert-field">
+                            <div class="cert-label">Valid From:</div>
+                            <div class="cert-value">Feb 15, 2025 00:00:00 GMT</div>
+                        </div>
+                        <div class="cert-field">
+                            <div class="cert-label">Valid To:</div>
+                            <div class="cert-value">Feb 15, 2026 23:59:59 GMT</div>
+                        </div>
+                        <div class="cert-field">
+                            <div class="cert-label">Serial Number:</div>
+                            <div class="cert-value">36:5c:8d:9a:f7:e2:d5:cb:7f:10:a3:b9:cc:58:95:d1:1a:b7:c2:e8</div>
+                        </div>
+                        <div class="cert-field">
+                            <div class="cert-label">Algorithm:</div>
+                            <div class="cert-value">SHA256withRSA</div>
+                        </div>
+                        <div class="cert-field">
+                            <div class="cert-label">Key Usage:</div>
+                            <div class="cert-value">Digital Signature, Key Encipherment</div>
+                        </div>
+                        <div class="cert-field">
+                            <div class="cert-label">Extended Key Usage:</div>
+                            <div class="cert-value">TLS Web Server Authentication, TLS Web Client Authentication</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="/system/data/customers" class="access-button">
+                    Access Customer Data
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            &copy; 2025 SecureSystem Enterprise Solutions. All rights reserved.
+            <div>Version 3.5.2 | Build 20250424-01</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Log the page view to honeypot system
+            logInteraction('page_view');
+            
+            // Handle sidebar menu
+            document.querySelectorAll('.sidebar-menu li').forEach(item => {
+                item.addEventListener('click', function() {
+                    // Log menu click
+                    logInteraction('menu_click', {
+                        menu: this.textContent.trim()
+                    });
+                    
+                    // Update active state
+                    document.querySelectorAll('.sidebar-menu li').forEach(li => {
+                        li.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+            
+            // Handle tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Log tab click
+                    logInteraction('tab_click', {
+                        tab: tabId
+                    });
+                    
+                    // Update active state
+                    document.querySelectorAll('.tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+            
+            // Handle key card buttons
+            document.querySelectorAll('.key-actions button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = button.textContent.trim();
+                    const keyCard = button.closest('.key-card');
+                    const keyId = keyCard.querySelector('.key-info .value .text').textContent;
+                    const keyName = keyCard.querySelector('h3').textContent.trim();
+                    
+                    logInteraction('key_action', {
+                        action: action,
+                        key_id: keyId,
+                        key_name: keyName
+                    });
+                    
+                    // If it's "View Details", show the key viewer
+                    if (action === 'View Details') {
+                        document.querySelector('.key-viewer').scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Handle key info buttons (eye/copy)
+            document.querySelectorAll('.key-info .value button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = button.innerHTML.includes('fa-eye') ? 'view' : 'copy';
+                    const keyCard = button.closest('.key-card');
+                    const keyId = keyCard.querySelector('.key-info .value .text').textContent;
+                    const keyName = keyCard.querySelector('h3').textContent.trim();
+                    const fieldName = button.closest('.key-info').querySelector('.label').textContent;
+                    
+                    logInteraction('key_field_action', {
+                        action: action,
+                        key_id: keyId,
+                        key_name: keyName,
+                        field: fieldName
+                    });
+                    
+                    // If it's a view button, toggle between masked and unmasked
+                    if (action === 'view') {
+                        const valueText = button.parentElement.querySelector('.text');
+                        if (valueText.textContent.includes('•')) {
+                            // Generate a fake private key or sensitive data
+                            valueText.textContent = 'Decrypted: ' + Array(32).fill().map(() => Math.random().toString(36)[2]).join('');
+                            button.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                        } else {
+                            valueText.textContent = 'Protected • • • • • • • •';
+                            button.innerHTML = '<i class="fas fa-eye"></i>';
+                        }
+                    } else if (action === 'copy') {
+                        // Show a copied tooltip
+                        const tooltip = document.createElement('div');
+                        tooltip.textContent = 'Copied!';
+                        tooltip.style.position = 'absolute';
+                        tooltip.style.backgroundColor = '#2ecc71';
+                        tooltip.style.color = 'white';
+                        tooltip.style.padding = '5px 10px';
+                        tooltip.style.borderRadius = '3px';
+                        tooltip.style.fontSize = '12px';
+                        tooltip.style.zIndex = '1000';
+                        
+                        // Position the tooltip
+                        const rect = button.getBoundingClientRect();
+                        tooltip.style.top = `${rect.top - 30}px`;
+                        tooltip.style.left = `${rect.left - 20}px`;
+                        
+                        document.body.appendChild(tooltip);
+                        
+                        // Remove the tooltip after a delay
+                        setTimeout(() => {
+                            document.body.removeChild(tooltip);
+                        }, 1500);
+                    }
+                });
+            });
+            
+            // Handle top action buttons
+            document.querySelectorAll('.content-actions button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = button.textContent.includes('Generate') ? 'generate' : 
+                                 button.textContent.includes('Import') ? 'import' : 'export';
+                    
+                    logInteraction('header_action', {
+                        action: action
+                    });
+                    
+                    // If it's export, show an alert
+                    if (action === 'export') {
+                        alert('WARNING: Exporting encryption keys requires dual authorization. This action will be logged and reviewed by security team.');
+                    }
+                });
+            });
+        });
+        
+        // Function to log interactions with the honeypot
+        function logInteraction(interactionType, details = {}) {
+            fetch('/honeypot/log-interaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    page_type: 'encryption_keys',
+                    interaction_type: interactionType,
+                    additional_data: {
+                        ...details,
+                        referrer: document.referrer,
+                        resolution: `${window.innerWidth}x${window.innerHeight}`,
+                        user_agent: navigator.userAgent
+                    }
+                })
+            }).catch(error => {
+                console.log('Logging completed');
+            });
+        }
+        
+        // Log when the access button is clicked
+        document.querySelector('.access-button').addEventListener('click', function() {
+            logInteraction('access_button_click');
+        });
+    </script>
+</body>
+</html>

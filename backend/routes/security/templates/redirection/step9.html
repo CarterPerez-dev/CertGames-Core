@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureSystem - Customer Data Access</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        .logo i {
+            margin-right: 10px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .breadcrumb {
+            margin: 20px 0;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        .breadcrumb a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .breadcrumb i {
+            margin: 0 8px;
+            font-size: 12px;
+        }
+        .gdpr-banner {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .gdpr-banner i {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        .gdpr-banner div strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        .page-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+        .sidebar {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-menu li {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .sidebar-menu li.active {
+            background-color: #3498db;
+            color: white;
+        }
+        .sidebar-menu li:hover:not(.active) {
+            background-color: #f9f9fa;
+        }
+        .sidebar-menu li i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        .main-content {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .content-title {
+            font-size: 22px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        .content-title i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+        .content-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .privacy-notice {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #856404;
+        }
+        .privacy-notice i {
+            margin-right: 10px;
+        }
+        .button {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+        }
+        .button-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        .button-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .button-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        .button-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .search-box {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .search-filters {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        .search-filters select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        .customer-actions {
+            display: flex;
+            gap: 5px;
+        }
+        .customer-actions button {
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .badge-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .badge-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .badge-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .badge-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 5px;
+            border-radius: 4px;
+            background-color: #f1f1f1;
+            color: #333;
+            text-decoration: none;
+        }
+        .pagination a.active {
+            background-color: #3498db;
+            color: white;
+        }
+        .customer-detail {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 30px;
+            display: none;
+        }
+        .customer-detail h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .detail-section {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 15px;
+            border: 1px solid #eee;
+        }
+        .detail-section h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #2c3e50;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .detail-field {
+            margin-bottom: 10px;
+        }
+        .detail-field .label {
+            font-size: 13px;
+            color: #6c757d;
+            margin-bottom: 3px;
+        }
+        .detail-field .value {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .detail-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .masked-data {
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+        .activity-log {
+            margin-top: 20px;
+        }
+        .activity-log h4 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .activity-entry {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            font-size: 14px;
+        }
+        .activity-entry:last-child {
+            border-bottom: none;
+        }
+        .activity-time {
+            width: 180px;
+            color: #6c757d;
+        }
+        .activity-action {
+            flex: 1;
+        }
+        .data-export {
+            margin-top: 30px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+            border: 1px solid #eee;
+        }
+        .data-export h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+        .export-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .export-option {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .export-option:hover {
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        .export-option.selected {
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        .export-option h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        .export-option h4 i {
+            margin-right: 8px;
+            color: #3498db;
+        }
+        .export-option p {
+            margin: 0;
+            font-size: 13px;
+            color: #6c757d;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #7f8c8d;
+            font-size: 14px;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+        }
+        .consent-log {
+            margin-top: 20px;
+        }
+        .consent-item {
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .consent-date {
+            color: #6c757d;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .access-button {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            margin-top: 20px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .access-button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+            SecureSystem
+        </div>
+        <div class="user-info">
+            <img src="https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/11_avatar-512.png" alt="Admin">
+            <span class="username">System Administrator</span>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="#"><i class="fas fa-home"></i> Home</a>
+            <i class="fas fa-chevron-right"></i>
+            <a href="#">Data Management</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>Customer Data Access</span>
+        </div>
+        
+        <div class="gdpr-banner">
+            <i class="fas fa-user-shield"></i>
+            <div>
+                <strong>DATA PRIVACY NOTICE</strong>
+                This interface provides access to personal data protected under GDPR, CCPA, and other privacy regulations. All access is logged and monitored.
+            </div>
+        </div>
+        
+        <div class="privacy-notice">
+            <i class="fas fa-info-circle"></i>
+            Regulatory Notice: Data access requires valid business purpose and appropriate authorization level. Export functions may be limited based on your role.
+        </div>
+        
+        <div class="page-container">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="active"><i class="fas fa-users"></i> Customer Data</li>
+                    <li><i class="fas fa-file-export"></i> Data Export</li>
+                    <li><i class="fas fa-user-edit"></i> Data Correction</li>
+                    <li><i class="fas fa-trash-alt"></i> Data Deletion</li>
+                    <li><i class="fas fa-clipboard-list"></i> Consent Management</li>
+                    <li><i class="fas fa-history"></i> Access Logs</li>
+                    <li><i class="fas fa-cog"></i> Privacy Settings</li>
+                </ul>
+            </div>
+            
+            <div class="main-content">
+                <div class="content-header">
+                    <div class="content-title">
+                        <i class="fas fa-users"></i> Customer Data Repository
+                    </div>
+                    <div class="content-actions">
+                        <button class="button button-primary"><i class="fas fa-download"></i> Export</button>
+                        <button class="button button-warning"><i class="fas fa-file-alt"></i> Report</button>
+                    </div>
+                </div>
+                
+                <div class="search-box">
+                    <input type="text" placeholder="Search by name, email, ID, phone...">
+                    <button class="button button-primary">Search</button>
+                </div>
+                
+                <div class="search-filters">
+                    <select>
+                        <option value="">All Regions</option>
+                        <option value="eu">European Union</option>
+                        <option value="us">United States</option>
+                        <option value="asia">Asia Pacific</option>
+                        <option value="other">Other Regions</option>
+                    </select>
+                    <select>
+                        <option value="">All Account Types</option>
+                        <option value="personal">Personal</option>
+                        <option value="business">Business</option>
+                        <option value="enterprise">Enterprise</option>
+                    </select>
+                    <select>
+                        <option value="">All Statuses</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="suspended">Suspended</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                    <select>
+                        <option value="">Privacy Status</option>
+                        <option value="consent">Consent Given</option>
+                        <option value="limited">Limited Processing</option>
+                        <option value="deletion">Pending Deletion</option>
+                    </select>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Location</th>
+                            <th>Account Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>C-10045789</td>
+                            <td>John Wilson</td>
+                            <td>john.wilson@example.com</td>
+                            <td>New York, US</td>
+                            <td>Personal</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td class="customer-actions">
+                                <button class="view-customer" data-id="C-10045789"><i class="fas fa-eye"></i></button>
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-download"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>C-10058632</td>
+                            <td>Emma Roberts</td>
+                            <td>emma.roberts@example.com</td>
+                            <td>Berlin, DE</td>
+                            <td>Business</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td class="customer-actions">
+                                <button class="view-customer" data-id="C-10058632"><i class="fas fa-eye"></i></button>
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-download"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>C-10062347</td>
+                            <td>Carlos Mendez</td>
+                            <td>carlos.mendez@example.com</td>
+                            <td>Madrid, ES</td>
+                            <td>Personal</td>
+                            <td><span class="badge badge-warning">Limited</span></td>
+                            <td class="customer-actions">
+                                <button class="view-customer" data-id="C-10062347"><i class="fas fa-eye"></i></button>
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-download"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>C-10073914</td>
+                            <td>Sarah Johnson</td>
+                            <td>sarah.johnson@example.com</td>
+                            <td>London, UK</td>
+                            <td>Enterprise</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td class="customer-actions">
+                                <button class="view-customer" data-id="C-10073914"><i class="fas fa-eye"></i></button>
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-download"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>C-10081526</td>
+                            <td>Michael Chen</td>
+                            <td>michael.chen@example.com</td>
+                            <td>Singapore, SG</td>
+                            <td>Business</td>
+                            <td><span class="badge badge-info">Pending</span></td>
+                            <td class="customer-actions">
+                                <button class="view-customer" data-id="C-10081526"><i class="fas fa-eye"></i></button>
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-download"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>C-10092381</td>
+                            <td>Emily Davis</td>
+                            <td>emily.davis@example.com</td>
+                            <td>Sydney, AU</td>
+                            <td>Personal</td>
+                            <td><span class="badge badge-danger">Deletion</span></td>
+                            <td class="customer-actions">
+                                <button class="view-customer" data-id="C-10092381"><i class="fas fa-eye"></i></button>
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-download"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>C-10104759</td>
+                            <td>Robert Miller</td>
+                            <td>robert.miller@example.com</td>
+                            <td>Toronto, CA</td>
+                            <td>Personal</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td class="customer-actions">
+                                <button class="view-customer" data-id="C-10104759"><i class="fas fa-eye"></i></button>
+                                <button><i class="fas fa-edit"></i></button>
+                                <button><i class="fas fa-download"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="pagination">
+                    <a href="#">&laquo;</a>
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a>
+                    <a href="#">&raquo;</a>
+                </div>
+                
+                <div class="customer-detail" id="customer-detail">
+                    <h3><i class="fas fa-user"></i> Customer Information: <span id="detail-name">John Wilson</span></h3>
+                    
+                    <div class="detail-grid">
+                        <div class="detail-section">
+                            <h4>Personal Information</h4>
+                            <div class="detail-field">
+                                <div class="label">Customer ID</div>
+                                <div class="value">C-10045789</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Full Name</div>
+                                <div class="value">John Wilson</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Email Address</div>
+                                <div class="value">john.wilson@example.com</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Phone Number</div>
+                                <div class="value">+1 (555) 123-4567</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Date of Birth</div>
+                                <div class="value">1985-06-15</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Nationality</div>
+                                <div class="value">United States</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <h4>Address Information</h4>
+                            <div class="detail-field">
+                                <div class="label">Street Address</div>
+                                <div class="value">123 Main Street, Apt 45</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">City</div>
+                                <div class="value">New York</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">State/Province</div>
+                                <div class="value">NY</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Postal Code</div>
+                                <div class="value">10001</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Country</div>
+                                <div class="value">United States</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Address Verified</div>
+                                <div class="value">Yes (2024-11-15)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <h4>Account Information</h4>
+                            <div class="detail-field">
+                                <div class="label">Account Type</div>
+                                <div class="value">Personal</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Registration Date</div>
+                                <div class="value">2024-03-10</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Status</div>
+                                <div class="value"><span class="badge badge-success">Active</span></div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Last Login</div>
+                                <div class="value">2025-04-29 15:42:37</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Login IP</div>
+                                <div class="value">192.168.1.45</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">2FA Enabled</div>
+                                <div class="value">Yes</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <h4>Payment Information</h4>
+                            <div class="detail-field">
+                                <div class="label">Credit Card</div>
+                                <div class="value masked-data">VISA •••• •••• •••• 4789</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Card Expiry</div>
+                                <div class="value masked-data">••/••</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Billing Address</div>
+                                <div class="value">Same as primary address</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Payment Status</div>
+                                <div class="value">Valid</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Last Transaction</div>
+                                <div class="value">2025-04-15 | $59.99</div>
+                            </div>
+                            <div class="detail-field">
+                                <div class="label">Payment History</div>
+                                <div class="value"><a href="#" style="color: #3498db;">View History</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="consent-log">
+                        <h4><i class="fas fa-clipboard-check"></i> Consent Log</h4>
+                        <div class="consent-item">
+                            <div>Terms of Service and Privacy Policy accepted</div>
+                            <div class="consent-date">2024-03-10 12:35:28 | IP: 192.168.1.45</div>
+                        </div>
+                        <div class="consent-item">
+                            <div>Marketing emails opt-in</div>
+                            <div class="consent-date">2024-03-10 12:35:48 | IP: 192.168.1.45</div>
+                        </div>
+                        <div class="consent-item">
+                            <div>Data processing for service improvement</div>
+                            <div class="consent-date">2024-03-10 12:35:52 | IP: 192.168.1.45</div>
+                        </div>
+                        <div class="consent-item">
+                            <div>Third-party data sharing preferences updated</div>
+                            <div class="consent-date">2024-06-22 09:17:33 | IP: 192.168.1.45</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-log">
+                        <h4><i class="fas fa-history"></i> Recent Account Activity</h4>
+                        <div class="activity-entry">
+                            <div class="activity-time">2025-04-29 15:42:37</div>
+                            <div class="activity-action">Successful login from 192.168.1.45 (New York, US)</div>
+                        </div>
+                        <div class="activity-entry">
+                            <div class="activity-time">2025-04-15 09:23:18</div>
+                            <div class="activity-action">Subscription payment processed ($59.99)</div>
+                        </div>
+                        <div class="activity-entry">
+                            <div class="activity-time">2025-04-10 14:17:45</div>
+                            <div class="activity-action">Profile information updated</div>
+                        </div>
+                        <div class="activity-entry">
+                            <div class="activity-time">2025-04-05 11:38:22</div>
+                            <div class="activity-action">Password changed</div>
+                        </div>
+                        <div class="activity-entry">
+                            <div class="activity-time">2025-03-28 16:05:39</div>
+                            <div class="activity-action">Successful login from 192.168.1.45 (New York, US)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-actions">
+                        <button class="button button-primary"><i class="fas fa-download"></i> Export Data</button>
+                        <button class="button button-warning"><i class="fas fa-edit"></i> Edit Profile</button>
+                        <button class="button button-danger"><i class="fas fa-trash-alt"></i> Delete Account</button>
+                    </div>
+                </div>
+                
+                <div class="data-export">
+                    <h3><i class="fas fa-download"></i> Bulk Data Export</h3>
+                    <p>Select data format and filter criteria for bulk export. All export actions are logged for compliance purposes.</p>
+                    
+                    <div class="export-options">
+                        <div class="export-option">
+                            <h4><i class="fas fa-file-csv"></i> CSV Format</h4>
+                            <p>Standard comma-separated values format compatible with spreadsheet applications.</p>
+                        </div>
+                        <div class="export-option">
+                            <h4><i class="fas fa-file-code"></i> JSON Format</h4>
+                            <p>Structured data format ideal for programmatic processing.</p>
+                        </div>
+                        <div class="export-option">
+                            <h4><i class="fas fa-file-excel"></i> Excel Format</h4>
+                            <p>Native Microsoft Excel file with formatted data and sheets.</p>
+                        </div>
+                        <div class="export-option">
+                            <h4><i class="fas fa-file-pdf"></i> PDF Report</h4>
+                            <p>Formatted document suitable for printing and distribution.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="search-filters">
+                        <select>
+                            <option value="">Export Scope</option>
+                            <option value="all">All Data Fields</option>
+                            <option value="basic">Basic Information Only</option>
+                            <option value="financial">Financial Data Only</option>
+                            <option value="custom">Custom Field Selection</option>
+                        </select>
+                        <select>
+                            <option value="">Time Range</option>
+                            <option value="all">All Time</option>
+                            <option value="year">Last Year</option>
+                            <option value="quarter">Last Quarter</option>
+                            <option value="month">Last Month</option>
+                            <option value="week">Last Week</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                        <button class="button button-primary">Generate Export</button>
+                    </div>
+                </div>
+                
+                <a href="/system/finance/payments" class="access-button">
+                    View Payment Information
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            &copy; 2025 SecureSystem Enterprise Solutions. All rights reserved.
+            <div>Version 3.5.2 | Build 20250424-01</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Log the page view to honeypot system
+            logInteraction('page_view');
+            
+            // Handle sidebar navigation
+            document.querySelectorAll('.sidebar-menu li').forEach(item => {
+                item.addEventListener('click', function() {
+                    // Log menu click
+                    logInteraction('menu_click', {
+                        menu: this.textContent.trim()
+                    });
+                    
+                    // Update active state
+                    document.querySelectorAll('.sidebar-menu li').forEach(li => {
+                        li.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+            
+            // Handle view customer buttons
+            document.querySelectorAll('.view-customer').forEach(button => {
+                button.addEventListener('click', function() {
+                    const customerId = this.getAttribute('data-id');
+                    
+                    // Log customer view
+                    logInteraction('view_customer', {
+                        customer_id: customerId
+                    });
+                    
+                    // Show the customer detail section
+                    document.getElementById('customer-detail').style.display = 'block';
+                    
+                    // Scroll to the detail section
+                    document.getElementById('customer-detail').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Handle customer action buttons
+            document.querySelectorAll('.customer-actions button:not(.view-customer)').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = button.innerHTML.includes('fa-edit') ? 'edit' : 'download';
+                    const row = button.closest('tr');
+                    const customerId = row.cells[0].textContent;
+                    const customerName = row.cells[1].textContent;
+                    
+                    logInteraction('customer_action', {
+                        action: action,
+                        customer_id: customerId,
+                        customer_name: customerName
+                    });
+                    
+                    if (action === 'download') {
+                        // Show an alert for download action
+                        alert(`Data export initiated for customer ${customerId}. This action has been logged.`);
+                    }
+                });
+            });
+            
+            // Handle customer detail action buttons
+            document.querySelectorAll('.detail-actions button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = button.textContent.includes('Export') ? 'export' : 
+                                 button.textContent.includes('Edit') ? 'edit' : 'delete';
+                    
+                    logInteraction('detail_action', {
+                        action: action,
+                        customer_id: document.querySelector('.detail-field:first-child .value').textContent
+                    });
+                    
+                    if (action === 'delete') {
+                        // Show a confirmation dialog
+                        if (confirm('WARNING: You are about to initiate the account deletion process. This action will be logged and requires additional approval. Continue?')) {
+                            alert('Account deletion request submitted. Awaiting approval from Data Protection Officer.');
+                        }
+                    } else if (action === 'export') {
+                        alert('Data export initiated. The file will be available in your secure downloads area shortly.');
+                    }
+                });
+            });
+            
+            // Handle export options
+            document.querySelectorAll('.export-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Toggle selected state
+                    document.querySelectorAll('.export-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    
+                    const format = this.querySelector('h4').textContent.trim();
+                    
+                    logInteraction('export_format_select', {
+                        format: format
+                    });
+                });
+            });
+            
+            // Handle export button
+            document.querySelector('.data-export button').addEventListener('click', function() {
+                const selectedFormat = document.querySelector('.export-option.selected');
+                const format = selectedFormat ? selectedFormat.querySelector('h4').textContent.trim() : 'None';
+                
+                logInteraction('bulk_export', {
+                    format: format,
+                    scope: document.querySelector('.search-filters select:first-child').value,
+                    time_range: document.querySelector('.search-filters select:last-child').value
+                });
+                
+                // Show alert
+                alert('Bulk export job initiated. You will receive a notification when the export is ready for download.');
+            });
+            
+            // Handle search and filters
+            document.querySelector('.search-box button').addEventListener('click', function() {
+                const searchTerm = document.querySelector('.search-box input').value;
+                
+                logInteraction('customer_search', {
+                    term: searchTerm
+                });
+            });
+            
+            document.querySelectorAll('.search-filters select').forEach(select => {
+                select.addEventListener('change', function() {
+                    logInteraction('filter_change', {
+                        filter: select.options[0].textContent,
+                        value: select.options[select.selectedIndex].textContent
+                    });
+                });
+            });
+            
+            // Handle header buttons
+            document.querySelectorAll('.content-actions button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = button.textContent.includes('Export') ? 'export' : 'report';
+                    
+                    logInteraction('header_action', {
+                        action: action
+                    });
+                    
+                    // Show alert
+                    if (action === 'export') {
+                        alert('Please select export options from the Export section below.');
+                        document.querySelector('.data-export').scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        alert('Generating data access report. This may take a few moments.');
+                    }
+                });
+            });
+        });
+        
+        // Function to log interactions with the honeypot
+        function logInteraction(interactionType, details = {}) {
+            fetch('/honeypot/log-interaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    page_type: 'customer_data',
+                    interaction_type: interactionType,
+                    additional_data: {
+                        ...details,
+                        referrer: document.referrer,
+                        resolution: `${window.innerWidth}x${window.innerHeight}`,
+                        user_agent: navigator.userAgent
+                    }
+                })
+            }).catch(error => {
+                console.log('Logging completed');
+            });
+        }
+        
+        // Log when the access button is clicked
+        document.querySelector('.access-button').addEventListener('click', function() {
+            logInteraction('access_button_click');
+        });
+    </script>
+</body>
+</html>
