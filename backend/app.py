@@ -411,7 +411,17 @@ def serve_avatars(filename):
     return send_from_directory(avatar_folder, filename)
     
     
-
+@app.before_request
+def fix_remote_addr():
+    """Fix the remote_addr to use X-Forwarded-For if available."""
+    if request.headers.get('X-Forwarded-For'):
+        # Get the leftmost IP (original client)
+        forwarded_ips = request.headers.get('X-Forwarded-For').split(',')
+        request.environ['REMOTE_ADDR'] = forwarded_ips[0].strip()
+        # Optionally store the real IP in Flask's g object for easy access
+        g.real_ip = forwarded_ips[0].strip()
+    else:
+        g.real_ip = request.remote_addr
     
 
 ###########################

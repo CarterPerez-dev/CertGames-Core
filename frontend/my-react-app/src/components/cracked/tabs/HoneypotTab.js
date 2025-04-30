@@ -3,7 +3,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { 
   FaSpider, FaSync, FaSpinner, FaExclamationTriangle, FaFilter, 
   FaNetworkWired, FaGlobe, FaTimes, FaSort, FaDownload, FaChartBar,
-  FaSortUp, FaSortDown, FaUserSecret, FaAngleRight, FaClock
+  FaSortUp, FaSortDown, FaUserSecret, FaAngleRight, FaClock,
+  FaLocationArrow, FaFingerprint, FaUser, FaBug, FaShieldAlt
 } from "react-icons/fa";
 import { adminFetch } from '../csrfHelper';
 import { 
@@ -38,11 +39,13 @@ const HoneypotTab = () => {
     setLoading(true);
     setError(null);
     try {
+      // Changed to correct endpoint path
       const response = await adminFetch("/api/honeypot/analytics");
       if (!response.ok) {
         throw new Error("Failed to fetch honeypot analytics");
       }
       const data = await response.json();
+      console.log("Honeypot analytics data:", data);
       setHoneypotData(data);
       setTotalInteractions(data.total_attempts || 0);
     } catch (err) {
@@ -57,11 +60,13 @@ const HoneypotTab = () => {
   const fetchDetailedStats = useCallback(async () => {
     setStatsLoading(true);
     try {
+      // Changed to correct endpoint path
       const response = await adminFetch("/api/honeypot/detailed-stats");
       if (!response.ok) {
         throw new Error("Failed to fetch detailed statistics");
       }
       const data = await response.json();
+      console.log("Detailed stats data:", data);
       setDetailedStats(data);
     } catch (err) {
       console.error("Error fetching detailed stats:", err);
@@ -95,6 +100,7 @@ const HoneypotTab = () => {
         throw new Error("Failed to fetch honeypot interactions");
       }
       const data = await response.json();
+      console.log("Interactions data:", data);
       setInteractions(data.interactions || []);
       setTotalInteractions(data.total || 0);
     } catch (err) {
@@ -108,16 +114,20 @@ const HoneypotTab = () => {
   // Get detailed interaction info
   const fetchInteractionDetails = useCallback(async (id) => {
     try {
+      setLoading(true);
       const response = await adminFetch(`/api/cracked/honeypot/interactions/${id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch interaction details");
       }
       const data = await response.json();
+      console.log("Interaction details:", data);
       setSelectedInteraction(data);
       setViewMode("details");
     } catch (err) {
       console.error("Error fetching interaction details:", err);
-      // Show error in a toast or alert instead
+      // Show error in a toast or alert
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -215,17 +225,17 @@ const HoneypotTab = () => {
     if (!honeypotData) return { pathData: [], ipData: [], timeData: [] };
     
     // Most accessed paths
-    const pathData = honeypotData.top_paths.map(item => ({
+    const pathData = honeypotData.top_paths?.map(item => ({
       name: item._id.length > 20 ? item._id.substring(0, 20) + '...' : item._id,
       value: item.count,
       fullPath: item._id
-    }));
+    })) || [];
     
     // Top source IPs
-    const ipData = honeypotData.top_ips.map(item => ({
+    const ipData = honeypotData.top_ips?.map(item => ({
       name: item._id,
       value: item.count
-    }));
+    })) || [];
     
     // Activity over time
     const timeData = [];
@@ -287,7 +297,7 @@ const HoneypotTab = () => {
               <FaSpider />
             </div>
             <div className="honeypot-stat-content">
-              <div className="honeypot-stat-value">{honeypotData.total_attempts}</div>
+              <div className="honeypot-stat-value">{honeypotData.total_attempts || 0}</div>
               <div className="honeypot-stat-label">Total Interactions</div>
             </div>
           </div>
@@ -297,7 +307,7 @@ const HoneypotTab = () => {
               <FaGlobe />
             </div>
             <div className="honeypot-stat-content">
-              <div className="honeypot-stat-value">{honeypotData.unique_ips}</div>
+              <div className="honeypot-stat-value">{honeypotData.unique_ips || 0}</div>
               <div className="honeypot-stat-label">Unique IPs</div>
             </div>
           </div>
@@ -307,7 +317,7 @@ const HoneypotTab = () => {
               <FaUserSecret />
             </div>
             <div className="honeypot-stat-content">
-              <div className="honeypot-stat-value">{honeypotData.unique_clients}</div>
+              <div className="honeypot-stat-value">{honeypotData.unique_clients || 0}</div>
               <div className="honeypot-stat-label">Unique Clients</div>
             </div>
           </div>
@@ -445,44 +455,50 @@ const HoneypotTab = () => {
           </div>
           
           <div className="honeypot-table-container">
-            <table className="honeypot-data-table">
-              <thead>
-                <tr>
-                  <th>Time</th>
-                  <th>IP Address</th>
-                  <th>Path</th>
-                  <th>Type</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {honeypotData.recent_activity.slice(0, 10).map((activity, index) => (
-                  <tr key={index} className="honeypot-activity-row">
-                    <td>
-                      <div className="honeypot-timestamp">
-                        <FaClock className="honeypot-timestamp-icon" />
-                        {formatTimestamp(activity.timestamp)}
-                      </div>
-                    </td>
-                    <td>{activity.ip}</td>
-                    <td className="honeypot-path-cell">{activity.path}</td>
-                    <td>
-                      <span className={`honeypot-type-badge ${activity.type || 'page_view'}`}>
-                        {activity.interaction_type || "page_view"}
-                      </span>
-                    </td>
-                    <td>
-                      <button 
-                        className="honeypot-action-btn"
-                        onClick={() => fetchInteractionDetails(activity._id)}
-                      >
-                        Details
-                      </button>
-                    </td>
+            {honeypotData.recent_activity && honeypotData.recent_activity.length > 0 ? (
+              <table className="honeypot-data-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>IP Address</th>
+                    <th>Path</th>
+                    <th>Type</th>
+                    <th>Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {honeypotData.recent_activity.slice(0, 10).map((activity, index) => (
+                    <tr key={index} className="honeypot-activity-row">
+                      <td>
+                        <div className="honeypot-timestamp">
+                          <FaClock className="honeypot-timestamp-icon" />
+                          {formatTimestamp(activity.timestamp)}
+                        </div>
+                      </td>
+                      <td>{activity.ip || activity.ip_address}</td>
+                      <td className="honeypot-path-cell">{activity.path}</td>
+                      <td>
+                        <span className={`honeypot-type-badge ${activity.interaction_type || activity.type || 'page_view'}`}>
+                          {activity.interaction_type || activity.type || "page_view"}
+                        </span>
+                      </td>
+                      <td>
+                        <button 
+                          className="honeypot-action-btn"
+                          onClick={() => fetchInteractionDetails(activity._id)}
+                        >
+                          Details
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="honeypot-no-data">
+                No recent activity found. The honeypot might not have captured any interactions yet.
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -555,7 +571,10 @@ const HoneypotTab = () => {
                 <option value="wordpress">WordPress</option>
                 <option value="phpmyadmin">phpMyAdmin</option>
                 <option value="cpanel">cPanel</option>
-                {/* Add other categories as needed */}
+                <option value="database_endpoints">Database</option>
+                <option value="remote_access">Remote Access</option>
+                <option value="backdoors_and_shells">Backdoors/Shells</option>
+                <option value="injection_attempts">Injection Attempts</option>
               </select>
             </div>
           </div>
@@ -616,12 +635,12 @@ const HoneypotTab = () => {
                       <td>{interaction.ip_address}</td>
                       <td>
                         <span className={`honeypot-page-type-badge ${interaction.page_type}`}>
-                          {interaction.page_type}
+                          {interaction.page_type || "unknown"}
                         </span>
                       </td>
                       <td>
                         <span className={`honeypot-interaction-type-badge ${interaction.interaction_type}`}>
-                          {interaction.interaction_type}
+                          {interaction.interaction_type || "unknown"}
                         </span>
                       </td>
                       <td>
@@ -655,7 +674,7 @@ const HoneypotTab = () => {
                 </button>
                 
                 <span className="honeypot-page-info">
-                  Page {page} of {Math.ceil(totalInteractions / limit)}
+                  Page {page} of {Math.ceil(totalInteractions / limit) || 1}
                 </span>
                 
                 <button 
@@ -668,7 +687,7 @@ const HoneypotTab = () => {
                 <button 
                   className="honeypot-page-btn" 
                   disabled={page >= Math.ceil(totalInteractions / limit)}
-                  onClick={() => handlePageChange(Math.ceil(totalInteractions / limit))}
+                  onClick={() => handlePageChange(Math.ceil(totalInteractions / limit) || 1)}
                 >
                   Last
                 </button>
@@ -745,7 +764,7 @@ const HoneypotTab = () => {
             <span className="honeypot-meta-label">Page Type:</span>
             <span className="honeypot-meta-value">
               <span className={`honeypot-page-type-badge ${selectedInteraction.page_type}`}>
-                {selectedInteraction.page_type}
+                {selectedInteraction.page_type || "unknown"}
               </span>
             </span>
           </div>
@@ -753,10 +772,35 @@ const HoneypotTab = () => {
             <span className="honeypot-meta-label">Interaction Type:</span>
             <span className="honeypot-meta-value">
               <span className={`honeypot-interaction-type-badge ${selectedInteraction.interaction_type}`}>
-                {selectedInteraction.interaction_type}
+                {selectedInteraction.interaction_type || "unknown"}
               </span>
             </span>
           </div>
+          {selectedInteraction.geoInfo && (
+            <div className="honeypot-meta-item">
+              <span className="honeypot-meta-label">Location:</span>
+              <span className="honeypot-meta-value">
+                {selectedInteraction.geoInfo.country || "Unknown"} 
+                {selectedInteraction.geoInfo.asn && ` (${selectedInteraction.geoInfo.asn})`}
+              </span>
+            </div>
+          )}
+          {selectedInteraction.is_tor_or_proxy && (
+            <div className="honeypot-meta-item">
+              <span className="honeypot-meta-label">Proxy Detection:</span>
+              <span className="honeypot-meta-value honeypot-warning">
+                Using Tor/Proxy
+              </span>
+            </div>
+          )}
+          {selectedInteraction.hostname && (
+            <div className="honeypot-meta-item">
+              <span className="honeypot-meta-label">Hostname:</span>
+              <span className="honeypot-meta-value">
+                {selectedInteraction.hostname}
+              </span>
+            </div>
+          )}
         </div>
         
         {/* Tabs for different data sections */}
@@ -777,8 +821,11 @@ const HoneypotTab = () => {
         
         {/* Details content */}
         <div className="honeypot-details-content">
+          {/* Browser Information Section */}
           <div className="honeypot-details-section">
-            <h4 className="honeypot-section-title">Browser Information</h4>
+            <h4 className="honeypot-section-title">
+              <FaUser /> Browser Information
+            </h4>
             <div className="honeypot-details-table-container">
               <table className="honeypot-details-table">
                 <tbody>
@@ -790,15 +837,43 @@ const HoneypotTab = () => {
                     <td>Referer</td>
                     <td>{selectedInteraction.referer || "None"}</td>
                   </tr>
-                  {selectedInteraction.headers && (
+                  <tr>
+                    <td>Path</td>
+                    <td>{selectedInteraction.path || "Unknown"}</td>
+                  </tr>
+                  <tr>
+                    <td>HTTP Method</td>
+                    <td>{selectedInteraction.http_method || "Unknown"}</td>
+                  </tr>
+                  {selectedInteraction.ua_info && (
                     <>
                       <tr>
-                        <td>Accept</td>
-                        <td>{selectedInteraction.headers.Accept || "Not provided"}</td>
+                        <td>Browser</td>
+                        <td>
+                          {selectedInteraction.ua_info.browser?.family || "Unknown"} 
+                          {selectedInteraction.ua_info.browser?.version && 
+                            ` (${selectedInteraction.ua_info.browser.version})`}
+                        </td>
                       </tr>
                       <tr>
-                        <td>Accept-Language</td>
-                        <td>{selectedInteraction.headers["Accept-Language"] || "Not provided"}</td>
+                        <td>Operating System</td>
+                        <td>
+                          {selectedInteraction.ua_info.os?.family || "Unknown"}
+                          {selectedInteraction.ua_info.os?.version && 
+                            ` (${selectedInteraction.ua_info.os.version})`}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Device Type</td>
+                        <td>
+                          {selectedInteraction.ua_info.is_mobile ? "Mobile" : 
+                           selectedInteraction.ua_info.is_tablet ? "Tablet" : 
+                           selectedInteraction.ua_info.is_pc ? "Desktop" : "Unknown"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Is Bot</td>
+                        <td>{selectedInteraction.ua_info.is_bot ? "Yes" : "No"}</td>
                       </tr>
                     </>
                   )}
@@ -806,6 +881,135 @@ const HoneypotTab = () => {
               </table>
             </div>
           </div>
+          
+          {/* Threat Intelligence Section */}
+          <div className="honeypot-details-section">
+            <h4 className="honeypot-section-title">
+              <FaShieldAlt /> Threat Intelligence
+            </h4>
+            <div className="honeypot-details-table-container">
+              <table className="honeypot-details-table">
+                <tbody>
+                  <tr>
+                    <td>Using Proxy/Tor</td>
+                    <td>{selectedInteraction.is_tor_or_proxy ? "Yes" : "No"}</td>
+                  </tr>
+                  <tr>
+                    <td>Bot Indicators</td>
+                    <td>
+                      {selectedInteraction.bot_indicators ? 
+                        selectedInteraction.bot_indicators.join(", ") : 
+                        "None detected"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Is Scanner</td>
+                    <td>{selectedInteraction.is_scanner ? "Yes" : "No"}</td>
+                  </tr>
+                  <tr>
+                    <td>Port Scan</td>
+                    <td>{selectedInteraction.is_port_scan ? "Yes" : "No"}</td>
+                  </tr>
+                  <tr>
+                    <td>Suspicious Parameters</td>
+                    <td>{selectedInteraction.suspicious_params ? "Yes" : "No"}</td>
+                  </tr>
+                  {selectedInteraction.notes && selectedInteraction.notes.length > 0 && (
+                    <tr>
+                      <td>Security Notes</td>
+                      <td>{selectedInteraction.notes.join("; ")}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          {/* Location Information */}
+          <div className="honeypot-details-section">
+            <h4 className="honeypot-section-title">
+              <FaLocationArrow /> Location Information
+            </h4>
+            <div className="honeypot-details-table-container">
+              <table className="honeypot-details-table">
+                <tbody>
+                  <tr>
+                    <td>Country</td>
+                    <td>{selectedInteraction.geoInfo?.country || "Unknown"}</td>
+                  </tr>
+                  <tr>
+                    <td>ASN</td>
+                    <td>{selectedInteraction.geoInfo?.asn || "Unknown"}</td>
+                  </tr>
+                  <tr>
+                    <td>Organization</td>
+                    <td>{selectedInteraction.geoInfo?.org || "Unknown"}</td>
+                  </tr>
+                  <tr>
+                    <td>Hostname</td>
+                    <td>{selectedInteraction.hostname || "Not resolved"}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          {/* Request Headers */}
+          {selectedInteraction.headers && (
+            <div className="honeypot-details-section">
+              <h4 className="honeypot-section-title">HTTP Headers</h4>
+              <div className="honeypot-details-table-container">
+                <table className="honeypot-details-table">
+                  <tbody>
+                    {Object.entries(selectedInteraction.headers).map(([key, value]) => (
+                      <tr key={key}>
+                        <td>{key}</td>
+                        <td>{value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+          
+          {/* Request Parameters */}
+          {selectedInteraction.query_params && Object.keys(selectedInteraction.query_params).length > 0 && (
+            <div className="honeypot-details-section">
+              <h4 className="honeypot-section-title">Query Parameters</h4>
+              <div className="honeypot-details-table-container">
+                <table className="honeypot-details-table">
+                  <tbody>
+                    {Object.entries(selectedInteraction.query_params).map(([key, value]) => (
+                      <tr key={key}>
+                        <td>{key}</td>
+                        <td>{value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+          
+          {/* Form Data */}
+          {selectedInteraction.form_data && Object.keys(selectedInteraction.form_data).length > 0 && (
+            <div className="honeypot-details-section">
+              <h4 className="honeypot-section-title">Form Data</h4>
+              <div className="honeypot-details-table-container">
+                <table className="honeypot-details-table">
+                  <tbody>
+                    {Object.entries(selectedInteraction.form_data).map(([key, value]) => (
+                      <tr key={key}>
+                        <td>{key}</td>
+                        <td>{value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
           
           {/* Additional Data Section */}
           {selectedInteraction.additional_data && (

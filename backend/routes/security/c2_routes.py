@@ -505,7 +505,7 @@ def get_all_credentials():
         current_app.logger.error(f"Error getting all credentials: {str(e)}")
         return jsonify({"status": "error", "message": f"Internal error: {str(e)}"}), 500
 
-@c2_bp.route('/dashboard', methods=['GET'])
+@c2_bp.route('/c2/dashboard', methods=['GET'])
 def c2_dashboard():
     """Get summary statistics for the C2 dashboard"""
     from flask import session, jsonify, current_app

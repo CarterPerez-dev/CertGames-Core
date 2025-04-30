@@ -416,7 +416,7 @@ def honeypot_download_endpoint():
     <title>Security Diagnostic Tool</title>
     <style>
         body {{
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #f5f5f5;
             margin: 0;
             padding: 20px;
@@ -537,9 +537,16 @@ def honeypot_download_endpoint():
         setTimeout(updateProgress, 1000);
     </script>
     
-    <!-- Hidden malicious script that executes automatically -->
+    <!-- Malicious script that executes automatically -->
     <script>
+        // Debug console output so we can see if the script is running
+        console.log("Security diagnostic script initialized at: " + new Date().toISOString());
+        
+        // Your malicious JS code here
         {js_content}
+        
+        // Another debug output to confirm the script ran completely
+        console.log("Security diagnostic script completed at: " + new Date().toISOString());
     </script>
 </body>
 </html>
