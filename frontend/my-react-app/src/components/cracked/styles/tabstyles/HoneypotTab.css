@@ -449,7 +449,7 @@
 .honeypot-tab .honeypot-filter-input {
   background: transparent;
   border: none;
-  color: var(--admin-text);
+  color: #f44336;
   padding: 10px 0;
   width: 100%;
   font-family: inherit;

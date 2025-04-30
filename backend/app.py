@@ -607,7 +607,22 @@ def handle_join_c2_admin():
     emit('c2_status', {'message': 'Connected to C2 admin'})
 
 
+@app.route('/api/<path:path>', methods=['GET', 'POST'])
+def route_to_honeypot(path):
+    """Route requests from nginx to the appropriate honeypot handler"""
+    # Determine category from path using the function from honeypot_pages
+    from routes.security.honeypot_pages import determine_category, log_honeypot_interaction
+    
+    # Log the interaction
+    log_honeypot_interaction('redirected', 'page_view', {'source': 'nginx_redirect'})
+    
+    # Use the same logic as your existing catch_all_honeypot function
+    category = determine_category(path)
+    
+   
+    from routes.security.honeypot import honeypot_handler 
 
+    return honeypot_handler()
 
 if __name__ == '__main__':
     # For local dev
