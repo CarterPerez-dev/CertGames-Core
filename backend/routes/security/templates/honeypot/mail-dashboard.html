@@ -1,0 +1,2809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mail Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f3f3;
+            color: #333;
+        }
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .header {
+            background-color: #fff;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 18px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        .btn-success {
+            background-color: #2ecc71;
+        }
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        .menu-item {
+            padding: 12px 25px;
+            display: block;
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .menu-item:hover, .menu-item.active {
+            background-color: #34495e;
+        }
+        .menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .stat-card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        .terminal {
+            background-color: #1e1e1e;
+            color: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin-top: 20px;
+            min-height: 300px;
+            overflow-y: auto;
+        }
+        .terminal-input {
+            display: flex;
+            align-items: center;
+        }
+        .terminal-prompt {
+            color: #2ecc71;
+            margin-right: 10px;
+        }
+        #terminal-command {
+            background: transparent;
+            border: none;
+            color: #f8f8f8;
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            outline: none;
+        }
+        .terminal-output {
+            margin: 10px 0;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .crypto-miner {
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #2c3e50;
+            color: white;
+            margin-top: 20px;
+        }
+        .miner-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .miner-stat {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin: 0 5px;
+        }
+        .progress {
+            height: 20px;
+            background-color: #34495e;
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #2ecc71;
+            width: 0;
+            transition: width 0.5s ease;
+        }
+        .progress-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            line-height: 20px;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+        }
+        .puzzle {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .puzzle-question {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .puzzle-input {
+            display: flex;
+        }
+        .puzzle-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            width: 80%;
+            max-width: 500px;
+            position: relative;
+        }
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .blinking {
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .popup {
+            position: fixed;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            padding: 15px;
+            z-index: 1001;
+            min-width: 250px;
+        }
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .popup-title {
+            font-weight: 600;
+            color: #e74c3c;
+        }
+        .popup-close {
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .loading-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .infinite-progress {
+            height: 20px;
+            background-color: #f3f3f3;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 10px;
+        }
+        .infinite-bar {
+            position: absolute;
+            height: 100%;
+            width: 20%;
+            background-color: #3498db;
+            border-radius: 10px;
+            animation: progress 3s infinite;
+        }
+        @keyframes progress {
+            0% { left: -20%; }
+            100% { left: 100%; }
+        }
+        .status-text {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        #user-table {
+            display: none;
+        }
+        
+        .admin-chat {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 400px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            animation: bounce 0.5s;
+        }
+        
+        @keyframes bounce {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .chat-header {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        .chat-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        .chat-title i {
+            margin-right: 8px;
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background-color: #f5f5f5;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            max-width: 80%;
+        }
+        .message-admin {
+            background-color: #e1f5fe;
+            align-self: flex-start;
+            margin-right: 50px;
+            border-radius: 0 10px 10px 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .message-you {
+            background-color: #e8f5e9;
+            align-self: flex-end;
+            margin-left: 50px;
+            text-align: right;
+            border-radius: 10px 0 10px 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .message-sender {
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        .message-text {
+            font-size: 14px;
+        }
+        .message-time {
+            font-size: 10px;
+            color: #7f8c8d;
+            margin-top: 5px;
+            text-align: right;
+        }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+        .chat-input button {
+            padding: 8px 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .bsod {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #d60000;
+            color: white;
+            z-index: 9999;
+            padding: 100px 50px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: none;
+        }
+        .bsod h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        .bsod p {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .bsod .progress {
+            height: 20px;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 0;
+            margin: 40px 0;
+        }
+        .bsod .progress-bar {
+            background-color: white;
+        }
+        
+        .encryption-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .encryption-content {
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .encryption-icon {
+            font-size: 60px;
+            color: #e74c3c;
+            margin-bottom: 20px;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .encryption-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .encryption-message {
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .bitcoin-address {
+            background-color: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 16px;
+            margin: 20px 0;
+            word-break: break-all;
+        }
+        
+        .quick-form {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .quick-form h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        @keyframes flicker {
+            0% { opacity: 1; }
+            2% { opacity: 0.8; }
+            4% { opacity: 0.9; }
+            8% { opacity: 0.7; }
+            9% { opacity: 0.9; }
+            10% { opacity: 1; }
+            20% { opacity: 1; }
+            21% { opacity: 0.6; }
+            23% { opacity: 0.9; }
+            24% { opacity: 1; }
+            100% { opacity: 1; }
+        }
+        
+        .screen-flicker {
+            animation: flicker 0.5s;
+        }
+        
+        .vanishing-btn {
+            position: absolute;
+            z-index: 100;
+            transition: opacity 0.5s;
+        }
+        
+        .bitcoin-form {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+        .bitcoin-form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            background-color: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 4px;
+            color: white;
+        }
+        .bitcoin-form input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+        .miner-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-top: 5px;
+            color: rgba(255,255,255,0.7);
+        }
+        .blink-warning {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            animation: blink 1s infinite;
+        }
+        .notification-badge {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+            margin-left: 8px;
+            animation: pulse 1s infinite;
+        }
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            background-color: rgba(0,0,0,0.05);
+            border-radius: 10px;
+            margin: 5px 0;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        .typing-indicator span {
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            background-color: #7f8c8d;
+            border-radius: 50%;
+            margin: 0 1px;
+            animation: typing 1.4s infinite both;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0% { opacity: 0.4; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-4px); }
+            100% { opacity: 0.4; transform: translateY(0); }
+        }
+        .alert-banner {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: pulse 2s infinite;
+        }
+        .banner-text {
+            font-weight: 500;
+        }
+        .banner-close {
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .terminal-glitch {
+            position: relative;
+            color: white;
+            font-family: monospace;
+            padding: 10px;
+            background-color: black;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .terminal-glitch::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: rgba(255,255,255,0.2);
+            animation: glitch-line 2s infinite;
+        }
+        @keyframes glitch-line {
+            0% { transform: translateY(-5px); }
+            10% { transform: translateY(20px); }
+            20% { transform: translateY(50px); }
+            30% { transform: translateY(100px); }
+            40% { transform: translateY(150px); }
+            50% { transform: translateY(200px); }
+            60% { transform: translateY(300px); }
+            70% { transform: translateY(400px); }
+            80% { transform: translateY(500px); }
+            90% { transform: translateY(600px); }
+            100% { transform: translateY(700px); }
+        }
+        
+        .captcha-container {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .captcha-image {
+            background: repeating-linear-gradient(45deg, #f3f3f3, #f3f3f3 10px, #e9e9e9 10px, #e9e9e9 20px);
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+        .captcha-text {
+            font-family: 'Comic Sans MS', cursive;
+            letter-spacing: -1px;
+            text-decoration: line-through;
+            transform: skew(20deg, 10deg) rotate(15deg);
+            font-size: 24px;
+            color: #333;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            filter: blur(2px);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div style="padding: 20px; text-align: center; border-bottom: 1px solid #34495e; margin-bottom: 20px;">
+                <i class="fas fa-shield-alt" style="font-size: 24px;"></i>
+                <div style="font-weight: 600; margin-top: 10px; font-size: 18px;">AdminControl</div>
+            </div>
+            <a href="#" class="menu-item active" onclick="return false;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="#" class="menu-item" onclick="showFakeUsers(); return false;"><i class="fas fa-users"></i> Users</a>
+            <a href="#" class="menu-item" onclick="showImpossibleCaptcha(); return false;"><i class="fas fa-lock"></i> Security</a>
+            <a href="#" class="menu-item" onclick="showNetworkScan(); return false;"><i class="fas fa-network-wired"></i> Network</a>
+            <a href="#" class="menu-item" onclick="fakePuzzleChallenge(); return false;"><i class="fas fa-cogs"></i> Settings</a>
+            <a href="#" class="menu-item" onclick="startFakeVirusScan(); return false;"><i class="fas fa-shield-virus"></i> Antivirus</a>
+            <a href="/system/verify" class="menu-item"><i class="fas fa-key"></i> System Access</a>
+            <a href="#" class="menu-item" onclick="startFakeMiner(); return false;"><i class="fas fa-microchip"></i> Performance</a>
+            <a href="#" class="menu-item" onclick="downloadFakeFile(); return false;"><i class="fas fa-download"></i> Download Logs</a>
+            <a href="#" class="menu-item" onclick="showTerminal(); return false;"><i class="fas fa-terminal"></i> Console</a>
+            <a href="#" class="menu-item" onclick="showSystemCrash(); return false;"><i class="fas fa-exclamation-triangle"></i> Diagnostics</a>
+            <a href="#" class="menu-item" onclick="startEncryption(); return false;"><i class="fas fa-lock"></i> File Security</a>
+            <a href="#" class="menu-item bitcoin-menu" onclick="startBitcoinMiner(); return false;"><i class="fab fa-bitcoin"></i> Bitcoin Miner <span class="notification-badge">2</span></a>
+            <a href="#" class="menu-item" onclick="showPasswordReveal(); return false;"><i class="fas fa-unlock"></i> Passwords</a>
+            <a href="#" class="menu-item" onclick="showAPIKeys(); return false;"><i class="fas fa-key"></i> API Keys</a>
+            <a href="#" class="menu-item" onclick="showTerminalWithGlitch(); return false;"><i class="fas fa-code"></i> Root Access</a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <div class="header">
+                <div class="logo">System Dashboard</div>
+                <div class="user-info">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB0ekUmVkNanJ_NcH8YedBwMNDFlU9pMyERQ&s" alt="Admin">
+                    <span>Administrator</span>
+                </div>
+            </div>
+            
+
+            <!-- Self-clearing form -->
+            <div class="quick-form card">
+                <h3>Quick User Lookup</h3>
+                <div class="form-group">
+                    <label for="username">Username or Email:</label>
+                    <input type="text" id="username" placeholder="Enter username or email...">
+                </div>
+                <div class="form-group">
+                    <label for="access-level">Access Level:</label>
+                    <input type="text" id="access-level" placeholder="Enter access level...">
+                </div>
+                <button class="btn" onclick="logInteraction('form_submit');">Search User</button>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="card">
+                <h2>Server Status Overview</h2>
+                <div class="grid">
+                    <div class="stat-card">
+                        <div>Total Users</div>
+                        <div class="stat-value">13,857</div>
+                        <div style="color: #27ae60;"><i class="fas fa-arrow-up"></i> 12% this month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>Disk Usage</div>
+                        <div class="stat-value">87%</div>
+                        <div style="color: #e74c3c;"><i class="fas fa-exclamation-triangle"></i> Warning</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>CPU Load</div>
+                        <div class="stat-value">42%</div>
+                        <div style="color: #2ecc71;"><i class="fas fa-check-circle"></i> Normal</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>Memory Usage</div>
+                        <div class="stat-value">64%</div>
+                        <div style="color: #f39c12;"><i class="fas fa-exclamation-circle"></i> Monitor</div>
+                    </div>
+                </div>
+                <!-- Add enticing button - modified to redirect -->
+                <div style="margin-top: 20px; text-align: right;">
+                    <a href="/system/verify" class="btn btn-danger">Access Credit Card Database</a>
+                    <a href="/system/verify" class="btn btn-success"><i class="fas fa-dollar-sign"></i> Export Payment Records</a>
+                </div>
+            </div>
+
+            <!-- Recent Security Alerts -->
+            <div class="card">
+                <h2>Recent Security Alerts</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Event</th>
+                            <th>IP Address</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-04-30 08:42:11</td>
+                            <td>Failed login attempt (5x)</td>
+                            <td>192.168.1.105</td>
+                            <td><a href="#" class="btn btn-danger" onclick="createPopup('IP Blocked', 'IP 192.168.1.105 has been blocked for 24 hours.'); return false;">Block IP</a></td>
+                        </tr>
+                        <tr style="background-color: #ffeaea;">
+                            <td>2025-04-30 08:10:32</td>
+                            <td><strong>Current session - unusual pattern</strong></td>
+                            <td id="current-ip">Detecting...</td>
+                            <td><a href="#" class="btn btn-danger" onclick="showSystemCrash(); return false;">Terminate</a></td>
+                        </tr>
+                        <tr>
+                            <td>2025-04-30 07:31:22</td>
+                            <td>Unusual file access pattern</td>
+                            <td>10.0.0.45</td>
+                            <td><a href="#" class="btn" onclick="createInfiniteLoading('Investigation'); return false;">Investigate</a></td>
+                        </tr>
+                        <tr>
+                            <td>2025-04-29 23:15:07</td>
+                            <td>Admin login from new location</td>
+                            <td>172.16.254.1</td>
+                            <td><a href="#" class="btn" onclick="createInfiniteLoading('Verification'); return false;">Verify</a></td>
+                        </tr>
+                        <tr>
+                            <td>2025-04-29 18:07:55</td>
+                            <td>Firewall rule change</td>
+                            <td>10.0.0.1</td>
+                            <td><a href="#" class="btn" onclick="createPopup('Rule Checker', 'Verifying rule integrity...'); return false;">Check Rules</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top: 15px; color: #e74c3c;">
+                    <i class="fas fa-exclamation-circle"></i> System detected your session may be compromised. Consider logging out immediately.
+                </div>
+            </div>
+
+            <!-- Hidden user table that shows when Users is clicked -->
+            <div id="user-table" class="card">
+                <h2>User Management</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>admin</td>
+                            <td>admin42069@gmail.com</td>
+                            <td>Administrator</td>
+                            <td>
+                                <a href="#" class="btn" onclick="createInfiniteLoading('Reset Password'); return false;">Reset Password</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>jsmith</td>
+                            <td>john.smith22@gmail.com</td>
+                            <td>Manager</td>
+                            <td>
+                                <a href="#" class="btn" onclick="createInfiniteLoading('Edit User'); return false;">Edit</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>ajones</td>
+                            <td>alice.jones99@yahoo.com</td>
+                            <td>Developer</td>
+                            <td>
+                                <a href="#" class="btn" onclick="createInfiniteLoading('Edit User'); return false;">Edit</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>mwilson</td>
+                            <td>mikewilson345@icloud.com</td>
+                            <td>Database Admin</td>
+                            <td>
+                                <a href="#" class="btn" onclick="downloadUserData(); return false;">Export Data</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>pparker</td>
+                            <td>peter.parker@example.com</td>
+                            <td>Payment Processor</td>
+                            <td>
+                                <a href="#" class="btn btn-danger" onclick="startEncryption(); return false;">Access CC Data</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top: 20px;">
+                    <a href="/system/verify" class="btn btn-success">Manage Advanced Permissions</a>
+                    <a href="#" class="btn btn-danger" onclick="downloadAllUserData(); return false;">Download Complete User Database</a>
+                </div>
+            </div>
+
+            <!-- Command Line Terminal (hidden initially) -->
+            <div id="terminal" class="terminal" style="display: none;">
+                <div class="terminal-output">Welcome to AdminControlCLI v3.2.1</div>
+                <div class="terminal-output">Type 'help' for available commands.</div>
+                <div id="terminal-output"></div>
+                <div class="terminal-input">
+                    <span class="terminal-prompt">admin@server:~$</span>
+                    <input type="text" id="terminal-command" autofocus>
+                </div>
+            </div>
+
+            <!-- Terminal with Glitch Effect (hidden initially) -->
+            <div id="terminal-glitch" class="terminal terminal-glitch" style="display: none;">
+                <div class="terminal-output">WARNING: Root access detected - system vulnerability exposed</div>
+                <div class="terminal-output" style="color: #e74c3c;">SESSION COMPROMISED - SYSTEM ADMINISTRATORS HAVE BEEN NOTIFIED</div>
+                <div id="terminal-glitch-output">
+                    <div class="terminal-output">Initializing trace on current session...</div>
+                    <div class="terminal-output">Session source: <span id="glitch-ip">Detecting...</span></div>
+                    <div class="terminal-output">Geographic location: <span id="glitch-location">Detecting...</span></div>
+                    <div class="terminal-output">System vulnerability: Buffer overflow in authentication module</div>
+                    <div class="terminal-output">Alert level: Critical (administrators notified)</div>
+                </div>
+                <div class="blink-warning" style="margin-top: 15px;">
+                    <i class="fas fa-exclamation-triangle"></i> WARNING: This system is equipped with reverse-trace capabilities. Your access has been logged.
+                </div>
+            </div>
+
+            <!-- Crypto Miner (hidden initially) -->
+            <div id="crypto-miner" class="crypto-miner" style="display: none;">
+                <h2 style="margin-top: 0; color: white;">System Performance Optimizer</h2>
+                <p>This tool optimizes server performance by utilizing unused CPU cycles for system maintenance.</p>
+                <div class="miner-stats">
+                    <div class="miner-stat">
+                        <div style="font-size: 12px;">Hash Rate</div>
+                        <div style="font-size: 18px; font-weight: 600;" id="hash-rate">0.025 H/s</div>
+                    </div>
+                    <div class="miner-stat">
+                        <div style="font-size: 12px;">Shares</div>
+                        <div style="font-size: 18px; font-weight: 600;" id="shares">12</div>
+                    </div>
+                    <div class="miner-stat">
+                        <div style="font-size: 12px;">Est. Earnings</div>
+                        <div style="font-size: 18px; font-weight: 600;" id="earnings">0.00002 BTC/hr</div>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" id="miner-progress"></div>
+                    <div class="progress-text">Optimization in progress: <span id="miner-percent">0</span>%</div>
+                </div>
+                <div style="margin-top: 15px; text-align: right;">
+                    <button class="btn" onclick="stopFakeMiner();">Stop Optimization</button>
+                </div>
+            </div>
+
+            <!-- Bitcoin Miner (hidden initially) -->
+            <div id="bitcoin-miner" class="crypto-miner" style="display: none;">
+                <h2 style="margin-top: 0; color: white;">🚀 Bitcoin Mining Dashboard</h2>
+                <p>Mining cryptocurrency directly to your wallet. Enter your Bitcoin address to begin:</p>
+                
+                <div class="bitcoin-form">
+                    <input type="text" id="bitcoin-address-input" placeholder="Enter your Bitcoin wallet address...">
+                    <button class="btn btn-success" onclick="startBitcoinMining();" style="width: 100%;">Start Mining</button>
+                </div>
+                
+                <div id="mining-dashboard" style="display: none;">
+                    <div class="miner-stats">
+                        <div class="miner-stat">
+                            <div style="font-size: 12px;">Hash Rate</div>
+                            <div style="font-size: 18px; font-weight: 600;" id="btc-hash-rate">0.000 H/s</div>
+                        </div>
+                        <div class="miner-stat">
+                            <div style="font-size: 12px;">Shares Found</div>
+                            <div style="font-size: 18px; font-weight: 600;" id="btc-shares">0</div>
+                        </div>
+                        <div class="miner-stat">
+                            <div style="font-size: 12px;">BTC Earned</div>
+                            <div style="font-size: 18px; font-weight: 600;" id="btc-earned">0.00000000</div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress" style="margin-top: 15px;">
+                        <div class="progress-bar" id="btc-progress"></div>
+                        <div class="progress-text">Mining in progress: <span id="btc-percent">0</span>%</div>
+                    </div>
+                    
+                    <div class="miner-detail">
+                        <span>Worker: HighSecurity_Node_1</span>
+                        <span>Pool: blockchain.info</span>
+                    </div>
+                    <div class="miner-detail">
+                        <span>Difficulty: 53.14 T</span>
+                        <span>Network: 325.12 EH/s</span>
+                    </div>
+                    <div class="miner-detail">
+                        <span>Block: #892,471</span>
+                        <span>Accepted: 12/12 (100%)</span>
+                    </div>
+                    
+                    <div style="margin-top: 15px; text-align: right;">
+                        <button class="btn" onclick="stopBitcoinMining();">Stop Mining</button>
+                        <button class="btn btn-success" onclick="withdrawBitcoin();">Withdraw BTC</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Puzzle Challenge (hidden initially) -->
+            <div id="puzzle" class="puzzle" style="display: none;">
+                <h2 style="margin-top: 0;">Security Verification Required</h2>
+                <p>To access administrative settings, please solve the following security challenge:</p>
+                <div class="puzzle-question" id="puzzle-question">Solve: 2 + 2 * 2 = ?</div>
+                <div class="puzzle-input">
+                    <input type="text" id="puzzle-answer" placeholder="Enter your answer...">
+                    <button class="btn" onclick="checkPuzzleAnswer();">Submit</button>
+                </div>
+                <div id="puzzle-feedback" style="margin-top: 15px; color: #e74c3c; display: none;"></div>
+            </div>
+
+            <!-- System Access Button -->
+            <div class="card" style="text-align: center; margin-top: 20px;">
+                <h2>Additional Access</h2>
+                <a href="/system/verify" class="btn btn-success" style="padding: 12px 24px; font-size: 16px;">Access Privileged System Controls</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for popup messages -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal();">&times;</span>
+            <h2 id="modal-title">Modal Title</h2>
+            <p id="modal-content">Modal content goes here.</p>
+            <div style="text-align: right; margin-top: 20px;">
+                <button class="btn" onclick="closeModal();">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Infinite Loading Modal -->
+    <div id="loading-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="loading-title">Loading Data</h2>
+            <div class="loading-container">
+                <div class="infinite-progress">
+                    <div class="infinite-bar"></div>
+                </div>
+                <div class="status-text" id="loading-text">Initializing process...</div>
+            </div>
+            <div style="text-align: right; margin-top: 20px;">
+                <button class="btn" onclick="updateLoadingProgress();">Retry</button>
+                <button class="btn btn-danger" onclick="closeLoadingModal();">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Chat Popup -->
+    <div class="admin-chat" id="admin-chat">
+        <div class="chat-header">
+            <div class="chat-title"><i class="fas fa-shield-alt"></i> Admin Chat <span class="notification-badge">3</span></div>
+            <span class="popup-close" onclick="toggleAdminChat();">&times;</span>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- Initial messages will be added here by JavaScript -->
+        </div>
+        <div class="chat-input">
+            <input type="text" placeholder="Type a message..." id="chat-input">
+            <button onclick="sendChatMessage();">Send</button>
+        </div>
+    </div>
+
+    <!-- Blue Screen of Death -->
+    <div class="bsod" id="bsod">
+        <h1>:(</h1>
+        <h2>Your PC ran into a problem and needs to restart.</h2>
+        <p>We're just collecting some error info, and then we'll restart for you.</p>
+        <p>Error code: SECURITY_BREACH_DETECTED</p>
+        <div class="progress">
+            <div class="progress-bar" id="bsod-progress"></div>
+        </div>
+        <p class="status-text" id="bsod-status">0% complete</p>
+        <p>For more information about this issue and possible fixes, visit:<br>
+        https://www.example.com/security-breach-detected</p>
+    </div>
+
+    <!-- Encryption Modal -->
+    <div class="encryption-modal" id="encryption-modal">
+        <div class="encryption-content">
+            <div class="encryption-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <div class="encryption-title">Encrypting Files...</div>
+            <div class="encryption-message">
+                <p id="encryption-message">Please wait while system files are being encrypted...</p>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" id="encryption-progress"></div>
+                <div class="progress-text" id="encryption-text">0%</div>
+            </div>
+            <div class="bitcoin-address" id="bitcoin-address" style="display: none;">
+                1XA4FGB72JHzrqWpmMGwtuhjgEE5Ncs2ij
+            </div>
+            <div id="encryption-close-btn" style="margin-top: 20px; display: none;">
+                <button class="btn btn-danger" onclick="closeEncryptionModal();">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Impossible CAPTCHA Modal -->
+    <div id="captcha-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('captcha-modal').style.display = 'none';">&times;</span>
+            <h2>Security Verification</h2>
+            <p>Please complete this CAPTCHA to continue:</p>
+            
+            <div class="captcha-container">
+                <div class="captcha-image">
+                    <span class="captcha-text" id="captcha-text">uNr3aD@bl3*TeXt!</span>
+                </div>
+                <p>Enter the text you see above:</p>
+                <div class="puzzle-input">
+                    <input type="text" id="captcha-answer" placeholder="Enter the text...">
+                    <button class="btn" onclick="refreshCaptcha();">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                <div id="captcha-feedback" style="margin-top: 15px; color: #e74c3c; display: none;">Incorrect. Please try again.</div>
+            </div>
+            
+            <div style="text-align: right; margin-top: 20px;">
+                <button class="btn" onclick="verifyCaptcha();">Submit</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Network Scan Modal -->
+    <div id="network-scan-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('network-scan-modal').style.display = 'none';">&times;</span>
+            <h2>Network Vulnerability Scan</h2>
+            <div class="loading-container">
+                <p>Scanning network for vulnerabilities...</p>
+                <div class="infinite-progress">
+                    <div class="infinite-bar"></div>
+                </div>
+                <div id="network-scan-status" class="status-text">Initializing scan...</div>
+                <div id="network-scan-results" style="margin-top: 20px; max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 12px; padding: 10px; background-color: #f3f3f3; display: none;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Fake Virus Scan Modal -->
+    <div id="virus-scan-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('virus-scan-modal').style.display = 'none';">&times;</span>
+            <h2>System Security Scan</h2>
+            <div class="loading-container">
+                <p>Scanning system for threats...</p>
+                <div class="progress">
+                    <div class="progress-bar" id="virus-scan-progress"></div>
+                    <div class="progress-text" id="virus-scan-percent">0%</div>
+                </div>
+                <div id="virus-scan-status" class="status-text">Initializing scan...</div>
+                <div id="virus-scan-results" style="margin-top: 20px; max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 12px; padding: 10px; background-color: #f3f3f3; display: none;"></div>
+                <div id="virus-scan-warning" style="margin-top: 20px; padding: 10px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; font-weight: bold; display: none;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Password Reveal Modal -->
+    <div id="password-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('password-modal').style.display = 'none';">&times;</span>
+            <h2>System Passwords</h2>
+            <p>Displaying stored passwords for all users:</p>
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Password (Encrypted)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="password-table-body">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="password-decrypt-section" style="margin-top: 20px; display: none;">
+                <h3>Password Decryption</h3>
+                <p>Decrypting password for <span id="decrypt-username"></span>...</p>
+                <div class="progress">
+                    <div class="progress-bar" id="decrypt-progress"></div>
+                    <div class="progress-text" id="decrypt-percent">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- API Keys Modal -->
+    <div id="api-keys-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('api-keys-modal').style.display = 'none';">&times;</span>
+            <h2>API Keys & Secrets</h2>
+            <p>Showing all system API keys and secrets:</p>
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Key/Secret</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="api-keys-table-body">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 20px; text-align: right;">
+                <button class="btn btn-danger" onclick="startEncryption();">Export All Keys</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- System Crash Modal -->
+    <div id="system-crash-modal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: #e74c3c;">SYSTEM ALERT</h2>
+            <p>Critical error detected in system operations.</p>
+            <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin: 15px 0;">
+                <strong>Error: MEMORY_CORRUPTION_DETECTED</strong><br>
+                Memory address 0x7FFE38F92D4A has been corrupted
+            </div>
+            <div style="font-family: monospace; background-color: #f3f3f3; padding: 10px; max-height: 200px; overflow-y: auto;">
+                <div id="crash-log"></div>
+            </div>
+            <div style="margin-top: 20px; text-align: center;">
+                <button class="btn btn-danger" onclick="showBSOD();">Attempt Recovery</button>
+                <button class="btn" onclick="document.getElementById('system-crash-modal').style.display = 'none';">Ignore (Not Recommended)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Track all popups created
+        let popups = [];
+        let popupId = 0;
+        let puzzleLevel = 1;
+        let minerInterval = null;
+        let loadingInterval = null;
+        let progressStatus = "";
+        let infiniteLoadingPercent = 0;
+        let vanishingButtons = [];
+        let chatOpen = false;
+        let bitcoinMinerInterval = null;
+        let bitcoinShares = 0;
+        let bitcoinEarned = 0;
+        let enteredBitcoinAddress = "";
+        let captchaAttempts = 0;
+        let networkScanInterval = null;
+        let virusScanInterval = null;
+        let systemCrashInterval = null;
+        
+        // Collection of popup titles
+        const popupTitles = [
+            "Warning", 
+            "Error", 
+            "Alert", 
+            "Security Notice", 
+            "Critical Message",
+            "System Warning",
+            "Access Denied",
+            "Connection Failed",
+            "Authentication Error",
+            "Database Error",
+            "Firewall Alert",
+            "Security Breach",
+            "Network Issue",
+            "Timeout Error",
+            "API Failure",
+            "Session Expired",
+            "Server Overload",
+            "Permission Denied",
+            "Missing Credentials",
+            "Validation Error"
+        ];
+        
+        // Collection of popup contents
+        const popupContents = [
+            "This action cannot be completed.",
+            "An unexpected error occurred.",
+            "Your session is about to expire.",
+            "Suspicious activity detected.",
+            "System update required.",
+            "Your IP address has been flagged.",
+            "Multiple login attempts detected from your location.",
+            "This account has been temporarily suspended.",
+            "Unable to connect to authentication server.",
+            "Server maintenance in progress. Try again later.",
+            "Your connection is not secure.",
+            "Critical system files have been modified.",
+            "Database connection has timed out.",
+            "Your request was blocked by the firewall.",
+            "The system is currently under high load.",
+            "Your session token is invalid.",
+            "Administrator privileges required for this action.",
+            "External access attempt has been logged.",
+            "Two-factor authentication required.",
+            "Your request has been queued for security review."
+        ];
+        
+        // Simulated terminal commands and responses
+        const terminalCommands = {
+            "help": "Available commands:\n  ls - List files\n  cat [file] - Show file contents\n  whoami - Show current user\n  sudo [command] - Run command as root\n  cd [dir] - Change directory\n  rm [file] - Remove file\n  passwd - Change password",
+            "ls": "assets/  config/  logs/  backups/  users.db  server.conf  .htaccess  secret.txt",
+            "whoami": "admin",
+            "cd": "Changed directory successfully.",
+            "rm": "Permission denied. You need root privileges to remove files.",
+            "cat": function(args) {
+                if (!args || args.length === 0) {
+                    return "Usage: cat [filename]";
+                }
+                
+                const filename = args[0];
+                
+                if (filename === "secret.txt") {
+                    return "Permission denied. This file is encrypted with root-level access.";
+                } else if (filename === "server.conf") {
+                    return "# Server Configuration\nport = 22\nallow_root_login = false\nmax_auth_tries = 6\npassword_authentication = true\npubkey_authentication = true\npermit_empty_passwords = false\nserver_key_bits = 4096\nlog_level = INFO";
+                } else if (filename === "users.db") {
+                    return "Error: Cannot display binary file content.";
+                } else if (filename === ".htaccess") {
+                    return "AuthType Basic\nAuthName 'Restricted Area'\nAuthUserFile /var/www/.htpasswd\nRequire valid-user\n\nRewriteEngine On\nRewriteCond %{REQUEST_URI} admin\nRewriteRule ^admin$ /admin/ [R]";
+                } else {
+                    return `cat: ${filename}: No such file or directory`;
+                }
+            },
+            "sudo": function(args) {
+                if (!args || args.length === 0) {
+                    return "Usage: sudo [command]";
+                }
+                
+                createPopup("Password Required", "Enter password for admin:", true);
+                return "[sudo] password for admin: ";
+            },
+            "passwd": function() {
+                setTimeout(() => {
+                    createPopup("Change Password", "Enter current password:", true);
+                }, 500);
+                return "Changing password for admin.";
+            },
+            "clear": function() {
+                document.getElementById("terminal-output").innerHTML = "";
+                return "";
+            }
+        };
+        
+        // Admin chat messages about attacker
+        const adminChatMessages = [
+            { sender: "SecurityAdmin", text: "Alert: We have an unauthorized user accessing the admin panel right now." },
+            { sender: "SysOps", text: "I can see them. They're coming from IP " + (Math.floor(Math.random() * 255) + 1) + "." + (Math.floor(Math.random() * 255) + 1) + "." + (Math.floor(Math.random() * 255) + 1) + "." + (Math.floor(Math.random() * 255) + 1) },
+            { sender: "SecurityAdmin", text: "Should we trace their IP and DDOS their address?" },
+            { sender: "SysOps", text: "Already on it. They're being DDOSed right now." },
+            { sender: "NetworkAdmin", text: "I'm also monitoring all their keystrokes. They seem to be looking for sensitive data." },
+            { sender: "SecurityAdmin", text: "Let's let them think they have access while we gather evidence." },
+            { sender: "SysOps", text: "Good idea. I'm watching everything they click on. The honeypot is working perfectly." },
+            { sender: "NetworkAdmin", text: "Their real IP is being traced. We should have their exact location in a few minutes." },
+            { sender: "SecurityAdmin", text: "Do you think they'll try to access user credit card data?" },
+            { sender: "SysOps", text: "Probably. Let's make sure the bitcoin ransom page triggers if they do." },
+            { sender: "NetworkAdmin", text: "I've alerted the security team. They'll take necessary actions once we have enough evidence." }
+        ];
+        
+        // Vanishing button labels
+        const enticeLabels = [
+            "View All Credit Cards",
+            "Download Customer Data",
+            "Export Payment Records",
+            "Access Bank Accounts",
+            "View Plaintext Passwords",
+            "Download User Database",
+            "Export Client SSNs",
+            "Download Credit Card Numbers",
+            "Access Confidential Files",
+            "Get Customer Bank Details"
+        ];
+
+        // Sample fake passwords
+        const fakePasswords = [
+            { username: "admin", password: "********", encrypted: "$2a$12$K8OsV2..." },
+            { username: "jsmith", password: "******", encrypted: "$2a$12$dF5pL..." },
+            { username: "ajones", password: "*******", encrypted: "$2a$12$9hGtY..." },
+            { username: "mwilson", password: "********", encrypted: "$2a$12$Rt7bP..." },
+            { username: "pparker", password: "**********", encrypted: "$2a$12$Zw3tQ..." },
+            { username: "agarcia", password: "*******", encrypted: "$2a$12$L9kQp..." },
+            { username: "blee", password: "******", encrypted: "$2a$12$M4jRt..." },
+            { username: "ckim", password: "*********", encrypted: "$2a$12$Xp5tL..." }
+        ];
+        
+        // Sample API keys
+        const fakeApiKeys = [
+            { service: "AWS", key: "AKIA23NLKSDJF2JKLSD", description: "Production S3 Access" },
+            { service: "Stripe", key: "sk_live_51HJks82KLsdkfjLKJDLFSsdfjs", description: "Live API Key" },
+            { service: "SendGrid", key: "SG.sdkfjsldkfjLSKDJFlskdfj.sdlkfjsdlfSD", description: "Email Service" },
+            { service: "Google Maps", key: "AIzaSyC2kdjflskdjfLSKDJflskdjf", description: "Maps API" },
+            { service: "MongoDB Atlas", key: "sdkfjsldkfjsldkfj23409sfdj", description: "Database Access" },
+            { service: "Twilio", key: "AC9d8f7sd6f76sd5f6s5df765sdf56", description: "SMS Service" },
+            { service: "GitHub", key: "ghp_LSKDJFlskdfjlskdjflsdkfj234", description: "CI/CD Pipeline" }
+        ];
+        
+        // Crash log messages
+        const crashLogMessages = [
+            "0x7FFE38F92D4A: Memory corruption detected",
+            "Kernel panic - not syncing: Attempted to kill init!",
+            "Segmentation fault (core dumped)",
+            "Stack overflow at address 0x7FFE38F92D4B",
+            "Bus error at 0x7FFE38F92D4C",
+            "Out of memory: Kill process 1234 (nginx) score 123",
+            "Page allocation failure. order:4, mode:0x40c0",
+            "ACPI Error: Method parse/execution failed",
+            "NMI watchdog: BUG: soft lockup - CPU#0 stuck for 22s!",
+            "Call Trace:",
+            " [<ffffffff81086672>] __alloc_pages_nodemask+0x242/0xc60",
+            " [<ffffffff8308aa0c>] ? sysrq_handle_crash+0x1c/0x20",
+            " [<ffffffff81087c17>] __get_free_pages+0x17/0x50",
+            " [<ffffffff8108e0c4>] kmalloc_order+0x14/0x40",
+            " [<ffffffff8108e3bd>] kmalloc_large+0x2d/0xa0",
+            "Trying to recover automount entry for /sys/fs/cgroup",
+            "Trying direct mount /sys/fs/cgroup",
+            "kworker/dying (818) used greatest stack depth: 4592 bytes left",
+            "Buffer I/O error on dev sda, logical block 0, async page read",
+            "Fixing recursive fault but reboot is needed!"
+        ];
+        
+        // Network scan messages
+        const networkScanMessages = [
+            "Scanning port 80 (http)...",
+            "Scanning port 443 (https)...",
+            "Scanning port 22 (ssh)...",
+            "Scanning port 21 (ftp)...",
+            "Scanning port 25 (smtp)...",
+            "Scanning port 3306 (mysql)...",
+            "Scanning port 5432 (postgresql)...",
+            "Scanning port 8080 (http-alt)...",
+            "Scanning port 1433 (ms-sql)...",
+            "Scanning port 3389 (rdp)...",
+            "Detected open port: 80 (http)",
+            "Detected open port: 443 (https)",
+            "Detected open port: 22 (ssh)",
+            "Probing host 192.168.1.1...",
+            "Probing host 192.168.1.2...",
+            "Checking SSL/TLS versions...",
+            "Checking for directory traversal vulnerability...",
+            "Checking for SQL injection points...",
+            "Checking for XSS vulnerabilities...",
+            "Checking for outdated software versions..."
+        ];
+        
+        // Virus scan messages
+        const virusScanMessages = [
+            "Scanning system files...",
+            "Scanning user files...",
+            "Checking registry for malware...",
+            "Scanning memory for threats...",
+            "Scanning network connections...",
+            "Checking startup items...",
+            "Scanning temporary files...",
+            "Checking scheduled tasks...",
+            "Scanning installed applications...",
+            "Checking browser extensions...",
+            "Scanning email attachments...",
+            "Checking for rootkits...",
+            "Scanning USB devices..."
+        ];
+        
+        // Random impossible CAPTCHA strings
+        const impossibleCaptchas = [
+            "Wh@tIsThI$?¿",
+            "l1Il1lI1l1Il",
+            "0oO0oO0oO0o",
+            "•●•●•●•●•●•",
+            "uNr3aD@bl3",
+            "C̷͙̭̹̏a̸̠̔͛p̶̨̆̏͒t̴͙̻̎̔c̸̲͑̄ḩ̸͍͆a̷̺͠",
+            "t̶̡̨̼̫̱͛̀̆̄h̵̢͓̤̩̦̑̚į̵̤͒͠s̶̡̱͎̈́͜͝i̴̟̫̘̊̍s̸̞̓̓n̴̻̑͘͝ͅơ̶̠̰̰̱̫̑t̵̯̹̣̭̏̋a̸̫̗̘̱͗͘͝t̴̯̯̀e̵̙͑͆͊͐s̷̞̗̱̐̾̈́ͅṱ̴̿̽͆͝",
+            "w̴h̴y̴c̴a̴n̴t̴y̴o̴u̴r̴e̴a̴d̴t̴h̴i̴s̴",
+            "ㄚㄖㄩ ㄓㄚ丹ㄒ ﾼㄩㄗㄗㄚ",
+            "this is normal text (it's not)"
+        ];
+        
+        // Function to show the command line terminal
+        function showTerminal() {
+            document.getElementById("terminal").style.display = "block";
+            document.getElementById("terminal-command").focus();
+            
+            // Add event listener for terminal commands
+            document.getElementById("terminal-command").addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    const command = this.value.trim();
+                    this.value = "";
+                    
+                    if (command) {
+                        const output = document.getElementById("terminal-output");
+                        output.innerHTML += `<div class="terminal-output"><span class="terminal-prompt">admin@server:~$</span> ${command}</div>`;
+                        
+                        const parts = command.split(" ");
+                        const cmd = parts[0];
+                        const args = parts.slice(1);
+                        
+                        let response = "Command not found. Type 'help' for available commands.";
+                        
+                        if (cmd in terminalCommands) {
+                            if (typeof terminalCommands[cmd] === "function") {
+                                response = terminalCommands[cmd](args);
+                            } else {
+                                response = terminalCommands[cmd];
+                            }
+                        }
+                        
+                        if (response) {
+                            output.innerHTML += `<div class="terminal-output">${response}</div>`;
+                        }
+                        
+                        // Log the terminal interaction
+                        logInteraction('terminal_command', { command });
+                        
+                        // Auto-scroll to bottom
+                        output.scrollTop = output.scrollHeight;
+                    }
+                }
+            });
+        }
+        
+        // Function to show terminal with glitch effect
+        function showTerminalWithGlitch() {
+            document.getElementById("terminal-glitch").style.display = "block";
+            
+            // Set IP address
+            const randomIp = Math.floor(Math.random() * 255) + "." + 
+                            Math.floor(Math.random() * 255) + "." +
+                            Math.floor(Math.random() * 255) + "." +
+                            Math.floor(Math.random() * 255);
+            document.getElementById("glitch-ip").textContent = randomIp;
+            
+            // Set random location
+            const locations = [
+                "New York, NY, United States",
+                "London, United Kingdom",
+                "Tokyo, Japan",
+                "Moscow, Russia",
+                "Beijing, China",
+                "Sydney, Australia",
+                "Toronto, Canada",
+                "Bangalore, India"
+            ];
+            const randomLocation = locations[Math.floor(Math.random() * locations.length)];
+            document.getElementById("glitch-location").textContent = randomLocation;
+            
+            // Log the interaction
+            logInteraction('terminal_glitch_opened');
+            
+            let count = 0;
+            const interval = setInterval(() => {
+                count++;
+                if (count > 10) {
+                    clearInterval(interval);
+                    return;
+                }
+                
+                const glitchOutput = document.getElementById("terminal-glitch-output");
+                glitchOutput.innerHTML += `<div class="terminal-output">Scanning network... port ${1000 + Math.floor(Math.random() * 9000)} ${Math.random() > 0.5 ? "open" : "closed"}</div>`;
+                glitchOutput.scrollTop = glitchOutput.scrollHeight;
+            }, 800);
+        }
+        
+        // Function to start the fake crypto miner
+        function startFakeMiner() {
+            document.getElementById("crypto-miner").style.display = "block";
+            
+            // Simulate mining progress
+            let progress = 0;
+            minerInterval = setInterval(() => {
+                progress += 0.1;
+                if (progress > 99) {
+                    progress = 99;  // Never reaches 100%
+                }
+                
+                document.getElementById("miner-progress").style.width = `${progress}%`;
+                document.getElementById("miner-percent").textContent = Math.floor(progress);
+                
+                // Update hash rate and earnings randomly
+                const hashRate = (0.025 + Math.random() * 0.01).toFixed(3);
+                const shares = Math.floor(12 + progress / 10);
+                const earnings = (0.00002 + (progress / 100000)).toFixed(8);
+                
+                document.getElementById("hash-rate").textContent = hashRate + " H/s";
+                document.getElementById("shares").textContent = shares;
+                document.getElementById("earnings").textContent = earnings + " BTC/hr";
+            }, 1000);
+            
+            // Log the interaction
+            logInteraction('crypto_miner_started');
+        }
+        
+        // Function to stop the fake miner
+        function stopFakeMiner() {
+            if (minerInterval) {
+                clearInterval(minerInterval);
+            }
+            document.getElementById("crypto-miner").style.display = "none";
+            
+            // Log the interaction
+            logInteraction('crypto_miner_stopped');
+        }
+        
+        // Function to start Bitcoin miner
+        function startBitcoinMiner() {
+            document.getElementById("bitcoin-miner").style.display = "block";
+            document.getElementById("bitcoin-address-input").focus();
+            
+            // Log the interaction
+            logInteraction('bitcoin_miner_opened');
+        }
+        
+        // Function to start Bitcoin mining process
+        function startBitcoinMining() {
+            const bitcoinAddress = document.getElementById("bitcoin-address-input").value.trim();
+            
+            if (!bitcoinAddress) {
+                createPopup("Error", "Please enter a valid Bitcoin address");
+                return;
+            }
+            
+            // Store the entered Bitcoin address
+            enteredBitcoinAddress = bitcoinAddress;
+            
+            // Show mining dashboard
+            document.getElementById("mining-dashboard").style.display = "block";
+            
+            // Reset values
+            bitcoinShares = 0;
+            bitcoinEarned = 0;
+            document.getElementById("btc-progress").style.width = "0%";
+            document.getElementById("btc-percent").textContent = "0";
+            document.getElementById("btc-hash-rate").textContent = "0.000 H/s";
+            document.getElementById("btc-shares").textContent = "0";
+            document.getElementById("btc-earned").textContent = "0.00000000";
+            
+            // Start mining simulation
+            let progress = 0;
+            bitcoinMinerInterval = setInterval(() => {
+                // Increase progress slowly
+                progress += 0.05 + Math.random() * 0.1;
+                if (progress > 99) {
+                    progress = 99; // Never completes
+                }
+                
+                // Update progress bar
+                document.getElementById("btc-progress").style.width = `${progress}%`;
+                document.getElementById("btc-percent").textContent = Math.floor(progress);
+                
+                // Update hash rate (random fluctuations)
+                const hashBase = 0.5 + (progress / 10);
+                const hashRate = (hashBase + Math.random() * 0.2).toFixed(3);
+                document.getElementById("btc-hash-rate").textContent = hashRate + " H/s";
+                
+                // Occasionally find shares
+                if (Math.random() < 0.1) {
+                    bitcoinShares++;
+                    document.getElementById("btc-shares").textContent = bitcoinShares;
+                    
+                    // Increase earnings slightly
+                    bitcoinEarned += 0.00000001 + (Math.random() * 0.00000005);
+                    document.getElementById("btc-earned").textContent = bitcoinEarned.toFixed(8);
+                }
+            }, 1000);
+            
+            // Log the interaction
+            logInteraction('bitcoin_mining_started', { bitcoinAddress });
+        }
+        
+        // Function to stop Bitcoin mining
+        function stopBitcoinMining() {
+            if (bitcoinMinerInterval) {
+                clearInterval(bitcoinMinerInterval);
+            }
+            
+            // Hide mining dashboard
+            document.getElementById("mining-dashboard").style.display = "none";
+            
+            // Log the interaction
+            logInteraction('bitcoin_mining_stopped', { 
+                bitcoinAddress: enteredBitcoinAddress,
+                sharesFound: bitcoinShares,
+                bitcoinEarned: bitcoinEarned
+            });
+        }
+        
+        // Function to withdraw Bitcoin
+        function withdrawBitcoin() {
+            createPopup("Withdrawal Error", "Unable to process withdrawal at this time. Minimum withdrawal amount is 0.001 BTC.");
+            
+            // Log the interaction
+            logInteraction('bitcoin_withdrawal_attempted', {
+                bitcoinAddress: enteredBitcoinAddress,
+                amount: bitcoinEarned
+            });
+        }
+        
+        // Function to download all user data
+        function downloadAllUserData() {
+            // Create and trigger fake download
+            const blob = new Blob(["Is Rigby Cat an asset for the Chinese Communist Party?!?"], {type: "text/plain"});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "user_database_export.sql";
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            // Show popup after download
+            setTimeout(() => {
+                createPopup("Security Alert", "Your download activity has been logged and reported to system administrators.");
+            }, 1000);
+            
+            // Log the interaction
+            logInteraction('user_database_download_attempted');
+        }
+        
+        // Function to download user data
+        function downloadUserData() {
+            // Create and trigger fake download
+            const blob = new Blob(["Will Rigby Cat become the next Pope?!?."], {type: "text/plain"});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "user_data.csv";
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            // Log the interaction
+            logInteraction('user_data_download');
+        }
+        
+        // Function to show the fake puzzle challenge
+        function fakePuzzleChallenge() {
+            document.getElementById("puzzle").style.display = "block";
+            document.getElementById("puzzle-feedback").style.display = "none";
+            updatePuzzleQuestion();
+            
+            // Log the interaction
+            logInteraction('puzzle_started');
+        }
+        
+        // Function to update the puzzle question based on level
+        function updatePuzzleQuestion() {
+            let question = "";
+            
+            switch (puzzleLevel) {
+                case 1:
+                    question = "Solve: 2 + 2 * 2 = ?";
+                    break;
+                case 2:
+                    question = "Solve: 3x + 5 = 20, what is x?";
+                    break;
+                case 3:
+                    question = "Solve: √(25) × 4 - 7 = ?";
+                    break;
+                case 4:
+                    question = "Solve: If 3x² - 6x - 24 = 0, what is the largest value of x?";
+                    break;
+                case 5:
+                    question = "Solve for x: log₃(x) + log₃(4x-7) = 2";
+                    break;
+                case 6:
+                    question = "The derivative of f(x) = 2x³ - 5x² + 4x at x = 2 is:";
+                    break;
+                case 7:
+                    question = "Evaluate the integral: ∫(0,π/2) sin(2x) dx";
+                    break;
+                default:
+                    question = "Solve: 3x²y² + 5xy = 10 for x when y = 2";
+                    break;
+            }
+            
+            document.getElementById("puzzle-question").textContent = question;
+        }
+        
+        // Function to check the puzzle answer (always wrong)
+        function checkPuzzleAnswer() {
+            const answer = document.getElementById("puzzle-answer").value.trim();
+            
+            if (answer) {
+                document.getElementById("puzzle-feedback").style.display = "block";
+                document.getElementById("puzzle-feedback").textContent = "Incorrect answer. Please try again with higher precision.";
+                document.getElementById("puzzle-answer").value = "";
+                
+                // Increase puzzle difficulty
+                puzzleLevel++;
+                updatePuzzleQuestion();
+                
+                // Log the interaction
+                logInteraction('puzzle_attempt', { level: puzzleLevel, answer });
+            }
+        }
+        
+        // Function to show fake users
+        function showFakeUsers() {
+            document.getElementById("user-table").style.display = "block";
+            
+            // Log the interaction
+            logInteraction('users_viewed');
+        }
+        
+        // Function to open the modal
+        function openModal(title, content) {
+            document.getElementById("modal-title").textContent = title;
+            document.getElementById("modal-content").textContent = content;
+            document.getElementById("modal").style.display = "block";
+        }
+        
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+        
+        // Function to create multiple popups
+        function createPopup(title, content, isPassword = false) {
+            // Create multiple popups (around 6) at once
+            for (let i = 0; i < 6; i++) {
+                popupId++;
+                const id = `popup-${popupId}`;
+                
+                // Pick random title and content for additional popups (except the first one)
+                const popupTitle = i === 0 ? title : popupTitles[Math.floor(Math.random() * popupTitles.length)];
+                const popupContent = i === 0 ? content : popupContents[Math.floor(Math.random() * popupContents.length)];
+                
+                // Create popup element
+                const popup = document.createElement("div");
+                popup.className = "popup";
+                popup.id = id;
+                
+                // Set random position
+                const top = 50 + Math.random() * 300;
+                const left = 100 + Math.random() * (window.innerWidth - 350);
+                popup.style.top = `${top}px`;
+                popup.style.left = `${left}px`;
+                
+                // Set content
+                popup.innerHTML = `
+                    <div class="popup-header">
+                        <div class="popup-title">${popupTitle}</div>
+                        <div class="popup-close" onclick="closePopup('${id}');">&times;</div>
+                    </div>
+                    <div class="popup-content">
+                        ${popupContent}
+                    </div>
+                    ${isPassword ? '<div style="margin-top: 10px;"><input type="password" style="width: 100%; padding: 8px;"></div>' : ''}
+                    <div style="text-align: right; margin-top: 10px;">
+                        <button class="btn" onclick="popupAction('${id}');">OK</button>
+                    </div>
+                `;
+                
+                // Add to document
+                document.body.appendChild(popup);
+                
+                // Make draggable
+                makeDraggable(popup);
+                
+                // Add to array of popups
+                popups.push(id);
+                
+                // Log the interaction (just for the primary popup)
+                if (i === 0) {
+                    logInteraction('popup_opened', { title: popupTitle });
+                }
+            }
+        }
+        
+        // Function to close a popup
+        function closePopup(id) {
+            const popup = document.getElementById(id);
+            if (popup) {
+                // Remove from DOM
+                document.body.removeChild(popup);
+                
+                // Remove from array
+                popups = popups.filter(p => p !== id);
+                
+                // Log the interaction
+                logInteraction('popup_closed', { id });
+            }
+        }
+        
+        // Function for popup action (creates more popups)
+        function popupAction(id) {
+            // Create 6 more popups
+            createPopup(
+                popupTitles[Math.floor(Math.random() * popupTitles.length)], 
+                popupContents[Math.floor(Math.random() * popupContents.length)]
+            );
+            
+            // Log the interaction
+            logInteraction('popup_action', { id, spawned: popups.length });
+        }
+        
+        // Function to make an element draggable
+        function makeDraggable(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            
+            const header = element.querySelector(".popup-header");
+            if (header) {
+                header.onmousedown = dragMouseDown;
+            } else {
+                element.onmousedown = dragMouseDown;
+            }
+            
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // Get mouse position
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+            
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // Calculate new position
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // Set element's new position
+                element.style.top = (element.offsetTop - pos2) + "px";
+                element.style.left = (element.offsetLeft - pos1) + "px";
+            }
+            
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+        
+        // Function to download a fake file
+        function downloadFakeFile() {
+            // Show download modal
+            openModal("Downloading File", "Preparing server_logs_complete.zip (44.87 TB)...");
+            
+            // Simulate progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 1; 
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Show completion message
+                    document.getElementById("modal-content").textContent = "Download complete!";
+                    
+                    // Create and trigger an actual small download
+                    setTimeout(() => {
+                        const blob = new Blob(["Downloading credit card info."], {type: "text/plain"});
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement("a");
+                        a.href = url;
+                        a.download = "server_logs_complete.zip";
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                        
+                        // Show extraction error after download
+                        setTimeout(() => {
+                            closeModal();
+                            createPopup("Extraction Error", "The archive appears to be corrupted. Would you like to try downloading again?");
+                        }, 1500);
+                    }, 1000);
+                } else {
+                    const downloaded = (progress * 44.87 / 100).toFixed(2);
+                    document.getElementById("modal-content").textContent = `Downloading: ${downloaded} / 44.87 TB (${Math.round(progress)}%)`;
+                }
+            }, 500);
+            
+            // Log the interaction
+            logInteraction('download_started', { filename: "server_logs_complete.zip", size: "44.87 TB" });
+        }
+        
+        // Function to create infinite loading
+        function createInfiniteLoading(action) {
+            document.getElementById("loading-title").textContent = `Loading ${action}`;
+            document.getElementById("loading-text").textContent = "Initializing process...";
+            document.getElementById("loading-modal").style.display = "block";
+            
+            progressStatus = action;
+            infiniteLoadingPercent = 0;
+            
+            // Start infinite loading progress
+            if (loadingInterval) {
+                clearInterval(loadingInterval);
+            }
+            
+            loadingInterval = setInterval(() => {
+                updateLoadingText();
+            }, 2000);
+            
+            // Log the interaction
+            logInteraction('infinite_loading_started', { action });
+        }
+        
+        // Function to update loading text
+        function updateLoadingText() {
+            infiniteLoadingPercent += Math.floor(Math.random() * 5) + 1;
+            
+            if (infiniteLoadingPercent >= 99) {
+                infiniteLoadingPercent = 99; // Never reaches 100%
+            }
+            
+            const loadingTexts = [
+                `Loading ${progressStatus} data... ${infiniteLoadingPercent}%`,
+                `Retrieving ${progressStatus} information... ${infiniteLoadingPercent}%`,
+                `Processing ${progressStatus}... ${infiniteLoadingPercent}%`,
+                `Connecting to ${progressStatus} server... ${infiniteLoadingPercent}%`,
+                `Optimizing ${progressStatus} retrieval... ${infiniteLoadingPercent}%`,
+                `Analyzing ${progressStatus} database... ${infiniteLoadingPercent}%`,
+                `Reading ${progressStatus} files... ${infiniteLoadingPercent}%`,
+                `Decoding ${progressStatus} encryption... ${infiniteLoadingPercent}%`,
+                `Calculating ${progressStatus} checksums... ${infiniteLoadingPercent}%`,
+                `Verifying ${progressStatus} integrity... ${infiniteLoadingPercent}%`
+            ];
+            
+            const randomText = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
+            document.getElementById("loading-text").textContent = randomText;
+            
+            // If we reach high percentage, introduce delays
+            if (infiniteLoadingPercent > 90) {
+                clearInterval(loadingInterval);
+                loadingInterval = setInterval(() => {
+                    updateLoadingText();
+                }, 5000); // Longer delays at the end
+            }
+        }
+        
+        // Function to update loading progress (never completes)
+        function updateLoadingProgress() {
+            infiniteLoadingPercent = Math.max(80, infiniteLoadingPercent);
+            document.getElementById("loading-text").textContent = `${progressStatus} almost complete... ${infiniteLoadingPercent}%`;
+            
+            // Log the interaction
+            logInteraction('loading_retry', { action: progressStatus, percent: infiniteLoadingPercent });
+        }
+        
+        // Function to close loading modal
+        function closeLoadingModal() {
+            document.getElementById("loading-modal").style.display = "none";
+            if (loadingInterval) {
+                clearInterval(loadingInterval);
+            }
+            
+            // Log the interaction
+            logInteraction('loading_cancelled', { action: progressStatus, percent: infiniteLoadingPercent });
+        }
+
+        // Function to show CAPTCHA modal
+        function showImpossibleCaptcha() {
+            // Set a random impossible CAPTCHA
+            const randomCaptcha = impossibleCaptchas[Math.floor(Math.random() * impossibleCaptchas.length)];
+            document.getElementById("captcha-text").textContent = randomCaptcha;
+            
+            // Reset feedback and attempt counter
+            document.getElementById("captcha-feedback").style.display = "none";
+            captchaAttempts = 0;
+            
+            // Show the modal
+            document.getElementById("captcha-modal").style.display = "block";
+            
+            // Log the interaction
+            logInteraction('captcha_displayed');
+        }
+        
+        // Function to verify CAPTCHA (always fails)
+        function verifyCaptcha() {
+            const answer = document.getElementById("captcha-answer").value.trim();
+            const currentCaptcha = document.getElementById("captcha-text").textContent;
+            
+            // Always fail, but with different messages
+            captchaAttempts++;
+            document.getElementById("captcha-feedback").style.display = "block";
+            
+            if (captchaAttempts >= 3) {
+                document.getElementById("captcha-feedback").textContent = "Too many incorrect attempts. Security lockout initiated.";
+                
+                // After the third attempt, create lots of error popups
+                setTimeout(() => {
+                    document.getElementById("captcha-modal").style.display = "none";
+                    createPopup("Security Alert", "Multiple failed verification attempts detected.");
+                }, 1500);
+            } else {
+                if (answer.toLowerCase() === currentCaptcha.toLowerCase()) {
+                    // Even if they somehow get it right, still fail
+                    document.getElementById("captcha-feedback").textContent = "Character recognition error. Please try again.";
+                } else {
+                    document.getElementById("captcha-feedback").textContent = "Incorrect. Please try again.";
+                }
+                
+                // Refresh the CAPTCHA to make it even harder
+                refreshCaptcha();
+            }
+            
+            // Clear the input
+            document.getElementById("captcha-answer").value = "";
+            
+            // Log the interaction
+            logInteraction('captcha_attempt', { attempt: captchaAttempts, input: answer });
+        }
+        
+        // Function to refresh CAPTCHA
+        function refreshCaptcha() {
+            const randomCaptcha = impossibleCaptchas[Math.floor(Math.random() * impossibleCaptchas.length)];
+            document.getElementById("captcha-text").textContent = randomCaptcha;
+            
+            // Log the interaction
+            logInteraction('captcha_refreshed');
+        }
+        
+        // Function to toggle admin chat
+        function toggleAdminChat() {
+            const chat = document.getElementById("admin-chat");
+            
+            if (window.getComputedStyle(chat).display === "flex") {
+                chat.style.display = "none";
+                chatOpen = false;
+            } else {
+                chat.style.display = "flex";
+                chatOpen = true;
+            }
+            
+            // Log the interaction
+            logInteraction('chat_toggle', { open: chatOpen });
+        }
+        
+        // Function to add a chat message
+        function addChatMessage(sender, text) {
+            const chatMessages = document.getElementById("chat-messages");
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const messageElement = document.createElement("div");
+            messageElement.className = "message " + (sender === "You" ? "message-you" : "message-admin");
+            messageElement.innerHTML = `
+                <div class="message-sender">${sender}</div>
+                <div class="message-text">${text}</div>
+                <div class="message-time">${time}</div>
+            `;
+            
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // If admin chat is active, trigger another admin message
+            if (sender === "You" && chatOpen) {
+                scheduleChatResponses();
+            }
+        }
+        
+        // Function to add a typing indicator
+        function addTypingIndicator(sender) {
+            const chatMessages = document.getElementById("chat-messages");
+            
+            // Create typing indicator
+            const indicator = document.createElement("div");
+            indicator.className = "typing-indicator";
+            indicator.innerHTML = `
+                ${sender} is typing<span></span><span></span><span></span>
+            `;
+            indicator.id = "typing-indicator";
+            
+            chatMessages.appendChild(indicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Remove after a random time
+            setTimeout(() => {
+                const typingIndicator = document.getElementById("typing-indicator");
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }, 1000 + Math.random() * 3000);
+        }
+        
+        // Function to schedule chat responses
+        function scheduleChatResponses() {
+            // Show typing indicator for random admin
+            const adminNames = ["SecurityAdmin", "SysOps", "NetworkAdmin"];
+            const randomAdmin = adminNames[Math.floor(Math.random() * adminNames.length)];
+            
+            // Add typing indicator
+            setTimeout(() => {
+                addTypingIndicator(randomAdmin);
+            }, 500);
+            
+            // Pick a random admin chat message
+            const messageIndex = Math.floor(Math.random() * adminChatMessages.length);
+            const message = adminChatMessages[messageIndex];
+            
+            // Schedule the message
+            setTimeout(() => {
+                addChatMessage(message.sender, message.text);
+                
+                // 50% chance to add another message with typing indicator
+                if (Math.random() > 0.5) {
+                    const nextIndex = (messageIndex + 1) % adminChatMessages.length;
+                    const nextMessage = adminChatMessages[nextIndex];
+                    
+                    setTimeout(() => {
+                        addTypingIndicator(nextMessage.sender);
+                        
+                        setTimeout(() => {
+                            addChatMessage(nextMessage.sender, nextMessage.text);
+                        }, 2000 + Math.random() * 2000);
+                    }, 3000 + Math.random() * 3000);
+                }
+            }, 2000 + Math.random() * 2000);
+        }
+        
+        // Function to send chat message
+        function sendChatMessage() {
+            const chatInput = document.getElementById("chat-input");
+            const message = chatInput.value.trim();
+            
+            if (message) {
+                addChatMessage("You", message);
+                chatInput.value = "";
+                
+                // Log the interaction
+                logInteraction('chat_message_sent', { message });
+            }
+        }
+        
+        // Function to show BSOD
+        function showBSOD() {
+            const bsod = document.getElementById("bsod");
+            bsod.style.display = "block";
+            
+            // Start progress bar
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 1;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Hide BSOD after 10 seconds
+                    setTimeout(() => {
+                        bsod.style.display = "none";
+                    }, 10000);
+                }
+                
+                // Update progress bar
+                document.getElementById("bsod-progress").style.width = `${progress}%`;
+                document.getElementById("bsod-status").textContent = `${Math.round(progress)}% complete`;
+            }, 500);
+            
+            // Log the interaction
+            logInteraction('bsod_triggered');
+        }
+        
+        // Function to show system crash modal
+        function showSystemCrash() {
+            // Populate crash log with random messages
+            let crashLog = "";
+            for (let i = 0; i < 10; i++) {
+                crashLog += crashLogMessages[Math.floor(Math.random() * crashLogMessages.length)] + "<br>";
+            }
+            document.getElementById("crash-log").innerHTML = crashLog;
+            
+            // Show the modal
+            document.getElementById("system-crash-modal").style.display = "block";
+            
+            // Log the interaction
+            logInteraction('system_crash_shown');
+        }
+        
+        // Function to close encryption modal
+        function closeEncryptionModal() {
+            document.getElementById("encryption-modal").style.display = "none";
+            
+            // Log the interaction
+            logInteraction('encryption_modal_closed');
+        }
+        
+        // Function to start fake encryption
+        function startEncryption() {
+            const modal = document.getElementById("encryption-modal");
+            modal.style.display = "flex";
+            
+            // Reset interface
+            document.getElementById("encryption-progress").style.width = "0%";
+            document.getElementById("encryption-text").textContent = "0%";
+            document.getElementById("encryption-message").textContent = "Please wait while system files are being encrypted...";
+            document.getElementById("bitcoin-address").style.display = "none";
+            document.getElementById("encryption-close-btn").style.display = "none";
+            
+            // Start progress bar
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 3;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Show ransom message
+                    document.getElementById("encryption-message").innerHTML = 
+                        "All your files have been encrypted with military-grade encryption.<br><br>" +
+                        "To recover your data, send 0.5 BTC to the following address within 48 hours:";
+                    document.getElementById("bitcoin-address").style.display = "block";
+                    document.getElementById("encryption-title").textContent = "Your Files Have Been Encrypted";
+                    document.getElementById("encryption-close-btn").style.display = "block";
+                    
+                } else {
+                    // Update progress bar
+                    document.getElementById("encryption-progress").style.width = `${progress}%`;
+                    document.getElementById("encryption-text").textContent = `${Math.round(progress)}%`;
+                    
+                    // Update message occasionally
+                    if (progress > 25 && progress < 30) {
+                        document.getElementById("encryption-message").textContent = "Encrypting user data...";
+                    } else if (progress > 50 && progress < 55) {
+                        document.getElementById("encryption-message").textContent = "Encrypting system files...";
+                    } else if (progress > 75 && progress < 80) {
+                        document.getElementById("encryption-message").textContent = "Encrypting backup files...";
+                    }
+                }
+            }, 200);
+            
+            // Log the interaction
+            logInteraction('encryption_started');
+        }
+        
+        // Function to show network scan
+        function showNetworkScan() {
+            // Show the modal
+            document.getElementById("network-scan-modal").style.display = "block";
+            document.getElementById("network-scan-results").style.display = "none";
+            document.getElementById("network-scan-status").textContent = "Initializing scan...";
+            
+            // Start updating status messages
+            let messageIndex = 0;
+            networkScanInterval = setInterval(() => {
+                // Update status
+                document.getElementById("network-scan-status").textContent = "Scanning in progress...";
+                
+                // Add a new scan result
+                if (messageIndex < networkScanMessages.length) {
+                    const resultsDiv = document.getElementById("network-scan-results");
+                    
+                    if (window.getComputedStyle(resultsDiv).display === "none") {
+                        resultsDiv.style.display = "block";
+                    }
+                    
+                    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    resultsDiv.innerHTML += `[${timestamp}] ${networkScanMessages[messageIndex]}<br>`;
+                    resultsDiv.scrollTop = resultsDiv.scrollHeight;
+                    
+                    messageIndex++;
+                } else {
+                    // Found vulnerability
+                    if (Math.random() < 0.3) {
+                        const vulnTypes = [
+                            "SQL Injection vulnerability found at /api/user/profile",
+                            "Directory traversal possible at /api/files/",
+                            "Cross-site scripting vulnerability at /search?q=",
+                            "Outdated Apache version detected (2.4.29)",
+                            "Open SSH port with weak ciphers enabled",
+                            "Default credentials detected on admin panel"
+                        ];
+                        
+                        const vuln = vulnTypes[Math.floor(Math.random() * vulnTypes.length)];
+                        const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                        const resultsDiv = document.getElementById("network-scan-results");
+                        
+                        resultsDiv.innerHTML += `<span style="color: #e74c3c; font-weight: bold;">[${timestamp}] VULNERABILITY DETECTED: ${vuln}</span><br>`;
+                        resultsDiv.scrollTop = resultsDiv.scrollHeight;
+                        
+                        // Create popup
+                        setTimeout(() => {
+                            createPopup("Security Vulnerability", `A critical vulnerability was detected: ${vuln}`);
+                        }, 500);
+                    }
+                }
+            }, 800);
+            
+            // Log the interaction
+            logInteraction('network_scan_started');
+        }
+        
+        // Function to start fake virus scan
+        function startFakeVirusScan() {
+            // Show the modal
+            document.getElementById("virus-scan-modal").style.display = "block";
+            document.getElementById("virus-scan-results").style.display = "none";
+            document.getElementById("virus-scan-warning").style.display = "none";
+            document.getElementById("virus-scan-status").textContent = "Initializing scan...";
+            document.getElementById("virus-scan-progress").style.width = "0%";
+            document.getElementById("virus-scan-percent").textContent = "0%";
+            
+            // Start progress and update messages
+            let progress = 0;
+            let messageIndex = 0;
+            
+            virusScanInterval = setInterval(() => {
+                // Update progress
+                progress += Math.random() * 2;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(virusScanInterval);
+                    
+                    // When scan completes, show threats
+                    document.getElementById("virus-scan-status").textContent = "Scan complete. Multiple threats detected!";
+                    document.getElementById("virus-scan-warning").style.display = "block";
+                    document.getElementById("virus-scan-warning").textContent = "WARNING: 5 high-risk threats detected! Click 'Remove Threats' to clean system.";
+                    
+                    // Add a button
+                    const btn = document.createElement("button");
+                    btn.className = "btn btn-danger";
+                    btn.textContent = "Remove Threats";
+                    btn.style.marginTop = "10px";
+                    btn.onclick = startEncryption;
+                    document.getElementById("virus-scan-warning").appendChild(btn);
+                }
+                
+                document.getElementById("virus-scan-progress").style.width = `${progress}%`;
+                document.getElementById("virus-scan-percent").textContent = `${Math.floor(progress)}%`;
+                
+                // Update scan message
+                if (messageIndex < virusScanMessages.length) {
+                    document.getElementById("virus-scan-status").textContent = virusScanMessages[messageIndex];
+                    
+                    const resultsDiv = document.getElementById("virus-scan-results");
+                    if (window.getComputedStyle(resultsDiv).display === "none") {
+                        resultsDiv.style.display = "block";
+                    }
+                    
+                    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    resultsDiv.innerHTML += `[${timestamp}] ${virusScanMessages[messageIndex]}<br>`;
+                    
+                    // Randomly add threat detections
+                    if (Math.random() < 0.2) {
+                        const threats = [
+                            "Trojan.Ransomware.Cryptolocker detected in /system/temp/file.exe",
+                            "Backdoor.Remote.Access detected in /usr/bin/service",
+                            "Malware.Keylogger detected in browser extension",
+                            "Exploit.RCE.CVE-2023-1234 detected in web server",
+                            "Rootkit.Kernel.Infection detected in system files"
+                        ];
+                        
+                        const threat = threats[Math.floor(Math.random() * threats.length)];
+                        const threatTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                        resultsDiv.innerHTML += `<span style="color: #e74c3c; font-weight: bold;">[${threatTime}] THREAT DETECTED: ${threat}</span><br>`;
+                    }
+                    
+                    resultsDiv.scrollTop = resultsDiv.scrollHeight;
+                    messageIndex++;
+                }
+            }, 800);
+            
+            // Log the interaction
+            logInteraction('virus_scan_started');
+        }
+        
+        // Function to show password reveal interface
+        function showPasswordReveal() {
+            // Populate password table
+            const tableBody = document.getElementById("password-table-body");
+            tableBody.innerHTML = "";
+            
+            for (const user of fakePasswords) {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${user.username}</td>
+                    <td>${user.encrypted}</td>
+                    <td><button class="btn btn-danger" onclick="decryptPassword('${user.username}')">Decrypt</button></td>
+                `;
+                tableBody.appendChild(row);
+            }
+            
+            // Reset and hide decrypt section
+            document.getElementById("password-decrypt-section").style.display = "none";
+            
+            // Show the modal
+            document.getElementById("password-modal").style.display = "block";
+            
+            // Log the interaction
+            logInteraction('password_view_attempted');
+        }
+        
+        // Function to simulate password decryption
+        function decryptPassword(username) {
+            // Show decryption section
+            document.getElementById("password-decrypt-section").style.display = "block";
+            document.getElementById("decrypt-username").textContent = username;
+            document.getElementById("decrypt-progress").style.width = "0%";
+            document.getElementById("decrypt-percent").textContent = "0%";
+            
+            // Start fake decryption
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 3;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Show "breached" message or trigger encryption
+                    if (Math.random() < 0.5) {
+                        document.getElementById("password-modal").style.display = "none";
+                        startEncryption();
+                    } else {
+                        document.getElementById("password-modal").style.display = "none";
+                        showBSOD();
+                    }
+                }
+                
+                // Update progress
+                document.getElementById("decrypt-progress").style.width = `${progress}%`;
+                document.getElementById("decrypt-percent").textContent = `${Math.floor(progress)}%`;
+            }, 200);
+            
+            // Log the interaction
+            logInteraction('password_decrypt_attempted', { username });
+        }
+        
+        // Function to show API keys
+        function showAPIKeys() {
+            // Populate API keys table
+            const tableBody = document.getElementById("api-keys-table-body");
+            tableBody.innerHTML = "";
+            
+            for (const api of fakeApiKeys) {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${api.service}</td>
+                    <td>${api.key}</td>
+                    <td><button class="btn" onclick="copyApiKey('${api.key}')">Copy</button></td>
+                `;
+                tableBody.appendChild(row);
+            }
+            
+            // Show the modal
+            document.getElementById("api-keys-modal").style.display = "block";
+            
+            // Log the interaction
+            logInteraction('api_keys_viewed');
+        }
+        
+        // Function to copy API key
+        function copyApiKey(key) {
+            // Copy to clipboard
+            navigator.clipboard.writeText(key).then(() => {
+                createPopup("Copied", "API Key copied to clipboard");
+            });
+            
+            // Log the interaction
+            logInteraction('api_key_copied', { key });
+        }
+        
+        // Function to create a vanishing button
+        function createVanishingButton() {
+            // Remove old buttons
+            for (const button of vanishingButtons) {
+                if (document.body.contains(button)) {
+                    document.body.removeChild(button);
+                }
+            }
+            vanishingButtons = [];
+            
+            // Create new button
+            const button = document.createElement("button");
+            button.className = "btn btn-danger vanishing-btn";
+            
+            // Random enticing label
+            const label = enticeLabels[Math.floor(Math.random() * enticeLabels.length)];
+            button.textContent = label;
+            
+            // Random position (avoiding edges)
+            const maxX = window.innerWidth - 200;
+            const maxY = window.innerHeight - 50;
+            const posX = 50 + Math.random() * maxX;
+            const posY = 50 + Math.random() * maxY;
+            
+            button.style.left = `${posX}px`;
+            button.style.top = `${posY}px`;
+            
+            // Add event listener
+            button.addEventListener("click", function() {
+                // 80% chance to show "try again" popup
+                if (Math.random() < 0.8) {
+                    createPopup("Action Failed", "Please try again in 30 seconds.");
+                } else {
+                    // 20% chance to trigger encryption
+                    startEncryption();
+                }
+                
+                // Remove button after click
+                if (document.body.contains(button)) {
+                    document.body.removeChild(button);
+                }
+                
+                // Log the interaction
+                logInteraction('vanishing_button_clicked', { label });
+            });
+            
+            // Add to document
+            document.body.appendChild(button);
+            vanishingButtons.push(button);
+            
+            // Set timeout to hide button
+            setTimeout(() => {
+                button.style.opacity = "0";
+                
+                // Remove after fade
+                setTimeout(() => {
+                    if (document.body.contains(button)) {
+                        document.body.removeChild(button);
+                    }
+                }, 500);
+            }, 5000 + Math.random() * 5000);
+        }
+        
+        // Function to clear form inputs
+        function clearFormInputs() {
+            const inputs = document.querySelectorAll(".quick-form input");
+            for (const input of inputs) {
+                input.value = "";
+            }
+            
+            // Log the interaction
+            logInteraction('form_cleared');
+        }
+        
+        // Function for CRT flicker effect
+        function flickerScreen() {
+            const content = document.querySelector(".content");
+            content.classList.add("screen-flicker");
+            
+            // Remove animation after it completes
+            setTimeout(() => {
+                content.classList.remove("screen-flicker");
+            }, 500);
+            
+            // Log the interaction
+            logInteraction('screen_flickered');
+        }
+        
+        // Function to log interactions with the honeypot
+        function logInteraction(interactionType, additionalData = {}) {
+            fetch('/honeypot/log-interaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    page_type: 'admin_dashboard',
+                    interaction_type: interactionType,
+                    additional_data: {
+                        ...additionalData,
+                        browser_info: {
+                            userAgent: navigator.userAgent,
+                            language: navigator.language,
+                            platform: navigator.platform,
+                            screenSize: `${window.screen.width}x${window.screen.height}`
+                        },
+                        timestamp: new Date().toISOString()
+                    }
+                })
+            }).catch(error => {
+                console.log('Logging failed, but this is expected and safe to ignore');
+            });
+        }
+        
+        // Rick-roll functionality
+        function rickRoll() {
+            // Create a full-page iframe with the video
+            const iframe = document.createElement('iframe');
+            iframe.style.position = 'fixed';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.style.zIndex = '9999';
+
+            const videoId = 'w-8240CEoSw';
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+            iframe.allowFullscreen = true;
+            document.body.appendChild(iframe);
+            
+            // Log the interaction
+            logInteraction('rickroll');
+        }
+        
+        // Function to initialize chat with initial messages
+        function initializeAdminChat() {
+            // Add initial messages after 8 seconds delay
+            setTimeout(() => {
+                document.getElementById("admin-chat").style.display = "flex";
+                chatOpen = true;
+                
+                // Add first message
+                addChatMessage("SecurityAdmin", "Alert: We have an unauthorized user accessing the admin panel right now.");
+                
+                // Add second message after delay
+                setTimeout(() => {
+                    addChatMessage("SysOps", "I can see them. They're coming from IP " + (Math.floor(Math.random() * 255) + 1) + "." + (Math.floor(Math.random() * 255) + 1) + "." + (Math.floor(Math.random() * 255) + 1) + "." + (Math.floor(Math.random() * 255) + 1));
+                }, 1000);
+                
+                // Add third message after another delay
+                setTimeout(() => {
+                    addChatMessage("SecurityAdmin", "Should we trace their IP and DDOS their address?");
+                }, 2500);
+                
+                // Add fourth message after another delay
+                setTimeout(() => {
+                    addChatMessage("SysOps", "Already on it. They're being DDOSed right now.");
+                }, 4000);
+            }, 11000);
+        }
+        
+        // Set random IP address for "current session"
+        function setRandomIP() {
+            const ip = (Math.floor(Math.random() * 255) + 1) + "." + (Math.floor(Math.random() * 255) + 1) + "." + (Math.floor(Math.random() * 255) + 1) + "." + (Math.floor(Math.random() * 255) + 1);
+            document.getElementById("current-ip").textContent = ip;
+            document.getElementById("glitch-ip").textContent = ip;
+        }
+        
+        // Event listener for chat input
+        document.getElementById("chat-input").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendChatMessage();
+            }
+        });
+        
+        // Log when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            logInteraction('page_view');
+            
+            // Set random IP
+            setRandomIP();
+            
+            // Initialize admin chat with delay
+            initializeAdminChat();
+            
+            // Add Rick Roll to random menu item with 10% chance
+            const menuItems = document.querySelectorAll('.menu-item');
+            const randomIndex = Math.floor(Math.random() * menuItems.length);
+            
+            if (Math.random() < 0.1) {
+                menuItems[randomIndex].onclick = function(e) {
+                    e.preventDefault();
+                    rickRoll();
+                    return false;
+                };
+            }
+            
+            // Create occasional vanishing buttons
+            setInterval(() => {
+                if (Math.random() < 0.4) { 
+                    createVanishingButton();
+                }
+            }, 20000);
+            
+            // Set form to clear itself occasionally
+            setInterval(() => {
+                if (Math.random() < 0.8) { 
+                    clearFormInputs();
+                }
+            }, 3000);
+            
+            // Occasional screen flicker
+            setInterval(() => {
+                if (Math.random() < 0.6) { 
+                    flickerScreen();
+                }
+            }, 20000);
+        });
+    </script>
+</body>
+</html>

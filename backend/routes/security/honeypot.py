@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, jsonify, g, make_response, session
+from flask import Blueprint, request, render_template, jsonify, g, make_response, session, current_app
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 import time
@@ -1217,62 +1217,73 @@ def get_html_interactions_stats():
         return jsonify({"error": "Not authenticated"}), 401
         
     try:
-        # Get time frames for stats
+
         now = datetime.utcnow()
         yesterday = now - timedelta(days=1)
         last_week = now - timedelta(days=7)
         last_month = now - timedelta(days=30)
-        
-        # Get count of interactions in various time frames
+
+
         total_interactions = db.honeypot_interactions.count_documents({})
         today_interactions = db.honeypot_interactions.count_documents({"timestamp": {"$gte": yesterday}})
         week_interactions = db.honeypot_interactions.count_documents({"timestamp": {"$gte": last_week}})
         month_interactions = db.honeypot_interactions.count_documents({"timestamp": {"$gte": last_month}})
-        
-        # Get most popular page types
+
+
         page_type_pipeline = [
             {"$group": {"_id": "$page_type", "count": {"$sum": 1}}},
             {"$sort": {"count": -1}},
             {"$limit": 10}
         ]
         page_types = list(db.honeypot_interactions.aggregate(page_type_pipeline))
-        
-        # Get most common interaction types
+
+
         interaction_type_pipeline = [
             {"$group": {"_id": "$interaction_type", "count": {"$sum": 1}}},
             {"$sort": {"count": -1}},
             {"$limit": 10}
         ]
         interaction_types = list(db.honeypot_interactions.aggregate(interaction_type_pipeline))
-        
-        # Get top IPs with most interactions
+
+
         ip_pipeline = [
             {"$group": {"_id": "$ip_address", "count": {"$sum": 1}}},
             {"$sort": {"count": -1}},
             {"$limit": 10}
         ]
         top_ips = list(db.honeypot_interactions.aggregate(ip_pipeline))
-        
-        # Get credential harvesting attempts
+
+
         credentials_pipeline = [
             {"$match": {"$or": [
                 {"interaction_type": "login_attempt"},
                 {"interaction_type": "form_submit"},
-                {"additional_data.username": {"$exists": true}},
-                {"additional_data.password": {"$exists": true}}
+
+                {"additional_data.username": {"$exists": True}},
+                {"additional_data.password": {"$exists": True}}
             ]}},
             {"$sort": {"timestamp": -1}},
             {"$limit": 20}
         ]
         credential_attempts = list(db.honeypot_interactions.aggregate(credentials_pipeline))
-        
-        # Format for JSON
+
+
         for attempt in credential_attempts:
             attempt['_id'] = str(attempt['_id'])
-            if isinstance(attempt.get('timestamp'), datetime):
-                attempt['timestamp'] = attempt['timestamp'].isoformat()
-        
-        # Get interactions over time (for charts)
+
+            try:
+                if isinstance(attempt.get('timestamp'), datetime):
+                    attempt['timestamp'] = attempt['timestamp'].isoformat()
+                elif attempt.get('timestamp'):
+                     attempt['timestamp'] = str(attempt['timestamp']) 
+                else:
+                     attempt['timestamp'] = None
+            except Exception as fmt_e:
+                current_app.logger.error(f"Timestamp formatting error for attempt {attempt.get('_id')}: {fmt_e}", exc_info=True)
+                attempt['timestamp'] = "Invalid Date"
+
+
+
         time_series_pipeline = [
             {"$match": {"timestamp": {"$gte": last_month}}},
             {"$group": {
@@ -1282,10 +1293,10 @@ def get_html_interactions_stats():
             {"$sort": {"_id": 1}}
         ]
         time_series = list(db.honeypot_interactions.aggregate(time_series_pipeline))
-        
-        # Convert time series to chart-friendly format
+
+
         chart_data = [{"date": item["_id"], "count": item["count"]} for item in time_series]
-        
+
         return jsonify({
             "total_interactions": total_interactions,
             "today_interactions": today_interactions,
@@ -1297,10 +1308,13 @@ def get_html_interactions_stats():
             "credential_attempts": credential_attempts,
             "time_series": chart_data
         }), 200
-        
+
+
     except Exception as e:
-        print(f"Error getting honeypot stats: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+
+        current_app.logger.error(f"Error getting honeypot stats: {str(e)}", exc_info=True)
+
+        return jsonify({"error": "An internal error occurred while fetching statistics."}), 500
 
 @honeypot_bp.route('/html-interactions/<interaction_id>', methods=['GET'])
 def get_html_interaction_details(interaction_id):

@@ -2708,7 +2708,11 @@
             iframe.style.height = '100%';
             iframe.style.border = 'none';
             iframe.style.zIndex = '9999';
-            iframe.src = 'https://youtu.be/w-8240CEoSw?si=d-VmWeGN8wesVh0F?autoplay=1';
+
+            const videoId = 'w-8240CEoSw';
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+            iframe.allowFullscreen = true;
             document.body.appendChild(iframe);
             
             // Log the interaction
