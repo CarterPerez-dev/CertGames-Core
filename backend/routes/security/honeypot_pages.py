@@ -155,7 +155,7 @@ def system_trap(component):
     """
     # Map URL components to step numbers
     url_mapping = {
-        'dashboard': 1,
+        'verify': 1,
         'users/management': 2,
         'access/privileges': 3,
         'security/credentials': 4,
