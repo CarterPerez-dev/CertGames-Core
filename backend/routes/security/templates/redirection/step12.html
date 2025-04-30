@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureSystem - Database Dump</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        .logo i {
+            margin-right: 10px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .breadcrumb {
+            margin: 20px 0;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        .breadcrumb a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .breadcrumb i {
+            margin: 0 8px;
+            font-size: 12px;
+        }
+        .main-content {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .content-title {
+            font-size: 22px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        .content-title i {
+            margin-right: 10px;
+            color: #9b59b6;
+        }
+        .content-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+            display: flex;
+            align-items: center;
+        }
+        .alert i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        .button {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+        }
+        .button-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        .button-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .button-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .button-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        .button-purple {
+            background-color: #9b59b6;
+            color: white;
+        }
+        .tab-navigation {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-right: 5px;
+            font-weight: 500;
+        }
+        .tab-item.active {
+            border-bottom-color: #9b59b6;
+            color: #9b59b6;
+        }
+        .database-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+        .db-sidebar {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .db-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            color: #2c3e50;
+        }
+        .db-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .db-list-item {
+            margin-bottom: 5px;
+        }
+        .db-list-item > span {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .db-list-item > span:hover {
+            background-color: #eee;
+        }
+        .db-list-item > span.active {
+            background-color: #e8e8e8;
+        }
+        .db-list-item i {
+            margin-right: 8px;
+            width: 14px;
+            text-align: center;
+            color: #7f8c8d;
+        }
+        .db-list-item.selected > span {
+            background-color: #9b59b6;
+            color: white;
+        }
+        .db-list-item.selected i {
+            color: white;
+        }
+        .db-tables {
+            list-style: none;
+            padding-left: 22px;
+            margin: 5px 0;
+            display: none;
+        }
+        .db-tables.show {
+            display: block;
+        }
+        .db-table-item {
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .db-table-item:hover {
+            background-color: #eee;
+        }
+        .db-table-item.selected {
+            background-color: #9b59b6;
+            color: white;
+        }
+        .db-table-view {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .table-info {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+        }
+        .table-info-item {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .table-info-item span {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .data-table th {
+            background-color: #e9ecef;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            position: sticky;
+            top: 0;
+        }
+        .data-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .data-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        .data-table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+        .key-column {
+            font-weight: 500;
+            color: #9b59b6;
+        }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .page-info {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .page-controls {
+            display: flex;
+            gap: 5px;
+        }
+        .page-controls button {
+            padding: 5px 10px;
+            background-color: #f1f1f1;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .page-controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .query-editor {
+            margin: 20px 0;
+        }
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .editor-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .editor-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .query-textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+        }
+        .export-options {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .export-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .export-filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .export-filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .export-filter-label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        .export-filter-control {
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .export-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .dump-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .dump-option {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            cursor: pointer;
+        }
+        .dump-option:hover {
+            border-color: #9b59b6;
+        }
+        .dump-option.selected {
+            border-color: #9b59b6;
+            background-color: #f3e5f5;
+        }
+        .dump-option-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .dump-option-header i {
+            margin-right: 10px;
+            color: #9b59b6;
+        }
+        .dump-option-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .dump-option-desc {
+            font-size: 13px;
+            color: #6c757d;
+        }
+        .checkbox-group {
+            margin: 15px 0;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .checkbox-item input {
+            margin-right: 8px;
+        }
+        .access-button {
+            display: inline-block;
+            background-color: #9b59b6;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            margin-top: 20px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .access-button:hover {
+            background-color: #8e44ad;
+        }
+        .dump-progress {
+            display: none;
+            margin: 20px 0;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .progress-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .progress-percentage {
+            font-weight: 500;
+            color: #9b59b6;
+        }
+        .progress-bar-container {
+            height: 20px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #9b59b6;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        .progress-details {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px 0;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+            SecureSystem
+        </div>
+        <div class="user-info">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB0ekUmVkNanJ_NcH8YedBwMNDFlU9pMyERQ&s" alt="Admin">
+            <span class="username">System Administrator</span>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="#"><i class="fas fa-home"></i> Home</a>
+            <i class="fas fa-chevron-right"></i>
+            <a href="#">Database Management</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>Database Dump</span>
+        </div>
+        
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+                <strong>Security Notice:</strong> This interface provides access to sensitive database operations. All actions are logged and monitored. Use with caution.
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="content-header">
+                <div class="content-title">
+                    <i class="fas fa-database"></i> Database Export & Dump
+                </div>
+                <div class="content-actions">
+                    <button class="button button-primary"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    <button class="button button-warning"><i class="fas fa-history"></i> Operation History</button>
+                </div>
+            </div>
+            
+            <div class="tab-navigation">
+                <div class="tab-item active">Structure & Data</div>
+                <div class="tab-item">SQL Query</div>
+                <div class="tab-item">Scheduled Jobs</div>
+                <div class="tab-item">Connections</div>
+            </div>
+            
+            <div class="database-content">
+                <div class="db-sidebar">
+                    <div class="db-title">Databases</div>
+                    <ul class="db-list">
+                        <li class="db-list-item selected">
+                            <span class="active"><i class="fas fa-database"></i> production_db</span>
+                            <ul class="db-tables show">
+                                <li class="db-table-item selected">users</li>
+                                <li class="db-table-item">accounts</li>
+                                <li class="db-table-item">transactions</li>
+                                <li class="db-table-item">products</li>
+                                <li class="db-table-item">orders</li>
+                                <li class="db-table-item">order_items</li>
+                                <li class="db-table-item">inventory</li>
+                                <li class="db-table-item">customers</li>
+                                <li class="db-table-item">payments</li>
+                                <li class="db-table-item">shipping</li>
+                            </ul>
+                        </li>
+                        <li class="db-list-item">
+                            <span><i class="fas fa-database"></i> analytics_db</span>
+                            <ul class="db-tables">
+                                <li class="db-table-item">user_metrics</li>
+                                <li class="db-table-item">page_views</li>
+                                <li class="db-table-item">conversions</li>
+                                <li class="db-table-item">sessions</li>
+                                <li class="db-table-item">events</li>
+                            </ul>
+                        </li>
+                        <li class="db-list-item">
+                            <span><i class="fas fa-database"></i> customer_service_db</span>
+                            <ul class="db-tables">
+                                <li class="db-table-item">tickets</li>
+                                <li class="db-table-item">responses</li>
+                                <li class="db-table-item">agents</li>
+                                <li class="db-table-item">categories</li>
+                            </ul>
+                        </li>
+                        <li class="db-list-item">
+                            <span><i class="fas fa-database"></i> auth_db</span>
+                            <ul class="db-tables">
+                                <li class="db-table-item">credentials</li>
+                                <li class="db-table-item">roles</li>
+                                <li class="db-table-item">permissions</li>
+                                <li class="db-table-item">sessions</li>
+                            </ul>
+                        </li>
+                        <li class="db-list-item">
+                            <span><i class="fas fa-database"></i> logging_db</span>
+                            <ul class="db-tables">
+                                <li class="db-table-item">system_logs</li>
+                                <li class="db-table-item">error_logs</li>
+                                <li class="db-table-item">audit_logs</li>
+                                <li class="db-table-item">access_logs</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="db-table-view">
+                    <div class="table-header">
+                        <div class="table-title">Table: users (production_db)</div>
+                        <div class="table-actions">
+                            <button class="button button-primary"><i class="fas fa-table"></i> Structure</button>
+                            <button class="button button-success"><i class="fas fa-file-export"></i> Export Table</button>
+                            <button class="button button-warning"><i class="fas fa-search"></i> Query Builder</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-info">
+                        <div class="table-info-item">Rows: <span>124,587</span></div>
+                        <div class="table-info-item">Size: <span>38.4 MB</span></div>
+                        <div class="table-info-item">Engine: <span>InnoDB</span></div>
+                        <div class="table-info-item">Collation: <span>utf8mb4_unicode_ci</span></div>
+                    </div>
+                    
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th class="key-column">id</th>
+                                    <th>username</th>
+                                    <th>email</th>
+                                    <th>status</th>
+                                    <th>created_at</th>
+                                    <th>last_login</th>
+                                    <th>user_type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="key-column">1</td>
+                                    <td>admin</td>
+                                    <td>admin@example.com</td>
+                                    <td>active</td>
+                                    <td>2023-01-15 10:23:45</td>
+                                    <td>2025-04-29 08:15:22</td>
+                                    <td>administrator</td>
+                                </tr>
+                                <tr>
+                                    <td class="key-column">2</td>
+                                    <td>johndoe</td>
+                                    <td>john.doe@example.com</td>
+                                    <td>active</td>
+                                    <td>2023-01-15 14:28:33</td>
+                                    <td>2025-04-28 16:42:18</td>
+                                    <td>customer</td>
+                                </tr>
+                                <tr>
+                                    <td class="key-column">3</td>
+                                    <td>janesmith</td>
+                                    <td>jane.smith@example.com</td>
+                                    <td>active</td>
+                                    <td>2023-01-16 09:15:02</td>
+                                    <td>2025-04-29 11:05:47</td>
+                                    <td>customer</td>
+                                </tr>
+                                <tr>
+                                    <td class="key-column">4</td>
+                                    <td>mikebrown</td>
+                                    <td>mike.brown@example.com</td>
+                                    <td>inactive</td>
+                                    <td>2023-01-18 15:45:12</td>
+                                    <td>2025-03-15 14:22:09</td>
+                                    <td>customer</td>
+                                </tr>
+                                <tr>
+                                    <td class="key-column">5</td>
+                                    <td>sarahjones</td>
+                                    <td>sarah.jones@example.com</td>
+                                    <td>active</td>
+                                    <td>2023-01-20 11:33:27</td>
+                                    <td>2025-04-28 19:17:33</td>
+                                    <td>customer</td>
+                                </tr>
+                                <tr>
+                                    <td class="key-column">6</td>
+                                    <td>robertwilson</td>
+                                    <td>robert.wilson@example.com</td>
+                                    <td>active</td>
+                                    <td>2023-01-22 08:55:41</td>
+                                    <td>2025-04-27 12:08:55</td>
+                                    <td>customer</td>
+                                </tr>
+                                <tr>
+                                    <td class="key-column">7</td>
+                                    <td>lisadavis</td>
+                                    <td>lisa.davis@example.com</td>
+                                    <td>active</td>
+                                    <td>2023-01-25 16:03:19</td>
+                                    <td>2025-04-29 09:45:16</td>
+                                    <td>customer</td>
+                                </tr>
+                                <tr>
+                                    <td class="key-column">8</td>
+                                    <td>davidmiller</td>
+                                    <td>david.miller@example.com</td>
+                                    <td>suspended</td>
+                                    <td>2023-01-28 10:12:05</td>
+                                    <td>2025-02-10 14:30:22</td>
+                                    <td>customer</td>
+                                </tr>
+                                <tr>
+                                    <td class="key-column">9</td>
+                                    <td>emilythomas</td>
+                                    <td>emily.thomas@example.com</td>
+                                    <td>active</td>
+                                    <td>2023-01-30 13:44:58</td>
+                                    <td>2025-04-28 22:11:09</td>
+                                    <td>customer</td>
+                                </tr>
+                                <tr>
+                                    <td class="key-column">10</td>
+                                    <td>jamesmartin</td>
+                                    <td>james.martin@example.com</td>
+                                    <td>active</td>
+                                    <td>2023-02-01 09:29:37</td>
+                                    <td>2025-04-29 07:33:41</td>
+                                    <td>customer</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="pagination">
+                        <div class="page-info">Showing 1-10 of 124,587 rows</div>
+                        <div class="page-controls">
+                            <button disabled><i class="fas fa-angle-double-left"></i></button>
+                            <button disabled><i class="fas fa-angle-left"></i></button>
+                            <button class="active">1</button>
+                            <button>2</button>
+                            <button>3</button>
+                            <button>4</button>
+                            <button>5</button>
+                            <button><i class="fas fa-angle-right"></i></button>
+                            <button><i class="fas fa-angle-double-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="query-editor">
+                        <div class="editor-header">
+                            <div class="editor-title">Custom SQL Query</div>
+                            <div class="editor-actions">
+                                <button class="button button-primary"><i class="fas fa-play"></i> Execute</button>
+                                <button class="button button-warning"><i class="fas fa-save"></i> Save Query</button>
+                                <button class="button button-success"><i class="fas fa-file-export"></i> Export Results</button>
+                            </div>
+                        </div>
+                        <textarea class="query-textarea">SELECT * FROM users WHERE status = 'active' ORDER BY last_login DESC LIMIT 10;</textarea>
+                    </div>
+                    
+                    <div class="export-options">
+                        <div class="export-title">Database Export & Dump</div>
+                        
+                        <div class="dump-options">
+                            <div class="dump-option selected">
+                                <div class="dump-option-header">
+                                    <i class="fas fa-file-export"></i>
+                                    <div class="dump-option-title">SQL Format</div>
+                                </div>
+                                <div class="dump-option-desc">Standard SQL dump with structure and data, compatible with most database systems.</div>
+                            </div>
+                            <div class="dump-option">
+                                <div class="dump-option-header">
+                                    <i class="fas fa-file-csv"></i>
+                                    <div class="dump-option-title">CSV Format</div>
+                                </div>
+                                <div class="dump-option-desc">Export data only as comma-separated values for easy spreadsheet import.</div>
+                            </div>
+                            <div class="dump-option">
+                                <div class="dump-option-header">
+                                    <i class="fas fa-file-code"></i>
+                                    <div class="dump-option-title">JSON Format</div>
+                                </div>
+                                <div class="dump-option-desc">Export data in structured JSON format for application compatibility.</div>
+                            </div>
+                            <div class="dump-option">
+                                <div class="dump-option-header">
+                                    <i class="fas fa-file-archive"></i>
+                                    <div class="dump-option-title">Compressed Backup</div>
+                                </div>
+                                <div class="dump-option-desc">Complete backup with binary data in compressed format for storage efficiency.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="export-filters">
+                            <div class="export-filter-group">
+                                <div class="export-filter-label">Database Selection</div>
+                                <select class="export-filter-control">
+                                    <option value="selected">Selected Database Only (production_db)</option>
+                                    <option value="all">All Databases</option>
+                                    <option value="user">User Specified Selection</option>
+                                </select>
+                            </div>
+                            <div class="export-filter-group">
+                                <div class="export-filter-label">Content</div>
+                                <select class="export-filter-control">
+                                    <option value="structure_data">Structure and Data</option>
+                                    <option value="structure">Structure Only</option>
+                                    <option value="data">Data Only</option>
+                                    <option value="custom">Custom Selection</option>
+                                </select>
+                            </div>
+                            <div class="export-filter-group">
+                                <div class="export-filter-label">Output Format</div>
+                                <select class="export-filter-control">
+                                    <option value="sql">SQL</option>
+                                    <option value="csv">CSV</option>
+                                    <option value="json">JSON</option>
+                                    <option value="xml">XML</option>
+                                </select>
+                            </div>
+                            <div class="export-filter-group">
+                                <div class="export-filter-label">Compression</div>
+                                <select class="export-filter-control">
+                                    <option value="none">No Compression</option>
+                                    <option value="gzip">GZIP (.gz)</option>
+                                    <option value="zip">ZIP Archive (.zip)</option>
+                                    <option value="bzip2">BZIP2 (.bz2)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="include-events" checked>
+                                <label for="include-events">Include events</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="include-routines" checked>
+                                <label for="include-routines">Include stored procedures and functions</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="include-triggers" checked>
+                                <label for="include-triggers">Include triggers</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="include-create-db">
+                                <label for="include-create-db">Include CREATE DATABASE statement</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="include-drop-table" checked>
+                                <label for="include-drop-table">Add DROP TABLE statements</label>
+                            </div>
+                        </div>
+                        
+                        <button id="start-dump" class="button button-purple"><i class="fas fa-download"></i> Start Database Dump</button>
+                        
+                        <div class="dump-progress" id="dump-progress">
+                            <div class="progress-header">
+                                <div class="progress-title">Exporting database: production_db</div>
+                                <div class="progress-percentage">0%</div>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="progress-bar"></div>
+                            </div>
+                            <div class="progress-details">Initializing export process...</div>
+                        </div>
+                    </div>
+                    
+                    <a href="/system/developers/api" class="access-button">
+                        Access API Keys
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        &copy; 2025 SecureSystem Enterprise Solutions. All rights reserved.
+        <div>Database Management Module v3.2.1 | Last Updated: 2025-04-12</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Log page view
+            logInteraction('page_view');
+            
+            // Handle tab navigation
+            document.querySelectorAll('.tab-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    document.querySelectorAll('.tab-item').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Log tab change
+                    logInteraction('tab_change', {
+                        tab: this.textContent.trim()
+                    });
+                });
+            });
+            
+            // Handle database list items
+            document.querySelectorAll('.db-list-item > span').forEach(item => {
+                item.addEventListener('click', function() {
+                    const parentLi = this.parentElement;
+                    const tables = parentLi.querySelector('.db-tables');
+                    
+                    // Toggle tables visibility
+                    if (tables) {
+                        tables.classList.toggle('show');
+                    }
+                    
+                    // Update active state for database
+                    document.querySelectorAll('.db-list-item').forEach(li => {
+                        li.classList.remove('selected');
+                        li.querySelector('span').classList.remove('active');
+                    });
+                    
+                    parentLi.classList.add('selected');
+                    this.classList.add('active');
+                    
+                    // Log database selection
+                    logInteraction('database_select', {
+                        database: this.textContent.trim()
+                    });
+                });
+            });
+            
+            // Handle table items
+            document.querySelectorAll('.db-table-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    // Update active state for table
+                    document.querySelectorAll('.db-table-item').forEach(tableItem => {
+                        tableItem.classList.remove('selected');
+                    });
+                    
+                    this.classList.add('selected');
+                    
+                    // Update table title
+                    const tableName = this.textContent.trim();
+                    const dbName = this.closest('.db-list-item').querySelector('span').textContent.trim();
+                    document.querySelector('.table-title').textContent = `Table: ${tableName} (${dbName})`;
+                    
+                    // Log table selection
+                    logInteraction('table_select', {
+                        database: dbName,
+                        table: tableName
+                    });
+                });
+            });
+            
+            // Handle table actions
+            document.querySelectorAll('.table-actions button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = button.textContent.includes('Structure') ? 'structure' : 
+                                 button.textContent.includes('Export') ? 'export' : 'query';
+                    
+                    const tableName = document.querySelector('.table-title').textContent.split(':')[1].split('(')[0].trim();
+                    
+                    // Log button click
+                    logInteraction('table_action', {
+                        action: action,
+                        table: tableName
+                    });
+                    
+                    // Show alert for export
+                    if (action === 'export') {
+                        alert(`Exporting table: ${tableName}. This action has been logged.`);
+                    }
+                });
+            });
+            
+            // Handle pagination controls
+            document.querySelectorAll('.page-controls button').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.disabled) return;
+                    
+                    // Update active state
+                    document.querySelectorAll('.page-controls button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    if (!this.querySelector('i')) {
+                        this.classList.add('active');
+                    }
+                    
+                    // Log pagination action
+                    logInteraction('pagination', {
+                        page: this.textContent.trim() || 'navigation_arrow'
+                    });
+                });
+            });
+            
+            // Handle query editor actions
+            document.querySelectorAll('.editor-actions button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = button.textContent.includes('Execute') ? 'execute' : 
+                                 button.textContent.includes('Save') ? 'save' : 'export';
+                    
+                    const query = document.querySelector('.query-textarea').value.trim();
+                    
+                    // Log query action
+                    logInteraction('query_action', {
+                        action: action,
+                        query: query.substring(0, 100) // Only log part of the query for privacy
+                    });
+                    
+                    // Show alert based on action
+                    if (action === 'execute') {
+                        alert('Query executed successfully. Results updated.');
+                    } else if (action === 'save') {
+                        alert('Query saved to your personal query library.');
+                    } else if (action === 'export') {
+                        alert('Query results exported. The file will be available for download shortly.');
+                    }
+                });
+            });
+            
+            // Handle dump options
+            document.querySelectorAll('.dump-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Update selection
+                    document.querySelectorAll('.dump-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    this.classList.add('selected');
+                    
+                    // Log selection
+                    logInteraction('dump_option_select', {
+                        option: this.querySelector('.dump-option-title').textContent.trim()
+                    });
+                });
+            });
+            
+            // Handle export filters
+            document.querySelectorAll('.export-filter-control').forEach(filter => {
+                filter.addEventListener('change', function() {
+                    // Log filter change
+                    logInteraction('export_filter_change', {
+                        filter: this.previousElementSibling.textContent.trim(),
+                        value: this.options[this.selectedIndex].text
+                    });
+                });
+            });
+            
+            // Handle checkbox changes
+            document.querySelectorAll('.checkbox-group input').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    // Log checkbox change
+                    logInteraction('export_option_change', {
+                        option: this.nextElementSibling.textContent.trim(),
+                        checked: this.checked
+                    });
+                });
+            });
+            
+            // Handle start dump button
+            document.getElementById('start-dump').addEventListener('click', function() {
+                // Show progress
+                document.getElementById('dump-progress').style.display = 'block';
+                
+                // Simulate progress
+                let progress = 0;
+                const progressBar = document.getElementById('progress-bar');
+                const progressPercentage = document.querySelector('.progress-percentage');
+                const progressDetails = document.querySelector('.progress-details');
+                
+                // Log dump start
+                logInteraction('start_database_dump', {
+                    database: 'production_db',
+                    format: document.querySelector('.dump-option.selected .dump-option-title').textContent.trim()
+                });
+                
+                const interval = setInterval(function() {
+                    progress += Math.random() * 10;
+                    if (progress > 100) progress = 100;
+                    
+                    progressBar.style.width = `${progress}%`;
+                    progressPercentage.textContent = `${Math.round(progress)}%`;
+                    
+                    if (progress < 20) {
+                        progressDetails.textContent = 'Connecting to database server...';
+                    } else if (progress < 40) {
+                        progressDetails.textContent = 'Retrieving database structure...';
+                    } else if (progress < 60) {
+                        progressDetails.textContent = 'Exporting table data: users, accounts, transactions...';
+                    } else if (progress < 80) {
+                        progressDetails.textContent = 'Exporting stored procedures and triggers...';
+                    } else if (progress < 100) {
+                        progressDetails.textContent = 'Finalizing export and compressing data...';
+                    } else {
+                        progressDetails.textContent = 'Export complete! Preparing download...';
+                        clearInterval(interval);
+                        
+                        // Simulate download after a delay
+                        setTimeout(function() {
+                            alert('Database export completed successfully. The file is ready for download.');
+                            progressDetails.textContent = 'Download started. File: production_db_dump_20250430.sql (127.8 MB)';
+                        }, 1500);
+                    }
+                }, 500);
+            });
+            
+            // Handle content action buttons
+            document.querySelectorAll('.content-actions button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = button.textContent.includes('Refresh') ? 'refresh' : 'history';
+                    
+                    // Log button click
+                    logInteraction('content_action', {
+                        action: action
+                    });
+                    
+                    // Show alert for history
+                    if (action === 'history') {
+                        alert('Loading operation history. Please wait...');
+                    }
+                });
+            });
+        });
+        
+        // Function to log interactions with the honeypot
+        function logInteraction(interactionType, details = {}) {
+            fetch('/honeypot/log-interaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    page_type: 'database_dump',
+                    interaction_type: interactionType,
+                    additional_data: {
+                        ...details,
+                        referrer: document.referrer,
+                        resolution: `${window.innerWidth}x${window.innerHeight}`,
+                        user_agent: navigator.userAgent
+                    }
+                })
+            }).catch(error => {
+                console.log('Logging completed');
+            });
+        }
+        
+        // Log when the access button is clicked
+        document.querySelector('.access-button').addEventListener('click', function() {
+            logInteraction('access_button_click');
+        });
+    </script>
+</body>
+</html>

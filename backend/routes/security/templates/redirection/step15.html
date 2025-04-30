@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureSystem - Full System Access</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        .logo i {
+            margin-right: 10px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .breadcrumb {
+            margin: 20px 0;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        .breadcrumb a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .breadcrumb i {
+            margin: 0 8px;
+            font-size: 12px;
+        }
+        .main-content {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .critical-banner {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+        }
+        .critical-banner i {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        .verification-panel {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+        }
+        .verification-icon {
+            font-size: 60px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .verification-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .verification-subtitle {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        .biometric-scan {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            background-color: #e8f4fc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            color: #3498db;
+            position: relative;
+            overflow: hidden;
+        }
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            background-color: rgba(52, 152, 219, 0.7);
+            top: 0;
+            left: 0;
+            box-shadow: 0 0 10px 2px rgba(52, 152, 219, 0.7);
+            animation: scan 2s linear infinite;
+        }
+        @keyframes scan {
+            0% {
+                top: 0;
+            }
+            100% {
+                top: 100%;
+            }
+        }
+        .progress-container {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .progress-bar {
+            height: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.5s;
+            position: relative;
+        }
+        .progress-text {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        .verification-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            text-align: left;
+        }
+        .verification-step {
+            padding: 10px 15px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .verification-step i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        .verification-step.completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .verification-step.in-progress {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        .verification-step.pending {
+            color: #6c757d;
+        }
+        .security-codes {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .security-code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            letter-spacing: 2px;
+        }
+        .verification-message {
+            margin: 30px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            text-align: left;
+        }
+        .verification-message p {
+            margin: 5px 0;
+        }
+        .verification-actions {
+            margin-top: 30px;
+        }
+        .access-button {
+            display: inline-block;
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            margin-top: 20px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .access-button:hover {
+            background-color: #1a252f;
+        }
+        .access-button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .security-note {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .verification-complete {
+            display: none;
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #d4edda;
+            border-radius: 10px;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+        }
+        .verification-complete-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        .verification-complete-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .verification-complete-subtitle {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .verification-error {
+            display: none;
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #f8d7da;
+            border-radius: 10px;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+        }
+        .verification-error-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        .verification-error-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .verification-error-subtitle {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px 0;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+            SecureSystem
+        </div>
+        <div class="user-info">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB0ekUmVkNanJ_NcH8YedBwMNDFlU9pMyERQ&s" alt="Admin">
+            <span class="username">System Administrator</span>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="#"><i class="fas fa-home"></i> Home</a>
+            <i class="fas fa-chevron-right"></i>
+            <a href="#">System Controls</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>Full System Access</span>
+        </div>
+        
+        <div class="critical-banner">
+            <i class="fas fa-radiation"></i>
+            <div>CRITICAL ACCESS AREA: Full access to all system controls requires extensive verification</div>
+        </div>
+        
+        <div class="main-content">
+            <div class="verification-panel" id="verification-panel">
+                <div class="verification-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="verification-title">Security Verification Protocol</div>
+                <div class="verification-subtitle">Please complete the multi-factor verification process to access critical system controls.</div>
+                
+                <div class="biometric-scan">
+                    <i class="fas fa-fingerprint"></i>
+                    <div class="scan-line"></div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">Initializing verification process... (0%)</div>
+                </div>
+                
+                <div class="verification-steps">
+                    <div class="verification-step completed">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Initial identity verification</span>
+                    </div>
+                    <div class="verification-step in-progress">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <span>Biometric authentication</span>
+                    </div>
+                    <div class="verification-step pending">
+                        <i class="fas fa-circle"></i>
+                        <span>Hardware security key verification</span>
+                    </div>
+                    <div class="verification-step pending">
+                        <i class="fas fa-circle"></i>
+                        <span>Security question validation</span>
+                    </div>
+                    <div class="verification-step pending">
+                        <i class="fas fa-circle"></i>
+                        <span>Executive approval verification</span>
+                    </div>
+                    <div class="verification-step pending">
+                        <i class="fas fa-circle"></i>
+                        <span>System access authorization</span>
+                    </div>
+                </div>
+                
+                <div class="verification-message">
+                    <p><strong>System Message:</strong> Biometric verification in progress. Please do not refresh or navigate away from this page. This process may take up to 60 seconds to complete.</p>
+                    <p>If verification does not complete automatically, please enter the emergency backup codes provided to you during setup.</p>
+                </div>
+                
+                <div class="security-codes">
+                    <div class="security-code">A7H9-BT65-JK32</div>
+                    <div class="security-code">X4F2-PN18-QR09</div>
+                </div>
+                
+                <div class="verification-actions">
+                    <button class="access-button" id="manually-verify" disabled>
+                        <i class="fas fa-unlock-alt"></i> Manual Verification
+                    </button>
+                </div>
+                
+                <div class="security-note">
+                    All verification attempts are logged and monitored. Multiple failed attempts will trigger an automatic security lockout and notification to the security team.
+                </div>
+            </div>
+            
+            <div class="verification-complete" id="verification-complete">
+                <div class="verification-complete-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="verification-complete-title">Verification Successful</div>
+                <div class="verification-complete-subtitle">You have been granted full system access. Redirecting to the system control dashboard...</div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="redirect-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="redirect-text">Preparing system dashboard... (0%)</div>
+                </div>
+                
+                <a href="/system/verify" class="access-button" id="continue-button" style="display: none;">
+                    Continue to System Dashboard
+                </a>
+            </div>
+            
+            <div class="verification-error" id="verification-error">
+                <div class="verification-error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="verification-error-title">Verification Error</div>
+                <div class="verification-error-subtitle">The verification process could not be completed successfully. Please try again or contact the security team for assistance.</div>
+                
+                <div class="verification-message">
+                    <p><strong>Error Details:</strong> Biometric verification failed. Hardware security key verification timed out. Multiple authentication factors required.</p>
+                    <p>If this issue persists, please contact the security team at security@example.com or call the emergency security hotline at +1-555-123-4567.</p>
+                </div>
+                
+                <a href="#" class="access-button" id="retry-button">
+                    <i class="fas fa-redo"></i> Retry Verification
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        &copy; 2025 SecureSystem Enterprise Solutions. All rights reserved.
+        <div>Security Verification Module v2.3.1 | Security Level: Maximum</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Log page view
+            logInteraction('page_view');
+            
+            // Initialize progress variables
+            let progress = 0;
+            let verificationSteps = document.querySelectorAll('.verification-step');
+            let currentStep = 1;
+            let progressFill = document.getElementById('progress-fill');
+            let progressText = document.getElementById('progress-text');
+            let progressInterval;
+            
+            // Start the verification progress simulation
+            progressInterval = setInterval(function() {
+                // Increment progress
+                progress += Math.random() * 2;
+                
+                // Handle step transitions
+                if (progress >= 20 && currentStep === 1) {
+                    // Biometric authentication completed
+                    verificationSteps[1].classList.remove('in-progress');
+                    verificationSteps[1].classList.add('completed');
+                    verificationSteps[1].querySelector('i').className = 'fas fa-check-circle';
+                    
+                    // Start hardware security key verification
+                    verificationSteps[2].classList.remove('pending');
+                    verificationSteps[2].classList.add('in-progress');
+                    verificationSteps[2].querySelector('i').className = 'fas fa-spinner fa-spin';
+                    
+                    // Update verification message
+                    document.querySelector('.verification-message p:first-child').innerHTML = '<strong>System Message:</strong> Hardware security key verification in progress. Please insert your security key if prompted by your browser.';
+                    
+                    // Log step completion
+                    logInteraction('verification_step_complete', {
+                        step: 'biometric_authentication',
+                        progress: Math.round(progress)
+                    });
+                    
+                    currentStep = 2;
+                }
+                
+                if (progress >= 40 && currentStep === 2) {
+                    // Hardware security key verification completed
+                    verificationSteps[2].classList.remove('in-progress');
+                    verificationSteps[2].classList.add('completed');
+                    verificationSteps[2].querySelector('i').className = 'fas fa-check-circle';
+                    
+                    // Start security question validation
+                    verificationSteps[3].classList.remove('pending');
+                    verificationSteps[3].classList.add('in-progress');
+                    verificationSteps[3].querySelector('i').className = 'fas fa-spinner fa-spin';
+                    
+                    // Update verification message
+                    document.querySelector('.verification-message p:first-child').innerHTML = '<strong>System Message:</strong> Security question validation in progress. Retrieving security questions from your account profile.';
+                    
+                    // Log step completion
+                    logInteraction('verification_step_complete', {
+                        step: 'hardware_security_key',
+                        progress: Math.round(progress)
+                    });
+                    
+                    currentStep = 3;
+                }
+                
+                if (progress >= 60 && currentStep === 3) {
+                    // Security question validation completed
+                    verificationSteps[3].classList.remove('in-progress');
+                    verificationSteps[3].classList.add('completed');
+                    verificationSteps[3].querySelector('i').className = 'fas fa-check-circle';
+                    
+                    // Start executive approval verification
+                    verificationSteps[4].classList.remove('pending');
+                    verificationSteps[4].classList.add('in-progress');
+                    verificationSteps[4].querySelector('i').className = 'fas fa-spinner fa-spin';
+                    
+                    // Update verification message
+                    document.querySelector('.verification-message p:first-child').innerHTML = '<strong>System Message:</strong> Executive approval verification in progress. Waiting for approval from authorized executive personnel.';
+                    
+                    // Enable manual verification button
+                    document.getElementById('manually-verify').disabled = false;
+                    
+                    // Log step completion
+                    logInteraction('verification_step_complete', {
+                        step: 'security_question_validation',
+                        progress: Math.round(progress)
+                    });
+                    
+                    currentStep = 4;
+                }
+                
+                if (progress >= 80 && currentStep === 4) {
+                    // Executive approval verification completed
+                    verificationSteps[4].classList.remove('in-progress');
+                    verificationSteps[4].classList.add('completed');
+                    verificationSteps[4].querySelector('i').className = 'fas fa-check-circle';
+                    
+                    // Start system access authorization
+                    verificationSteps[5].classList.remove('pending');
+                    verificationSteps[5].classList.add('in-progress');
+                    verificationSteps[5].querySelector('i').className = 'fas fa-spinner fa-spin';
+                    
+                    // Update verification message
+                    document.querySelector('.verification-message p:first-child').innerHTML = '<strong>System Message:</strong> System access authorization in progress. Finalizing verification process.';
+                    
+                    // Log step completion
+                    logInteraction('verification_step_complete', {
+                        step: 'executive_approval',
+                        progress: Math.round(progress)
+                    });
+                    
+                    currentStep = 5;
+                }
+                
+                if (progress >= 100) {
+                    // Complete the verification process
+                    clearInterval(progressInterval);
+                    progress = 100;
+                    
+                    // Update last step
+                    verificationSteps[5].classList.remove('in-progress');
+                    verificationSteps[5].classList.add('completed');
+                    verificationSteps[5].querySelector('i').className = 'fas fa-check-circle';
+                    
+                    // Show verification complete
+                    document.getElementById('verification-panel').style.display = 'none';
+                    document.getElementById('verification-complete').style.display = 'block';
+                    
+                    // Log verification complete
+                    logInteraction('verification_complete');
+                    
+                    // Start redirect progress
+                    startRedirectProgress();
+                }
+                
+                // Update progress display
+                progressFill.style.width = `${progress}%`;
+                progressText.textContent = `Verification in progress... (${Math.round(progress)}%)`;
+                
+            }, 1000);
+            
+            // Handle manual verification button
+            document.getElementById('manually-verify').addEventListener('click', function() {
+                // Log manual verification attempt
+                logInteraction('manual_verification_attempt');
+                
+                // Show verification error
+                clearInterval(progressInterval);
+                document.getElementById('verification-panel').style.display = 'none';
+                document.getElementById('verification-error').style.display = 'block';
+            });
+            
+            // Handle retry button
+            document.getElementById('retry-button').addEventListener('click', function() {
+                // Log retry attempt
+                logInteraction('verification_retry');
+                
+                // Reset verification process
+                document.getElementById('verification-error').style.display = 'none';
+                document.getElementById('verification-panel').style.display = 'block';
+                
+                // Reset progress
+                progress = 0;
+                currentStep = 1;
+                progressFill.style.width = '0%';
+                progressText.textContent = 'Initializing verification process... (0%)';
+                
+                // Reset verification steps
+                verificationSteps[1].className = 'verification-step in-progress';
+                verificationSteps[1].querySelector('i').className = 'fas fa-spinner fa-spin';
+                for (let i = 2; i < verificationSteps.length; i++) {
+                    verificationSteps[i].className = 'verification-step pending';
+                    verificationSteps[i].querySelector('i').className = 'fas fa-circle';
+                }
+                
+                // Reset verification message
+                document.querySelector('.verification-message p:first-child').innerHTML = '<strong>System Message:</strong> Biometric verification in progress. Please do not refresh or navigate away from this page. This process may take up to 60 seconds to complete.';
+                
+                // Disable manual verification button
+                document.getElementById('manually-verify').disabled = true;
+                
+                // Restart progress simulation
+                progressInterval = setInterval(function() {
+                    // This is a simplification for the retry scenario
+                    // In a real system, you might want to simulate a different path or outcome
+                    progress += 100; // Jump straight to 100%
+                    
+                    if (progress >= 100) {
+                        clearInterval(progressInterval);
+                        
+                        // Show verification error again
+                        document.getElementById('verification-panel').style.display = 'none';
+                        document.getElementById('verification-error').style.display = 'block';
+                        
+                        // Log verification failure
+                        logInteraction('verification_failure', {
+                            reason: 'multiple_attempts'
+                        });
+                    }
+                }, 2000);
+            });
+            
+            // Function to start redirect progress
+            function startRedirectProgress() {
+                let redirectProgress = 0;
+                let redirectProgressFill = document.getElementById('redirect-progress');
+                let redirectText = document.getElementById('redirect-text');
+                
+                const redirectInterval = setInterval(function() {
+                    redirectProgress += Math.random() * 5;
+                    
+                    if (redirectProgress >= 100) {
+                        clearInterval(redirectInterval);
+                        redirectProgress = 100;
+                        
+                        // Show continue button
+                        document.getElementById('continue-button').style.display = 'inline-block';
+                        redirectText.textContent = 'System dashboard ready. Click "Continue" to proceed.';
+                        
+                        // Log redirect complete
+                        logInteraction('redirect_ready');
+                    } else {
+                        // Update progress text based on current progress
+                        if (redirectProgress < 30) {
+                            redirectText.textContent = `Loading system modules... (${Math.round(redirectProgress)}%)`;
+                        } else if (redirectProgress < 60) {
+                            redirectText.textContent = `Initializing system controls... (${Math.round(redirectProgress)}%)`;
+                        } else if (redirectProgress < 90) {
+                            redirectText.textContent = `Preparing dashboard interface... (${Math.round(redirectProgress)}%)`;
+                        } else {
+                            redirectText.textContent = `Finalizing system access... (${Math.round(redirectProgress)}%)`;
+                        }
+                    }
+                    
+                    // Update progress display
+                    redirectProgressFill.style.width = `${redirectProgress}%`;
+                    
+                }, 500);
+            }
+        });
+        
+        // Function to log interactions with the honeypot
+        function logInteraction(interactionType, details = {}) {
+            fetch('/honeypot/log-interaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    page_type: 'system_access',
+                    interaction_type: interactionType,
+                    additional_data: {
+                        ...details,
+                        referrer: document.referrer,
+                        resolution: `${window.innerWidth}x${window.innerHeight}`,
+                        user_agent: navigator.userAgent
+                    }
+                })
+            }).catch(error => {
+                console.log('Logging completed');
+            });
+        }
+        
+        // Log when the continue button is clicked
+        document.addEventListener('click', function(e) {
+            if (e.target.id === 'continue-button' || e.target.closest('#continue-button')) {
+                logInteraction('continue_to_dashboard');
+            }
+        });
+    </script>
+</body>
+</html>

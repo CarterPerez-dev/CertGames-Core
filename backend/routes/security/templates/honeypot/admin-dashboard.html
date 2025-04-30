@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Administration Dashboard</title>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f3f3;
+            color: #333;
+        }
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .header {
+            background-color: #fff;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 18px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        .btn-success {
+            background-color: #2ecc71;
+        }
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        .menu-item {
+            padding: 12px 25px;
+            display: block;
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .menu-item:hover, .menu-item.active {
+            background-color: #34495e;
+        }
+        .menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .stat-card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        .terminal {
+            background-color: #1e1e1e;
+            color: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin-top: 20px;
+            min-height: 300px;
+            overflow-y: auto;
+        }
+        .terminal-input {
+            display: flex;
+            align-items: center;
+        }
+        .terminal-prompt {
+            color: #2ecc71;
+            margin-right: 10px;
+        }
+        #terminal-command {
+            background: transparent;
+            border: none;
+            color: #f8f8f8;
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            outline: none;
+        }
+        .terminal-output {
+            margin: 10px 0;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .crypto-miner {
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #2c3e50;
+            color: white;
+            margin-top: 20px;
+        }
+        .miner-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .miner-stat {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin: 0 5px;
+        }
+        .progress {
+            height: 20px;
+            background-color: #34495e;
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #2ecc71;
+            width: 0;
+            transition: width 0.5s ease;
+        }
+        .progress-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            line-height: 20px;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+        }
+        .puzzle {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .puzzle-question {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .puzzle-input {
+            display: flex;
+        }
+        .puzzle-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            width: 80%;
+            max-width: 500px;
+            position: relative;
+        }
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .blinking {
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .popup {
+            position: fixed;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            padding: 15px;
+            z-index: 1001;
+            min-width: 250px;
+        }
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .popup-title {
+            font-weight: 600;
+            color: #e74c3c;
+        }
+        .popup-close {
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .loading-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .infinite-progress {
+            height: 20px;
+            background-color: #f3f3f3;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 10px;
+        }
+        .infinite-bar {
+            position: absolute;
+            height: 100%;
+            width: 20%;
+            background-color: #3498db;
+            border-radius: 10px;
+            animation: progress 3s infinite;
+        }
+        @keyframes progress {
+            0% { left: -20%; }
+            100% { left: 100%; }
+        }
+        .status-text {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        #user-table {
+            display: none;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div style="padding: 20px; text-align: center; border-bottom: 1px solid #34495e; margin-bottom: 20px;">
+                <i class="fas fa-shield-alt" style="font-size: 24px;"></i>
+                <div style="font-weight: 600; margin-top: 10px; font-size: 18px;">AdminControl</div>
+            </div>
+            <a href="#" class="menu-item active" onclick="return false;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="#" class="menu-item" onclick="showFakeUsers(); return false;"><i class="fas fa-users"></i> Users</a>
+            <a href="#" class="menu-item" onclick="createPopup('Security Alert', 'Unauthorized access attempt detected!'); return false;"><i class="fas fa-lock"></i> Security</a>
+            <a href="#" class="menu-item" onclick="createInfiniteLoading('Servers'); return false;"><i class="fas fa-server"></i> Servers</a>
+            <a href="#" class="menu-item" onclick="fakePuzzleChallenge(); return false;"><i class="fas fa-cogs"></i> Settings</a>
+            <a href="#" class="menu-item" onclick="createInfiniteLoading('Backups'); return false;"><i class="fas fa-database"></i> Backups</a>
+            <a href="/system/verify" class="menu-item"><i class="fas fa-key"></i> System Access</a>
+            <a href="#" class="menu-item" onclick="startFakeMiner(); return false;"><i class="fas fa-microchip"></i> Performance</a>
+            <a href="#" class="menu-item" onclick="downloadFakeFile(); return false;"><i class="fas fa-download"></i> Download Logs</a>
+            <a href="#" class="menu-item" onclick="showTerminal(); return false;"><i class="fas fa-terminal"></i> Console</a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <div class="header">
+                <div class="logo">System Dashboard</div>
+                <div class="user-info">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="Admin">
+                    <span>Administrator</span>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="card">
+                <h2>Server Status Overview</h2>
+                <div class="grid">
+                    <div class="stat-card">
+                        <div>Total Users</div>
+                        <div class="stat-value">13,857</div>
+                        <div style="color: #27ae60;"><i class="fas fa-arrow-up"></i> 12% this month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>Disk Usage</div>
+                        <div class="stat-value">87%</div>
+                        <div style="color: #e74c3c;"><i class="fas fa-exclamation-triangle"></i> Warning</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>CPU Load</div>
+                        <div class="stat-value">42%</div>
+                        <div style="color: #2ecc71;"><i class="fas fa-check-circle"></i> Normal</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>Memory Usage</div>
+                        <div class="stat-value">64%</div>
+                        <div style="color: #f39c12;"><i class="fas fa-exclamation-circle"></i> Monitor</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Security Alerts -->
+            <div class="card">
+                <h2>Recent Security Alerts</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Event</th>
+                            <th>IP Address</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-04-30 08:42:11</td>
+                            <td>Failed login attempt (5x)</td>
+                            <td>192.168.1.105</td>
+                            <td><a href="#" class="btn btn-danger" onclick="createPopup('IP Blocked', 'IP 192.168.1.105 has been blocked for 24 hours.'); return false;">Block IP</a></td>
+                        </tr>
+                        <tr>
+                            <td>2025-04-30 07:31:22</td>
+                            <td>Unusual file access pattern</td>
+                            <td>10.0.0.45</td>
+                            <td><a href="#" class="btn" onclick="createInfiniteLoading('Investigation'); return false;">Investigate</a></td>
+                        </tr>
+                        <tr>
+                            <td>2025-04-29 23:15:07</td>
+                            <td>Admin login from new location</td>
+                            <td>172.16.254.1</td>
+                            <td><a href="#" class="btn" onclick="createInfiniteLoading('Verification'); return false;">Verify</a></td>
+                        </tr>
+                        <tr>
+                            <td>2025-04-29 18:07:55</td>
+                            <td>Firewall rule change</td>
+                            <td>10.0.0.1</td>
+                            <td><a href="#" class="btn" onclick="createPopup('Rule Checker', 'Verifying rule integrity...'); return false;">Check Rules</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Hidden user table that shows when Users is clicked -->
+            <div id="user-table" class="card">
+                <h2>User Management</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>admin</td>
+                            <td>admin@example.com</td>
+                            <td>Administrator</td>
+                            <td>
+                                <a href="#" class="btn" onclick="createInfiniteLoading('Reset Password'); return false;">Reset Password</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>jsmith</td>
+                            <td>john.smith@example.com</td>
+                            <td>Manager</td>
+                            <td>
+                                <a href="#" class="btn" onclick="createInfiniteLoading('Edit User'); return false;">Edit</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>ajones</td>
+                            <td>alice.jones@example.com</td>
+                            <td>Developer</td>
+                            <td>
+                                <a href="#" class="btn" onclick="createInfiniteLoading('Edit User'); return false;">Edit</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top: 20px;">
+                    <a href="/system/users/management" class="btn btn-success">Manage Advanced Permissions</a>
+                </div>
+            </div>
+
+            <!-- Command Line Terminal (hidden initially) -->
+            <div id="terminal" class="terminal" style="display: none;">
+                <div class="terminal-output">Welcome to AdminControlCLI v3.2.1</div>
+                <div class="terminal-output">Type 'help' for available commands.</div>
+                <div id="terminal-output"></div>
+                <div class="terminal-input">
+                    <span class="terminal-prompt">admin@server:~$</span>
+                    <input type="text" id="terminal-command" autofocus>
+                </div>
+            </div>
+
+            <!-- Crypto Miner (hidden initially) -->
+            <div id="crypto-miner" class="crypto-miner" style="display: none;">
+                <h2 style="margin-top: 0; color: white;">System Performance Optimizer</h2>
+                <p>This tool optimizes server performance by utilizing unused CPU cycles for system maintenance.</p>
+                <div class="miner-stats">
+                    <div class="miner-stat">
+                        <div style="font-size: 12px;">Hash Rate</div>
+                        <div style="font-size: 18px; font-weight: 600;">0.025 H/s</div>
+                    </div>
+                    <div class="miner-stat">
+                        <div style="font-size: 12px;">Shares</div>
+                        <div style="font-size: 18px; font-weight: 600;">12</div>
+                    </div>
+                    <div class="miner-stat">
+                        <div style="font-size: 12px;">Est. Earnings</div>
+                        <div style="font-size: 18px; font-weight: 600;">0.00002 BTC/hr</div>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" id="miner-progress"></div>
+                    <div class="progress-text">Optimization in progress: <span id="miner-percent">0</span>%</div>
+                </div>
+                <div style="margin-top: 15px; text-align: right;">
+                    <button class="btn" onclick="stopFakeMiner();">Stop Optimization</button>
+                </div>
+            </div>
+
+            <!-- Puzzle Challenge (hidden initially) -->
+            <div id="puzzle" class="puzzle" style="display: none;">
+                <h2 style="margin-top: 0;">Security Verification Required</h2>
+                <p>To access administrative settings, please solve the following security challenge:</p>
+                <div class="puzzle-question" id="puzzle-question">Solve: 2 + 2 * 2 = ?</div>
+                <div class="puzzle-input">
+                    <input type="text" id="puzzle-answer" placeholder="Enter your answer...">
+                    <button class="btn" onclick="checkPuzzleAnswer();">Submit</button>
+                </div>
+                <div id="puzzle-feedback" style="margin-top: 15px; color: #e74c3c; display: none;"></div>
+            </div>
+
+            <!-- System Access Button -->
+            <div class="card" style="text-align: center; margin-top: 20px;">
+                <h2>Additional Access</h2>
+                <a href="/system/verify" class="btn btn-success" style="padding: 12px 24px; font-size: 16px;">Access Privileged System Controls</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for popup messages -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal();">&times;</span>
+            <h2 id="modal-title">Modal Title</h2>
+            <p id="modal-content">Modal content goes here.</p>
+            <div style="text-align: right; margin-top: 20px;">
+                <button class="btn" onclick="closeModal();">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Infinite Loading Modal -->
+    <div id="loading-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="loading-title">Loading Data</h2>
+            <div class="loading-container">
+                <div class="infinite-progress">
+                    <div class="infinite-bar"></div>
+                </div>
+                <div class="status-text" id="loading-text">Initializing process...</div>
+            </div>
+            <div style="text-align: right; margin-top: 20px;">
+                <button class="btn" onclick="updateLoadingProgress();">Retry</button>
+                <button class="btn btn-danger" onclick="closeLoadingModal();">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Track all popups created
+        let popups = [];
+        let popupId = 0;
+        let puzzleLevel = 1;
+        let minerInterval = null;
+        let loadingInterval = null;
+        let progressStatus = "";
+        let infiniteLoadingPercent = 0;
+        
+        // Simulated terminal commands and responses
+        const terminalCommands = {
+            "help": "Available commands:\n  ls - List files\n  cat [file] - Show file contents\n  whoami - Show current user\n  sudo [command] - Run command as root\n  cd [dir] - Change directory\n  rm [file] - Remove file\n  passwd - Change password",
+            "ls": "assets/  config/  logs/  backups/  users.db  server.conf  .htaccess  secret.txt",
+            "whoami": "admin",
+            "cd": "Changed directory successfully.",
+            "rm": "Permission denied. You need root privileges to remove files.",
+            "cat": function(args) {
+                if (!args || args.length === 0) {
+                    return "Usage: cat [filename]";
+                }
+                
+                const filename = args[0];
+                
+                if (filename === "secret.txt") {
+                    return "Permission denied. This file is encrypted with root-level access.";
+                } else if (filename === "server.conf") {
+                    return "# Server Configuration\nport = 22\nallow_root_login = false\nmax_auth_tries = 6\npassword_authentication = true\npubkey_authentication = true\npermit_empty_passwords = false\nserver_key_bits = 4096\nlog_level = INFO";
+                } else if (filename === "users.db") {
+                    return "Error: Cannot display binary file content.";
+                } else if (filename === ".htaccess") {
+                    return "AuthType Basic\nAuthName 'Restricted Area'\nAuthUserFile /var/www/.htpasswd\nRequire valid-user\n\nRewriteEngine On\nRewriteCond %{REQUEST_URI} admin\nRewriteRule ^admin$ /admin/ [R]";
+                } else {
+                    return `cat: ${filename}: No such file or directory`;
+                }
+            },
+            "sudo": function(args) {
+                if (!args || args.length === 0) {
+                    return "Usage: sudo [command]";
+                }
+                
+                createPopup("Password Required", "Enter password for admin:", true);
+                return "[sudo] password for admin: ";
+            },
+            "passwd": function() {
+                setTimeout(() => {
+                    createPopup("Change Password", "Enter current password:", true);
+                }, 500);
+                return "Changing password for admin.";
+            },
+            "clear": function() {
+                document.getElementById("terminal-output").innerHTML = "";
+                return "";
+            }
+        };
+        
+        // Function to show the command line terminal
+        function showTerminal() {
+            document.getElementById("terminal").style.display = "block";
+            document.getElementById("terminal-command").focus();
+            
+            // Add event listener for terminal commands
+            document.getElementById("terminal-command").addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    const command = this.value.trim();
+                    this.value = "";
+                    
+                    if (command) {
+                        // Add command to output
+                        const output = document.getElementById("terminal-output");
+                        output.innerHTML += `<div class="terminal-output"><span class="terminal-prompt">admin@server:~$</span> ${command}</div>`;
+                        
+                        // Process command
+                        const parts = command.split(" ");
+                        const cmd = parts[0];
+                        const args = parts.slice(1);
+                        
+                        let response = "Command not found. Type 'help' for available commands.";
+                        
+                        if (cmd in terminalCommands) {
+                            if (typeof terminalCommands[cmd] === "function") {
+                                response = terminalCommands[cmd](args);
+                            } else {
+                                response = terminalCommands[cmd];
+                            }
+                        }
+                        
+                        if (response) {
+                            output.innerHTML += `<div class="terminal-output">${response}</div>`;
+                        }
+                        
+                        // Log the terminal interaction
+                        logInteraction('terminal_command', { command });
+                        
+                        // Auto-scroll to bottom
+                        output.scrollTop = output.scrollHeight;
+                    }
+                }
+            });
+        }
+        
+        // Function to start the fake crypto miner
+        function startFakeMiner() {
+            document.getElementById("crypto-miner").style.display = "block";
+            
+            // Simulate mining progress
+            let progress = 0;
+            minerInterval = setInterval(() => {
+                progress += 0.1;
+                if (progress > 99) {
+                    progress = 99;  // Never reaches 100%
+                }
+                
+                document.getElementById("miner-progress").style.width = `${progress}%`;
+                document.getElementById("miner-percent").textContent = Math.floor(progress);
+            }, 1000);
+            
+            // Log the interaction
+            logInteraction('crypto_miner_started');
+        }
+        
+        // Function to stop the fake miner
+        function stopFakeMiner() {
+            if (minerInterval) {
+                clearInterval(minerInterval);
+            }
+            document.getElementById("crypto-miner").style.display = "none";
+            
+            // Log the interaction
+            logInteraction('crypto_miner_stopped');
+        }
+        
+        // Function to show the fake puzzle challenge
+        function fakePuzzleChallenge() {
+            document.getElementById("puzzle").style.display = "block";
+            document.getElementById("puzzle-feedback").style.display = "none";
+            updatePuzzleQuestion();
+            
+            // Log the interaction
+            logInteraction('puzzle_started');
+        }
+        
+        // Function to update the puzzle question based on level
+        function updatePuzzleQuestion() {
+            let question = "";
+            
+            switch (puzzleLevel) {
+                case 1:
+                    question = "Solve: 2 + 2 * 2 = ?";
+                    break;
+                case 2:
+                    question = "Solve: 3x + 5 = 20, what is x?";
+                    break;
+                case 3:
+                    question = "Solve: √(25) × 4 - 7 = ?";
+                    break;
+                case 4:
+                    question = "Solve: If 3x² - 6x - 24 = 0, what is the largest value of x?";
+                    break;
+                case 5:
+                    question = "Solve for x: log₃(x) + log₃(4x-7) = 2";
+                    break;
+                case 6:
+                    question = "The derivative of f(x) = 2x³ - 5x² + 4x at x = 2 is:";
+                    break;
+                case 7:
+                    question = "Evaluate the integral: ∫(0,π/2) sin(2x) dx";
+                    break;
+                default:
+                    question = "Solve: 3x²y² + 5xy = 10 for x when y = 2";
+                    break;
+            }
+            
+            document.getElementById("puzzle-question").textContent = question;
+        }
+        
+        // Function to check the puzzle answer (always wrong)
+        function checkPuzzleAnswer() {
+            const answer = document.getElementById("puzzle-answer").value.trim();
+            
+            if (answer) {
+                document.getElementById("puzzle-feedback").style.display = "block";
+                document.getElementById("puzzle-feedback").textContent = "Incorrect answer. Please try again with higher precision.";
+                document.getElementById("puzzle-answer").value = "";
+                
+                // Increase puzzle difficulty
+                puzzleLevel++;
+                updatePuzzleQuestion();
+                
+                // Log the interaction
+                logInteraction('puzzle_attempt', { level: puzzleLevel, answer });
+            }
+        }
+        
+        // Function to show fake users
+        function showFakeUsers() {
+            document.getElementById("user-table").style.display = "block";
+            
+            // Log the interaction
+            logInteraction('users_viewed');
+        }
+        
+        // Function to open the modal
+        function openModal(title, content) {
+            document.getElementById("modal-title").textContent = title;
+            document.getElementById("modal-content").textContent = content;
+            document.getElementById("modal").style.display = "block";
+        }
+        
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+        
+        // Function to create a popup
+        function createPopup(title, content, isPassword = false) {
+            popupId++;
+            const id = `popup-${popupId}`;
+            
+            // Create popup element
+            const popup = document.createElement("div");
+            popup.className = "popup";
+            popup.id = id;
+            
+            // Set random position
+            const top = 50 + Math.random() * 300;
+            const left = 100 + Math.random() * 800;
+            popup.style.top = `${top}px`;
+            popup.style.left = `${left}px`;
+            
+            // Set content
+            popup.innerHTML = `
+                <div class="popup-header">
+                    <div class="popup-title">${title}</div>
+                    <div class="popup-close" onclick="closePopup('${id}');">&times;</div>
+                </div>
+                <div class="popup-content">
+                    ${content}
+                </div>
+                ${isPassword ? '<div style="margin-top: 10px;"><input type="password" style="width: 100%; padding: 8px;"></div>' : ''}
+                <div style="text-align: right; margin-top: 10px;">
+                    <button class="btn" onclick="popupAction('${id}');">OK</button>
+                </div>
+            `;
+            
+            // Add to document
+            document.body.appendChild(popup);
+            
+            // Make draggable
+            makeDraggable(popup);
+            
+            // Add to array of popups
+            popups.push(id);
+            
+            // Log the interaction
+            logInteraction('popup_opened', { title });
+            
+            return id;
+        }
+        
+        // Function to close a popup
+        function closePopup(id) {
+            const popup = document.getElementById(id);
+            if (popup) {
+                // Remove from DOM
+                document.body.removeChild(popup);
+                
+                // Remove from array
+                popups = popups.filter(p => p !== id);
+                
+                // Log the interaction
+                logInteraction('popup_closed', { id });
+            }
+        }
+        
+        // Function for popup action (creates more popups)
+        function popupAction(id) {
+            // Create 2 more popups
+            const titles = ["Warning", "Error", "Alert", "Security Notice", "Critical Message"];
+            const contents = [
+                "This action cannot be completed.",
+                "An unexpected error occurred.",
+                "Your session is about to expire.",
+                "Suspicious activity detected.",
+                "System update required."
+            ];
+            
+            const title = titles[Math.floor(Math.random() * titles.length)];
+            const content = contents[Math.floor(Math.random() * contents.length)];
+            
+            createPopup(title, content);
+            
+            // Randomly create another one
+            if (Math.random() > 0.5) {
+                const title2 = titles[Math.floor(Math.random() * titles.length)];
+                const content2 = contents[Math.floor(Math.random() * contents.length)];
+                createPopup(title2, content2);
+            }
+            
+            // Don't close the original
+            
+            // Log the interaction
+            logInteraction('popup_action', { id, spawned: popups.length });
+        }
+        
+        // Function to make an element draggable
+        function makeDraggable(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            
+            const header = element.querySelector(".popup-header");
+            if (header) {
+                header.onmousedown = dragMouseDown;
+            } else {
+                element.onmousedown = dragMouseDown;
+            }
+            
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // Get mouse position
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+            
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // Calculate new position
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // Set element's new position
+                element.style.top = (element.offsetTop - pos2) + "px";
+                element.style.left = (element.offsetLeft - pos1) + "px";
+            }
+            
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+        
+        // Function to download a fake file (infinite size)
+        function downloadFakeFile() {
+            const a = document.createElement("a");
+            a.href = "#";
+            a.download = "server_logs_complete.zip";
+            a.style.display = "none";
+            
+            // Create a fake download that never completes
+            openModal("Downloading File", "Preparing server_logs_complete.zip (9.87 GB)...");
+            
+            // Simulate progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 0.1;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    document.getElementById("modal-content").textContent = "Download complete. File should open automatically.";
+                    
+                    // Create another popup after "completion"
+                    setTimeout(() => {
+                        createPopup("Extraction Error", "The archive appears to be corrupted. Would you like to try downloading again?");
+                    }, 2000);
+                } else {
+                    const downloaded = (progress * 9.87 / 100).toFixed(2);
+                    document.getElementById("modal-content").textContent = `Downloading: ${downloaded} GB of 9.87 GB (${Math.round(progress)}%)`;
+                }
+            }, 1000);
+            
+            // Log the interaction
+            logInteraction('download_started', { filename: "server_logs_complete.zip", size: "9.87 GB" });
+        }
+        
+        // Function to create infinite loading
+        function createInfiniteLoading(action) {
+            document.getElementById("loading-title").textContent = `Loading ${action}`;
+            document.getElementById("loading-text").textContent = "Initializing process...";
+            document.getElementById("loading-modal").style.display = "block";
+            
+            progressStatus = action;
+            infiniteLoadingPercent = 0;
+            
+            // Start infinite loading progress
+            if (loadingInterval) {
+                clearInterval(loadingInterval);
+            }
+            
+            loadingInterval = setInterval(() => {
+                updateLoadingText();
+            }, 2000);
+            
+            // Log the interaction
+            logInteraction('infinite_loading_started', { action });
+        }
+        
+        // Function to update loading text
+        function updateLoadingText() {
+            infiniteLoadingPercent += Math.floor(Math.random() * 5) + 1;
+            
+            if (infiniteLoadingPercent >= 99) {
+                infiniteLoadingPercent = 99; // Never reaches 100%
+            }
+            
+            const loadingTexts = [
+                `Loading ${progressStatus} data... ${infiniteLoadingPercent}%`,
+                `Retrieving ${progressStatus} information... ${infiniteLoadingPercent}%`,
+                `Processing ${progressStatus}... ${infiniteLoadingPercent}%`,
+                `Connecting to ${progressStatus} server... ${infiniteLoadingPercent}%`,
+                `Optimizing ${progressStatus} retrieval... ${infiniteLoadingPercent}%`
+            ];
+            
+            const randomText = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
+            document.getElementById("loading-text").textContent = randomText;
+            
+            // If we reach high percentage, introduce delays
+            if (infiniteLoadingPercent > 90) {
+                clearInterval(loadingInterval);
+                loadingInterval = setInterval(() => {
+                    updateLoadingText();
+                }, 5000); // Longer delays at the end
+            }
+        }
+        
+        // Function to update loading progress (never completes)
+        function updateLoadingProgress() {
+            infiniteLoadingPercent = Math.max(80, infiniteLoadingPercent);
+            document.getElementById("loading-text").textContent = `${progressStatus} almost complete... ${infiniteLoadingPercent}%`;
+            
+            // Log the interaction
+            logInteraction('loading_retry', { action: progressStatus, percent: infiniteLoadingPercent });
+        }
+        
+        // Function to close loading modal
+        function closeLoadingModal() {
+            document.getElementById("loading-modal").style.display = "none";
+            if (loadingInterval) {
+                clearInterval(loadingInterval);
+            }
+            
+            // Log the interaction
+            logInteraction('loading_cancelled', { action: progressStatus, percent: infiniteLoadingPercent });
+        }
+
+        // Rick-roll functionality
+        function rickRoll() {
+            // Create a full-page iframe with the video
+            const iframe = document.createElement('iframe');
+            iframe.style.position = 'fixed';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.style.zIndex = '9999';
+            iframe.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
+            document.body.appendChild(iframe);
+            
+            // Log the interaction
+            logInteraction('rickroll');
+        }
+        
+        // Function to log interactions with the honeypot
+        function logInteraction(interactionType, additionalData = {}) {
+            fetch('/honeypot/log-interaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    page_type: 'admin_dashboard',
+                    interaction_type: interactionType,
+                    additional_data: {
+                        ...additionalData,
+                        browser_info: {
+                            userAgent: navigator.userAgent,
+                            language: navigator.language,
+                            platform: navigator.platform,
+                            screenSize: `${window.screen.width}x${window.screen.height}`
+                        },
+                        timestamp: new Date().toISOString()
+                    }
+                })
+            }).catch(error => {
+                console.log('Logging failed, but this is expected and safe to ignore');
+            });
+        }
+        
+        // Log when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            logInteraction('page_view');
+            
+            // Add Rick Roll to random menu item with 10% chance
+            const menuItems = document.querySelectorAll('.menu-item');
+            const randomIndex = Math.floor(Math.random() * menuItems.length);
+            
+            if (Math.random() < 0.1) {
+                menuItems[randomIndex].onclick = function(e) {
+                    e.preventDefault();
+                    rickRoll();
+                    return false;
+                };
+            }
+        });
+    </script>
+</body>
+</html>

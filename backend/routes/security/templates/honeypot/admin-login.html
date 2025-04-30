@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Login</title>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo i {
+            font-size: 48px;
+            color: #3498db;
+        }
+        .company-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        .form-group input.error {
+            border-color: #e74c3c;
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        .login-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .login-button:hover {
+            background-color: #2980b9;
+        }
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .login-options a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .login-options a:hover {
+            text-decoration: underline;
+        }
+        .captcha-container {
+            margin: 20px 0;
+            display: none;
+        }
+        .captcha-image {
+            width: 100%;
+            height: 80px;
+            background-color: #f3f3f3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .captcha-image::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(0,0,0,0.05),
+                rgba(0,0,0,0.05) 10px,
+                rgba(0,0,0,0.02) 10px,
+                rgba(0,0,0,0.02) 20px
+            );
+        }
+        .captcha-image::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100" stroke="rgba(0,0,0,0.1)" stroke-width="1"/><line x1="100" y1="0" x2="0" y2="100" stroke="rgba(0,0,0,0.1)" stroke-width="1"/></svg>');
+            background-size: 20px 20px;
+        }
+        .captcha-input input {
+            width: 70%;
+        }
+        .captcha-refresh {
+            display: inline-block;
+            width: 25%;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            margin-left: 5%;
+        }
+        .hidden {
+            display: none;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: #3498db;
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-text {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .sql-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            margin: 15px 0;
+            display: none;
+        }
+        .connection-status {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+        .connection-status i {
+            color: #2ecc71;
+            margin-right: 5px;
+        }
+        .lockout-message {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            width: 80%;
+            max-width: 400px;
+            position: relative;
+        }
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .progress {
+            height: 20px;
+            background-color: #f3f3f3;
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #3498db;
+            width: 0;
+            transition: width 0.5s ease;
+        }
+        .progress-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            line-height: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+            <div class="company-name">AdminControl</div>
+            <div style="font-size: 14px; color: #777;">Secure Administration Panel</div>
+        </div>
+        
+        <form id="login-form" onsubmit="return processLogin(event);">
+            <div class="form-group">
+                <label for="username">Username or Email</label>
+                <input type="text" id="username" name="username" required>
+                <div class="error-message" id="username-error">Invalid username format</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <div class="error-message" id="password-error">Password must be at least 8 characters</div>
+            </div>
+            
+            <div class="sql-message" id="sql-message">
+                Warning: SQL syntax detected. SQL injection attempts are monitored and logged.
+            </div>
+            
+            <div class="captcha-container" id="captcha-container">
+                <label>Please verify you're not a robot</label>
+                <div class="captcha-image" id="captcha-image">
+                    <span id="captcha-text">AB12CD</span>
+                </div>
+                <div class="captcha-input">
+                    <input type="text" id="captcha" name="captcha" placeholder="Enter the code above" required>
+                    <button type="button" class="captcha-refresh" onclick="refreshCaptcha();">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                <div class="error-message" id="captcha-error">Incorrect CAPTCHA code</div>
+            </div>
+            
+            <button type="submit" class="login-button" id="login-button">Log In</button>
+            
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <div class="loading-text" id="loading-text">Authenticating...</div>
+            </div>
+            
+            <div class="lockout-message" id="lockout-message">
+                Your account has been temporarily locked due to multiple failed login attempts.
+                <div style="margin-top: 10px;">Please try again in <span id="lockout-timer">30</span> seconds.</div>
+            </div>
+            
+            <div class="login-options">
+                <a href="#" onclick="return showResetPassword();">Forgot Password?</a>
+                <a href="#" onclick="return showTwoFactor();">Use Two-Factor Authentication</a>
+            </div>
+            
+            <div class="connection-status">
+                <i class="fas fa-lock"></i> Secure Connection
+            </div>
+        </form>
+    </div>
+    
+    <!-- Reset Password Modal -->
+    <div id="reset-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('reset-modal');">&times;</span>
+            <h2>Reset Password</h2>
+            <p>Enter your email address to receive password reset instructions.</p>
+            <div class="form-group">
+                <label for="reset-email">Email Address</label>
+                <input type="email" id="reset-email" name="reset-email" required>
+            </div>
+            <button type="button" class="login-button" onclick="resetPassword();">Send Reset Instructions</button>
+            <div id="reset-progress" class="hidden">
+                <div class="progress">
+                    <div class="progress-bar" id="reset-progress-bar"></div>
+                    <div class="progress-text" id="reset-progress-text">Sending email...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Two-Factor Auth Modal -->
+    <div id="twofa-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('twofa-modal');">&times;</span>
+            <h2>Two-Factor Authentication</h2>
+            <p>Enter your username first to receive a verification code.</p>
+            <div class="form-group">
+                <label for="twofa-username">Username</label>
+                <input type="text" id="twofa-username" name="twofa-username" required>
+            </div>
+            <div class="form-group hidden" id="twofa-code-container">
+                <label for="twofa-code">Verification Code</label>
+                <input type="text" id="twofa-code" name="twofa-code" required placeholder="6-digit code">
+            </div>
+            <button type="button" class="login-button" id="twofa-button" onclick="sendTwoFactorCode();">Send Code</button>
+            <div id="twofa-progress" class="hidden">
+                <div class="progress">
+                    <div class="progress-bar" id="twofa-progress-bar"></div>
+                    <div class="progress-text" id="twofa-progress-text">Sending code...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Track failed login attempts
+        let failedAttempts = 0;
+        let redirects = 0;
+        let lockoutTimer = null;
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sometimes randomly show CAPTCHA on page load
+            if (Math.random() < 0.3) {
+                document.getElementById('captcha-container').style.display = 'block';
+                refreshCaptcha();
+            }
+            
+            // Track form interactions
+            const form = document.getElementById('login-form');
+            const formElements = form.elements;
+            
+            for (let i = 0; i < formElements.length; i++) {
+                if (formElements[i].type !== 'submit') {
+                    formElements[i].addEventListener('input', function() {
+                        logInteraction('form_input', { field: this.name });
+                    });
+                    
+                    formElements[i].addEventListener('blur', function() {
+                        logInteraction('form_blur', { field: this.name });
+                        
+                        // Check for SQL injection on blur
+                        if (this.name === 'username' || this.name === 'password') {
+                            checkForSQLInjection(this.value);
+                        }
+                    });
+                }
+            }
+            
+            // Log page view
+            logInteraction('page_view');
+        });
+        
+        // Process login (capture credentials and always fail)
+        function processLogin(event) {
+            event.preventDefault();
+            
+            // Get form values
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Log the credentials
+            logInteraction('login_attempt', { 
+                username: username,
+                password: password
+            });
+            
+            // Check for SQL injection again
+            if (checkForSQLInjection(username) || checkForSQLInjection(password)) {
+                // Already handled in the check function
+                return false;
+            }
+            
+            // Show loading indicator
+            document.getElementById('login-button').disabled = true;
+            document.getElementById('loading').style.display = 'block';
+            
+            // Different failure scenarios based on attempt count
+            failedAttempts++;
+            
+            // Simulate processing delay
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                
+                if (failedAttempts === 1) {
+                    // First attempt - invalid credentials
+                    document.getElementById('password-error').textContent = 'Invalid username or password';
+                    document.getElementById('password-error').style.display = 'block';
+                } 
+                else if (failedAttempts === 2) {
+                    // Second attempt - Show CAPTCHA
+                    document.getElementById('password-error').style.display = 'none';
+                    document.getElementById('captcha-container').style.display = 'block';
+                    refreshCaptcha();
+                    alert("Invalid credentials. Please complete the CAPTCHA to continue.");
+                }
+                else if (failedAttempts >= 3 && failedAttempts < 5) {
+                    // Third attempt - CAPTCHA failed
+                    document.getElementById('captcha-error').style.display = 'block';
+                    refreshCaptcha();
+                } 
+                else if (failedAttempts >= 5) {
+                    // Fifth attempt - Account lockout
+                    document.getElementById('captcha-container').style.display = 'none';
+                    document.getElementById('login-form').classList.add('hidden');
+                    document.getElementById('lockout-message').style.display = 'block';
+                    
+                    // Start lockout timer
+                    let timeLeft = 30;
+                    document.getElementById('lockout-timer').textContent = timeLeft;
+                    
+                    lockoutTimer = setInterval(() => {
+                        timeLeft--;
+                        document.getElementById('lockout-timer').textContent = timeLeft;
+                        
+                        if (timeLeft <= 0) {
+                            clearInterval(lockoutTimer);
+                            // Reset to first failure state
+                            failedAttempts = 1;
+                            document.getElementById('lockout-message').style.display = 'none';
+                            document.getElementById('login-form').classList.remove('hidden');
+                            document.getElementById('password-error').textContent = 'Invalid username or password';
+                            document.getElementById('password-error').style.display = 'block';
+                        }
+                    }, 1000);
+                    
+                    logInteraction('account_lockout', { attempts: failedAttempts });
+                }
+                
+                document.getElementById('login-button').disabled = false;
+                
+                // Special case: If username/password look like SQL injection attempts, redirect to fake SQL error page
+                if (username.toLowerCase().includes(" union select") || 
+                    username.toLowerCase().includes("' or '1'='1") ||
+                    password.toLowerCase().includes(" union select") ||
+                    password.toLowerCase().includes("' or '1'='1")) {
+                    
+                    if (redirects === 0) {
+                        redirects++;
+                        fakeSystemAccess("SQL Injection detected in your input. Redirecting to security dashboard...");
+                    }
+                }
+                
+                // Special case: On 4th attempt, sometimes fake a successful login
+                if (failedAttempts === 4 && Math.random() < 0.3) {
+                    fakeSystemAccess("Login successful! Redirecting to dashboard...");
+                }
+                
+            }, 2000 + Math.random() * 1000);
+            
+            return false;
+        }
+        
+        // Check for SQL injection attempts
+        function checkForSQLInjection(input) {
+            // Common SQL injection patterns
+            const sqlPatterns = [
+                "'",
+                "\"",
+                ";",
+                "--",
+                "/*",
+                "*/",
+                "=",
+                "OR",
+                "AND",
+                "SELECT",
+                "INSERT",
+                "UPDATE",
+                "DELETE",
+                "DROP",
+                "UNION",
+                "1=1",
+                "admin'--",
+                "' OR '1'='1"
+            ];
+            
+            // Convert to lowercase for case-insensitive matching
+            const lowerInput = input.toLowerCase();
+            
+            // Check for SQL patterns
+            for (const pattern of sqlPatterns) {
+                if (lowerInput.includes(pattern.toLowerCase())) {
+                    // Show SQL warning
+                    document.getElementById('sql-message').style.display = 'block';
+                    
+                    // Log the SQL injection attempt
+                    logInteraction('sql_injection_attempt', { 
+                        input: input,
+                        matched_pattern: pattern
+                    });
+                    
+                    return true;
+                }
+            }
+            
+            // No SQL injection detected
+            document.getElementById('sql-message').style.display = 'none';
+            return false;
+        }
+        
+        // Refresh the CAPTCHA with a new code
+        function refreshCaptcha() {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            let captcha = "";
+            
+            // Generate random 6-character captcha
+            for (let i = 0; i < 6; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            document.getElementById('captcha-text').textContent = captcha;
+            document.getElementById('captcha').value = '';
+            document.getElementById('captcha-error').style.display = 'none';
+            
+            // Log the interaction
+            logInteraction('captcha_refreshed', { new_captcha: captcha });
+        }
+        
+        // Show reset password modal
+        function showResetPassword() {
+            document.getElementById('reset-modal').style.display = 'block';
+            document.getElementById('reset-email').focus();
+            
+            // Log the interaction
+            logInteraction('reset_password_requested');
+            
+            return false;
+        }
+        
+        // Show two-factor auth modal
+        function showTwoFactor() {
+            document.getElementById('twofa-modal').style.display = 'block';
+            document.getElementById('twofa-username').focus();
+            
+            // Log the interaction
+            logInteraction('twofa_requested');
+            
+            return false;
+        }
+        
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            
+            // Reset progress
+            const progressBar = document.getElementById(`${modalId.split('-')[0]}-progress-bar`);
+            if (progressBar) {
+                progressBar.style.width = '0%';
+            }
+            
+            // Reset two-factor UI
+            if (modalId === 'twofa-modal') {
+                document.getElementById('twofa-code-container').classList.add('hidden');
+                document.getElementById('twofa-button').textContent = 'Send Code';
+                document.getElementById('twofa-button').onclick = sendTwoFactorCode;
+            }
+            
+            // Log the interaction
+            logInteraction('modal_closed', { modal: modalId });
+        }
+        
+        // Process reset password request (never completes)
+        function resetPassword() {
+            const email = document.getElementById('reset-email').value;
+            
+            if (!email) {
+                alert("Please enter your email address.");
+                return;
+            }
+            
+            // Log the interaction with the email
+            logInteraction('reset_password_submitted', { email: email });
+            
+            // Show progress
+            document.getElementById('reset-progress').classList.remove('hidden');
+            let progress = 0;
+            
+            // Update progress that never reaches 100%
+            const interval = setInterval(() => {
+                progress += Math.random() * 5;
+                if (progress >= 99) {
+                    progress = 99; // Never complete
+                    document.getElementById('reset-progress-text').textContent = "Almost done...";
+                } else if (progress >= 75) {
+                    document.getElementById('reset-progress-text').textContent = "Generating security token...";
+                } else if (progress >= 50) {
+                    document.getElementById('reset-progress-text').textContent = "Verifying account details...";
+                } else if (progress >= 25) {
+                    document.getElementById('reset-progress-text').textContent = "Connecting to server...";
+                }
+                
+                document.getElementById('reset-progress-bar').style.width = `${progress}%`;
+                
+                // After a while, add an error message and stop
+                if (progress >= 85 && Math.random() < 0.1) {
+                    clearInterval(interval);
+                    document.getElementById('reset-progress-text').textContent = "Error connecting to mail server";
+                    logInteraction('reset_password_error', { progress: progress.toFixed(1) });
+                }
+            }, 500);
+        }
+        
+        // Process two-factor auth request (never completes)
+        function sendTwoFactorCode() {
+            const username = document.getElementById('twofa-username').value;
+            
+            if (!username) {
+                alert("Please enter your username.");
+                return;
+            }
+            
+            // Log the interaction with the username
+            logInteraction('twofa_code_requested', { username: username });
+            
+            // Show progress
+            document.getElementById('twofa-progress').classList.remove('hidden');
+            let progress = 0;
+            
+            // Update progress that reaches 100% then shows code input
+            const interval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    document.getElementById('twofa-progress').classList.add('hidden');
+                    document.getElementById('twofa-code-container').classList.remove('hidden');
+                    document.getElementById('twofa-button').textContent = 'Verify Code';
+                    document.getElementById('twofa-button').onclick = verifyTwoFactorCode;
+                    
+                    logInteraction('twofa_code_sent', { username: username });
+                } else if (progress >= 75) {
+                    document.getElementById('twofa-progress-text').textContent = "Sending SMS code...";
+                } else if (progress >= 50) {
+                    document.getElementById('twofa-progress-text').textContent = "Generating secure code...";
+                } else if (progress >= 25) {
+                    document.getElementById('twofa-progress-text').textContent = "Verifying account...";
+                }
+                
+                document.getElementById('twofa-progress-bar').style.width = `${progress}%`;
+            }, 500);
+        }
+        
+        // Verify two-factor auth code (always fails)
+        function verifyTwoFactorCode() {
+            const code = document.getElementById('twofa-code').value;
+            
+            if (!code) {
+                alert("Please enter the verification code.");
+                return;
+            }
+            
+            // Log the interaction with the code
+            logInteraction('twofa_code_verification', { code: code });
+            
+            // Show progress
+            document.getElementById('twofa-progress').classList.remove('hidden');
+            document.getElementById('twofa-progress-text').textContent = "Verifying code...";
+            let progress = 0;
+            
+            // Update progress that reaches about 50% then fails
+            const interval = setInterval(() => {
+                progress += Math.random() * 10;
+                
+                if (progress >= 50) {
+                    clearInterval(interval);
+                    document.getElementById('twofa-progress').classList.add('hidden');
+                    alert("Invalid verification code. Please try again.");
+                    
+                    logInteraction('twofa_code_invalid', { code: code });
+                }
+                
+                document.getElementById('twofa-progress-bar').style.width = `${progress}%`;
+            }, 500);
+        }
+        
+        // Pretend to allow access to system
+        function fakeSystemAccess(message) {
+            // Show loading with custom message
+            document.getElementById('login-button').disabled = true;
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading-text').textContent = message;
+            
+            // Log the interaction
+            logInteraction('fake_success');
+            
+            // Redirect to admin panel after delay
+            setTimeout(() => {
+                window.location.href = "/system/verify";
+            }, 3000);
+        }
+        
+        // Function to log interactions with the honeypot
+        function logInteraction(interactionType, additionalData = {}) {
+            fetch('/honeypot/log-interaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    page_type: 'admin_login',
+                    interaction_type: interactionType,
+                    additional_data: {
+                        ...additionalData,
+                        browser_info: {
+                            userAgent: navigator.userAgent,
+                            language: navigator.language,
+                            platform: navigator.platform,
+                            screenSize: `${window.screen.width}x${window.screen.height}`
+                        },
+                        timestamp: new Date().toISOString()
+                    }
+                })
+            }).catch(error => {
+                console.log('Logging failed, but this is expected and safe to ignore');
+            });
+        }
+    </script>
+</body>
+</html>
