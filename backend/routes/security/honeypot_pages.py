@@ -148,7 +148,57 @@ def determine_category(path):
     # Return None if no category matched
     return None
 
-
+@honeypot_pages_bp.route('/system/<path:component>', methods=['GET'])
+def system_trap(component):
+    """
+    Handles the redirection loop with realistic-looking URLs
+    """
+    # Map URL components to step numbers
+    url_mapping = {
+        'dashboard': 1,
+        'users/management': 2,
+        'access/privileges': 3,
+        'security/credentials': 4,
+        'vault/passwords': 5,
+        'auth/tokens': 6,
+        'security/2fa': 7,
+        'crypto/keys': 8,
+        'data/customers': 9,
+        'finance/payments': 10,
+        'servers/access': 11,
+        'database/dump': 12,
+        'developers/api': 13,
+        'admin/override': 14,
+        'system/root': 15
+    }
+    
+    # Find the current step number from the URL component
+    current_step = 1
+    for path, step in url_mapping.items():
+        if component == path:
+            current_step = step
+            break
+    
+    # Determine the next step
+    next_step = current_step + 1 if current_step < 15 else 1
+    
+    # Get the URL component for the next step
+    next_component = list(url_mapping.keys())[next_step - 1]
+    
+    # Log this interaction
+    log_honeypot_interaction(
+        'system_trap',
+        'page_view',
+        additional_data={
+            'step': current_step,
+            'component': component,
+            'next_step': next_step,
+            'next_component': next_component
+        }
+    )
+    
+    # Render the appropriate template
+    return render_template(f'redirection/step{current_step}.html', next_component=next_component)
 
 # Your existing specific routes
 @honeypot_pages_bp.route('/wp-admin', methods=['GET', 'POST'])
