@@ -2163,49 +2163,7 @@ def admin_user_requests():
         return jsonify({"error": f"Error retrieving admin access logs: {str(e)}"}), 500
 
 
-@cracked_bp.route('/honeypot/interactions', methods=['GET'])
-def view_honeypot_interactions():
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-        
-    try:
-        # Get interactions with pagination
-        page = int(request.args.get('page', 1))
-        limit = int(request.args.get('limit', 20))
-        skip = (page - 1) * limit
-        
-        # Apply filters if provided
-        filter_query = {}
-        page_type = request.args.get('page_type')
-        if page_type:
-            filter_query['page_type'] = page_type
-            
-        interaction_type = request.args.get('interaction_type')
-        if interaction_type:
-            filter_query['interaction_type'] = interaction_type
-            
-        # Get interactions
-        interactions = list(db.honeypot_interactions.find(filter_query)
-                           .sort("timestamp", -1)
-                           .skip(skip)
-                           .limit(limit))
-                           
-        # Format for JSON response
-        for interaction in interactions:
-            interaction['_id'] = str(interaction['_id'])
-            interaction['timestamp'] = interaction['timestamp'].isoformat()
-            
-        # Get total count
-        total_count = db.honeypot_interactions.count_documents(filter_query)
-        
-        return jsonify({
-            "interactions": interactions,
-            "total": total_count,
-            "page": page,
-            "limit": limit
-        }), 200
-    except Exception as e:
-        return jsonify({"error": f"Failed to retrieve user requests: {str(e)}"}), 500
+
         
         
         

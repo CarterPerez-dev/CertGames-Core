@@ -35,11 +35,13 @@ const HoneypotTab = () => {
   const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#a4de6c', '#d0ed57'];
 
   // Fetch main honeypot data
+  // Fetch main honeypot data
   const fetchHoneypotData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await adminFetch("/api/honeypot/analytics");
+
+      const response = await adminFetch("/api/honeypot/combined-analytics");
       if (!response.ok) {
         throw new Error("Failed to fetch honeypot analytics");
       }
@@ -47,11 +49,11 @@ const HoneypotTab = () => {
       console.log("Honeypot analytics data:", data);
       setHoneypotData(data);
       
-      // Ensure we set the total interactions count
+
       if (data && typeof data.total_attempts === 'number') {
         setTotalInteractions(data.total_attempts);
       } else if (data && Array.isArray(data.recent_activity)) {
-        // Fallback - try to get count from recent activity length
+
         setTotalInteractions(data.recent_activity.length);
       }
       
@@ -101,7 +103,7 @@ const HoneypotTab = () => {
         queryParams.append('page_type', filterCategory);
       }
       
-      const response = await adminFetch(`/api/cracked/honeypot/interactions?${queryParams.toString()}`);
+      const response = await adminFetch(`/api/honeypot/interactions?${queryParams.toString()}`);
       if (!response.ok) {
         throw new Error("Failed to fetch honeypot interactions");
       }
@@ -131,7 +133,7 @@ const HoneypotTab = () => {
   const fetchInteractionDetails = useCallback(async (id) => {
     try {
       setLoading(true);
-      const response = await adminFetch(`/api/cracked/honeypot/interactions/${id}`);
+      const response = await adminFetch(`/api/honeypot/interactions/${id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch interaction details");
       }
@@ -931,6 +933,33 @@ const HoneypotTab = () => {
               </table>
             </div>
           </div>
+
+
+          {selectedInteraction.explanations && (
+            <div className="honeypot-details-section">
+              <h4 className="honeypot-section-title">
+                <FaBug /> Human-Readable Explanation
+              </h4>
+              <div className="honeypot-explanation-box">
+                <p><strong>What happened:</strong> {selectedInteraction.explanations.summary}</p>
+                
+                <p><strong>Page Type:</strong> {selectedInteraction.explanations.page_type}</p>
+                
+                <p><strong>Interaction Type:</strong> {selectedInteraction.explanations.interaction_type}</p>
+                
+                <h5>Security Analysis:</h5>
+                <ul className="honeypot-suspicious-factors">
+                  {selectedInteraction.explanations.suspicious_factors.map((factor, index) => (
+                    <li key={index}>{factor}</li>
+                  ))}
+                </ul>
+                
+                <p><em>{selectedInteraction.explanations.technical_details}</em></p>
+              </div>
+            </div>
+          )}
+
+
           
           {/* Threat Intelligence Section */}
           <div className="honeypot-details-section">

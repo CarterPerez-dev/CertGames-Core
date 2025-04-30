@@ -817,5 +817,299 @@ def honeypot_detailed_stats():
         }), 500
 
 
+@honeypot_bp.route('/interactions', methods=['GET'])
+def view_honeypot_interactions():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Get interactions with pagination
+        page = int(request.args.get('page', 1))
+        limit = int(request.args.get('limit', 20))
+        skip = (page - 1) * limit
+        
+        # Apply filters if provided
+        filter_query = {}
+        page_type = request.args.get('page_type')
+        if page_type:
+            filter_query['page_type'] = page_type
+            
+        interaction_type = request.args.get('interaction_type')
+        if interaction_type:
+            filter_query['interaction_type'] = interaction_type
+            
+        # Get interactions
+        interactions = list(db.honeypot_interactions.find(filter_query)
+                           .sort("timestamp", -1)
+                           .skip(skip)
+                           .limit(limit))
+                           
+        # Format for JSON response
+        for interaction in interactions:
+            interaction['_id'] = str(interaction['_id'])
+            interaction['timestamp'] = interaction['timestamp'].isoformat()
+            
+        # Get total count
+        total_count = db.honeypot_interactions.count_documents(filter_query)
+        
+        return jsonify({
+            "interactions": interactions,
+            "total": total_count,
+            "page": page,
+            "limit": limit
+        }), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to retrieve user requests: {str(e)}"}), 500
+        
+        
+@honeypot_bp.route('/interactions/<interaction_id>', methods=['GET'])
+def get_honeypot_interaction(interaction_id):
+    """Get detailed information about a specific honeypot interaction"""
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Find the interaction by ID
+        interaction = db.honeypot_interactions.find_one({"_id": ObjectId(interaction_id)})
+        
+        if not interaction:
+            return jsonify({"error": "Interaction not found"}), 404
+            
+        # Convert ObjectId to string for JSON serialization
+        interaction["_id"] = str(interaction["_id"])
+        
+        # Make timestamp JSON serializable if it's a datetime
+        if isinstance(interaction.get("timestamp"), datetime):
+            interaction["timestamp"] = interaction["timestamp"].isoformat()
+            
+        # Add human-readable explanations to the data
+        interaction["explanations"] = {
+            "summary": "This is a record of when someone interacted with your honeypot system.",
+            "interaction_type": get_interaction_type_explanation(interaction.get("interaction_type", "")),
+            "page_type": get_page_type_explanation(interaction.get("page_type", "")),
+            "suspicious_factors": get_suspicious_factors(interaction),
+            "technical_details": "The data shows exactly what the visitor sent to your server, including their browser details, IP address, and what they were trying to access."
+        }
+        
+        return jsonify(interaction), 200
+        
+    except Exception as e:
+        current_app.logger.error(f"Error getting honeypot interaction: {str(e)}")
+        return jsonify({"error": f"Failed to retrieve interaction details: {str(e)}"}), 500
 
+# Helper functions for human-readable explanations
+def get_interaction_type_explanation(interaction_type):
+    """Return a human-readable explanation of the interaction type"""
+    explanations = {
+        "page_view": "Someone visited this page directly, possibly trying to access restricted admin areas.",
+        "download_attempt": "Someone tried to download a file from your honeypot, which could indicate they were tricked by the fake system.",
+        "form_submission": "Someone submitted login credentials or other data to your honeypot form.",
+        "button_click": "Someone clicked on an interactive element in your honeypot.",
+        "menu_click": "Someone clicked on a menu item in your honeypot interface."
+    }
+    return explanations.get(interaction_type, "Unknown interaction type")
+    
+def get_page_type_explanation(page_type):
+    """Return a human-readable explanation of the page type"""
+    explanations = {
+        "wordpress": "A fake WordPress admin page that attracts attackers looking for vulnerable WordPress sites.",
+        "admin_panels": "A fake admin login page designed to attract unauthorized access attempts.",
+        "phpmyadmin": "A fake database administration tool page that attracts attackers looking for database access.",
+        "cpanel": "A fake hosting control panel that attracts attackers looking for website hosting access."
+    }
+    return explanations.get(page_type, "Unknown page type")
+    
+def get_suspicious_factors(interaction):
+    """Analyze the interaction for suspicious factors and return human-readable explanations"""
+    factors = []
+    
+    # Check for Tor/proxy usage
+    if interaction.get("is_tor_or_proxy"):
+        factors.append("This visitor appears to be using Tor or a proxy service, which might indicate they're trying to hide their identity.")
+    
+    # Check for known bot patterns
+    if interaction.get("bot_indicators") and len(interaction.get("bot_indicators", [])) > 0:
+        factors.append("This visitor shows signs of being an automated tool or bot rather than a real person.")
+    
+    # Check for scanner signatures
+    if interaction.get("is_scanner"):
+        factors.append("This visitor appears to be using a vulnerability scanner tool, which is commonly used by attackers.")
+    
+    # Check for port scanning
+    if interaction.get("is_port_scan"):
+        factors.append("This visitor seems to be scanning your server for open ports, which is often a first step in an attack.")
+    
+    # Check for suspicious query parameters
+    if interaction.get("suspicious_params"):
+        factors.append("This visitor is using suspicious parameters that might indicate an attempt to exploit vulnerabilities.")
+    
+    return factors if factors else ["No obviously suspicious behavior detected."]
+
+
+
+@honeypot_bp.route('/combined-analytics', methods=['GET'])
+def combined_honeypot_analytics():
+    """Return combined analytics from both honeypot collections"""
+    if not require_cracked_admin():  
+        return jsonify({"error": "Not authorized"}), 401
+    
+    try:
+        # Get statistics from both collections
+        scan_attempts_count = db.scanAttempts.count_documents({})
+        interactions_count = db.honeypot_interactions.count_documents({})
+        total_attempts = scan_attempts_count + interactions_count
+        
+        # Combine unique IPs from both collections
+        scan_ips = set(db.scanAttempts.distinct("ip"))
+        interaction_ips = set(db.honeypot_interactions.distinct("ip_address"))
+        unique_ips = len(scan_ips.union(interaction_ips))
+        
+        # Combine unique clients
+        scan_clients = set(db.scanAttempts.distinct("clientId"))
+        interaction_clients = set(db.honeypot_interactions.distinct("interaction_id"))
+        unique_clients = len(scan_clients.union(interaction_clients))
+        
+        # Get top paths from both collections
+        paths_data = []
+        
+        # Get paths from scanAttempts
+        if scan_attempts_count > 0:
+            scan_paths_pipeline = [
+                {"$group": {"_id": "$path", "count": {"$sum": 1}}},
+                {"$sort": {"count": -1}},
+                {"$limit": 10}
+            ]
+            scan_paths = list(db.scanAttempts.aggregate(scan_paths_pipeline))
+            paths_data.extend(scan_paths)
+        
+        # Get paths from honeypot_interactions
+        if interactions_count > 0:
+            interaction_paths_pipeline = [
+                {"$group": {"_id": "$path", "count": {"$sum": 1}}},
+                {"$sort": {"count": -1}},
+                {"$limit": 10}
+            ]
+            interaction_paths = list(db.honeypot_interactions.aggregate(interaction_paths_pipeline))
+            paths_data.extend(interaction_paths)
+        
+        # Combine and sort paths
+        path_counts = {}
+        for item in paths_data:
+            path = item["_id"]
+            count = item["count"]
+            if path in path_counts:
+                path_counts[path] += count
+            else:
+                path_counts[path] = count
+        
+        top_paths = [{"_id": k, "count": v} for k, v in path_counts.items()]
+        top_paths.sort(key=lambda x: x["count"], reverse=True)
+        top_paths = top_paths[:10]
+        
+        # Similar approach for IPs
+        ips_data = []
+        
+        # Get IPs from scanAttempts
+        if scan_attempts_count > 0:
+            scan_ips_pipeline = [
+                {"$group": {"_id": "$ip", "count": {"$sum": 1}}},
+                {"$sort": {"count": -1}},
+                {"$limit": 10}
+            ]
+            scan_ips_list = list(db.scanAttempts.aggregate(scan_ips_pipeline))
+            ips_data.extend(scan_ips_list)
+        
+        # Get IPs from honeypot_interactions
+        if interactions_count > 0:
+            interaction_ips_pipeline = [
+                {"$group": {"_id": "$ip_address", "count": {"$sum": 1}}},
+                {"$sort": {"count": -1}},
+                {"$limit": 10}
+            ]
+            interaction_ips_list = list(db.honeypot_interactions.aggregate(interaction_ips_pipeline))
+            ips_data.extend(interaction_ips_list)
+        
+        # Combine and sort IPs
+        ip_counts = {}
+        for item in ips_data:
+            ip = item["_id"]
+            count = item["count"]
+            if ip in ip_counts:
+                ip_counts[ip] += count
+            else:
+                ip_counts[ip] = count
+        
+        top_ips = [{"_id": k, "count": v} for k, v in ip_counts.items()]
+        top_ips.sort(key=lambda x: x["count"], reverse=True)
+        top_ips = top_ips[:10]
+        
+        # Get recent activity (combine both collections)
+        recent_scan_attempts = list(db.scanAttempts.find().sort("timestamp", -1).limit(10))
+        recent_interactions = list(db.honeypot_interactions.find().sort("timestamp", -1).limit(10))
+        
+        # Format scan attempts
+        for item in recent_scan_attempts:
+            item["_id"] = str(item["_id"])
+            if isinstance(item.get("timestamp"), datetime):
+                item["timestamp"] = item["timestamp"].isoformat()
+            # Normalize data structure
+            item["ip"] = item.get("ip")
+            item["path"] = item.get("path", "")
+            item["type"] = item.get("type", "page_view")
+        
+        # Format interactions
+        for item in recent_interactions:
+            item["_id"] = str(item["_id"])
+            if isinstance(item.get("timestamp"), datetime):
+                item["timestamp"] = item["timestamp"].isoformat()
+            # Normalize data structure
+            item["ip"] = item.get("ip_address")
+            item["path"] = item.get("path", "")
+            item["type"] = item.get("interaction_type", "page_view")
+        
+        # Combine, sort by timestamp, and limit to 20
+        combined_activity = recent_scan_attempts + recent_interactions
+        combined_activity.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
+        recent_activity = combined_activity[:20]
+        
+        # Count detected threats
+        threats_detected = (
+            db.scanAttempts.count_documents({
+                "$or": [
+                    {"is_scanner": True},
+                    {"is_port_scan": True},
+                    {"suspicious_params": True},
+                    {"bot_indicators": {"$exists": True, "$ne": []}}
+                ]
+            }) +
+            db.honeypot_interactions.count_documents({
+                "$or": [
+                    {"is_scanner": True},
+                    {"is_port_scan": True},
+                    {"suspicious_params": True}
+                ]
+            })
+        )
+        
+        return jsonify({
+            "total_attempts": total_attempts,
+            "unique_ips": unique_ips,
+            "unique_clients": unique_clients,
+            "threats_detected": threats_detected,
+            "top_paths": top_paths,
+            "top_ips": top_ips,
+            "recent_activity": recent_activity
+        }), 200
+    except Exception as e:
+        logger.error(f"Error in combined honeypot analytics: {str(e)}")
+        # Return empty data with 200 status
+        return jsonify({
+            "total_attempts": 0,
+            "unique_ips": 0,
+            "unique_clients": 0,
+            "threats_detected": 0,
+            "top_paths": [],
+            "top_ips": [],
+            "recent_activity": []
+        }), 200
 
