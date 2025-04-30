@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synergy Portal Access</title> 
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e0f2f7 0%, #d1e0e0 100%);
+            color: #333;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 420px;
+            padding: 35px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        .logo i {
+            font-size: 52px;
+            color: #26a69a;
+        }
+        .company-name {
+            font-size: 26px; 
+            font-weight: 700; 
+            margin-top: 12px;
+            
+            color: #004d40; 
+        }
+        .tagline { 
+            font-size: 15px;
+            color: #555;
+            margin-top: 5px;
+        }
+        .form-group {
+            margin-bottom: 22px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600; 
+            color: #444;
+        }
+        .form-group input {
+            width: 100%; 
+            box-sizing: border-box;
+            padding: 12px; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            font-size: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-group input:focus {
+            
+            border-color: #26a69a;
+            box-shadow: 0 0 0 2px rgba(38, 166, 154, 0.2); 
+            outline: none;
+        }
+        .form-group input.error {
+            border-color: #e74c3c;
+            background-color: #fffafa; 
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 13px; 
+            margin-top: 6px;
+            display: none;
+            font-weight: 500;
+        }
+        .login-button {
+            display: block;
+            width: 100%;
+            padding: 14px; 
+            
+            background-color: #26a69a; 
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 17px; 
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .login-button:hover {
+            
+            background-color: #00897b; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .login-button:active {
+            transform: translateY(1px); 
+        }
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 18px;
+            font-size: 14px;
+        }
+        .login-options a {
+            
+            color: #00796b; 
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .login-options a:hover {
+            color: #004d40; 
+            text-decoration: underline;
+        }
+        .captcha-container {
+            margin: 25px 0;
+            display: none;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #fdfdfd;
+        }
+        .captcha-image {
+            width: 100%;
+            height: 80px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px; 
+            font-family: 'Consolas', 'Courier New', monospace; 
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            border: 1px dashed #aaa; 
+            
+            animation: subtle-wobble 1.5s infinite ease-in-out alternate;
+        }
+        
+        .captcha-image::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                60deg,
+                rgba(0,0,0,0.04),
+                rgba(0,0,0,0.04) 8px,
+                rgba(0,0,0,0.01) 8px,
+                rgba(0,0,0,0.01) 16px
+            );
+            opacity: 0.7;
+        }
+        .captcha-image::after {
+            content: "";
+            position: absolute;
+            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><line x1="0" y1="50" x2="100" y2="50" stroke="rgba(0,0,0,0.08)" stroke-width="2" stroke-dasharray="5,5"/><line x1="50" y1="0" x2="50" y2="100" stroke="rgba(0,0,0,0.08)" stroke-width="2" stroke-dasharray="5,5"/></svg>');
+            background-size: 30px 30px;
+            animation: noise 0.2s infinite linear;
+            opacity: 0.6;
+        }
+        @keyframes subtle-wobble {
+            0% { transform: rotate(-0.3deg) scale(1.01); }
+            100% { transform: rotate(0.3deg) scale(0.99); }
+        }
+        @keyframes noise {
+            0% { transform: translate(0,0); }
+            25% { transform: translate(1px,-1px); }
+            50% { transform: translate(-1px,1px); }
+            75% { transform: translate(-1px,-1px); }
+            100% { transform: translate(1px,1px); }
+        }
+        .captcha-input {
+            display: flex;
+            align-items: center;
+        }
+        .captcha-input input {
+            flex-grow: 1; 
+            margin-right: 10px;
+            padding: 11px;
+        }
+        .captcha-refresh {
+            display: inline-block;
+            padding: 11px 15px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .captcha-refresh:hover {
+            background-color: #e0e0e0;
+        }
+        .captcha-refresh:active {
+             transform: scale(0.95);
+        }
+        .captcha-note { 
+            font-size: 12px;
+            color: #777;
+            display: block;
+            margin-top: 8px;
+            text-align: center;
+        }
+        .hidden {
+            display: none !important; 
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 25px;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            border: 4px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+             
+            border-top-color: #26a69a; 
+            animation: spin 0.8s linear infinite; 
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-text {
+            margin-top: 12px;
+            font-size: 15px;
+            color: #555;
+            font-weight: 500;
+        }
+        .sql-message {
+            background-color: #fff3cd; 
+            color: #856404; 
+            padding: 12px;
+            border: 1px solid #ffeeba; 
+            border-left: 5px solid #ffc107; 
+            border-radius: 4px;
+            margin: 18px 0;
+            display: none;
+            font-size: 13px;
+        }
+        .connection-status {
+            text-align: center;
+            font-size: 13px; 
+            color: #666;
+            margin-top: 25px;
+        }
+        .connection-status i {
+            color: #4caf50; 
+            margin-right: 6px;
+            font-size: 14px;
+        }
+        .lockout-message {
+            display: none;
+            background-color: #f8d7da; 
+            color: #721c24; 
+            padding: 15px;
+            border: 1px solid #f5c6cb;
+            border-left: 5px solid #e74c3c; 
+            border-radius: 4px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1050; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); 
+            overflow: auto; 
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 8% auto; 
+            padding: 25px 30px; 
+            border-radius: 6px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+            width: 90%;
+            max-width: 450px; 
+            position: relative;
+            animation: slide-down 0.4s ease-out;
+        }
+        @keyframes slide-down {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-content h2 {
+             margin-top: 0;
+             margin-bottom: 15px;
+             color: #004d40; 
+             font-weight: 600;
+        }
+        .modal-content p {
+            margin-bottom: 20px;
+            color: #555;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .close:hover {
+            color: #555;
+        }
+        .progress {
+            height: 22px; 
+            background-color: #e9ecef; 
+            border-radius: 11px; 
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .progress-bar {
+            height: 100%;
+            
+            background-color: #26a69a; 
+            width: 0;
+            transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            border-radius: 11px;
+        }
+        .progress-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            line-height: 22px; 
+            text-align: center;
+            color: #fff; 
+            font-size: 12px;
+            font-weight: 600;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2); 
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <i class="fas fa-network-wired"></i> 
+            <div class="company-name">Synergy Portal</div> 
+            <div class="tagline">Connecting Teams, Powering Progress</div> 
+        </div>
+
+        <form id="login-form" onsubmit="return processLogin(event);">
+            <div class="form-group">
+                <label for="username">Username or Corporate ID</label> 
+                <input type="text" id="username" name="username" required placeholder="e.g., jane.doe or JDOE123"> 
+                <div class="error-message" id="username-error">Hmm, that doesn't look right. Check format?</div> 
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your secure password"> 
+                <div class="error-message" id="password-error">how the turned haev tables huh....password too long.</div> 
+            </div>
+
+            <div class="sql-message" id="sql-message">
+                
+                Hold up! Our system detects fancy SQL stuff. This attempt is being monitored by infamous Rigby cat.
+            </div>
+
+            <div class="captcha-container" id="captcha-container">
+                <label>Prove Your Humanity (or Superior AI Status)</label> 
+                <div class="captcha-image captcha-image-enhanced" id="captcha-image"> 
+                    <span id="captcha-text">XY7Z8W</span>
+                </div>
+                <div class="captcha-input">
+                    <input type="text" id="captcha" name="captcha" placeholder="Enter the wobbly code" required> 
+                    <button type="button" class="captcha-refresh" onclick="refreshCaptcha();" title="Get a new code"> 
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                 <small class="captcha-note">Are you *sure* you're not rigby cat?</small> 
+                <div class="error-message" id="captcha-error">Close! But cigar no. Try again.</div> 
+            </div>
+
+            <button type="submit" class="login-button" id="login-button">Log In</button>
+
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <div class="loading-text" id="loading-text">Reticulating Splines...</div> 
+            </div>
+
+            <div class="lockout-message" id="lockout-message">
+                 
+                Whoa there! Too many attempts. Your account is taking a brief security nap.
+                <div style="margin-top: 10px;">Please try again in <span id="lockout-timer">30</span> seconds (maybe grab a coffee?).</div>
+            </div>
+
+            <div class="login-options">
+                <a href="#" onclick="return showResetPassword();">Forgot Password? (Oops!)</a> 
+                <a href="#" onclick="return showTwoFactor();">Use Super Secure 2FA</a> 
+            </div>
+
+            <div class="connection-status">
+                <i class="fas fa-lock"></i> Secure Connection (Verified by Unicorns) 
+            </div>
+        </form>
+    </div>
+
+    
+    <div id="reset-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('reset-modal');">×</span>
+            <h2>Password Recovery Mission</h2> 
+            <p>Enter your registered email. We'll dispatch a carrier pigeon with reset instructions in 3-5 biz days.</p> 
+            <div class="form-group">
+                <label for="reset-email">Email Address</label>
+                <input type="email" id="reset-email" name="reset-email" required placeholder="your.email@example.com">
+            </div>
+            <button type="button" class="login-button" onclick="resetPassword();">Send Reset Instructions</button>
+            <div id="reset-progress" class="hidden">
+                 <div class="progress">
+                    <div class="progress-bar" id="reset-progress-bar"></div>
+                    
+                    <div class="progress-text" id="reset-progress-text">Consulting the Oracle...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="twofa-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('twofa-modal');">×</span>
+            <h2>Extra Security Layer (Like an Onion!)</h2> 
+            <p>Enter your username first. We'll beam a verification code to your registered device using psychic waves.</p> 
+            <div class="form-group">
+                <label for="twofa-username">Username</label>
+                <input type="text" id="twofa-username" name="twofa-username" required placeholder="Your Portal Username">
+            </div>
+            <div class="form-group hidden" id="twofa-code-container">
+                <label for="twofa-code">Verification Code</label>
+                <input type="text" id="twofa-code" name="twofa-code" required placeholder="6-digit code from device">
+            </div>
+            <button type="button" class="login-button" id="twofa-button" onclick="sendTwoFactorCode();">Send Code</button>
+            <div id="twofa-progress" class="hidden">
+                 <div class="progress">
+                    <div class="progress-bar" id="twofa-progress-bar"></div>
+                    
+                    <div class="progress-text" id="twofa-progress-text">Negotiating with the Authenticator Gnome...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        let failedAttempts = 0;
+        let redirects = 0;
+        let lockoutTimer = null;
+        const loadingMessages = [ 
+            "Downloading More Dedotated WAM...",
+            "Reticulating Splines...",
+            "Verifying Quantum Entanglement...",
+            "Polishing the Portal...",
+            "Waking Up the Rigby...",
+            "Checking for Pixie Dust...",
+            "Engaging Warp Drive...",
+            "Dedotated WAM Downloading...",
+        ];
+        let currentLoadingMsgIndex = 0;
+
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            if (Math.random() < 0.35) { 
+                document.getElementById('captcha-container').style.display = 'block';
+                refreshCaptcha();
+            }
+
+            
+            const form = document.getElementById('login-form');
+            const formElements = form.elements;
+
+            for (let i = 0; i < formElements.length; i++) {
+                if (formElements[i].type !== 'submit' && formElements[i].type !== 'button') {
+                    formElements[i].addEventListener('input', function() {
+                        logInteraction('form_input', { field: this.name });
+                        
+                        const errorId = this.id + '-error';
+                        if (document.getElementById(errorId)) {
+                            document.getElementById(errorId).style.display = 'none';
+                        }
+                        if (this.id === 'captcha') {
+                             document.getElementById('captcha-error').style.display = 'none';
+                        }
+                    });
+
+                    formElements[i].addEventListener('blur', function() {
+                        logInteraction('form_blur', { field: this.name });
+
+                        
+                        if (this.name === 'username' || this.name === 'password') {
+                            checkForSQLInjection(this.value);
+                        }
+                    });
+                }
+            }
+
+            
+            logInteraction('page_view');
+        });
+
+        
+        function processLogin(event) {
+            event.preventDefault();
+
+            
+            document.getElementById('username-error').style.display = 'none';
+            document.getElementById('password-error').style.display = 'none';
+            document.getElementById('captcha-error').style.display = 'none';
+            document.getElementById('sql-message').style.display = 'none';
+
+
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const captchaInput = document.getElementById('captcha').value;
+            const captchaRequired = document.getElementById('captcha-container').style.display === 'block';
+
+            
+            if (!username || !password || (captchaRequired && !captchaInput)) {
+                alert("Please fill in all required fields.");
+                return false;
+            }
+
+
+            
+            logInteraction('login_attempt', {
+                username: username,
+                password: password, 
+                captcha_entered: captchaRequired ? captchaInput : 'N/A'
+            });
+
+            
+            if (checkForSQLInjection(username) || checkForSQLInjection(password)) {
+                
+                return false;
+            }
+
+            
+            document.getElementById('login-button').disabled = true;
+            document.getElementById('loading').style.display = 'block';
+            currentLoadingMsgIndex = (currentLoadingMsgIndex + 1) % loadingMessages.length;
+            document.getElementById('loading-text').textContent = loadingMessages[currentLoadingMsgIndex];
+
+
+            
+            failedAttempts++;
+
+            
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+
+                 
+                let isLockedOut = false;
+
+                if (failedAttempts === 1) {
+                    
+                    document.getElementById('password-error').textContent = 'Credentials incorrect. Did you download the required amount of Dedotated WAM?'; 
+                    document.getElementById('password-error').style.display = 'block';
+                    document.getElementById('username').classList.add('error');
+                    document.getElementById('password').classList.add('error');
+                }
+                else if (failedAttempts === 2) {
+                    
+                    document.getElementById('password-error').style.display = 'none'; 
+                     document.getElementById('username').classList.remove('error');
+                     document.getElementById('password').classList.remove('error');
+                    document.getElementById('captcha-container').style.display = 'block';
+                    refreshCaptcha();
+                    alert("no"); 
+                }
+                else if (failedAttempts >= 3 && failedAttempts < 5) {
+                    
+                    if(captchaRequired) {
+                        document.getElementById('captcha-error').style.display = 'block';
+                        document.getElementById('captcha').classList.add('error');
+                         refreshCaptcha();
+                    } else {
+                         document.getElementById('password-error').textContent = 'yes'; 
+                         document.getElementById('password-error').style.display = 'block';
+                         document.getElementById('username').classList.add('error');
+                         document.getElementById('password').classList.add('error');
+                    }
+                }
+                else if (failedAttempts >= 5) {
+                    
+                    isLockedOut = true;
+                    document.getElementById('captcha-container').style.display = 'none';
+                    document.getElementById('login-form').classList.add('hidden'); 
+                    document.getElementById('lockout-message').style.display = 'block';
+                    document.getElementById('username').classList.remove('error');
+                    document.getElementById('password').classList.remove('error');
+                    document.getElementById('captcha').classList.remove('error');
+
+
+                    
+                    let timeLeft = 30;
+                    document.getElementById('lockout-timer').textContent = timeLeft;
+
+                    if(lockoutTimer) clearInterval(lockoutTimer); 
+                    lockoutTimer = setInterval(() => {
+                        timeLeft--;
+                        document.getElementById('lockout-timer').textContent = timeLeft;
+
+                        if (timeLeft <= 0) {
+                            clearInterval(lockoutTimer);
+                            
+                            failedAttempts = 0; 
+                            document.getElementById('lockout-message').style.display = 'none';
+                            document.getElementById('login-form').classList.remove('hidden');
+                            
+                            document.getElementById('login-button').disabled = false;
+
+                        }
+                    }, 1000);
+
+                    logInteraction('account_lockout', { attempts: failedAttempts });
+                }
+
+                 if (!isLockedOut) {
+                    document.getElementById('login-button').disabled = false;
+                }
+
+                
+                
+                if (username.toLowerCase().includes(" union select") ||
+                    username.toLowerCase().includes("' or '1'='1") ||
+                    password.toLowerCase().includes(" union select") ||
+                    password.toLowerCase().includes("' or '1'='1")) {
+
+                    if (redirects === 0) {
+                        redirects++;
+                        
+                        fakeSystemAccess("CRITICAL SECURITY ALERT! Malicious input detected. Isolating session...");
+                        return false; 
+                    }
+                }
+
+                
+                if (failedAttempts === 4 && Math.random() < 0.35) { 
+                    fakeSystemAccess("Success! Authenticated. Engaging Hyperdrive to Dashboard...");
+                    return false; 
+                }
+
+            }, 1500 + Math.random() * 1500); 
+
+            return false;
+        }
+
+        
+        function checkForSQLInjection(input) {
+            
+            const sqlPatterns = [
+                "'", "\"", ";", "--", "/*", "*/", "=",
+                " OR ", " AND ", "SELECT ", "INSERT ", "UPDATE ", "DELETE ", "DROP ", "UNION "
+                
+            ];
+
+            const lowerInput = input.toLowerCase();
+
+            for (const pattern of sqlPatterns) {
+                if (lowerInput.includes(pattern.toLowerCase())) {
+                    document.getElementById('sql-message').style.display = 'block';
+                    logInteraction('sql_injection_attempt', {
+                        input_field: document.activeElement ? document.activeElement.name : 'unknown', 
+                        input_value: input, 
+                        matched_pattern: pattern
+                    });
+                    
+                    if (document.activeElement && document.activeElement.classList) {
+                       document.activeElement.classList.add('error');
+                    }
+                    return true; 
+                }
+            }
+             
+            document.getElementById('sql-message').style.display = 'none';
+            return false;
+        }
+
+
+        
+        function refreshCaptcha() {
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; 
+            let captcha = "";
+            for (let i = 0; i < 6; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('captcha-text').textContent = captcha;
+            document.getElementById('captcha').value = '';
+            document.getElementById('captcha-error').style.display = 'none';
+            document.getElementById('captcha').classList.remove('error');
+
+            logInteraction('captcha_refreshed', { new_captcha: captcha });
+        }
+
+        
+        function showResetPassword() {
+            document.getElementById('reset-modal').style.display = 'block';
+             setTimeout(() => document.getElementById('reset-email').focus(), 10); 
+            logInteraction('reset_password_requested');
+            return false; 
+        }
+
+        
+        function showTwoFactor() {
+            document.getElementById('twofa-modal').style.display = 'block';
+            setTimeout(() => document.getElementById('twofa-username').focus(), 10); 
+            logInteraction('twofa_requested');
+            return false; 
+        }
+
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'none';
+
+             
+             const progressContainerId = `${modalId.split('-')[0]}-progress`;
+             const progressBarId = `${modalId.split('-')[0]}-progress-bar`;
+             const progressTextId = `${modalId.split('-')[0]}-progress-text`;
+
+             const progressContainer = document.getElementById(progressContainerId);
+             const progressBar = document.getElementById(progressBarId);
+             const progressText = document.getElementById(progressTextId);
+
+             if (progressContainer) progressContainer.classList.add('hidden');
+             if (progressBar) progressBar.style.width = '0%';
+             
+              if (progressTextId === 'reset-progress-text' && progressText) progressText.textContent = "Consulting the Oracle...";
+              if (progressTextId === 'twofa-progress-text' && progressText) progressText.textContent = "Negotiating with the Authenticator Gnome...";
+
+
+            
+            if (modalId === 'twofa-modal') {
+                document.getElementById('twofa-code-container').classList.add('hidden');
+                document.getElementById('twofa-button').textContent = 'Send Code';
+                document.getElementById('twofa-button').onclick = sendTwoFactorCode;
+                document.getElementById('twofa-username').value = ''; 
+                document.getElementById('twofa-code').value = '';
+            }
+             if (modalId === 'reset-modal') {
+                 document.getElementById('reset-email').value = ''; 
+            }
+
+
+            logInteraction('modal_closed', { modal: modalId });
+        }
+
+        
+        function resetPassword() {
+            const email = document.getElementById('reset-email').value;
+            if (!email || !email.includes('@')) { 
+                alert("Please enter a valid email address.");
+                return;
+            }
+            logInteraction('reset_password_submitted', { email: email });
+
+            const progressContainer = document.getElementById('reset-progress');
+            const progressBar = document.getElementById('reset-progress-bar');
+            const progressText = document.getElementById('reset-progress-text');
+
+            progressContainer.classList.remove('hidden');
+            progressBar.style.width = '0%';
+            progressText.textContent = "Locating Account...";
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 8 + 2;
+                if (progress >= 99) {
+                    progress = 99;
+                    progressText.textContent = "Finalizing Request... Almost there!";
+                    setTimeout(() => {
+                         clearInterval(interval);
+                         progressText.textContent = "Error: Mail Server Unresponsive (Maybe pigeons are on strike?)";
+                         logInteraction('reset_password_error', { email: email, stage: 'finalizing' });
+                    }, 2500);
+
+                } else if (progress >= 75) {
+                     progressText.textContent = "Generating Secure Reset Token...";
+                } else if (progress >= 50) {
+                     progressText.textContent = "Searching Lost Password Database...";
+                } else if (progress >= 25) {
+                     progressText.textContent = "Validating Email Existence...";
+                }
+
+                progressBar.style.width = `${Math.min(progress, 100)}%`;
+
+            }, 400);
+        }
+
+
+        function sendTwoFactorCode() {
+            const username = document.getElementById('twofa-username').value;
+            if (!username) {
+                alert("Please enter your username first.");
+                return;
+            }
+            logInteraction('twofa_code_requested', { username: username });
+
+             const progressContainer = document.getElementById('twofa-progress');
+             const progressBar = document.getElementById('twofa-progress-bar');
+             const progressText = document.getElementById('twofa-progress-text');
+
+            progressContainer.classList.remove('hidden');
+            progressBar.style.width = '0%';
+            progressText.textContent = "Contacting Authentication Servers...";
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 12 + 5;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    progressContainer.classList.add('hidden');
+                    document.getElementById('twofa-code-container').classList.remove('hidden');
+                    document.getElementById('twofa-button').textContent = 'Verify Code';
+                    document.getElementById('twofa-button').onclick = verifyTwoFactorCode;
+                    setTimeout(() => document.getElementById('twofa-code').focus(), 10);
+                    logInteraction('twofa_code_sent_simulated', { username: username });
+                } else if (progress >= 75) {
+                    progressText.textContent = "Dispatching Code via Psychic Waves...";
+                } else if (progress >= 50) {
+                    progressText.textContent = "Generating Ultra-Secure Code...";
+                } else if (progress >= 25) {
+                    progressText.textContent = "Verifying User Existence...";
+                }
+
+                 progressBar.style.width = `${Math.min(progress, 100)}%`;
+
+            }, 350);
+        }
+
+
+        function verifyTwoFactorCode() {
+            const code = document.getElementById('twofa-code').value;
+             if (!code || code.length !== 6 || !/^\d+$/.test(code)) {
+                alert("Please enter the 6-digit verification code.");
+                return;
+            }
+            logInteraction('twofa_code_verification_attempt', { code_entered: code });
+
+            const progressContainer = document.getElementById('twofa-progress');
+            const progressBar = document.getElementById('twofa-progress-bar');
+            const progressText = document.getElementById('twofa-progress-text');
+
+
+            progressContainer.classList.remove('hidden');
+             progressBar.style.width = '0%';
+            progressText.textContent = "Verifying Code with Quantum Computer...";
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 15 + 5;
+                if (progress >= 60) {
+                    clearInterval(interval);
+                    progressContainer.classList.add('hidden');
+                    alert("Invalid or Expired Code. Did it get lost in the time vortex? Please request a new one.");
+                    logInteraction('twofa_code_invalid', { code_entered: code });
+                    
+                     document.getElementById('twofa-code-container').classList.add('hidden');
+                     document.getElementById('twofa-button').textContent = 'Send Code';
+                     document.getElementById('twofa-button').onclick = sendTwoFactorCode;
+                     document.getElementById('twofa-code').value = '';
+
+                }
+                progressBar.style.width = `${Math.min(progress, 100)}%`;
+            }, 300);
+        }
+
+
+        function fakeSystemAccess(message) {
+            document.getElementById('login-button').disabled = true;
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading-text').textContent = message;
+
+            logInteraction('fake_success_redirect_initiated');
+
+            setTimeout(() => {
+                window.location.href = "/portal/dashboard/verify";
+            }, 3500);
+        }
+
+
+        function logInteraction(interactionType, additionalData = {}) {
+            fetch('/api/telemetry/log-event', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Client-Version': 'portal-1.2.3'
+                },
+                body: JSON.stringify({
+                    source_page: 'synergy_portal_login',
+                    event_type: interactionType,
+                    event_data: {
+                        ...additionalData,
+                        session_id: 'fake-' + Date.now(),
+                        browser_info: {
+                            userAgent: navigator.userAgent,
+                            language: navigator.language,
+                            platform: navigator.platform,
+                            screenSize: `${window.screen.width}x${window.screen.height}`,
+                            cookiesEnabled: navigator.cookieEnabled
+                        },
+                        timestamp_utc: new Date().toISOString()
+                    }
+                })
+            }).catch(error => {
+            });
+        }
+    </script>
+</body>
+</html>
+

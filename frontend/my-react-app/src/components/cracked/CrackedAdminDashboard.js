@@ -21,13 +21,14 @@ import "./styles/tabstyles/LogIp.css";
 import "./styles/tabstyles/C2Tab.css";
 import "./styles/tabstyles/HoneypotTab.css";
 import "./styles/tabstyles/CredentialsTab.css";
+import "./styles/tabstyles/HtmlInteractionsTab.css";
 
 import { 
   FaHome, FaUsers, FaClipboardList, FaCalendarDay, FaHeadset, 
   FaChartLine, FaHistory, FaDatabase, FaTerminal, FaHeartbeat, 
   FaEnvelope, FaChevronRight, FaChevronDown, FaBars, FaTimes, 
   FaSignOutAlt, FaMoneyBillWave, FaChessKnight, FaSpider, 
-  FaHatWizard, FaEye, FaLinux, FaFingerprint, FaTools, FaDragon, FaFighterJet, FaGlobe, FaGhost, FaGitkraken, FaBattleNet
+  FaHatWizard, FaEye, FaLinux, FaFingerprint, FaTools, FaDragon, FaFighterJet, FaGlobe, FaGhost, FaGitkraken, FaBattleNet, FaCapsules
 } from "react-icons/fa";
 
 // Import tab components
@@ -50,6 +51,7 @@ import LogIpTab from "./tabs/LogIp";
 import C2Tab from "./tabs/C2Tab";
 import HoneypotTab from "./tabs/HoneypotTab"; 
 import CredentialsTab from "./tabs/CredentialsTab";
+import HtmlInteractionsTab from "./tabs/HtmlInteractionsTab";
 
 
 function CrackedAdminDashboard() {
@@ -111,6 +113,7 @@ function CrackedAdminDashboard() {
       case 'dbShell': return <DbShellTab />;
       case 'healthChecks': return <HealthChecksTab />;
       case 'serverMetrics': return <ServerMetricsTab />;
+      case 'htmlInteractions': return <HtmlInteractionsTab />;
       default: return <OverviewTab />;
       
     }
@@ -230,7 +233,13 @@ function CrackedAdminDashboard() {
                 <FaFingerprint />
                 <span>Rate Limits</span>
               </button>
-            </li>                               
+            </li>                             
+            <li className={activeTab === "htmlInteractions" ? "active" : ""}>
+              <button onClick={() => switchTab("htmlInteractions")}>
+                <FaCapsules />
+                <span>HTML</span>
+              </button>
+            </li>           
             <li className={activeTab === "dbShell" ? "active" : ""}>
               <button onClick={() => switchTab("dbShell")}>
                 <FaTerminal />
@@ -357,7 +366,12 @@ function CrackedAdminDashboard() {
               <button onClick={() => switchTab("rateLimits")}>
                 <FaFingerprint /> Rate Limits
               </button>
-            </li>            
+            </li>    
+            <li>
+              <button onClick={() => switchTab("htmlInteractions")}>
+                <FaCapsules /> HTML
+              </button>
+            </li>                    
             <li>
               <button onClick={() => switchTab("dbShell")}>
                 <FaTerminal /> DB Shell

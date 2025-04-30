@@ -1113,3 +1113,315 @@ def combined_honeypot_analytics():
             "recent_activity": []
         }), 200
 
+
+
+@honeypot_bp.route('/html-interactions', methods=['GET'])
+def get_html_interactions():
+    """Get honeypot HTML page interactions with filtering and pagination"""
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Get pagination params
+        page = int(request.args.get('page', 1))
+        limit = int(request.args.get('limit', 20))
+        skip = (page - 1) * limit
+        
+        # Get filter params
+        page_type = request.args.get('page_type')
+        interaction_type = request.args.get('interaction_type')
+        ip_filter = request.args.get('ip')
+        date_from = request.args.get('date_from')
+        date_to = request.args.get('date_to')
+        search_term = request.args.get('search')
+        
+        # Build query
+        query = {}
+        
+        # Apply filters
+        if page_type and page_type != 'all':
+            query['page_type'] = page_type
+            
+        if interaction_type and interaction_type != 'all':
+            query['interaction_type'] = interaction_type
+            
+        if ip_filter:
+            query['ip_address'] = {"$regex": ip_filter, "$options": "i"}
+            
+        # Date range filter
+        if date_from or date_to:
+            query['timestamp'] = {}
+            if date_from:
+                try:
+                    from_date = datetime.fromisoformat(date_from.replace('Z', '+00:00'))
+                    query['timestamp']["$gte"] = from_date
+                except:
+                    pass
+                    
+            if date_to:
+                try:
+                    to_date = datetime.fromisoformat(date_to.replace('Z', '+00:00'))
+                    query['timestamp']["$lte"] = to_date
+                except:
+                    pass
+        
+        # Full text search across multiple fields
+        if search_term:
+            search_regex = {"$regex": search_term, "$options": "i"}
+            query["$or"] = [
+                {"page_type": search_regex},
+                {"interaction_type": search_regex},
+                {"ip_address": search_regex},
+                {"additional_data.username": search_regex},
+                {"additional_data.message": search_regex},
+                {"additional_data.input": search_regex},
+                {"additional_data.form_data": search_regex}
+            ]
+        
+        # Get total count for pagination
+        total_count = db.honeypot_interactions.count_documents(query)
+        
+        # Get interactions with pagination
+        interactions = list(db.honeypot_interactions.find(query)
+                          .sort("timestamp", -1)
+                          .skip(skip)
+                          .limit(limit))
+        
+        # Format for JSON
+        for interaction in interactions:
+            interaction['_id'] = str(interaction['_id'])
+            if isinstance(interaction.get('timestamp'), datetime):
+                interaction['timestamp'] = interaction['timestamp'].isoformat()
+            
+        # Get unique page types and interaction types for filters
+        page_types = db.honeypot_interactions.distinct("page_type")
+        interaction_types = db.honeypot_interactions.distinct("interaction_type")
+        
+        return jsonify({
+            "interactions": interactions,
+            "total": total_count,
+            "page": page,
+            "limit": limit,
+            "page_types": page_types,
+            "interaction_types": interaction_types
+        }), 200
+        
+    except Exception as e:
+        print(f"Error getting honeypot interactions: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@honeypot_bp.route('/html-interactions/stats', methods=['GET'])
+def get_html_interactions_stats():
+    """Get statistics about honeypot HTML page interactions"""
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Get time frames for stats
+        now = datetime.utcnow()
+        yesterday = now - timedelta(days=1)
+        last_week = now - timedelta(days=7)
+        last_month = now - timedelta(days=30)
+        
+        # Get count of interactions in various time frames
+        total_interactions = db.honeypot_interactions.count_documents({})
+        today_interactions = db.honeypot_interactions.count_documents({"timestamp": {"$gte": yesterday}})
+        week_interactions = db.honeypot_interactions.count_documents({"timestamp": {"$gte": last_week}})
+        month_interactions = db.honeypot_interactions.count_documents({"timestamp": {"$gte": last_month}})
+        
+        # Get most popular page types
+        page_type_pipeline = [
+            {"$group": {"_id": "$page_type", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 10}
+        ]
+        page_types = list(db.honeypot_interactions.aggregate(page_type_pipeline))
+        
+        # Get most common interaction types
+        interaction_type_pipeline = [
+            {"$group": {"_id": "$interaction_type", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 10}
+        ]
+        interaction_types = list(db.honeypot_interactions.aggregate(interaction_type_pipeline))
+        
+        # Get top IPs with most interactions
+        ip_pipeline = [
+            {"$group": {"_id": "$ip_address", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 10}
+        ]
+        top_ips = list(db.honeypot_interactions.aggregate(ip_pipeline))
+        
+        # Get credential harvesting attempts
+        credentials_pipeline = [
+            {"$match": {"$or": [
+                {"interaction_type": "login_attempt"},
+                {"interaction_type": "form_submit"},
+                {"additional_data.username": {"$exists": true}},
+                {"additional_data.password": {"$exists": true}}
+            ]}},
+            {"$sort": {"timestamp": -1}},
+            {"$limit": 20}
+        ]
+        credential_attempts = list(db.honeypot_interactions.aggregate(credentials_pipeline))
+        
+        # Format for JSON
+        for attempt in credential_attempts:
+            attempt['_id'] = str(attempt['_id'])
+            if isinstance(attempt.get('timestamp'), datetime):
+                attempt['timestamp'] = attempt['timestamp'].isoformat()
+        
+        # Get interactions over time (for charts)
+        time_series_pipeline = [
+            {"$match": {"timestamp": {"$gte": last_month}}},
+            {"$group": {
+                "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$timestamp"}},
+                "count": {"$sum": 1}
+            }},
+            {"$sort": {"_id": 1}}
+        ]
+        time_series = list(db.honeypot_interactions.aggregate(time_series_pipeline))
+        
+        # Convert time series to chart-friendly format
+        chart_data = [{"date": item["_id"], "count": item["count"]} for item in time_series]
+        
+        return jsonify({
+            "total_interactions": total_interactions,
+            "today_interactions": today_interactions,
+            "week_interactions": week_interactions,
+            "month_interactions": month_interactions,
+            "page_types": page_types,
+            "interaction_types": interaction_types,
+            "top_ips": top_ips,
+            "credential_attempts": credential_attempts,
+            "time_series": chart_data
+        }), 200
+        
+    except Exception as e:
+        print(f"Error getting honeypot stats: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@honeypot_bp.route('/html-interactions/<interaction_id>', methods=['GET'])
+def get_html_interaction_details(interaction_id):
+    """Get detailed information about a specific honeypot interaction"""
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Find the interaction by ID
+        interaction = db.honeypot_interactions.find_one({"_id": ObjectId(interaction_id)})
+        
+        if not interaction:
+            return jsonify({"error": "Interaction not found"}), 404
+            
+        # Convert ObjectId to string for JSON serialization
+        interaction["_id"] = str(interaction["_id"])
+        
+        # Make timestamp JSON serializable if it's a datetime
+        if isinstance(interaction.get("timestamp"), datetime):
+            interaction["timestamp"] = interaction["timestamp"].isoformat()
+            
+        # Add human-readable explanations
+        interaction["explanations"] = {
+            "summary": f"This is a record of a user interacting with the {interaction.get('page_type', 'unknown')} honeypot page.",
+            "interaction_type": get_interaction_explanation(interaction.get("interaction_type", "")),
+            "page_type": get_page_type_explanation(interaction.get("page_type", "")),
+            "risk_level": get_risk_level(interaction),
+            "technical_details": "The data shows the exact interaction the visitor made with your honeypot system."
+        }
+        
+        # Enrich with GeoIP data if not already present
+        if interaction.get('ip_address') and not interaction.get('geoInfo'):
+            interaction['geoInfo'] = extract_asn_from_ip(interaction['ip_address'])
+        
+        return jsonify(interaction), 200
+        
+    except Exception as e:
+        print(f"Error getting interaction details: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+# Helper functions
+def get_interaction_explanation(interaction_type):
+    """Return a human-readable explanation of the interaction type"""
+    explanations = {
+        "page_view": "The visitor viewed this honeypot page, showing interest in this resource.",
+        "login_attempt": "The visitor attempted to log in with credentials, trying to gain unauthorized access.",
+        "form_submit": "The visitor submitted form data, potentially revealing their intentions.",
+        "button_click": "The visitor clicked on a button, showing deeper engagement with the honeypot.",
+        "download_attempt": "The visitor tried to download a file, which could indicate data exfiltration intent.",
+        "sql_injection_attempt": "The visitor attempted to inject SQL code, a clear attack vector.",
+        "captcha_attempt": "The visitor attempted to solve a CAPTCHA challenge.",
+        "terminal_command": "The visitor entered commands in a fake terminal, showing technical sophistication.",
+        "chat_message": "The visitor sent messages in a fake chat interface."
+    }
+    
+    return explanations.get(interaction_type, f"Unknown interaction type: {interaction_type}")
+
+def get_page_type_explanation(page_type):
+    """Return a human-readable explanation of the page type"""
+    explanations = {
+        "admin_dashboard": "A fake admin dashboard that attracts attackers looking for privileged access.",
+        "login_portal": "A fake login page designed to attract unauthorized access attempts.",
+        "system_verify": "A fake system verification page that appears to offer privileged access.",
+        "synergy_portal_login": "A fake enterprise portal login that attracts credential harvesting attempts.",
+        "wp-admin": "A fake WordPress admin page that attracts attackers looking for vulnerable WordPress sites.",
+        "phpmyadmin": "A fake database administration tool page that attracts attackers looking for database access.",
+        "cpanel": "A fake hosting control panel that attracts attackers looking for website hosting access."
+    }
+    
+    return explanations.get(page_type, f"Honeypot page type: {page_type}")
+
+def get_risk_level(interaction):
+    """Determine risk level based on interaction characteristics"""
+    risk = "Low"
+    reasons = []
+    
+    # Higher risk interaction types
+    high_risk_types = ["sql_injection_attempt", "terminal_command", "download_attempt"]
+    medium_risk_types = ["login_attempt", "form_submit"]
+    
+    interaction_type = interaction.get("interaction_type", "")
+    
+    if interaction_type in high_risk_types:
+        risk = "High"
+        reasons.append(f"{interaction_type} is a high-risk interaction type")
+    elif interaction_type in medium_risk_types:
+        risk = "Medium"
+        reasons.append(f"{interaction_type} is a medium-risk interaction type")
+    
+    # Check additional data for suspicious content
+    additional_data = interaction.get("additional_data", {})
+    
+    # SQL injection patterns
+    sql_patterns = ["'", "\"", ";", "--", "/*", "*/", "=", " OR ", " AND ", 
+                   "SELECT ", "INSERT ", "UPDATE ", "DELETE ", "DROP ", "UNION "]
+    
+    for field in ["username", "password", "message", "input", "command"]:
+        if field in additional_data:
+            value = str(additional_data[field]).lower()
+            for pattern in sql_patterns:
+                if pattern.lower() in value:
+                    risk = "High"
+                    reasons.append(f"SQL injection pattern ({pattern}) found in {field}")
+                    break
+    
+    # Check for credential harvesting
+    if interaction_type == "login_attempt" and "username" in additional_data and "password" in additional_data:
+        risk = max(risk, "Medium")
+        reasons.append("Credential harvesting attempt detected")
+    
+    # Check browser information if present
+    browser_info = additional_data.get("browser_info", {})
+    user_agent = browser_info.get("userAgent", "").lower()
+    
+    # Potential automated tool indicators
+    tool_patterns = ["curl", "wget", "python", "bot", "spider", "crawl", "scan"]
+    for pattern in tool_patterns:
+        if pattern in user_agent:
+            risk = max(risk, "Medium")
+            reasons.append(f"Potential automated tool detected in user agent ({pattern})")
+            break
+    
+    return {"level": risk, "reasons": reasons}
+
