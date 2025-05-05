@@ -28,6 +28,10 @@ import shopThumbnail from './images/shop.webp';
 import supportThumbnail from './images/support.webp';
 import xpThumbnail from './images/xboost.webp';
 import achi from './images/achi.webp';
+import phishing from './images/phishing.webp';
+import threathunter from './images/threathunter.webp';
+import incident from './images/incident.webp';
+import cipher from './images/cipher.webp';
 
 const DemosPage = () => {
   const [activeSection, setActiveSection] = useState('featured');
