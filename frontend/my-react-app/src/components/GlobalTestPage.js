@@ -776,7 +776,7 @@ const GlobalTestPage = ({
   const handleSkipQuestion = () => {
     if (!questionObject) return;
     
-    // NEW: Don't allow skipping if free user has reached limit
+    // Check question limit as you already do
     if (!subscriptionActive && practiceQuestionsRemaining <= 0) {
       setShowQuestionLimitPrompt(true);
       return;
@@ -791,15 +791,27 @@ const GlobalTestPage = ({
       userAnswerIndex: null,
       correctAnswerIndex: questionObject.correctAnswerIndex
     };
+    
+    // Check if this is a new answer (not previously answered or skipped)
+    const isNewAnswer = idx < 0;
+    
     if (idx >= 0) {
       updatedAnswers[idx] = skipObj;
     } else {
       updatedAnswers.push(skipObj);
     }
+    
     setAnswers(updatedAnswers);
     setIsAnswered(false);
     setSelectedOptionIndex(null);
+    
+    // Add this line to update the UI counter for free users
+    if (!subscriptionActive && isNewAnswer && practiceQuestionsRemaining > 0) {
+      dispatch(throttledDecrementQuestions(userId));
+    }
+    
     updateServerProgress(updatedAnswers, score, false, skipObj);
+    
     if (currentQuestionIndex === effectiveTotal - 1) {
       finishTestProcess();
       return;

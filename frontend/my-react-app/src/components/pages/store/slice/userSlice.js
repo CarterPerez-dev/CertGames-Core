@@ -19,10 +19,9 @@ const throttledDecrementQuestions = (userId) => (dispatch) => {
   
   isActionPending = true;
   dispatch(decrementQuestions(userId)).finally(() => {
-    // Reset after a short timeout to prevent rapid firing
     setTimeout(() => {
       isActionPending = false;
-    }, 500); // 500ms cooldown
+    }, 200); 
   });
 };
 
@@ -575,22 +574,23 @@ const userSlice = createSlice({
         state.error = action.payload;
         state.status = 'failed';
       })
-      
-      
+           
       .addCase(decrementQuestions.pending, (state) => {
-        // Optimistic update - immediately decrement the counter in the UI
+        // Add a flag to track that we've already decremented
+        state.questionDecrementedOptimistically = true;
         if (state.practiceQuestionsRemaining > 0) {
           state.practiceQuestionsRemaining -= 1;
         }
       })
       .addCase(decrementQuestions.fulfilled, (state, action) => {
-        // Update with the actual value from the server
-        state.practiceQuestionsRemaining = action.payload.practiceQuestionsRemaining;
+        // Only update if we haven't already decremented optimistically
+        if (!state.questionDecrementedOptimistically) {
+          state.practiceQuestionsRemaining = action.payload.practiceQuestionsRemaining;
+        }
+        // Reset the flag
+        state.questionDecrementedOptimistically = false;
       })
-      .addCase(decrementQuestions.rejected, (state, action) => {
-
-        state.error = action.payload;
-      })      
+ 
       
       // Add refresh token cases
       .addCase(refreshToken.fulfilled, (state, action) => {
