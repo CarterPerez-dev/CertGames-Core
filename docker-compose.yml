@@ -61,18 +61,12 @@ services:
 
   redis:
     container_name: redis_service
-    image: redis:latest
+    image: redis:7.2
     ports:
-      - "6380:6379"
+      - "6379:6379"
     volumes:
-      - /mnt/storage/redis_data:/data
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: >
-      redis-server /usr/local/etc/redis/redis.conf
-      --requirepass ${REDIS_PASSWORD}
-      --appendonly yes
-      --protected-mode yes
-      --bind 0.0.0.0
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--requirepass", "${REDIS_PASSWORD}", "--appendonly", "yes", "--protected-mode", "yes", "--bind", "0.0.0.0"]
     env_file:
       - .env
     networks:

@@ -1,5 +1,5 @@
 // src/components/pages/games/ThreatHunter/ThreatHunter.js
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { 
   fetchLogScenarios, 
@@ -44,7 +44,7 @@ const ThreatHunter = () => {
   } = useSelector(state => state.threatHunter);
   const { userId, coins, xp } = useSelector(state => state.user);
   
-  const subscriptionErrorHandler = SubscriptionErrorHandler();
+  const memoizedErrorHandler = useMemo(() => SubscriptionErrorHandler(), []);
   
   const [selectedThreatType, setSelectedThreatType] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all'); // Changed from 'medium' to 'all'
@@ -73,28 +73,35 @@ const ThreatHunter = () => {
     if (currentScenario && currentScenario.logs) {
       console.log('Current scenario logs:', currentScenario.logs);
     }
-  }, [currentScenario]);
+  }, [currentScenario?.id]);
   
   // Fetch log scenarios when component mounts
   useEffect(() => {
-    if (scenarios.length === 0) {
-      setLoading(true); // You should have a local loading state in your component
+    // Add a mounted ref to prevent state updates after unmount
+    let isMounted = true;
+    
+    if (scenarios.length === 0 && !localLoading) {
+      setLoading(true);
       dispatch(fetchLogScenarios())
-        .unwrap() // This converts the Redux promise to a regular promise
+        .unwrap()
         .then((data) => {
-          // Success handling if needed
-          setLoading(false);
+          if (isMounted) setLoading(false);
         })
         .catch((error) => {
-          // Check if this is a subscription error
-          if (!subscriptionErrorHandler.handleApiError(error, 'threat-hunter')) {
-            // Only set error state if not a subscription error
-            setError("Failed to fetch scenarios. Please try again.");
+          if (isMounted) {
+            if (!memoizedErrorHandler.handleApiError(error, 'threat-hunter')) {
+              setError("Failed to fetch scenarios. Please try again.");
+            }
+            setLoading(false);
           }
-          setLoading(false);
         });
     }
-  }, [dispatch, scenarios.length, subscriptionErrorHandler]);
+    
+    // Cleanup function to prevent state updates after unmount
+    return () => {
+      isMounted = false;
+    };
+  }, [dispatch, scenarios.length, memoizedErrorHandler, localLoading]);
   
   // Show results modal when game is completed
   useEffect(() => {
@@ -102,7 +109,7 @@ const ThreatHunter = () => {
       setShowResults(true);
       setTimerRunning(false);
     }
-  }, [gameStatus, results]);
+  }, [gameStatus, !!results]);
   
   // Timer functionality
   useEffect(() => {
@@ -220,7 +227,7 @@ const ThreatHunter = () => {
       detectedThreats,
       timeLeft: currentTimeLeft
     }));
-  }, [dispatch, userId, currentScenario, flaggedLines, detectedThreats, currentTimeLeft]);
+  }, [dispatch, userId, currentScenario?.id, flaggedLines, detectedThreats, currentTimeLeft]);
   
   const handleDifficultyChange = (difficulty) => {
     setSelectedDifficulty(difficulty);
@@ -425,7 +432,7 @@ const ThreatHunter = () => {
   
   return (
     <div className="threat-hunter-container">
-      {subscriptionErrorHandler.render()}
+      {memoizedErrorHandler.render()}
       <div className="threat-hunter-header">
         <h1><FaSearch /> Threat Hunter</h1>
         <p>Analyze logs, detect suspicious patterns, and identify security threats.</p>
