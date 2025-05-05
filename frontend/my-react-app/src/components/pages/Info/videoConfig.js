@@ -45,5 +45,14 @@ export const videoConfig = {
   },
   'resource-hub': {
     youtubeId: 'fU6L85VUj6w'
+  },
+  'phishing': {
+    youtubeId: 'g4fsV_zV3Aw'
+  },
+  'incident': {
+    youtubeId: 'Qzy34xlUN_Q'
+  },
+  'threat-hunter': {
+    youtubeId: 'qOrMg9O0Y_k'    
   }
 };
