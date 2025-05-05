@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setXPAndCoins } from "./pages/store/slice/userSlice";
+import { setXPAndCoins, throttledDecrementQuestions } from "./pages/store/slice/userSlice";
 import { fetchShopItems } from "./pages/store/slice/shopSlice";
 import ConfettiAnimation from "./ConfettiAnimation";
 import { showAchievementToast } from "./pages/store/AchievementToast";
@@ -68,6 +68,8 @@ function shuffleIndices(length) {
   return shuffleArray(indices);
 }
 
+
+
 // Reusable QuestionDropdown component
 const QuestionDropdown = ({
   totalQuestions,
@@ -81,7 +83,8 @@ const QuestionDropdown = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-
+  
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -164,7 +167,8 @@ const GlobalTestPage = ({
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const questionCardRef = useRef(null);
+  const explanationRef = useRef(null);
   // Redux user data
   const { 
     xp, 
@@ -562,7 +566,7 @@ const GlobalTestPage = ({
       
       const actualAnswerIndex = answerOrder[realIndex][displayOptionIndex];
       setSelectedOptionIndex(displayOptionIndex);
-
+  
       // For non–exam mode, lock the answer; for exam mode, allow changes.
       if (!examMode) {
         setIsAnswered(true);
@@ -587,6 +591,14 @@ const GlobalTestPage = ({
           updatedAnswers.push(newAnswerObj);
         }
         setAnswers(updatedAnswers);
+        
+        
+        const isNewAnswer = idx < 0;
+
+        if (!subscriptionActive && isNewAnswer && practiceQuestionsRemaining > 0) {
+          // Dispatch the decrementQuestions action to update the counter
+          dispatch(throttledDecrementQuestions(userId));
+        }  
 
         const awardData = await updateServerProgress(
           updatedAnswers,
@@ -614,6 +626,17 @@ const GlobalTestPage = ({
             );
           }
         }
+        
+        // ADDED: Scroll to explanation after a small delay to ensure rendering is complete
+        setTimeout(() => {
+          if (explanationRef.current) {
+            explanationRef.current.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        }, 100);
+        
       } catch (err) {
         console.error("Failed to submit answer to backend", err);
       }
@@ -721,6 +744,16 @@ const GlobalTestPage = ({
     const nextIndex = currentQuestionIndex + 1;
     setCurrentQuestionIndex(nextIndex);
     updateServerProgress(answers, score, false);
+    
+    // ADDED: Scroll to the top of the question card after state update
+    setTimeout(() => {
+      if (questionCardRef.current) {
+        questionCardRef.current.scrollIntoView({
+          behavior: 'auto',
+          block: 'start'
+        });
+      }
+    }, 100);
   }, [
     isAnswered,
     examMode,
@@ -1507,20 +1540,20 @@ const GlobalTestPage = ({
       </div>
 
       {!showScoreOverlay && !showReviewMode && !isFinished && (
-        <div className="question-card">
+        <div className="question-card" ref={questionCardRef}>  
           <div className="question-text">
             {questionObject && <FormattedQuestion questionText={questionObject.question} />}
           </div>
-
+      
           <ul className="options-list">
             {displayedOptions.map((option, displayIdx) => {
               let optionClass = "option-button";
-
+      
               if (!examMode) {
                 if (isAnswered && questionObject) {
                   const correctIndex = questionObject.correctAnswerIndex;
                   const actualIndex = answerOrder[realIndex][displayIdx];
-
+      
                   if (actualIndex === correctIndex) {
                     optionClass += " correct-option";
                   } else if (
@@ -1535,7 +1568,7 @@ const GlobalTestPage = ({
                   optionClass += " chosen-option";
                 }
               }
-
+      
               return (
                 <li className="option-item" key={displayIdx}>
                   <button
@@ -1550,14 +1583,17 @@ const GlobalTestPage = ({
               );
             })}
           </ul>
-
+      
           {isAnswered && questionObject && !examMode && (
             <>
-              <div className={`explanation ${selectedOptionIndex !== null &&
-                answerOrder[realIndex][selectedOptionIndex] ===
-                  questionObject.correctAnswerIndex
-                  ? "correct-explanation"
-                  : "incorrect-explanation"}`}>
+              <div 
+                className={`explanation ${selectedOptionIndex !== null &&
+                  answerOrder[realIndex][selectedOptionIndex] ===
+                    questionObject.correctAnswerIndex
+                    ? "correct-explanation"
+                    : "incorrect-explanation"}`}
+                ref={explanationRef} 
+              >
                 <strong>
                   {selectedOptionIndex !== null &&
                   answerOrder[realIndex][selectedOptionIndex] ===

@@ -1,5 +1,5 @@
 // src/components/pages/games/ThreatHunter/ThreatHunter.js
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { 
   fetchLogScenarios, 
@@ -10,12 +10,16 @@ import {
 import SubscriptionErrorHandler from '../../../SubscriptionErrorHandler';
 import { 
   FaSearch, 
+  FaFileAlt, 
+  FaChartLine, 
+  FaExclamationTriangle, 
+  FaInfoCircle, 
+  FaTrophy,
   FaArrowLeft,
   FaHourglassHalf,
   FaTimesCircle,
   FaCoins,
-  FaStar,
-  FaInfoCircle
+  FaStar
 } from 'react-icons/fa';
 import LogViewer from './LogViewer';
 import AnalysisTools from './AnalysisTools';
@@ -27,27 +31,21 @@ import './ThreatHunter.css';
 
 const ThreatHunter = () => {
   const dispatch = useDispatch();
+  const { 
+    scenarios, 
+    currentScenario,
+    gameStatus,
+    selectedLog,
+    timeLeft,
+    score,
+    results,
+    loading, 
+    error 
+  } = useSelector(state => state.threatHunter);
+  const { userId, coins, xp } = useSelector(state => state.user);
   
-  // Safely access redux state with fallbacks
-  const threatHunterState = useSelector(state => state.threatHunter) || {};
-  const scenarios = threatHunterState.scenarios || [];
-  const currentScenario = threatHunterState.currentScenario || null;
-  const gameStatus = threatHunterState.gameStatus || 'selecting';
-  const selectedLog = threatHunterState.selectedLog || null;
-  const timeLeft = threatHunterState.timeLeft || null;
-  const results = threatHunterState.results || null;
-  const loadingState = threatHunterState.loading || false;
-  const errorState = threatHunterState.error || null;
+  const subscriptionErrorHandler = SubscriptionErrorHandler();
   
-  const userState = useSelector(state => state.user) || {};
-  const userId = userState.userId || null;
-  const coins = userState.coins || 0;
-  const xp = userState.xp || 0;
-  
-  // Using useMemo to ensure memoizedErrorHandler is stable across renders
-  const memoizedErrorHandler = useMemo(() => SubscriptionErrorHandler(), []);
-  
-  // Local state
   const [selectedThreatType, setSelectedThreatType] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [showResults, setShowResults] = useState(false);
@@ -57,80 +55,43 @@ const ThreatHunter = () => {
   const [currentTimeLeft, setCurrentTimeLeft] = useState(null);
   const [timerRunning, setTimerRunning] = useState(false);
   const [shuffledThreatOptions, setShuffledThreatOptions] = useState([]);
-  const [localLoading, setLocalLoading] = useState(false);
-  const [localError, setLocalError] = useState(null);
+  const [localLoading, setLoading] = useState(false);
+  const [localError, setError] = useState(null);
   
-  // Safe array shuffle that handles undefined/null values
-  const shuffleArray = useCallback((array) => {
-    if (!array || !Array.isArray(array) || array.length === 0) {
-      return [];
-    }
-    
+  // Utility function to shuffle arrays
+  const shuffleArray = (array) => {
     const arrayCopy = [...array];
     for (let i = arrayCopy.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [arrayCopy[i], arrayCopy[j]] = [arrayCopy[j], arrayCopy[i]];
     }
     return arrayCopy;
-  }, []);
+  };
   
-  // Safely memoized submit analysis function
-  const handleSubmitAnalysis = useCallback(() => {
-    // Skip if not ready to submit
-    if (!currentScenario || !userId) {
-      console.warn('Cannot submit analysis: missing currentScenario or userId');
-      return;
-    }
-    
-    // Create a flattened array of flagged lines with log IDs for the backend
-    const flattenedFlaggedLines = [];
-    Object.entries(flaggedLines || {}).forEach(([logId, lines]) => {
-      if (Array.isArray(lines)) {
-        lines.forEach(lineIndex => {
-          flattenedFlaggedLines.push({ logId, lineIndex });
-        });
-      }
-    });
-    
-    dispatch(submitAnalysis({
-      userId,
-      scenarioId: currentScenario.id,
-      flaggedLines: flattenedFlaggedLines,
-      detectedThreats: detectedThreats || [],
-      timeLeft: currentTimeLeft !== null ? currentTimeLeft : 0
-    }));
-  }, [dispatch, userId, currentScenario, flaggedLines, detectedThreats, currentTimeLeft]);
-  
-  // Fetch scenarios only once at mount
+  // Debug logs - for development only
   useEffect(() => {
-    let mounted = true;
-    const shouldFetch = scenarios.length === 0 && !localLoading;
-    
-    if (shouldFetch) {
-      setLocalLoading(true);
-      
+    if (currentScenario && currentScenario.logs) {
+      console.log('Current scenario logs:', currentScenario.logs);
+    }
+  }, [currentScenario]);
+  
+  // Fetch log scenarios when component mounts
+  useEffect(() => {
+    if (scenarios.length === 0) {
+      setLoading(true);
       dispatch(fetchLogScenarios())
         .unwrap()
-        .then(() => {
-          if (mounted) setLocalLoading(false);
+        .then((data) => {
+          setLoading(false);
         })
         .catch((error) => {
-          if (mounted) {
-            const wasHandled = memoizedErrorHandler && memoizedErrorHandler.handleApiError && 
-                              memoizedErrorHandler.handleApiError(error, 'threat-hunter');
-            
-            if (!wasHandled) {
-              setLocalError("Failed to fetch scenarios. Please try again.");
-            }
-            setLocalLoading(false);
+          if (!subscriptionErrorHandler.handleApiError(error, 'threat-hunter')) {
+            setError("Failed to fetch scenarios. Please try again.");
           }
+          setLoading(false);
         });
     }
-    
-    return () => {
-      mounted = false;
-    };
-  }, []); // Empty dependency array to run only once at mount
+  }, [dispatch, scenarios.length]); // Removed subscriptionErrorHandler from dependencies
   
   // Show results modal when game is completed
   useEffect(() => {
@@ -140,7 +101,7 @@ const ThreatHunter = () => {
     }
   }, [gameStatus, results]);
   
-  // Timer initialization
+  // Timer functionality
   useEffect(() => {
     if (timeLeft !== null && timeLeft !== undefined) {
       setCurrentTimeLeft(timeLeft);
@@ -148,131 +109,125 @@ const ThreatHunter = () => {
     }
   }, [timeLeft]);
   
-  // Timer countdown effect - completely separated from other logic
+  // Timer countdown
   useEffect(() => {
-    let timer = null;
-    
-    const runTimer = () => {
-      if (timerRunning && currentTimeLeft > 0) {
-        timer = setTimeout(() => {
-          setCurrentTimeLeft(prev => {
-            const newTime = (prev <= 1) ? 0 : prev - 1;
-            
-            // If time is up, handle submission in the next effect
-            if (newTime === 0) {
-              setTimerRunning(false);
-            }
-            
-            return newTime;
-          });
-        }, 1000);
-      }
-    };
-    
-    runTimer();
+    let timer;
+    if (timerRunning && currentTimeLeft > 0) {
+      timer = setTimeout(() => {
+        setCurrentTimeLeft(prevTime => {
+          if (prevTime <= 1) {
+            // Auto-submit when time runs out
+            handleSubmitAnalysis();
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+    } else if (currentTimeLeft <= 0 && timerRunning) {
+      setTimerRunning(false);
+      handleSubmitAnalysis();
+    }
     
     return () => {
-      if (timer) clearTimeout(timer);
+      clearTimeout(timer);
     };
   }, [timerRunning, currentTimeLeft]);
   
-  // Separate effect for handling timer completion
+  // Shuffle threat options when scenario changes
   useEffect(() => {
-    if (currentTimeLeft === 0 && !timerRunning && gameStatus === 'playing') {
-      // Only call handleSubmitAnalysis if we need to
-      handleSubmitAnalysis();
-    }
-  }, [currentTimeLeft, timerRunning, gameStatus, handleSubmitAnalysis]);
-  
-  // Safe handling of threat options when scenario changes
-  useEffect(() => {
-    // Safe access to currentScenario and its properties
-    if (currentScenario && 
-        currentScenario.threatOptions && 
-        Array.isArray(currentScenario.threatOptions)) {
+    if (currentScenario && currentScenario.threatOptions) {
       setShuffledThreatOptions(shuffleArray(currentScenario.threatOptions));
-    } else {
-      setShuffledThreatOptions([]);
     }
-  }, [currentScenario, shuffleArray]);
+  }, [currentScenario?.id]);
   
-  const handleStartScenario = useCallback((scenarioId) => {
-    if (!scenarioId || !userId) return;
-    
+  const handleStartScenario = (scenarioId) => {
     dispatch(startScenario({ 
       scenarioId, 
       userId,
-      difficulty: selectedDifficulty || 'medium'
+      difficulty: selectedDifficulty
     }));
     
     // Reset state for new game
     setFlaggedLines({});
     setDetectedThreats([]);
     setCurrentTimeLeft(null);
-  }, [dispatch, userId, selectedDifficulty]);
+  };
   
-  const handleLogSelection = useCallback((logId) => {
+  const handleLogSelection = (logId) => {
     // If we need to track which log file is being viewed
     // This would be implemented in the Redux slice
-  }, []);
+  };
   
-  const handleLineFlagging = useCallback((logId, lineNumber) => {
-    if (!logId || lineNumber === undefined) return;
-    
+  const handleLineFlagging = (logId, lineNumber) => {
     setFlaggedLines(prevState => {
-      const prevLines = prevState[logId] || [];
+      const logLines = prevState[logId] || [];
       
-      if (prevLines.includes(lineNumber)) {
+      if (logLines.includes(lineNumber)) {
         // Remove the line if already flagged
         return {
           ...prevState,
-          [logId]: prevLines.filter(line => line !== lineNumber)
+          [logId]: logLines.filter(line => line !== lineNumber)
         };
       } else {
         // Add the line if not flagged
         return {
           ...prevState,
-          [logId]: [...prevLines, lineNumber]
+          [logId]: [...(logLines || []), lineNumber]
         };
       }
     });
-  }, []);
+  };
   
-  const handleThreatDetection = useCallback((threat) => {
-    if (!threat || !threat.id) return;
+  const handleThreatDetection = (threat) => {
+    // Either add or update a threat
+    const existingIndex = detectedThreats.findIndex(t => t.id === threat.id);
     
-    setDetectedThreats(prevThreats => {
-      const existingIndex = prevThreats.findIndex(t => t.id === threat.id);
-      
-      if (existingIndex >= 0) {
-        // Update existing threat
-        const updatedThreats = [...prevThreats];
-        updatedThreats[existingIndex] = threat;
-        return updatedThreats;
-      } else {
-        // Add new threat
-        return [...prevThreats, threat];
-      }
+    if (existingIndex >= 0) {
+      const updatedThreats = [...detectedThreats];
+      updatedThreats[existingIndex] = threat;
+      setDetectedThreats(updatedThreats);
+    } else {
+      setDetectedThreats([...detectedThreats, threat]);
+    }
+  };
+  
+  const handleThreatRemoval = (threatId) => {
+    setDetectedThreats(detectedThreats.filter(t => t.id !== threatId));
+  };
+  
+  const handleSubmitAnalysis = useCallback(() => {
+    // Add null check for currentScenario
+    if (!currentScenario) {
+      console.warn('Cannot submit analysis: currentScenario is null');
+      return;
+    }
+    
+    // Create a flattened array of flagged lines with log IDs for the backend
+    const flattenedFlaggedLines = [];
+    Object.entries(flaggedLines).forEach(([logId, lines]) => {
+      lines.forEach(lineIndex => {
+        flattenedFlaggedLines.push({ logId, lineIndex });
+      });
     });
-  }, []);
-  
-  const handleThreatRemoval = useCallback((threatId) => {
-    if (!threatId) return;
     
-    setDetectedThreats(prevThreats => 
-      prevThreats.filter(t => t.id !== threatId)
-    );
-  }, []);
+    dispatch(submitAnalysis({
+      userId,
+      scenarioId: currentScenario.id,
+      flaggedLines: flattenedFlaggedLines,
+      detectedThreats,
+      timeLeft: currentTimeLeft
+    }));
+  }, [dispatch, userId, currentScenario, flaggedLines, detectedThreats, currentTimeLeft]);
   
-  const handleDifficultyChange = useCallback((difficulty) => {
-    setSelectedDifficulty(difficulty || 'all');
-  }, []);
+  const handleDifficultyChange = (difficulty) => {
+    setSelectedDifficulty(difficulty);
+  };
   
-  const handleThreatTypeChange = useCallback((type) => {
-    setSelectedThreatType(type || 'all');
-  }, []);
+  const handleThreatTypeChange = (type) => {
+    setSelectedThreatType(type);
+  };
   
-  const handleRestart = useCallback(() => {
+  const handleRestart = () => {
     // First clear local state
     setFlaggedLines({});
     setDetectedThreats([]);
@@ -280,22 +235,22 @@ const ThreatHunter = () => {
   
     // Then reset the redux store state
     dispatch(resetGame());
-  }, [dispatch]);
+  };
   
-  const handleEarlyEnd = useCallback(() => {
+  const handleEarlyEnd = () => {
     if (window.confirm('Are you sure you want to end the analysis early? Your current findings will be submitted.')) {
       handleSubmitAnalysis();
     }
-  }, [handleSubmitAnalysis]);
+  };
   
-  const handleReturnToSelector = useCallback(() => {
+  const handleReturnToSelector = () => {
     if (window.confirm('Are you sure you want to return to the scenario selection? Your current progress will be lost.')) {
       dispatch(resetGame());
       // Clear local state as well
       setFlaggedLines({});
       setDetectedThreats([]);
     }
-  }, [dispatch]);
+  };
   
   // Define difficulty mapping
   const difficultyMapping = {
@@ -304,37 +259,28 @@ const ThreatHunter = () => {
     'hard': 3
   };
   
-  // Apply both filters: threat type and difficulty - this logic happens during render
-  // so we don't need useEffect or useMemo
-  const getFilteredScenarios = () => {
-    if (!scenarios || !Array.isArray(scenarios)) return [];
-    
-    let filtered = [...scenarios];
-    
-    // Filter by threat type if not 'all'
-    if (selectedThreatType && selectedThreatType !== 'all') {
-      filtered = filtered.filter(scenario => scenario && scenario.threatType === selectedThreatType);
-    }
-    
-    // Filter by difficulty if not 'all'
-    if (selectedDifficulty && selectedDifficulty !== 'all') {
-      const difficultyValue = difficultyMapping[selectedDifficulty];
-      filtered = filtered.filter(scenario => scenario && scenario.difficulty === difficultyValue);
-    }
-    
-    return filtered;
-  };
+  // Apply both filters: threat type and difficulty
+  let filteredScenarios = scenarios;
   
-  // Ensure logs have content arrays - computed during render
+  // Filter by threat type if not 'all'
+  if (selectedThreatType !== 'all') {
+    filteredScenarios = filteredScenarios.filter(scenario => scenario.threatType === selectedThreatType);
+  }
+  
+  // Filter by difficulty if not 'all'
+  if (selectedDifficulty !== 'all') {
+    const difficultyValue = difficultyMapping[selectedDifficulty];
+    filteredScenarios = filteredScenarios.filter(scenario => scenario.difficulty === difficultyValue);
+  }
+  
+  // Ensure the logs have content arrays
   const getScenarioLogs = () => {
-    if (!currentScenario || !currentScenario.logs || !Array.isArray(currentScenario.logs)) {
+    if (!currentScenario || !currentScenario.logs) {
       return [];
     }
     
     // Return logs with verified content arrays
     return currentScenario.logs.map(log => {
-      if (!log) return { id: 'invalid', content: [] };
-      
       if (!log.content || !Array.isArray(log.content)) {
         // If content is missing or not an array, create an empty array
         return { ...log, content: [] };
@@ -343,20 +289,8 @@ const ThreatHunter = () => {
     });
   };
   
-  // Safe flattening of flagged lines
-  const getFlatFlaggedLines = () => {
-    try {
-      return Object.values(flaggedLines || {}).flat() || [];
-    } catch (error) {
-      console.error("Error flattening flagged lines:", error);
-      return [];
-    }
-  };
-  
   // Render different views based on game status
   const renderGameContent = () => {
-    const filteredScenarios = getFilteredScenarios();
-    
     switch (gameStatus) {
       case 'selecting':
         return (
@@ -396,7 +330,6 @@ const ThreatHunter = () => {
         
       case 'playing':
         const scenarioLogs = getScenarioLogs();
-        const flatFlaggedLines = getFlatFlaggedLines();
         
         return (
           <div className="threat-hunter-gameplay">
@@ -445,7 +378,7 @@ const ThreatHunter = () => {
             
             <div className="log-analysis-container">
               <LogViewer 
-                logs={scenarioLogs}
+                logs={scenarioLogs || []}
                 selectedLog={selectedLog}
                 flaggedLines={flaggedLines || {}}
                 onSelectLog={handleLogSelection}
@@ -454,10 +387,10 @@ const ThreatHunter = () => {
               
               <div className="analysis-panel">
                 <AnalysisTools 
-                  scenario={currentScenario ? {
+                  scenario={{
                     ...currentScenario,
-                    threatOptions: shuffledThreatOptions
-                  } : null}
+                    threatOptions: shuffledThreatOptions // Use shuffled threat options
+                  }}
                   detectedThreats={detectedThreats}
                   onDetectThreat={handleThreatDetection}
                   onRemoveThreat={handleThreatRemoval}
@@ -465,8 +398,8 @@ const ThreatHunter = () => {
                 
                 <ThreatControls 
                   timeLeft={currentTimeLeft || 0}
-                  flaggedLines={flatFlaggedLines}
-                  detectedThreats={detectedThreats}
+                  flaggedLines={Object.values(flaggedLines).flat() || []}
+                  detectedThreats={detectedThreats || []}
                   onSubmit={handleSubmitAnalysis}
                 />
               </div>
@@ -475,34 +408,21 @@ const ThreatHunter = () => {
         );
         
       default:
-        return (
-          <div className="threat-hunter-error">
-            <p>Unknown game status: {gameStatus}</p>
-            <button onClick={() => dispatch(resetGame())}>Reset Game</button>
-          </div>
-        );
+        return null;
     }
   };
   
-  // Loading state
-  if ((loadingState || localLoading) && (!scenarios || scenarios.length === 0)) {
+  if (loading && scenarios.length === 0) {
     return <div className="threat-hunter-loading">Loading log scenarios...</div>;
   }
   
-  // Error state
-  if (errorState || localError) {
-    return (
-      <div className="threat-hunter-error">
-        <p>Error: {errorState || localError}</p>
-        <button onClick={() => dispatch(resetGame())}>Try Again</button>
-      </div>
-    );
+  if (error) {
+    return <div className="threat-hunter-error">Error: {error}</div>;
   }
   
   return (
     <div className="threat-hunter-container">
-      {memoizedErrorHandler && memoizedErrorHandler.render && memoizedErrorHandler.render()}
-      
+      {subscriptionErrorHandler.render()}
       <div className="threat-hunter-header">
         <h1><FaSearch /> Threat Hunter</h1>
         <p>Analyze logs, detect suspicious patterns, and identify security threats.</p>
@@ -512,7 +432,7 @@ const ThreatHunter = () => {
         {renderGameContent()}
       </div>
       
-      {showResults && results && (
+      {showResults && (
         <ThreatResultsModal 
           results={results}
           scenario={currentScenario}

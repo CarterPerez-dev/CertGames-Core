@@ -13,6 +13,24 @@ import iconMapping from "../../../iconMapping";
 import colorMapping from "../../../colorMapping";
 
 
+let isActionPending = false;
+const throttledDecrementQuestions = (userId) => (dispatch) => {
+  if (isActionPending) return;
+  
+  isActionPending = true;
+  dispatch(decrementQuestions(userId)).finally(() => {
+    // Reset after a short timeout to prevent rapid firing
+    setTimeout(() => {
+      isActionPending = false;
+    }, 500); // 500ms cooldown
+  });
+};
+
+// Export this function
+export { throttledDecrementQuestions }
+
+
+
 // Utility function to show toast for newlyUnlocked achievements:
 function showNewlyUnlockedAchievements(newlyUnlocked, allAchievements) {
   if (!newlyUnlocked || newlyUnlocked.length === 0) return;
@@ -558,14 +576,21 @@ const userSlice = createSlice({
         state.status = 'failed';
       })
       
-      // Decrement questions
+      
+      .addCase(decrementQuestions.pending, (state) => {
+        // Optimistic update - immediately decrement the counter in the UI
+        if (state.practiceQuestionsRemaining > 0) {
+          state.practiceQuestionsRemaining -= 1;
+        }
+      })
       .addCase(decrementQuestions.fulfilled, (state, action) => {
+        // Update with the actual value from the server
         state.practiceQuestionsRemaining = action.payload.practiceQuestionsRemaining;
       })
       .addCase(decrementQuestions.rejected, (state, action) => {
-        // Handle error but don't change question count if API call fails
+
         state.error = action.payload;
-      })
+      })      
       
       // Add refresh token cases
       .addCase(refreshToken.fulfilled, (state, action) => {
