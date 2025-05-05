@@ -350,7 +350,7 @@ const faqSchema = {
               </p>
               <div className="info-hero-cta">
                 <Link to="/register" className="info-button info-primary-button">
-                  Free Trial <FaAngleDoubleRight className="info-icon" aria-hidden="true" style={{ color: '#000' }} />
+                  Create Free Account <FaAngleDoubleRight className="info-icon" aria-hidden="true" style={{ color: '#000' }} />
                 </Link>
                 <Link to="/login" className="info-button info-secondary-button">
                   Log In
@@ -1228,7 +1228,7 @@ const faqSchema = {
             </ul>
             
             <Link to="/register" className="info-button info-cta-button spotlight-effect">
-              Register Now - 3 Day Free Trial 😎
+              Register Now - Create Your Free Account! 😎
             </Link>
             <p className="info-pricing-note">Cancel anytime. No long-term commitment.</p>
             <div className="payment-methods">
