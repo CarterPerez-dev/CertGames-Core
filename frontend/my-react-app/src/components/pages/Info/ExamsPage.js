@@ -556,15 +556,12 @@ const generateCertSchema = (cert) => {
               <p>Get unlimited access to all 12 certification paths with 13,000+ practice questions</p>
               <div className="price-section">
                 <div className="price">
-                  <span className="currency">$</span>
-                  <span className="amount">9</span>
-                  <span className="decimal">.99</span>
-                  <span className="period">/month</span>
+                  <span className="amount">Free</span>
                 </div>
-                <p className="price-note">Cancel anytime. No long-term commitment.</p>
+                <p className="price-note">Register Now.</p>
               </div>
               <Link to="/register" className="subscribe-button">
-                Start Your Free Trial
+                Create Your Account
               </Link>
             </div>
             

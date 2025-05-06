@@ -34,6 +34,47 @@ import {
   FaPlus,
   FaCcApplePay,
   FaCreditCard,
+  FaGamepad,
+  FaUserShield,
+  FaSearch,
+  FaEye,
+  FaCode,
+  FaKey,
+  FaVirus,
+  FaChartBar,
+  FaLaptopCode,
+  FaDice,
+  FaExclamationTriangle,
+  FaSkull,
+  FaTerminal,
+  FaIdBadge,
+  FaTrophy,
+  FaRegLightbulb,
+  FaCoins,
+  FaGift,
+  FaChartLine,
+  FaTools,
+  FaQuestion,
+  FaDatabase,
+  FaBook,
+  FaPuzzlePiece,
+  FaSitemap,
+  FaBrain,
+  FaRocket,
+  FaNetworkWired,
+  FaServer,
+  FaLightbulb,
+  FaEnvelope,
+  FaUserPlus,
+  FaComment,
+  FaClipboardList,
+  FaGem,
+  FaBolt,
+  FaAward,
+  FaPalette,
+  FaMobile,
+  FaHeadset,
+  FaNewspaper,
 } from 'react-icons/fa';
 import './css/InfoPage.css';
 import apple from './images/apple.svg';
@@ -42,6 +83,7 @@ import user2 from './images/user2.webp';
 import user3 from './images/user3.webp';
 import user4 from './images/user1.webp';
 import user5 from './images/user8.webp';
+import phsihing from './images/phishing.webp';
 
 const InfoPage = () => {
   // For tab switching functionality
@@ -412,7 +454,7 @@ const faqSchema = {
           </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
-              <span className="info-section-icon" aria-hidden="true">🎮</span>
+              <span className="info-section-icon" aria-hidden="true"><FaGamepad color="#4285F4" /></span>
               Gamified Learning Experience
             </h2>
             <p>Level up your skills while having fun</p>
@@ -427,7 +469,7 @@ const faqSchema = {
             >
               <div className="card-shine"></div>
               <div className="info-feature-icon">
-                <i className="info-exp-icon" aria-hidden="true">XP</i>
+                <FaAward className="info-exp-icon" color="#FFD700" aria-hidden="true" />
               </div>
               <h3>Earn XP & Level Up</h3>
               <p>Answer questions correctly to gain experience points and climb the ranks from rookie to elite hacker.</p>
@@ -452,7 +494,7 @@ const faqSchema = {
             >
               <div className="card-shine"></div>
               <div className="info-feature-icon">
-                <i className="info-coins-icon" aria-hidden="true">🪙</i>
+                <FaCoins className="info-coins-icon" color="#FFD700" aria-hidden="true" />
               </div>
               <h3>Collect Coins</h3>
               <p>Earn virtual currency by completing tests and daily challenges to unlock exclusive avatars and boosts.</p>
@@ -477,7 +519,7 @@ const faqSchema = {
             >
               <div className="card-shine"></div>
               <div className="info-feature-icon">
-                <i className="info-trophy-icon" aria-hidden="true">🏆</i>
+                <FaTrophy className="info-trophy-icon" color="#FFD700" aria-hidden="true" />
               </div>
               <h3>Unlock Achievements</h3>
               <p>Complete special tasks to earn badges and trophies that showcase your growing expertise.</p>
@@ -502,7 +544,7 @@ const faqSchema = {
             >
               <div className="card-shine"></div>
               <div className="info-feature-icon">
-                <i className="info-leaderboard-icon" aria-hidden="true">📊</i>
+                <FaChartBar className="info-leaderboard-icon" color="#4285F4" aria-hidden="true" />
               </div>
               <h3>Compete on Leaderboards</h3>
               <p>See how you rank against other cybersecurity enthusiasts and strive to climb to the top.</p>
@@ -527,7 +569,7 @@ const faqSchema = {
             >
               <div className="card-shine"></div>
               <div className="info-feature-icon">
-                <i className="info-theme-icon" aria-hidden="true">🎨</i>
+                <FaPalette className="info-theme-icon" color="#9c27b0" aria-hidden="true" />
               </div>
               <h3>Customize Your Experience</h3>
               <p>Choose from multiple themes and personalize your learning environment to suit your style.</p>
@@ -556,7 +598,7 @@ const faqSchema = {
             >
               <div className="card-shine"></div>
               <div className="info-feature-icon">
-                <i className="info-mobile-icon" aria-hidden="true">📱</i>
+                <FaMobile className="info-mobile-icon" color="#4285F4" aria-hidden="true" />
               </div>
               <h3>Learn Anywhere</h3>
               <p>Access all features on desktop, mobile browsers, and our dedicated iOS app for learning on the go.</p>
@@ -568,6 +610,141 @@ const faqSchema = {
                   <Link to="/demos" className="info-demo-link">
                     <FaPlay className="info-demo-icon" aria-hidden="true" />
                     <span>Watch Mobile App Demo</span>
+                  </Link>
+                </div>
+              </div>
+            </article>
+            
+            {/* NEW CARD: Cipher Challenge */}
+            <article 
+              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              onClick={(e) => handleCardClick(e, 'cipher-challenge')}
+              tabIndex="0"
+              role="button"
+              aria-label="Cipher Challenge game - click to see demo"
+            >
+              <div className="card-shine"></div>
+              <div className="info-feature-icon">
+                <FaKey className="info-cipher-icon" color="#FF6B6B" aria-hidden="true" />
+              </div>
+              <h3>Cipher Challenge</h3>
+              <p>Test your cryptography skills by decoding various cipher types from Caesar to Vigenère in increasingly difficult levels.</p>
+              <div className="feature-game-badge">
+                <span className="game-badge">Cryptography Game</span>
+              </div>
+              <div className="info-card-flip">
+                <div className="info-demo-preview">
+                  <Link to="/demos" className="info-demo-link">
+                    <FaExternalLinkAlt className="info-demo-icon" aria-hidden="true" />
+                    <span>View Cipher Challenge Preview</span>
+                  </Link>
+                </div>
+              </div>
+            </article>
+            
+            {/* NEW CARD: Incident Responder */}
+            <article 
+              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              onClick={(e) => handleCardClick(e, 'incident')}
+              tabIndex="0"
+              role="button"
+              aria-label="Incident Responder game - click to see demo"
+            >
+              <div className="card-shine"></div>
+              <div className="info-feature-icon">
+                <FaShieldAlt className="info-incident-icon" color="#4CAF50" aria-hidden="true" />
+              </div>
+              <h3>Incident Responder</h3>
+              <p>Test your cybersecurity incident response skills in realistic scenarios with branching decision paths and consequences.</p>
+              <div className="feature-game-badge">
+                <span className="game-badge">Security Response Game</span>
+              </div>
+              <div className="info-card-flip">
+                <div className="info-demo-preview">
+                  <Link to="/demos" className="info-demo-link">
+                    <FaPlay className="info-demo-icon" aria-hidden="true" />
+                    <span>Watch Incident Responder Demo</span>
+                  </Link>
+                </div>
+              </div>
+            </article>
+            
+            {/* NEW CARD: Threat Hunter */}
+            <article 
+              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              onClick={(e) => handleCardClick(e, 'threat-hunter')}
+              tabIndex="0"
+              role="button"
+              aria-label="Threat Hunter game - click to see demo"
+            >
+              <div className="card-shine"></div>
+              <div className="info-feature-icon">
+                <FaSearch className="info-threat-icon" color="#3F51B5" aria-hidden="true" />
+              </div>
+              <h3>Threat Hunter</h3>
+              <p>Analyze logs, identify suspicious patterns, and detect security threats in timed log analysis scenarios.</p>
+              <div className="feature-game-badge">
+                <span className="game-badge">Log Analysis Game</span>
+              </div>
+              <div className="info-card-flip">
+                <div className="info-demo-preview">
+                  <Link to="/demos" className="info-demo-link">
+                    <FaPlay className="info-demo-icon" aria-hidden="true" />
+                    <span>Watch Threat Hunter Demo</span>
+                  </Link>
+                </div>
+              </div>
+            </article>
+            
+            {/* NEW CARD: Phishing Phrenzy */}
+            <article 
+              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              onClick={(e) => handleCardClick(e, 'phishing')}
+              tabIndex="0"
+              role="button"
+              aria-label="Phishing Phrenzy game - click to see demo"
+            >
+              <div className="card-shine"></div>
+              <div className="info-feature-icon">
+                <FaExclamationTriangle className="info-phishing-icon" color="#FF9800" aria-hidden="true" />
+              </div>
+              <h3>Phishing Phrenzy</h3>
+              <p>Quickly identify phishing attempts from legitimate messages before time runs out in this fast-paced security awareness game.</p>
+              <div className="feature-game-badge">
+                <span className="game-badge">Security Awareness Game</span>
+              </div>
+              <div className="info-card-flip">
+                <div className="info-demo-preview">
+                  <Link to="/demos" className="info-demo-link">
+                    <FaPlay className="info-demo-icon" aria-hidden="true" />
+                    <span>Watch Phishing Phrenzy Demo</span>
+                  </Link>
+                </div>
+              </div>
+            </article>
+            
+            {/* NEW CARD: Performance Dashboard */}
+            <article 
+              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              onClick={(e) => handleCardClick(e, 'stats-dashboard')}
+              tabIndex="0"
+              role="button"
+              aria-label="Performance Dashboard - click to see demo"
+            >
+              <div className="card-shine"></div>
+              <div className="info-feature-icon">
+                <FaChartLine className="info-stats-icon" color="#5E35B1" aria-hidden="true" />
+              </div>
+              <h3>Performance Dashboard</h3>
+              <p>Track your progress with detailed analytics on test performance, skill improvements, and certification readiness scores.</p>
+              <div className="feature-gauge">
+                <span className="gauge-label">Readiness Analytics</span>
+              </div>
+              <div className="info-card-flip">
+                <div className="info-demo-preview">
+                  <Link to="/demos" className="info-demo-link">
+                    <FaExternalLinkAlt className="info-demo-icon" aria-hidden="true" />
+                    <span>View Stats Dashboard Preview</span>
                   </Link>
                 </div>
               </div>
@@ -599,7 +776,7 @@ const faqSchema = {
           </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
-              <span className="info-section-icon" aria-hidden="true">📝</span>
+              <span className="info-section-icon" aria-hidden="true"><FaClipboardList color="#FF5722" /></span>
               Master 12 Certification Paths
             </h2>
             <p>13,000 practice questions across the most in-demand certifications</p>
@@ -607,35 +784,35 @@ const faqSchema = {
           <div className="info-test-features info-animate-on-scroll">
             <div className="info-test-features-list">
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                 <span>Performance-Based Questions (PBQs)</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                 <span>Realistic Exam Simulations</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                 <span>Detailed Explanations</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                 <span>Difficulty Progression System</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                 <span>Customizable Test Lengths</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                 <span>Memorable Exam Tips</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                 <span>Progress Tracking & Analytics</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                 <span>Exam Mode with Timed Sessions</span>
               </div>
             </div>
@@ -800,7 +977,7 @@ const faqSchema = {
           </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
-              <span className="info-section-icon" aria-hidden="true">🛠️</span>
+              <span className="info-section-icon" aria-hidden="true"><FaTools color="#FF9800" /></span>
               Cutting-Edge Learning Tools
             </h2>
             <p>Unique tools to boost your cybersecurity understanding</p>
@@ -816,7 +993,7 @@ const faqSchema = {
               <div className="card-shine"></div>
               <div className="tool-badge">Most Popular</div>
               <h3>
-                <span className="info-tool-icon" aria-hidden="true">🔎</span>
+                <span className="info-tool-icon" aria-hidden="true"><FaSearch color="#4285F4" /></span>
                 ScenarioSphere
               </h3>
               <p>Immerse yourself in realistic security scenarios with detailed storylines. Tackle simulated cyberattacks to build your incident response skills.</p>
@@ -841,7 +1018,7 @@ const faqSchema = {
             >
               <div className="card-shine"></div>
               <h3>
-                <span className="info-tool-icon" aria-hidden="true">🔄</span>
+                <span className="info-tool-icon" aria-hidden="true"><FaLightbulb color="#FFC107" /></span>
                 Analogy Hub
               </h3>
               <p>Complex concepts made simple through custom analogies. Compare security concepts using memorable examples to reinforce your learning.</p>
@@ -866,7 +1043,7 @@ const faqSchema = {
             >
               <div className="card-shine"></div>
               <h3>
-                <span className="info-tool-icon" aria-hidden="true">📋</span>
+                <span className="info-tool-icon" aria-hidden="true"><FaClipboardList color="#4CAF50" /></span>
                 GRC Wizard
               </h3>
               <p>Master governance, risk, and compliance topics with custom generated questions across multiple categories and difficulty levels.</p>
@@ -892,7 +1069,7 @@ const faqSchema = {
               <div className="card-shine"></div>
               <div className="tool-badge">New</div>
               <h3>
-                <span className="info-tool-icon" aria-hidden="true">⚔️</span>
+                <span className="info-tool-icon" aria-hidden="true"><FaCode color="#E91E63" /></span>
                 XploitCraft
               </h3>
               <p>Learn about exploitation techniques through educational code examples with detailed explanations for real world understanding.</p>
@@ -986,7 +1163,7 @@ const faqSchema = {
           </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
-              <span className="info-section-icon" aria-hidden="true">🤝</span>
+              <span className="info-section-icon" aria-hidden="true"><FaHeadset color="#4CAF50" /></span>
               24/7 Expert Support
             </h2>
             <p>Get help whenever you need it</p>
@@ -1033,23 +1210,23 @@ const faqSchema = {
               <h3>Your Personal Cybersecurity Tutor</h3>
               <ul className="info-support-features">
                 <li>
-                  <span className="info-check-icon" aria-hidden="true">✓</span>
+                  <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                   <span>Ask questions about any certification topic</span>
                 </li>
                 <li>
-                  <span className="info-check-icon" aria-hidden="true">✓</span>
+                  <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                   <span>Get help with difficult concepts</span>
                 </li>
                 <li>
-                  <span className="info-check-icon" aria-hidden="true">✓</span>
+                  <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                   <span>Receive customized study advice</span>
                 </li>
                 <li>
-                  <span className="info-check-icon" aria-hidden="true">✓</span>
+                  <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                   <span>Average response time: 3 hours</span>
                 </li>
                 <li>
-                  <span className="info-check-icon" aria-hidden="true">✓</span>
+                  <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
                   <span>Technical assistance with platform features</span>
                 </li>
               </ul>
@@ -1084,7 +1261,7 @@ const faqSchema = {
           </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
-              <span className="info-section-icon" aria-hidden="true">🎁</span>
+              <span className="info-section-icon" aria-hidden="true"><FaGift color="#E91E63" /></span>
               Daily Rewards & Challenges
             </h2>
             <p>Keep the momentum going with daily incentives</p>
@@ -1098,7 +1275,7 @@ const faqSchema = {
               aria-label="Daily bonus feature - click to see demo"
             >
               <div className="card-shine"></div>
-              <div className="info-daily-icon" aria-hidden="true">🪙</div>
+              <div className="info-daily-icon" aria-hidden="true"><FaCoins color="#FFD700" /></div>
               <h3>Daily Bonus</h3>
               <p>Claim free coins every 24 hours to spend in the shop</p>
               <div className="daily-streak">
@@ -1130,7 +1307,7 @@ const faqSchema = {
               aria-label="Daily PBQ challenge feature - click to see demo"
             >
               <div className="card-shine"></div>
-              <div className="info-daily-icon" aria-hidden="true">🕵️‍♂️</div>
+              <div className="info-daily-icon" aria-hidden="true"><FaUserShield color="#3F51B5" /></div>
               <h3>Daily PBQ Challenge</h3>
               <p>Tackle a new performance-based question each day to earn bonus coins</p>
               <div className="daily-counter">
@@ -1154,7 +1331,7 @@ const faqSchema = {
               aria-label="Cyber brief feature - click to see demo"
             >
               <div className="card-shine"></div>
-              <div className="info-daily-icon" aria-hidden="true">📰</div>
+              <div className="info-daily-icon" aria-hidden="true"><FaNewspaper color="#607D8B" /></div>
               <h3>Cyber Brief</h3>
               <p>Stay informed with curated cybersecurity news and study tips</p>
               <div className="new-tag">
@@ -1178,66 +1355,44 @@ const faqSchema = {
           </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
-              <span className="info-section-icon" aria-hidden="true">🧙‍♂️</span>
-              Unlock Your Full Potential 
+              <span className="info-section-icon" aria-hidden="true"><FaRocket color="#9C27B0" /></span>
+              Get Started Today 
             </h2>
-            <p>Affordable access to premium cybersecurity training</p>
+            <p>Create your free account and begin your cybersecurity journey</p>
           </header>
           
           <div className="info-pricing-card info-animate-on-scroll">
-            <h3 className="info-plan-name">Free Trial</h3>
-            <div className="info-price">
-              <span className="info-currency">$</span>
-              <span className="info-amount">9</span>
-              <span className="info-decimal">.99</span>
-              <span className="info-period">/month</span>
-            </div>
-            <ul className="info-pricing-features">
-              <li>
-                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
-                <span><strong>13,000+</strong> Practice Questions</span>
-              </li>
-              <li>
-                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
-                <span><strong>12</strong> Certification Paths</span>
-              </li>
-              <li>
-                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
-                <span>All Interactive Learning Tools</span>
-              </li>
-              <li>
-                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
-                <span>Complete Resource Library</span>
-              </li>
-              <li>
-                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
-                <span>24/7 Support / Ask Anything</span>
-              </li>
-              <li>
-                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
-                <span>Gamified Learning Experience</span>
-              </li>
-              <li>
-                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
-                <span>Daily Rewards & Challenges</span>
-              </li>
-              <li>
-                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
-                <span>Mobile & iOS App Access</span>
-              </li>
-            </ul>
-            
-            <Link to="/register" className="info-button info-cta-button spotlight-effect">
-              Register Now - Create Your Free Account! 😎
-            </Link>
-            <p className="info-pricing-note">Cancel anytime. No long-term commitment.</p>
-            <div className="payment-methods">
-              <span className="payment-icons"><FaCreditCard style={{ marginRight: '5px', color: '#FFD700' }} /> Visa, Mastercard, Amex, PayPal</span>
-              <div className="apple-pay-container" style={{ textAlign: 'center', marginTop: '10px' }}>
-                <FaCcApplePay style={{ color: '#FFFFFF', fontSize: '34px' }} />
+            <h3 className="info-plan-name">Create Free Account</h3>
+            <div className="info-cta-content">
+              <div className="info-features-list">
+                <div className="info-feature-item">
+                  <FaCheck className="info-feature-icon" />
+                  <span><strong>13,000+</strong> Practice Questions</span>
+                </div>
+                <div className="info-feature-item">
+                  <FaCheck className="info-feature-icon" />
+                  <span><strong>12</strong> Certification Paths</span>
+                </div>
+                <div className="info-feature-item">
+                  <FaCheck className="info-feature-icon" />
+                  <span>Interactive Learning Tools</span>
+                </div>
+                <div className="info-feature-item">
+                  <FaCheck className="info-feature-icon" />
+                  <span>Gamified Learning Experience</span>
+                </div>
+                <div className="info-feature-item">
+                  <FaCheck className="info-feature-icon" />
+                  <span>Mobile & iOS App Access</span>
+                </div>
               </div>
+              
+              <Link to="/register" className="info-button info-cta-button spotlight-effect">
+                Start Your Cybersecurity Journey Today!
+              </Link>
+              <p className="info-pricing-note">No credit card required. Access premium features with subscription.</p>
             </div>
-          </div> {/* This closing div tag was missing */}
+          </div>
         </section>
 
         {/* Testimonials Section */}
@@ -1247,7 +1402,7 @@ const faqSchema = {
           </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
-              <span className="info-section-icon" aria-hidden="true">💬</span>
+              <span className="info-section-icon" aria-hidden="true"><FaComment color="#03A9F4" /></span>
               Success Stories
             </h2>
             <p>Join other IT enthusiasts who have leveled up their careers</p>
@@ -1314,7 +1469,7 @@ const faqSchema = {
           </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
-              <span className="info-section-icon" aria-hidden="true">❓</span>
+              <span className="info-section-icon" aria-hidden="true"><FaQuestion color="#FF5722" /></span>
               Frequently Asked Questions
             </h2>
             <p>Everything you need to know</p>

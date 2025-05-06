@@ -1,7 +1,7 @@
 // src/components/pages/Info/DemosPage.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaPlay, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaPlay, FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
 import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
 import SEOHelmet from '../../SEOHelmet';
@@ -156,18 +156,45 @@ const DemosPage = () => {
         description: 'Explore our comprehensive collection of study materials, guides, and references to boost your learning.',
         thumbnail: recThumbnail
       }
+    ],
+    // New game demos category
+    games: [
+      {
+        id: 'phishing',
+        title: 'Phishing Phrenzy',
+        description: 'Test your ability to identify phishing attempts in this fast-paced security awareness game.',
+        thumbnail: phishing
+      },
+      {
+        id: 'incident',
+        title: 'Incident Responder',
+        description: 'Practice your incident response skills in realistic cybersecurity scenarios.',
+        thumbnail: incident
+      },
+      {
+        id: 'threat-hunter',
+        title: 'Threat Hunter',
+        description: 'Analyze logs, flag suspicious lines, and identify security threats in this log analysis game.',
+        thumbnail: threathunter
+      },
+      {
+        id: 'cipher-challenge',
+        title: 'Cipher Challenge',
+        description: 'Decode various types of encryption in this cryptographic puzzle game.',
+        thumbnail: cipher
+      }
     ]
   };
 
-
+  // Add games to featured demos
   const featuredDemos = [
     demoData.gamification[0],
     demoData.learning[0],
     demoData.daily[0],
     demoData.tests[0],
     demoData.support[0],
-    demoData.profile[0],
-    demoData.resources[0]
+    demoData.games[0], // Add Phishing Phrenzy to featured
+    demoData.games[1], // Add Incident Responder to featured
   ];
 
   // Handle demo selection
@@ -196,6 +223,8 @@ const DemosPage = () => {
         return demoData.profile;
       case 'resources':
         return demoData.resources;
+      case 'games':
+        return demoData.games;
       default:
         return featuredDemos;
     }
@@ -239,6 +268,15 @@ const DemosPage = () => {
                     videoId={videoConfig[activeDemo.id].youtubeId}
                     title={`${activeDemo.title} demo`}
                   />
+                ) : activeDemo.id === 'cipher-challenge' ? (
+                  // For cipher challenge, show the image instead of a video
+                  <div className="demo-image-placeholder">
+                    <img src={cipher} alt={`${activeDemo.title} screenshot`} />
+                    <div className="demo-info-overlay">
+                      <h3>Cipher Challenge</h3>
+                      <p>Decode various encryption methods from Caesar to Vigenère ciphers to test your cryptography skills.</p>
+                    </div>
+                  </div>
                 ) : (
                   <div className="demo-video-placeholder">
                     <img src={activeDemo.thumbnail} alt={`Demonstration of ${activeDemo.title} feature`} />
@@ -277,6 +315,13 @@ const DemosPage = () => {
             aria-pressed={activeSection === 'gamification'}
           >
             Gamification
+          </button>
+          <button
+            className={`category-button ${activeSection === 'games' ? 'active' : ''}`}
+            onClick={() => setActiveSection('games')}
+            aria-pressed={activeSection === 'games'}
+          >
+            Interactive Games
           </button>
           <button
             className={`category-button ${activeSection === 'learning' ? 'active' : ''}`}
@@ -346,11 +391,14 @@ const DemosPage = () => {
                 tabIndex="0"
                 aria-selected={activeDemo && activeDemo.id === demo.id}
               >
-                {/* Updated thumbnail component */}
+                {/* Thumbnail component */}
                 <div className="thumbnail-image">
                   <img src={demo.thumbnail} alt={`Thumbnail for ${demo.title} demo`} />
                   <div className="thumbnail-overlay">
-                    <FaPlay className="thumbnail-play" aria-hidden="true" />
+                    {demo.id === 'cipher-challenge' ? 
+                      <FaSearch className="thumbnail-icon" aria-hidden="true" /> :
+                      <FaPlay className="thumbnail-play" aria-hidden="true" />
+                    }
                   </div>
                 </div>
                 <h4 className="thumbnail-title">{demo.title}</h4>

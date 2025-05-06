@@ -79,7 +79,7 @@ const blogPosts = [
       
       <p>Sign up today and take the first step toward your Security+ certification! Our guided study paths and adaptive learning technology will customize your experience based on your strengths and weaknesses.</p>
     `,
-    author: 'Sarah Johnson, CISSP',
+    author: 'Carter Perez, CASP',
     date: 'March 10, 2025',
     category: 'CompTIA',
     tags: ['Security+', 'Certification', 'CompTIA', 'Exam Tips'],
