@@ -66,8 +66,6 @@ def create_checkout_session():
             success_url=f"{success_url}?session_id={{CHECKOUT_SESSION_ID}}&user_id={user_id or 'new'}",
             cancel_url=f"{cancel_url}?user_id={user_id or 'new'}",
             client_reference_id=user_id or "new_registration",
-            subscription_data={
-                "trial_period_days": 3  # Add 3-day free trial
             },
             metadata={
                 'user_id': user_id or 'new_registration',

@@ -290,7 +290,7 @@ const PremiumSubscriptionPage = () => {
                 </div>
                 <div className="premium-price-period">per month</div>
                 <div className="premium-trial-badge">
-                  3-Day Free Trial
+                  Unlimited
                 </div>
               </div>
               
@@ -331,7 +331,7 @@ const PremiumSubscriptionPage = () => {
                   ) : (
                     <span className="premium-button-text">
                       <FaCreditCard />
-                      <span>{isRenewal ? 'RENEW SUBSCRIPTION' : '  START FREE TRIAL'}</span>
+                      <span>{isRenewal ? 'RENEW SUBSCRIPTION' : '  REGISTER NOW'}</span>
                       {isRenewal ? 
                         <FaRedo className="premium-button-icon" /> : 
                         <FaArrowRight className="premium-button-icon" />}

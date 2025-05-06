@@ -238,7 +238,7 @@ const PremiumUpgradePrompt = ({ feature }) => {
             <FaInfoCircle className="premium-upgrade-trial-info-icon" />
           </div>
           <p className="premium-upgrade-trial-text">
-            Start with a <span className="premium-upgrade-trial-highlight">3-day free trial</span> - cancel anytime with no obligation
+           Immediately Gain <span className="premium-upgrade-trial-highlight">Unlimited Access to Everythingl</span> - cancel anytime with no obligation
           </p>
         </div>
         

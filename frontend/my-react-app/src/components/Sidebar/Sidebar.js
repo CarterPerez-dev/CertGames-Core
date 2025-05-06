@@ -21,7 +21,8 @@ import {
   FaGamepad,
   FaAward,
   FaAmazon,
-  FaShieldAlt
+  FaShieldAlt,
+  FaCrown
 } from 'react-icons/fa';
 
 const Sidebar = () => {
@@ -103,6 +104,18 @@ const Sidebar = () => {
     }
   };
 
+  // Premium feature check
+  const isPremiumFeature = (path) => {
+    const premiumPaths = [
+      '/xploitcraft',
+      '/scenariosphere',
+      '/grc',
+      '/games/threat-hunter',
+      '/games/cipher-challenge'
+    ];
+    return premiumPaths.includes(path);
+  };
+
   return (
     <>
       {/* Sidebar Toggle Button */}
@@ -166,6 +179,7 @@ const Sidebar = () => {
                   <li>
                     <NavLink to="/games/threat-hunter" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
                       <span className="sidebar-link-text">Threat Hunter</span>
+                      <FaCrown className="premium-crown" />
                     </NavLink>
                   </li>
                   <li>
@@ -181,6 +195,7 @@ const Sidebar = () => {
                   <li>
                     <NavLink to="/games/cipher-challenge" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
                       <span className="sidebar-link-text">Cipher Challenge</span>
+                      <FaCrown className="premium-crown" />
                     </NavLink>
                   </li>
                   {/* Added Daily PBQ (renamed from Bonus) into Games dropdown */}
@@ -249,11 +264,13 @@ const Sidebar = () => {
                   <li>
                     <NavLink to="/xploitcraft" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
                       <span className="sidebar-link-text">Xploitcraft</span>
+                      <FaCrown className="premium-crown" />
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to="/scenariosphere" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
                       <span className="sidebar-link-text">Scenario Sphere</span>
+                      <FaCrown className="premium-crown" />
                     </NavLink>
                   </li>
                   <li>
@@ -264,6 +281,7 @@ const Sidebar = () => {
                   <li>
                     <NavLink to="/grc" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
                       <span className="sidebar-link-text">GRC Wizard</span>
+                      <FaCrown className="premium-crown" />
                     </NavLink>
                   </li>
                   {/* Added Study Resources to Tools dropdown */}
