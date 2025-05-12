@@ -23,17 +23,17 @@ const glitchAnimation = keyframes`
   0% {
     transform: translate(0);
   }
-  20% {
+  1.5% {
     transform: translate(-2px, 2px);
   }
-  40% {
-    transform: translate(-2px, -2px);
-  }
-  60% {
-    transform: translate(2px, 2px);
-  }
-  80% {
+  3% {
     transform: translate(2px, -2px);
+  }
+  4.5% {
+    transform: translate(0);
+  }
+  10% {
+    transform: translate(0);
   }
   100% {
     transform: translate(0);
@@ -59,11 +59,11 @@ const NodeContainer = styled.div`
   position: relative;
   width: 100%;
   
-  /* Enhanced left border for nesting visualization with increasing indentation */
+  /* Enhanced left border for nesting visualization */
   padding-left: ${props => props.depth > 0 ? '1.5rem' : '0'};
   border-left: ${props => props.depth > 0 ? `1px solid ${THEME.colors.borderPrimary}40` : 'none'};
   
-  /* Improved transition effect */
+  /* Improved transition for smooth movement */
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   
   /* Enhanced visual indicators for different node types */
@@ -146,6 +146,9 @@ const NodeContainer = styled.div`
     }
   `}
   
+  /* Progressive transformation based on depth */
+  transform: ${props => `translateX(${props.depth * 5}px) translateY(${props.depth * 3}px)`};
+  
   @media (max-width: ${THEME.breakpoints.md}) {
     padding-left: ${props => props.depth > 0 ? '1rem' : '0'};
   }
@@ -155,15 +158,15 @@ const NodeContainer = styled.div`
 const QuestionContainer = styled.div`
   background-color: ${props => props.expanded ? THEME.colors.bgTertiary : THEME.colors.bgSecondary};
   border: 1px solid ${props => props.expanded ? THEME.colors.accentPrimary : THEME.colors.borderPrimary};
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 12px;
+  padding: 1.25rem;
   cursor: pointer;
   transition: all 0.3s ${THEME.animations.curveEaseInOut};
   position: relative;
   overflow: hidden;
   
   /* Add subtle shadow for depth */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   
   /* Enhanced border styling based on node type */
   ${props => props.nodeType === THEME.philosophicalConcepts.PARADOX && `
@@ -181,8 +184,8 @@ const QuestionContainer = styled.div`
   /* Enhanced hover effects */
   &:hover {
     background-color: ${THEME.colors.bgTertiary};
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
   
   /* Enhanced focus styles for accessibility */
@@ -195,9 +198,9 @@ const QuestionContainer = styled.div`
   ${props => props.expanded && `
     background-color: ${THEME.colors.bgTertiary};
     border-color: ${THEME.colors.accentPrimary};
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    border-bottom-left-radius: ${props.showNestedQuestion ? '0' : '8px'};
-    border-bottom-right-radius: ${props.showNestedQuestion ? '0' : '8px'};
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-bottom-left-radius: ${props.showNestedQuestion ? '0' : '12px'};
+    border-bottom-right-radius: ${props.showNestedQuestion ? '0' : '12px'};
   `}
   
   /* Enhanced glitch effect on hover */
@@ -251,10 +254,10 @@ const QuestionContainer = styled.div`
 // Enhanced question text with improved typography
 const QuestionText = styled.div`
   font-family: ${props => props.philosophical ? THEME.typography.fontFamilyPhilosophical : THEME.typography.fontFamilyPrimary};
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: ${THEME.typography.weightMedium};
   color: ${THEME.colors.textPrimary};
-  padding-right: 1.5rem; /* Space for expand icon */
+  padding-right: 1.75rem; /* Space for expand icon */
   
   /* Enhanced italic for philosophical text */
   font-style: ${props => props.philosophical ? 'italic' : 'normal'};
@@ -280,33 +283,36 @@ const QuestionText = styled.div`
   `}
   
   @media (max-width: ${THEME.breakpoints.md}) {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 `;
 
 // Enhanced expand/collapse icon
 const ExpandIcon = styled.div`
   position: absolute;
-  right: 1rem;
+  right: 1.25rem;
   top: 50%;
   transform: translateY(-50%) ${props => props.expanded ? 'rotate(180deg)' : 'rotate(0)'};
   transition: transform 0.3s ${THEME.animations.curveEaseInOut};
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
+  background-color: ${props => props.expanded ? THEME.colors.accentPrimary + '33' : 'transparent'};
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
   &::before,
   &::after {
     content: "";
     position: absolute;
-    background-color: ${THEME.colors.textSecondary};
+    background-color: ${props => props.expanded ? THEME.colors.accentPrimary : THEME.colors.textSecondary};
     transition: all 0.3s ${THEME.animations.curveEaseInOut};
   }
   
   &::before {
     width: 2px;
     height: 12px;
-    top: 4px;
-    left: 9px;
     opacity: ${props => props.expanded ? '0' : '1'};
     transform: ${props => props.expanded ? 'rotate(90deg)' : 'rotate(0)'};
   }
@@ -314,21 +320,19 @@ const ExpandIcon = styled.div`
   &::after {
     width: 12px;
     height: 2px;
-    top: 9px;
-    left: 4px;
   }
 `;
 
 // Enhanced answer container with philosophical styling
 const AnswerContainer = styled.div`
-  padding: 1.5rem;
+  padding: 1.75rem;
   background-color: ${THEME.colors.bgPrimary};
   border: 1px solid ${THEME.colors.borderSecondary};
   border-top: none;
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 12px 12px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   
   /* Enhanced background pattern */
   &::before {
@@ -365,8 +369,8 @@ const AnswerContainer = styled.div`
 // Enhanced answer text with special formatting support
 const AnswerText = styled.div`
   font-family: ${props => props.philosophical ? THEME.typography.fontFamilyPhilosophical : THEME.typography.fontFamilyPrimary};
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 1.05rem;
+  line-height: 1.8;
   color: ${THEME.colors.textSecondary};
   
   /* Enhanced italic for philosophical text */
@@ -395,7 +399,7 @@ const AnswerText = styled.div`
   
   /* Enhanced text formatting */
   p {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
     
     &:last-child {
       margin-bottom: 0;
@@ -417,7 +421,7 @@ const AnswerText = styled.div`
     font-family: ${THEME.typography.fontFamilyPrimary};
     background-color: ${THEME.colors.bgCodeBlock};
     padding: 0.2em 0.4em;
-    border-radius: 3px;
+    border-radius: 4px;
     font-size: 0.9em;
   }
   
@@ -443,14 +447,14 @@ const AnswerText = styled.div`
   }
   
   @media (max-width: ${THEME.breakpoints.md}) {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 `;
 
 // Enhanced container for nested questions
 const NestedQuestionContainer = styled.div`
-  margin-top: 1.5rem;
-  padding-top: 1rem;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
   border-top: 1px dashed ${THEME.colors.borderPrimary};
   position: relative;
   
@@ -459,7 +463,7 @@ const NestedQuestionContainer = styled.div`
     content: "";
     position: absolute;
     top: -10px;
-    left: 20px;
+    left: 25px;
     width: 20px;
     height: 20px;
     border-right: 1px solid ${THEME.colors.borderPrimary};

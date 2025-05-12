@@ -121,13 +121,14 @@ const particleFloat = keyframes`
   }
 `;
 
-// Styled components for expansion effects
+// Enhanced styled components for expansion effects
 const ExpansionContainer = styled.div`
   position: relative;
   overflow: hidden;
   max-height: ${props => props.isExpanded ? '2000px' : '0'};
   opacity: ${props => props.isExpanded ? '1' : '0'};
   transform-origin: top;
+  will-change: max-height, opacity, transform; /* Performance optimization */
   
   /* Animation based on the expansion state */
   animation: ${props => props.isExpanded 
@@ -159,6 +160,13 @@ const ExpansionContainer = styled.div`
       animation: ${paradoxAnimation} 8s infinite linear;
     }
   `}
+  
+  /* Progressive transformation based on depth */
+  transform: ${props => props.depth > 0 ? 
+    `translateX(${props.depth * 15}px) translateY(${props.depth * 8}px) rotate(${props.depth * 0.3}deg)` : 
+    'none'
+  };
+  transition: transform 0.5s ${THEME.animations.curvePhilosophical};
 `;
 
 const ExpansionInner = styled.div`
@@ -349,6 +357,7 @@ const DialogueExpansion = ({
       isExpanded={isExpanded}
       hasAnimated={hasAnimated}
       isLoop={isLoop}
+      depth={depth}
       duration={animationDuration}
       curve={animationCurve}
       className={`dialogue-expansion ${isExpanded ? 'expanded' : 'collapsed'} ${effectType}-effect depth-${depth} ${isLoop ? 'loop-node' : ''}`}
