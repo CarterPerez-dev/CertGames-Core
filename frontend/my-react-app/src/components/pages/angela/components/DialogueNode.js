@@ -40,13 +40,26 @@ const glitchAnimation = keyframes`
   }
 `;
 
+// Spin animation for loop nodes
+const spinAnimation = keyframes`
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(2deg) scale(1.02);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+`;
+
 // Improved main container for a dialogue node
 const NodeContainer = styled.div`
   margin-bottom: ${props => props.isLast ? '0' : '1.5rem'};
   position: relative;
+  width: 100%;
   
   /* Enhanced left border for nesting visualization with increasing indentation */
-  margin-left: ${props => props.depth * 20}px;
   padding-left: ${props => props.depth > 0 ? '1.5rem' : '0'};
   border-left: ${props => props.depth > 0 ? `1px solid ${THEME.colors.borderPrimary}40` : 'none'};
   
@@ -69,6 +82,7 @@ const NodeContainer = styled.div`
         ${THEME.colors.accentPrimary}00
       );
       border-radius: 2px;
+      opacity: 0.7;
     }
   `}
   
@@ -87,11 +101,15 @@ const NodeContainer = styled.div`
         ${THEME.colors.terminalGreen}00
       );
       border-radius: 2px;
+      opacity: 0.7;
     }
   `}
   
   /* Enhanced loop indicator for loop nodes */
   ${props => props.isLoop && `
+    transform-origin: center;
+    animation: ${spinAnimation} 6s infinite ease-in-out;
+    
     &::after {
       content: "∞";
       position: absolute;
@@ -129,7 +147,6 @@ const NodeContainer = styled.div`
   `}
   
   @media (max-width: ${THEME.breakpoints.md}) {
-    margin-left: ${props => props.depth * 15}px;
     padding-left: ${props => props.depth > 0 ? '1rem' : '0'};
   }
 `;
@@ -144,6 +161,9 @@ const QuestionContainer = styled.div`
   transition: all 0.3s ${THEME.animations.curveEaseInOut};
   position: relative;
   overflow: hidden;
+  
+  /* Add subtle shadow for depth */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   
   /* Enhanced border styling based on node type */
   ${props => props.nodeType === THEME.philosophicalConcepts.PARADOX && `
@@ -162,7 +182,7 @@ const QuestionContainer = styled.div`
   &:hover {
     background-color: ${THEME.colors.bgTertiary};
     transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
   
   /* Enhanced focus styles for accessibility */
@@ -175,7 +195,7 @@ const QuestionContainer = styled.div`
   ${props => props.expanded && `
     background-color: ${THEME.colors.bgTertiary};
     border-color: ${THEME.colors.accentPrimary};
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     border-bottom-left-radius: ${props.showNestedQuestion ? '0' : '8px'};
     border-bottom-right-radius: ${props.showNestedQuestion ? '0' : '8px'};
   `}
@@ -210,7 +230,6 @@ const QuestionContainer = styled.div`
   ${props => props.isLoop && `
     animation: ${glitchAnimation} 5s infinite linear alternate-reverse;
     animation-delay: ${Math.random() * 2}s;
-    background-color: ${THEME.colors.bgSecondary};
     
     &::before {
       content: "";
@@ -309,6 +328,7 @@ const AnswerContainer = styled.div`
   border-radius: 0 0 8px 8px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   
   /* Enhanced background pattern */
   &::before {
@@ -472,6 +492,7 @@ const DialogueNode = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(expanded);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [hoverState, setHoverState] = useState(false);
   const nodeRef = useRef(null);
   
   // Update expanded state when prop changes
@@ -495,6 +516,15 @@ const DialogueNode = ({
     setTimeout(() => {
       setIsAnimating(false);
     }, 500); // Match with animation duration
+  };
+  
+  // Handle hover effects
+  const handleMouseEnter = () => {
+    setHoverState(true);
+  };
+  
+  const handleMouseLeave = () => {
+    setHoverState(false);
   };
   
   // Determine node type for styling
@@ -537,6 +567,8 @@ const DialogueNode = ({
       <QuestionContainer 
         expanded={isExpanded}
         onClick={handleToggle}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         nodeType={nodeType}
         isLoop={isLoopNode}
         showNestedQuestion={showNestedQuestion}

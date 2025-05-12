@@ -1,18 +1,73 @@
 // frontend/my-react-app/src/components/pages/angela/components/PhilosophicalFooter.js
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
+import { 
+  FaGithub, 
+  FaBook, 
+  FaExclamationCircle, 
+  FaDiscord, 
+  FaCode 
+} from 'react-icons/fa';
 import { ANGELA_THEME as THEME } from '../styles/PhilosophicalTheme';
 import { getRandomQuoteForConcept } from '../utils/philosophicalQuotes';
 import { detectPotentialLoop, generateParadoxInsight } from '../utils/paradoxGenerator';
 import ParadoxTransition from '../animations/ParadoxTransitions';
 
+// Pulse animation for subtle focus
+const pulseAnimation = keyframes`
+  0% {
+    opacity: 0.8;
+    box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.2);
+  }
+  70% {
+    opacity: 1;
+    box-shadow: 0 0 0 10px rgba(255, 51, 51, 0);
+  }
+  100% {
+    opacity: 0.8;
+    box-shadow: 0 0 0 0 rgba(255, 51, 51, 0);
+  }
+`;
+
+// Text reveal animation for quotes
+const revealText = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+// Grid animation for background texture
+const gridAnimation = keyframes`
+  0% {
+    background-position: 0px 0px;
+    opacity: 0.05;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  100% {
+    background-position: 20px 20px;
+    opacity: 0.05;
+  }
+`;
+
 // Main container for the philosophical footer
 const FooterContainer = styled.footer`
-  padding: 4rem 2rem 6rem;
+  width: 100%;
+  padding: 5rem 2rem 6rem;
   position: relative;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
   background-color: ${THEME.colors.bgPrimary};
   
+  /* Top border with gradient */
   &::before {
     content: "";
     position: absolute;
@@ -28,9 +83,32 @@ const FooterContainer = styled.footer`
     );
   }
   
+  /* Animated grid background */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(rgba(51, 51, 51, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(51, 51, 51, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: -1;
+    animation: ${gridAnimation} 20s linear infinite;
+    opacity: 0.05;
+  }
+  
   @media (max-width: ${THEME.breakpoints.md}) {
     padding: 3rem 1rem 5rem;
   }
+`;
+
+// Inner container to maintain max-width
+const FooterInner = styled.div`
+  max-width: 1200px;
+  width: 100%;
 `;
 
 // Philosophical content container
@@ -40,20 +118,22 @@ const PhilosophicalContent = styled.div`
   text-align: center;
   position: relative;
   
+  /* Large quote mark */
   &::before {
     content: """;
     position: absolute;
-    top: -3rem;
+    top: -4rem;
     left: 50%;
     transform: translateX(-50%);
     font-size: 8rem;
     color: ${THEME.colors.accentPrimary}20;
     font-family: ${THEME.typography.fontFamilyPhilosophical};
     z-index: -1;
+    line-height: 1;
   }
 `;
 
-// Philosophical quote text
+// Philosophical quote text with enhanced animation
 const PhilosophicalText = styled.div`
   font-family: ${THEME.typography.fontFamilyPhilosophical};
   font-style: italic;
@@ -61,6 +141,7 @@ const PhilosophicalText = styled.div`
   color: ${THEME.colors.textPrimary};
   margin-bottom: 1.5rem;
   line-height: 1.6;
+  animation: ${revealText} 1s ${THEME.animations.curvePhilosophical} forwards;
   
   @media (max-width: ${THEME.breakpoints.md}) {
     font-size: 1.25rem;
@@ -92,6 +173,7 @@ const LinkGrid = styled.div`
   margin-top: 3rem;
   position: relative;
   
+  /* Separator line above links */
   &::before {
     content: "";
     position: absolute;
@@ -119,11 +201,15 @@ const FooterLink = styled.a`
   position: relative;
   transition: all 0.2s ease;
   padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   
   &:hover {
     color: ${THEME.colors.accentPrimary};
   }
   
+  /* Animated underline effect */
   &::after {
     content: "";
     position: absolute;
@@ -137,6 +223,11 @@ const FooterLink = styled.a`
   
   &:hover::after {
     width: 100%;
+  }
+  
+  /* Icon styling */
+  svg {
+    font-size: 1.1rem;
   }
   
   @media (max-width: ${THEME.breakpoints.md}) {
@@ -183,6 +274,16 @@ const PixelCorner = styled.div`
       `;
     }
   }}
+  
+  @media (max-width: ${THEME.breakpoints.md}) {
+    width: 30px;
+    height: 30px;
+  }
+  
+  @media (max-width: ${THEME.breakpoints.sm}) {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 // Copyright text with terminal styling
@@ -241,6 +342,7 @@ const ParadoxInsight = styled.div`
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  animation: ${pulseAnimation} 6s infinite;
   
   @media (max-width: ${THEME.breakpoints.md}) {
     font-size: 0.9rem;
@@ -291,54 +393,56 @@ const PhilosophicalFooter = () => {
   
   return (
     <FooterContainer>
-      {/* Decorative pixel corners */}
-      <PixelCorner position="top-left" />
-      <PixelCorner position="top-right" />
-      <PixelCorner position="bottom-left" />
-      <PixelCorner position="bottom-right" />
-      
-      {/* Main philosophical content */}
-      <PhilosophicalContent>
-        <ParadoxTransition type={loopState ? 'paradox' : 'glitch'} isActive={true} intensity={0.3}>
-          <PhilosophicalText>
-            "{paradoxQuote.text}"
-          </PhilosophicalText>
-          <Attribution>{paradoxQuote.author}</Attribution>
-        </ParadoxTransition>
+      <FooterInner>
+        {/* Decorative pixel corners */}
+        <PixelCorner position="top-left" />
+        <PixelCorner position="top-right" />
+        <PixelCorner position="bottom-left" />
+        <PixelCorner position="bottom-right" />
         
-        <ParadoxInsight active={showInsight}>
-          {insight}
-        </ParadoxInsight>
+        {/* Main philosophical content */}
+        <PhilosophicalContent>
+          <ParadoxTransition type={loopState ? 'paradox' : 'glitch'} isActive={true} intensity={0.3}>
+            <PhilosophicalText>
+              "{paradoxQuote.text}"
+            </PhilosophicalText>
+            <Attribution>{paradoxQuote.author}</Attribution>
+          </ParadoxTransition>
+          
+          <ParadoxInsight active={showInsight}>
+            {insight}
+          </ParadoxInsight>
+          
+          {/* Links grid with React icons */}
+          <LinkGrid>
+            <FooterLink href="https://github.com/CarterPerez-dev/angela-cli" target="_blank" rel="noopener noreferrer">
+              <FaGithub /> GitHub
+            </FooterLink>
+            <FooterLink href="https://github.com/CarterPerez-dev/angela-cli/issues" target="_blank" rel="noopener noreferrer">
+              <FaExclamationCircle /> Report an Issue
+            </FooterLink>
+            <FooterLink href="https://github.com/CarterPerez-dev/angela-cli/wiki" target="_blank" rel="noopener noreferrer">
+              <FaBook /> Documentation
+            </FooterLink>
+            <FooterLink href="https://discord.gg/angela-cli" target="_blank" rel="noopener noreferrer">
+              <FaDiscord /> Community
+            </FooterLink>
+            <FooterLink href="https://docs.angela-cli.dev" target="_blank" rel="noopener noreferrer">
+              <FaCode /> API Reference
+            </FooterLink>
+          </LinkGrid>
+          
+          {/* Copyright info */}
+          <CopyrightText>
+            <div className="terminal-text">
+              © {new Date().getFullYear()} Angela CLI Team. All rights reserved. MIT License.
+            </div>
+          </CopyrightText>
+        </PhilosophicalContent>
         
-        {/* Links grid */}
-        <LinkGrid>
-          <FooterLink href="https://github.com/CarterPerez-dev/angela-cli" target="_blank" rel="noopener noreferrer">
-            GitHub
-          </FooterLink>
-          <FooterLink href="https://github.com/CarterPerez-dev/angela-cli/issues" target="_blank" rel="noopener noreferrer">
-            Report an Issue
-          </FooterLink>
-          <FooterLink href="https://github.com/CarterPerez-dev/angela-cli/wiki" target="_blank" rel="noopener noreferrer">
-            Documentation
-          </FooterLink>
-          <FooterLink href="https://discord.gg/angela-cli" target="_blank" rel="noopener noreferrer">
-            Community
-          </FooterLink>
-          <FooterLink href="https://docs.angela-cli.dev" target="_blank" rel="noopener noreferrer">
-            API Reference
-          </FooterLink>
-        </LinkGrid>
-        
-        {/* Copyright info */}
-        <CopyrightText>
-          <div className="terminal-text">
-            © {new Date().getFullYear()} Angela CLI Team. All rights reserved. MIT License.
-          </div>
-        </CopyrightText>
-      </PhilosophicalContent>
-      
-      {/* Decorative recursive pattern */}
-      <RecursivePattern />
+        {/* Decorative recursive pattern */}
+        <RecursivePattern />
+      </FooterInner>
     </FooterContainer>
   );
 };

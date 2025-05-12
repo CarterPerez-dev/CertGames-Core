@@ -1,6 +1,7 @@
 // frontend/my-react-app/src/components/pages/angela/components/FeatureSection.js
 import React, { useState, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
 import { ANGELA_THEME as THEME } from '../styles/PhilosophicalTheme';
 import { getRandomQuote } from '../utils/philosophicalQuotes';
 import { 
@@ -11,16 +12,77 @@ import {
   FaTerminal, 
   FaCode, 
   FaGlobe, 
-  FaLightbulb 
+  FaLightbulb
 } from 'react-icons/fa';
+
+// Hover animation for card
+const hoverAnimation = keyframes`
+  0% {
+    transform: translateY(0);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+// Floating animation for icon
+const floatAnimation = keyframes`
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(5deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+`;
+
+// Pulse animation for decorative elements
+const pulseAnimation = keyframes`
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+`;
 
 // Main container for the feature section
 const FeatureSectionContainer = styled.section`
-  padding: 4rem 2rem;
+  width: 100%;
   position: relative;
-  overflow: hidden;
+  
+  /* Subtle grid background */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(rgba(51, 51, 51, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(51, 51, 51, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: -1;
+    opacity: 0.3;
+  }
+`;
+
+// Inner container to maintain max-width and centering
+const FeatureSectionInner = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+  padding: 5rem 2rem;
   
   @media (max-width: ${THEME.breakpoints.md}) {
     padding: 3rem 1rem;
@@ -76,33 +138,20 @@ const FeatureCard = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   
   &:hover {
-    transform: translateY(-5px);
+    animation: ${hoverAnimation} 0.3s forwards;
     border-color: ${THEME.colors.accentPrimary};
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     
     .feature-icon {
-      transform: translateZ(20px) rotateY(10deg);
+      animation: ${floatAnimation} 2s infinite ease-in-out;
       color: ${THEME.colors.accentPrimary};
     }
   }
   
+  /* Pixel effect on corners */
   &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
-    pointer-events: none;
-    z-index: 0;
-    border-radius: 8px;
-  }
-  
-  // Pixelated corners
-  &::after {
     content: "";
     position: absolute;
     top: -2px;
@@ -117,13 +166,28 @@ const FeatureCard = styled.div`
       8px 100%, 8px calc(100% - 8px), 0% calc(100% - 8px)
     );
   }
+  
+  /* Shadow inset effect */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 8px;
+    opacity: 0.3;
+  }
 `;
 
 // Feature icon container 
 const FeatureIconContainer = styled.div`
   font-size: 2.5rem;
   color: ${THEME.colors.terminalGreen};
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   transition: all 0.3s ease;
   transform: translateZ(0);
   display: flex;
@@ -169,12 +233,13 @@ const PhilosophicalQuoteContainer = styled.div`
   margin: 4rem auto;
   max-width: 800px;
   text-align: center;
-  padding: 2rem;
+  padding: 2.5rem;
   background-color: ${THEME.colors.bgSecondary}80;
   border: 1px solid ${THEME.colors.borderPrimary};
   position: relative;
   border-radius: 8px;
   
+  /* Large quote mark */
   &::before {
     content: """;
     position: absolute;
@@ -184,6 +249,9 @@ const PhilosophicalQuoteContainer = styled.div`
     color: ${THEME.colors.accentPrimary}40;
     font-family: ${THEME.typography.fontFamilyPhilosophical};
   }
+  
+  /* Subtle box shadow */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 `;
 
 // Quote text with typing animation
@@ -224,7 +292,9 @@ const InteractiveExample = styled.div`
   border-radius: 8px;
   overflow: hidden;
   position: relative;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
   
+  /* CRT scan effect */
   &::before {
     content: "";
     position: absolute;
@@ -295,6 +365,26 @@ const ExampleContent = styled.div`
   overflow-y: auto;
   white-space: pre-wrap;
   
+  /* Improved scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: ${THEME.colors.bgSecondary};
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: ${THEME.colors.borderPrimary};
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${THEME.colors.accentPrimary};
+  }
+  
   .input {
     color: ${THEME.colors.textPrimary};
     margin-bottom: 8px;
@@ -362,7 +452,7 @@ const ExampleInput = styled.div`
 const ExampleButtons = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.75rem;
   margin-top: 1rem;
   justify-content: center;
   
@@ -381,8 +471,38 @@ const ExampleButtons = styled.div`
       background-color: ${THEME.colors.bgTertiary};
       border-color: ${THEME.colors.accentPrimary};
       color: ${THEME.colors.textPrimary};
+      transform: translateY(-2px);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
     }
   }
+`;
+
+// Decorative floating elements
+const FloatingElement = styled.div`
+  position: absolute;
+  width: ${props => props.size || '20px'};
+  height: ${props => props.size || '20px'};
+  background-color: ${props => props.color || THEME.colors.accentPrimary};
+  opacity: ${props => props.opacity || 0.3};
+  z-index: -1;
+  animation: ${pulseAnimation} ${props => props.duration || '6s'} infinite ease-in-out;
+  animation-delay: ${props => props.delay || '0s'};
+  filter: blur(${props => props.blur || '0px'});
+  border-radius: ${props => props.square ? '0' : '50%'};
+  
+  ${props => props.square && `
+    clip-path: polygon(
+      0% 0%, 
+      100% 0%, 
+      100% 100%, 
+      0% 100%
+    );
+  `}
 `;
 
 /**
@@ -554,89 +674,119 @@ const FeatureSection = ({ icons }) => {
   
   return (
     <FeatureSectionContainer id="features">
-      <SectionTitle>Key Features</SectionTitle>
-      
-      <FeaturesGrid>
-        {FEATURES.map((feature, index) => (
-          <FeatureCard key={index}>
-            <FeatureIconContainer className="feature-icon">
-              {feature.icon}
-            </FeatureIconContainer>
-            <FeatureTitle>{feature.title}</FeatureTitle>
-            <FeatureDescription>{feature.description}</FeatureDescription>
-          </FeatureCard>
-        ))}
-      </FeaturesGrid>
-      
-      <PhilosophicalQuoteContainer>
-        <QuoteText>"{quote.text}"</QuoteText>
-        <QuoteAttribution>{quote.author}</QuoteAttribution>
-      </PhilosophicalQuoteContainer>
-      
-      <InteractiveExample>
-        <ExampleHeader>
-          <div className="buttons">
-            <div className="button red"></div>
-            <div className="button yellow"></div>
-            <div className="button green"></div>
-          </div>
-          <div className="title">angela-cli ~ interactive-demo</div>
-        </ExampleHeader>
+      <FeatureSectionInner>
+        {/* Decorative elements */}
+        <FloatingElement 
+          size="60px" 
+          color={`${THEME.colors.accentPrimary}20`} 
+          top="10%" 
+          left="5%" 
+          blur="10px"
+          duration="8s"
+          style={{ top: '10%', left: '5%' }}
+        />
+        <FloatingElement 
+          size="100px" 
+          color={`${THEME.colors.terminalGreen}10`} 
+          opacity={0.2}
+          blur="15px"
+          duration="12s"
+          delay="2s"
+          style={{ top: '30%', right: '8%' }}
+        />
+        <FloatingElement 
+          size="40px" 
+          color={`${THEME.colors.terminalCyan}20`} 
+          square={true}
+          duration="10s"
+          delay="1s"
+          style={{ bottom: '20%', left: '12%' }}
+        />
         
-        <ExampleContent ref={contentRef}>
-          {/* Welcome message */}
-          <div className="angela-output">
-            Welcome to the Angela CLI interactive demo. Type a command or select one of the examples below.
-          </div>
-          
-          {/* Terminal history */}
-          {terminalHistory.map((entry, index) => {
-            if (entry.type === 'input') {
-              return (
-                <div key={index} className="input">
-                  <span className="prompt">$</span>
-                  <span>angela "{entry.text}"</span>
-                </div>
-              );
-            } else {
-              return (
-                <div key={index} className={entry.type}>
-                  {entry.text}
-                </div>
-              );
-            }
-          })}
-          
-          {/* Typing indicator */}
-          {isTyping && <div className="output">Angela is thinking...</div>}
-        </ExampleContent>
+        <SectionTitle>Key Features</SectionTitle>
         
-        <form onSubmit={handleInputSubmit}>
-          <ExampleInput>
-            <span className="prompt">$</span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={inputValue}
-              onChange={handleInputChange}
-              placeholder="Try an example command or type your own..."
-              disabled={isTyping}
-            />
-          </ExampleInput>
-        </form>
-        
-        <ExampleButtons>
-          {Object.keys(EXAMPLE_RESPONSES).map((command, index) => (
-            <button
-              key={index}
-              onClick={(e) => handleInputSubmit(e, command)}
-              disabled={isTyping}
-            >
-              {command}
-            </button>
+        <FeaturesGrid>
+          {FEATURES.map((feature, index) => (
+            <FeatureCard key={index}>
+              <FeatureIconContainer className="feature-icon">
+                {feature.icon}
+              </FeatureIconContainer>
+              <FeatureTitle>{feature.title}</FeatureTitle>
+              <FeatureDescription>{feature.description}</FeatureDescription>
+            </FeatureCard>
           ))}
-        </ExampleButtons>
-      </InteractiveExample>
+        </FeaturesGrid>
+        
+        <PhilosophicalQuoteContainer>
+          <QuoteText>"{quote.text}"</QuoteText>
+          <QuoteAttribution>{quote.author}</QuoteAttribution>
+        </PhilosophicalQuoteContainer>
+        
+        <InteractiveExample>
+          <ExampleHeader>
+            <div className="buttons">
+              <div className="button red"></div>
+              <div className="button yellow"></div>
+              <div className="button green"></div>
+            </div>
+            <div className="title">angela-cli ~ interactive-demo</div>
+          </ExampleHeader>
+          
+          <ExampleContent ref={contentRef}>
+            {/* Welcome message */}
+            <div className="angela-output">
+              Welcome to the Angela CLI interactive demo. Type a command or select one of the examples below.
+            </div>
+            
+            {/* Terminal history */}
+            {terminalHistory.map((entry, index) => {
+              if (entry.type === 'input') {
+                return (
+                  <div key={index} className="input">
+                    <span className="prompt">$</span>
+                    <span>angela "{entry.text}"</span>
+                  </div>
+                );
+              } else {
+                return (
+                  <div key={index} className={entry.type}>
+                    {entry.text}
+                  </div>
+                );
+              }
+            })}
+            
+            {/* Typing indicator */}
+            {isTyping && <div className="output">Angela is thinking...</div>}
+          </ExampleContent>
+          
+          <form onSubmit={handleInputSubmit}>
+            <ExampleInput>
+              <span className="prompt">$</span>
+              <input
+                ref={inputRef}
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+                placeholder="Try an example command or type your own..."
+                disabled={isTyping}
+              />
+            </ExampleInput>
+          </form>
+          
+          <ExampleButtons>
+            {Object.keys(EXAMPLE_RESPONSES).map((command, index) => (
+              <button
+                key={index}
+                onClick={(e) => handleInputSubmit(e, command)}
+                disabled={isTyping}
+              >
+                {command}
+              </button>
+            ))}
+          </ExampleButtons>
+        </InteractiveExample>
+      </FeatureSectionInner>
     </FeatureSectionContainer>
   );
 };

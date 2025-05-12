@@ -8,6 +8,7 @@ import { useDialogueChain } from '../hooks/useDialogueChain';
 import { useInfiniteLoop } from '../hooks/useInfiniteLoop';
 import { ANGELA_THEME as THEME } from '../styles/PhilosophicalTheme';
 import { generateParadoxInsight } from '../utils/paradoxGenerator';
+import ThoughtFlowEffect from '../animations/ThoughtFlowAnimations';
 
 // Pulse animation for active nodes
 const pulseEffect = keyframes`
@@ -37,6 +38,27 @@ const paradoxEffect = keyframes`
   }
 `;
 
+const glitchEffect = keyframes`
+  0% {
+    transform: translate(0);
+  }
+  1.5% {
+    transform: translate(-2px, 2px);
+  }
+  3% {
+    transform: translate(2px, -2px);
+  }
+  4.5% {
+    transform: translate(0);
+  }
+  6% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(0);
+  }
+`;
+
 // Enhanced DialogueContainer with proper centering and styling
 const DialogueContainer = styled.div`
   max-width: 900px;
@@ -58,6 +80,7 @@ const DialogueContainer = styled.div`
   };
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   
+  /* CRT effect overlay */
   &::before {
     content: "";
     position: absolute;
@@ -76,6 +99,24 @@ const DialogueContainer = styled.div`
     pointer-events: none;
   }
   
+  /* Cyber grid pattern */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(rgba(51, 51, 51, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(51, 51, 51, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: -1;
+    opacity: 0.5;
+    border-radius: 12px;
+    pointer-events: none;
+  }
+  
   /* Enhanced active state for looping */
   &.transitioning {
     animation: ${paradoxEffect} 1s linear;
@@ -83,6 +124,14 @@ const DialogueContainer = styled.div`
   
   &.looping {
     border: 1px solid ${THEME.colors.accentPrimary}44;
+  }
+  
+  /* Glitch effect when transitioning states */
+  &.glitching {
+    animation: ${glitchEffect} 1s step-end;
+    &::before {
+      animation: ${glitchEffect} 1s step-end reverse;
+    }
   }
   
   @media (max-width: 768px) {
@@ -100,10 +149,22 @@ const DialogueHeader = styled.div`
   padding-bottom: 1rem;
   border-bottom: 1px solid ${THEME.colors.borderPrimary};
   
+  .dialogue-title {
+    font-family: ${THEME.typography.fontFamilySecondary};
+    font-size: 1.2rem;
+    color: ${THEME.colors.textPrimary};
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
   .dialogue-depth {
     font-family: ${THEME.typography.fontFamilyPrimary};
     font-size: 0.9rem;
     color: ${THEME.colors.textSecondary};
+    padding: 0.25rem 0.5rem;
+    background-color: ${THEME.colors.bgSecondary};
+    border-radius: 4px;
+    border: 1px solid ${THEME.colors.borderPrimary};
   }
   
   .dialogue-looping {
@@ -118,12 +179,12 @@ const DialogueHeader = styled.div`
   }
 `;
 
-// Content container with improved scrolling behavior
+// Content container with improved scrolling behavior and progressive indent for the rightward shift
 const DialogueContent = styled.div`
   position: relative;
   max-height: 70vh;
   overflow-y: auto;
-  padding-right: 8px;
+  perspective: 1000px;
   
   /* Improved scrollbar styling */
   &::-webkit-scrollbar {
@@ -146,8 +207,13 @@ const DialogueContent = styled.div`
   }
   
   /* Create progressive space for rightward progression effect */
-  padding-right: ${props => props.depth * 15 + 20}px;
-  transition: padding-right 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding-right: ${props => Math.min(props.depth * 20, 200)}px;
+  transition: padding-right 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Create a perspective effect for depth */
+  transform-style: preserve-3d;
+  transform: ${props => props.depth > 5 ? `perspective(1000px) rotateX(${Math.min(props.depth - 5, 10)}deg)` : 'none'};
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 `;
 
 // Scanline effect overlay
@@ -198,6 +264,16 @@ const DialogueNavigation = styled.div`
       opacity: 0.5;
       cursor: not-allowed;
     }
+    
+    /* Reset button styling */
+    &.reset-button {
+      background-color: ${THEME.colors.borderPrimary};
+      color: ${THEME.colors.textPrimary};
+      
+      &:hover:not(:disabled) {
+        background-color: ${THEME.colors.accentPrimary};
+      }
+    }
   }
 `;
 
@@ -206,12 +282,53 @@ const ParadoxInsight = styled.div`
   font-family: ${THEME.typography.fontFamilyPhilosophical};
   font-style: italic;
   font-size: 0.9rem;
-  color: ${THEME.colors.accentPrimary};
+  color: ${THEME.colors.textPrimary};
   margin-top: 1.5rem;
   text-align: center;
   opacity: ${props => props.show ? 1 : 0};
   transform: translateY(${props => props.show ? 0 : '10px'});
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Text fade in/out effect */
+  &::before {
+    content: "";
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    bottom: -10px;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      ${THEME.colors.accentPrimary}33 50%,
+      transparent 100%
+    );
+  }
+`;
+
+// Wrapper for the progressive rightward shift effect
+const ProgressiveShiftWrapper = styled.div`
+  width: 100%;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* This is where the magic happens - the rightward and downward shifts */
+  transform: ${props => {
+    const xOffset = props.depth * props.xShiftFactor;
+    const yOffset = props.depth * props.yShiftFactor;
+    const rotateZ = props.depth * 0.5;
+    return `translate(${xOffset}px, ${yOffset}px) rotateZ(${rotateZ}deg)`;
+  }};
+  
+  /* Add perspective for 3D effect */
+  transform-style: preserve-3d;
+  
+  /* Only apply perspective effects at deeper levels */
+  ${props => props.depth > 5 && `
+    transform: translate(${props.depth * props.xShiftFactor}px, ${props.depth * props.yShiftFactor}px) 
+               rotateZ(${props.depth * 0.5}deg)
+               rotateY(${Math.min((props.depth - 5) * 2, 20)}deg);
+  `}
 `;
 
 /**
@@ -271,6 +388,10 @@ const DialogueSystem = ({
   const [showInsight, setShowInsight] = useState(false);
   const [disableNext, setDisableNext] = useState(false);
   const [disablePrev, setDisablePrev] = useState(true);
+  const [xShiftFactor, setXShiftFactor] = useState(15); // pixels per depth level
+  const [yShiftFactor, setYShiftFactor] = useState(10); // pixels per depth level
+  const [isGlitching, setIsGlitching] = useState(false);
+  
   const containerRef = useRef(null);
   const contentRef = useRef(null);
   
@@ -322,6 +443,10 @@ const DialogueSystem = ({
   useEffect(() => {
     if (enableLooping && getCurrentDepth() >= loopAfterDepth && !isLooping) {
       startLoop();
+      
+      // Trigger a glitch effect when loop starts
+      setIsGlitching(true);
+      setTimeout(() => setIsGlitching(false), 1000);
     }
   }, [enableLooping, getCurrentDepth, loopAfterDepth, isLooping, startLoop]);
   
@@ -331,6 +456,42 @@ const DialogueSystem = ({
     setDisablePrev(depth <= 1);
     setDisableNext(false); // We can always go deeper in an infinite loop
   }, [expandedNodes, getCurrentDepth]);
+  
+  // Adjust shift factors based on depth and looping state
+  useEffect(() => {
+    const depth = getCurrentDepth();
+    
+    // Increase the shift as we go deeper
+    if (depth > 10) {
+      // Make the shifts more dramatic at deeper levels
+      setXShiftFactor(20);
+      setYShiftFactor(15);
+    } else if (depth > 5) {
+      // Moderate shifts
+      setXShiftFactor(15);
+      setYShiftFactor(10);
+    } else {
+      // Initial subtle shifts
+      setXShiftFactor(10);
+      setYShiftFactor(5);
+    }
+    
+    // When looping, make it more extreme
+    if (isLooping) {
+      setXShiftFactor(prev => prev * 1.2);
+      setYShiftFactor(prev => prev * 1.2);
+    }
+  }, [getCurrentDepth, isLooping, loopCycles]);
+  
+  // Auto-scroll to show the latest content
+  useEffect(() => {
+    if (contentRef.current && expandedNodes.length > 0) {
+      contentRef.current.scrollTo({
+        top: contentRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, [expandedNodes]);
   
   // Callback for node expansion
   const handleNodeExpand = useCallback((node, isExpanded, path) => {
@@ -345,6 +506,10 @@ const DialogueSystem = ({
     
     setCurrentEffect(effect);
     setIsTransitioning(true);
+    
+    // Trigger glitch effect
+    setIsGlitching(true);
+    setTimeout(() => setIsGlitching(false), 500);
     
     // Briefly show transition effect
     setTimeout(() => {
@@ -429,30 +594,17 @@ const DialogueSystem = ({
       // Determine if this is a looping node
       const isLoopNode = isLooping && node.isLoop;
       
-      // Apply rightward progression styling
-      let xOffset = 0;
-      let yOffset = 0;
-      
-      if (rightProgression && isExpanded) {
-        // Calculate how deep we are in the expanded nodes list
-        const expandedIndex = expandedNodes.findIndex(path => path.join('-') === currentPath.join('-'));
-        if (expandedIndex !== -1) {
-          // Gradual increase with depth - this is key to the rightward/downward progression
-          xOffset = (expandedIndex + 1) * 15; // Shift right by 15px per level
-          yOffset = (expandedIndex + 1) * 10; // Shift down by 10px per level
-        }
-      }
+      // Calculate position in the expanded nodes list for progressive shift
+      const expandedIndex = expandedNodes.findIndex(path => path.join('-') === currentPath.join('-'));
+      const nodeDepth = expandedIndex !== -1 ? expandedIndex + 1 : 0;
       
       return (
-        <div 
+        <ProgressiveShiftWrapper
           key={pathKey}
-          className={`dialogue-node-wrapper ${isLoopNode ? 'looping-node' : ''}`}
-          style={{
-            transform: `translate(${xOffset}px, ${yOffset}px)`,
-            transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
-            position: 'relative',
-            zIndex: 100 - depth
-          }}
+          depth={nodeDepth}
+          xShiftFactor={rightProgression ? xShiftFactor : 0}
+          yShiftFactor={rightProgression ? yShiftFactor : 0}
+          className={`dialogue-node-wrapper depth-${nodeDepth} ${isLoopNode ? 'looping-node' : ''}`}
         >
           <DialogueNode
             node={node}
@@ -471,27 +623,41 @@ const DialogueSystem = ({
             {/* Render nested question */}
             {showNestedQuestion && renderDialogueNodes([node.nextQuestion], depth + 1, [...currentPath, 'nextQuestion'])}
           </DialogueNode>
-        </div>
+        </ProgressiveShiftWrapper>
       );
     });
   }, [
     expandedNodes, activeNodePath, handleNodeExpand, getLoopTransition,
-    isLooping, philosophical, terminal, rightProgression
+    isLooping, philosophical, terminal, rightProgression, xShiftFactor, yShiftFactor
   ]);
   
   // Handle navigation buttons
   const handleNavigateNext = useCallback(() => {
     if (disableNext) return;
+    
+    // Trigger a glitch effect when navigating
+    setIsGlitching(true);
+    setTimeout(() => setIsGlitching(false), 500);
+    
     navigateNext();
   }, [disableNext, navigateNext]);
   
   const handleNavigatePrevious = useCallback(() => {
     if (disablePrev) return;
+    
+    // Trigger a glitch effect when navigating
+    setIsGlitching(true);
+    setTimeout(() => setIsGlitching(false), 500);
+    
     navigatePrevious();
   }, [disablePrev, navigatePrevious]);
   
   // Function to reset dialogue state and position
   const handleResetDialogue = useCallback(() => {
+    // Trigger a strong glitch effect when resetting
+    setIsGlitching(true);
+    setTimeout(() => setIsGlitching(false), 800);
+    
     // Reset dialogue state
     resetDialogue();
     
@@ -522,11 +688,12 @@ const DialogueSystem = ({
   return (
     <DialogueContainer 
       ref={containerRef}
-      className={`dialogue-system ${isLooping ? 'looping' : ''} ${isTransitioning ? 'transitioning' : ''}`}
+      className={`dialogue-system ${isLooping ? 'looping' : ''} ${isTransitioning ? 'transitioning' : ''} ${isGlitching ? 'glitching' : ''}`}
       isLooping={isLooping}
     >
       {/* Header content */}
       <DialogueHeader>
+        <div className="dialogue-title">Philosophical Dialogue</div>
         <span className="dialogue-depth">
           Depth: {getCurrentDepth()}
         </span>
@@ -566,6 +733,7 @@ const DialogueSystem = ({
         {getCurrentDepth() > 3 && (
           <button
             onClick={handleResetDialogue}
+            className="reset-button"
             aria-label="Reset dialogue"
             style={{ marginLeft: 'auto', marginRight: 'auto' }}
           >
@@ -581,6 +749,18 @@ const DialogueSystem = ({
           Next →
         </button>
       </DialogueNavigation>
+      
+      {/* Ambient thought flow animations when looping */}
+      {isLooping && (
+        <ThoughtFlowEffect 
+          active={true}
+          particleCount={10}
+          bubbleCount={5}
+          origin="center"
+          zIndex={1}
+          opacity={0.3}
+        />
+      )}
       
       {/* Scanline effect overlay */}
       <DialogueScanlines isLooping={isLooping} />
