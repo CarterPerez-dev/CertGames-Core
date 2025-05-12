@@ -138,7 +138,7 @@ const NodeContainer = styled.div`
 const QuestionContainer = styled.div`
   background-color: ${props => props.expanded ? THEME.colors.bgTertiary : THEME.colors.bgSecondary};
   border: 1px solid ${props => props.expanded ? THEME.colors.accentPrimary : THEME.colors.borderPrimary};
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 1rem;
   cursor: pointer;
   transition: all 0.3s ${THEME.animations.curveEaseInOut};
@@ -176,8 +176,8 @@ const QuestionContainer = styled.div`
     background-color: ${THEME.colors.bgTertiary};
     border-color: ${THEME.colors.accentPrimary};
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    border-bottom-left-radius: ${props.showNestedQuestion ? '0' : '6px'};
-    border-bottom-right-radius: ${props.showNestedQuestion ? '0' : '6px'};
+    border-bottom-left-radius: ${props.showNestedQuestion ? '0' : '8px'};
+    border-bottom-right-radius: ${props.showNestedQuestion ? '0' : '8px'};
   `}
   
   /* Enhanced glitch effect on hover */
@@ -306,7 +306,7 @@ const AnswerContainer = styled.div`
   background-color: ${THEME.colors.bgPrimary};
   border: 1px solid ${THEME.colors.borderSecondary};
   border-top: none;
-  border-radius: 0 0 6px 6px;
+  border-radius: 0 0 8px 8px;
   position: relative;
   overflow: hidden;
   
@@ -454,20 +454,6 @@ const NestedQuestionContainer = styled.div`
  * Enhanced single node in the philosophical dialogue chain.
  * Supports nesting, progressive rightward/downward movement, and special styling
  * for different philosophical concepts.
- * 
- * @param {Object} node - The dialogue node data
- * @param {number} depth - Nesting depth level
- * @param {boolean} expanded - Whether the node is expanded
- * @param {Function} onExpand - Callback when node is expanded/collapsed
- * @param {boolean} showNestedQuestion - Whether to show nested questions
- * @param {boolean} philosophical - Whether to use philosophical styling
- * @param {boolean} terminal - Whether to use terminal styling
- * @param {boolean} isLoopNode - Whether this node is part of a loop
- * @param {Array} path - Path to this node in the dialogue tree
- * @param {string} loopTransition - Transition effect name for loop animation
- * @param {boolean} isActive - Whether this node is active
- * @param {boolean} isLast - Whether this is the last node in the sequence
- * @param {React.ReactNode} children - Child nodes (for nested questions)
  */
 const DialogueNode = ({
   node,
@@ -530,9 +516,9 @@ const DialogueNode = ({
     
     // Replace markdown-like syntax with spans and add CSS classes
     return text
-      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')  // Bold
-      .replace(/\*([^*]+)\*/g, '<em class="highlight">$1</em>')  // Italic/Highlight
-      .replace(/`([^`]+)`/g, '<code>$1</code>')  // Code
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') // Bold
+      .replace(/\*([^*]+)\*/g, '<em class="highlight">$1</em>') // Italic/Highlight
+      .replace(/`([^`]+)`/g, '<code>$1</code>') // Code
       .replace(/\_([^_]+)\_/g, '<span class="philosophical-term">$1</span>'); // Philosophical terms
   };
   

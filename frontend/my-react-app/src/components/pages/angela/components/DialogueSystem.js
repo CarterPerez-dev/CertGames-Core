@@ -7,8 +7,9 @@ import DialogueExpansion from './DialogueExpansion';
 import { useDialogueChain } from '../hooks/useDialogueChain';
 import { useInfiniteLoop } from '../hooks/useInfiniteLoop';
 import { ANGELA_THEME as THEME } from '../styles/PhilosophicalTheme';
+import { generateParadoxInsight } from '../utils/paradoxGenerator';
 
-// Enhanced animation for dialogue node
+// Pulse animation for active nodes
 const pulseEffect = keyframes`
   0% {
     box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.4);
@@ -36,20 +37,24 @@ const paradoxEffect = keyframes`
   }
 `;
 
-// Enhanced DialogueContainer with proper alignment and improved styling
+// Enhanced DialogueContainer with proper centering and styling
 const DialogueContainer = styled.div`
   max-width: 900px;
   margin: 0 auto; /* Center alignment */
-  padding: 2rem;
+  padding: 2.5rem;
   position: relative;
-  border-radius: 8px;
+  border-radius: 12px;
   background: ${props => props.isLooping ? 
     `linear-gradient(to bottom, ${THEME.colors.bgPrimary}aa, ${THEME.colors.bgSecondary}aa)` :
     `linear-gradient(to bottom, ${THEME.colors.bgPrimary}, ${THEME.colors.bgSecondary}22)`
   };
   box-shadow: ${props => props.isLooping ? 
     `0 0 30px rgba(255, 51, 51, 0.2)` :
-    'none'
+    '0 0 20px rgba(0, 0, 0, 0.3)'
+  };
+  border: 1px solid ${props => props.isLooping ? 
+    THEME.colors.accentPrimary + '33' : 
+    THEME.colors.borderPrimary + '33'
   };
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   
@@ -67,7 +72,7 @@ const DialogueContainer = styled.div`
     background-size: 100% 4px;
     z-index: -1;
     opacity: 0.2;
-    border-radius: 8px;
+    border-radius: 12px;
     pointer-events: none;
   }
   
@@ -82,6 +87,7 @@ const DialogueContainer = styled.div`
   
   @media (max-width: 768px) {
     padding: 1.5rem 1rem;
+    margin: 0 1rem;
   }
 `;
 
@@ -160,7 +166,7 @@ const DialogueScanlines = styled.div`
     rgba(32, 32, 32, 0.1) 50%
   );
   background-size: 100% 4px;
-  border-radius: 8px;
+  border-radius: 12px;
 `;
 
 // Navigation controls
@@ -214,16 +220,6 @@ const ParadoxInsight = styled.div`
  * Enhanced dialogue system that manages the philosophical Socratic dialogue.
  * Implements rightward and downward progression for a schizophrenic dialogue effect,
  * with paradoxical loop transitions and improved visual styling.
- * 
- * @param {Object[]} dialogueData - Initial dialogue tree data
- * @param {boolean} philosophical - Whether to use philosophical styling
- * @param {boolean} terminal - Whether to use terminal-style formatting
- * @param {boolean} autoAdvance - Whether to auto-advance the dialogue initially
- * @param {boolean} enableLooping - Whether to enable the paradoxical loop effect
- * @param {boolean} rightProgression - Whether to enable rightward/downward progression
- * @param {number} loopAfterDepth - After what depth to start the loop
- * @param {number} initialDepth - Initial depth to display
- * @param {function} onDialogueChange - Callback for dialogue state changes
  */
 const DialogueSystem = ({
   dialogueData,
@@ -262,8 +258,7 @@ const DialogueSystem = ({
     getLoopTransition,
     shouldEnterNewLoopPhase,
     createLoopPath,
-    generateLoopNodeType,
-    generateParadoxInsight
+    resetLoopState
   } = useInfiniteLoop(loopAfterDepth);
   
   // Internal state for tracking
@@ -299,7 +294,7 @@ const DialogueSystem = ({
       
       return () => clearInterval(insightTimer);
     }
-  }, [dialogueData, isLooping, showInsight, generateParadoxInsight]);
+  }, [dialogueData, isLooping, showInsight]);
   
   // Handle auto-advance
   useEffect(() => {
@@ -442,6 +437,7 @@ const DialogueSystem = ({
         // Calculate how deep we are in the expanded nodes list
         const expandedIndex = expandedNodes.findIndex(path => path.join('-') === currentPath.join('-'));
         if (expandedIndex !== -1) {
+          // Gradual increase with depth - this is key to the rightward/downward progression
           xOffset = (expandedIndex + 1) * 15; // Shift right by 15px per level
           yOffset = (expandedIndex + 1) * 10; // Shift down by 10px per level
         }
@@ -493,6 +489,25 @@ const DialogueSystem = ({
     if (disablePrev) return;
     navigatePrevious();
   }, [disablePrev, navigatePrevious]);
+  
+  // Function to reset dialogue state and position
+  const handleResetDialogue = useCallback(() => {
+    // Reset dialogue state
+    resetDialogue();
+    
+    // Reset loop state if looping
+    if (isLooping) {
+      resetLoopState();
+    }
+    
+    // Scroll to top of dialogue
+    if (contentRef.current) {
+      contentRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  }, [resetDialogue, isLooping, resetLoopState]);
   
   if (!isReady) {
     return (
@@ -546,6 +561,18 @@ const DialogueSystem = ({
         >
           ← Previous
         </button>
+        
+        {/* Add reset button when dialogue is deep enough */}
+        {getCurrentDepth() > 3 && (
+          <button
+            onClick={handleResetDialogue}
+            aria-label="Reset dialogue"
+            style={{ marginLeft: 'auto', marginRight: 'auto' }}
+          >
+            ↺ Reset
+          </button>
+        )}
+        
         <button
           onClick={handleNavigateNext}
           disabled={disableNext}

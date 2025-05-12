@@ -1,14 +1,26 @@
 // frontend/my-react-app/src/components/pages/angela/components/FeatureSection.js
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 import { ANGELA_THEME as THEME } from '../styles/PhilosophicalTheme';
 import { getRandomQuote } from '../utils/philosophicalQuotes';
+import { 
+  FaBrain, 
+  FaCogs, 
+  FaSearch, 
+  FaShieldAlt, 
+  FaTerminal, 
+  FaCode, 
+  FaGlobe, 
+  FaLightbulb 
+} from 'react-icons/fa';
 
 // Main container for the feature section
 const FeatureSectionContainer = styled.section`
   padding: 4rem 2rem;
   position: relative;
   overflow: hidden;
+  max-width: 1200px;
+  margin: 0 auto;
   
   @media (max-width: ${THEME.breakpoints.md}) {
     padding: 3rem 1rem;
@@ -55,15 +67,20 @@ const FeaturesGrid = styled.div`
 const FeatureCard = styled.div`
   background-color: ${THEME.colors.bgSecondary};
   border: 2px solid ${THEME.colors.borderPrimary};
+  border-radius: 8px;
   padding: 1.5rem;
   transition: all 0.3s ease;
   position: relative;
   transform-style: preserve-3d;
   perspective: 1000px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   
   &:hover {
     transform: translateY(-5px);
     border-color: ${THEME.colors.accentPrimary};
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     
     .feature-icon {
       transform: translateZ(20px) rotateY(10deg);
@@ -81,6 +98,7 @@ const FeatureCard = styled.div`
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
     pointer-events: none;
     z-index: 0;
+    border-radius: 8px;
   }
   
   // Pixelated corners
@@ -101,14 +119,20 @@ const FeatureCard = styled.div`
   }
 `;
 
-// Feature icon with 8-bit styling
-const FeatureIcon = styled.div`
+// Feature icon container 
+const FeatureIconContainer = styled.div`
   font-size: 2.5rem;
   color: ${THEME.colors.terminalGreen};
   margin-bottom: 1rem;
   transition: all 0.3s ease;
   transform: translateZ(0);
-  font-family: ${THEME.typography.fontFamilySecondary};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  svg {
+    filter: drop-shadow(0 0 5px rgba(51, 255, 51, 0.3));
+  }
   
   @media (max-width: ${THEME.breakpoints.md}) {
     font-size: 2rem;
@@ -149,6 +173,7 @@ const PhilosophicalQuoteContainer = styled.div`
   background-color: ${THEME.colors.bgSecondary}80;
   border: 1px solid ${THEME.colors.borderPrimary};
   position: relative;
+  border-radius: 8px;
   
   &::before {
     content: """;
@@ -196,9 +221,26 @@ const InteractiveExample = styled.div`
   max-width: 800px;
   background-color: ${THEME.colors.bgPrimary};
   border: 2px solid ${THEME.colors.borderPrimary};
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
   position: relative;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      rgba(18, 16, 16, 0) 50%, 
+      rgba(0, 0, 0, 0.1) 50%
+    );
+    background-size: 100% 4px;
+    z-index: 0;
+    opacity: 0.1;
+    pointer-events: none;
+  }
 `;
 
 // Terminal header with buttons
@@ -333,6 +375,7 @@ const ExampleButtons = styled.div`
     padding: 0.5rem 1rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    border-radius: 4px;
     
     &:hover {
       background-color: ${THEME.colors.bgTertiary};
@@ -347,42 +390,42 @@ const ExampleButtons = styled.div`
  */
 const FEATURES = [
   {
-    icon: "🧠",
+    icon: <FaBrain />,
     title: "Natural Language Understanding",
     description: "Angela interprets human language to extract intent, parameters, and goals, allowing you to use plain English instead of complex command syntax."
   },
   {
-    icon: "🔄",
+    icon: <FaCogs />,
     title: "Multi-Step Operation Planning",
     description: "Decomposes complex requests into coherent sequences of steps with dependencies and error handling, automating sophisticated workflows."
   },
   {
-    icon: "🔍",
+    icon: <FaSearch />,
     title: "Project Context Awareness",
     description: "Automatically detects project types, dependencies, and frameworks to provide intelligent suggestions and accurate command generation."
   },
   {
-    icon: "🛡️",
+    icon: <FaShieldAlt />,
     title: "Built-in Safety Mechanisms",
     description: "Comprehensive safety features including command previews, risk assessment, impact analysis, and transaction-based rollback capabilities."
   },
   {
-    icon: "🔌",
+    icon: <FaTerminal />,
     title: "Enhanced Shell Integration",
     description: "Deeply integrates with Bash, Zsh, and Tmux for a seamless experience with keybindings, status indicators, and auto-completion."
   },
   {
-    icon: "📊",
+    icon: <FaCode />,
     title: "Semantic Code Understanding",
     description: "Analyzes your codebase to understand functions, classes, and APIs, providing context-aware assistance and refactoring suggestions."
   },
   {
-    icon: "🌐",
+    icon: <FaGlobe />,
     title: "Cross-Tool Orchestration",
     description: "Coordinates complex sequences across multiple development tools (Git, Docker, cloud CLIs) maintaining context and data flow between steps."
   },
   {
-    icon: "💡",
+    icon: <FaLightbulb />,
     title: "Proactive Suggestions",
     description: "Monitors command errors, Git state, and file changes to offer timely advice and automated fixes when appropriate."
   }
@@ -434,7 +477,7 @@ const EXAMPLE_RESPONSES = {
  * 
  * Displays the key features of Angela CLI with interactive examples and a philosophical quote.
  */
-const FeatureSection = () => {
+const FeatureSection = ({ icons }) => {
   const [quote, setQuote] = useState(getRandomQuote());
   const [terminalHistory, setTerminalHistory] = useState([]);
   const [inputValue, setInputValue] = useState('');
@@ -510,13 +553,15 @@ const FeatureSection = () => {
   };
   
   return (
-    <FeatureSectionContainer>
+    <FeatureSectionContainer id="features">
       <SectionTitle>Key Features</SectionTitle>
       
       <FeaturesGrid>
         {FEATURES.map((feature, index) => (
           <FeatureCard key={index}>
-            <FeatureIcon className="feature-icon">{feature.icon}</FeatureIcon>
+            <FeatureIconContainer className="feature-icon">
+              {feature.icon}
+            </FeatureIconContainer>
             <FeatureTitle>{feature.title}</FeatureTitle>
             <FeatureDescription>{feature.description}</FeatureDescription>
           </FeatureCard>

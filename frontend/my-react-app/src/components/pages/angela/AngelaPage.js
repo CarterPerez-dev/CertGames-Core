@@ -2,7 +2,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Global, css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { FaBrain, FaCogs, FaSearch, FaShieldAlt, FaTerminal, FaCode, FaGlobe, FaLightbulb } from 'react-icons/fa';
+import { 
+  FaBrain, 
+  FaCogs, 
+  FaSearch, 
+  FaShieldAlt, 
+  FaTerminal, 
+  FaCode, 
+  FaGlobe, 
+  FaLightbulb,
+  FaChevronUp
+} from 'react-icons/fa';
 import HeroSection from './components/HeroSection';
 import FeatureSection from './components/FeatureSection';
 import InstallSection from './components/InstallSection';
@@ -12,7 +22,7 @@ import ThoughtFlowAnimation from './animations/ThoughtFlowAnimations';
 import { dialogueData } from './utils/dialogueData';
 import { ANGELA_THEME as THEME } from './styles/PhilosophicalTheme';
 
-// Matrix Rain Effect Component
+// Matrix Rain Effect Component - Enhanced with more characters and better performance
 const MatrixRain = () => {
   const canvasRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -42,8 +52,8 @@ const MatrixRain = () => {
     canvas.width = dimensions.width;
     canvas.height = dimensions.height;
     
-    // Characters for the matrix rain
-    const characters = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+    // Expanded characters for the matrix rain
+    const characters = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン¥∞§¶†‡≠±≈∫√∑∏πΣΔΩαβγδεζηθικλμνξοπρστυφχψω';
     
     // Character array setup
     const fontSize = 14;
@@ -51,23 +61,44 @@ const MatrixRain = () => {
     
     // Array of drops - one per column
     const drops = Array(columns).fill(0);
+    const speeds = Array(columns).fill(0).map(() => Math.random() * 0.8 + 0.5);
+    const charIndices = Array(columns).fill(0).map(() => Math.floor(Math.random() * characters.length));
     
-    // Matrix rain drawing
+    // Matrix rain drawing with optimizations
     const draw = () => {
-      // Black with alpha for fade effect
+      // Semi-transparent black for fade effect
       ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Set font and color
-      ctx.fillStyle = THEME.colors.terminalGreen;
-      ctx.font = `${fontSize}px monospace`;
-      
-      // Draw characters
       for (let i = 0; i < drops.length; i++) {
-        // Get random character
-        const text = characters.charAt(Math.floor(Math.random() * characters.length));
+        // Vary the character
+        charIndices[i] = (charIndices[i] + 1) % characters.length;
+        const text = characters.charAt(charIndices[i]);
         
-        // Draw text at (i*fontSize, drops[i]*fontSize)
+        // Add gradient effect with more green at the head
+        const headColor = drops[i] === 0 ? '#50ff50' : '#33ff33';
+        const midColor = '#29cc29';
+        const tailColor = '#164016';
+        
+        if (drops[i] > 1) {
+          // Tail character
+          ctx.fillStyle = tailColor;
+          ctx.font = `${fontSize - 2}px monospace`;
+          ctx.fillText(characters.charAt((charIndices[i] + 5) % characters.length), 
+                      i * fontSize, (drops[i] - 1) * fontSize);
+        }
+        
+        // Mid character
+        if (drops[i] > 0) {
+          ctx.fillStyle = midColor;
+          ctx.font = `${fontSize - 1}px monospace`;
+          ctx.fillText(characters.charAt((charIndices[i] + 2) % characters.length), 
+                      i * fontSize, drops[i] * fontSize - fontSize);
+        }
+        
+        // Head character (latest)
+        ctx.fillStyle = headColor;
+        ctx.font = `${fontSize}px monospace`;
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
         
         // If drop reaches bottom or random chance, reset to top
@@ -75,8 +106,8 @@ const MatrixRain = () => {
           drops[i] = 0;
         }
         
-        // Move drops down
-        drops[i]++;
+        // Move drops down at varying speeds
+        drops[i] += speeds[i];
       }
     };
     
@@ -103,7 +134,7 @@ const MatrixRain = () => {
   );
 };
 
-// Custom global styles for improved appearance
+// Enhanced global styles for improved appearance
 const angelaEnhancedStyles = css`
   /* Import required fonts */
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600&family=VT323&display=swap');
@@ -125,14 +156,6 @@ const angelaEnhancedStyles = css`
     --angela-terminal-green: #33ff33;
     --angela-terminal-cyan: #33ffff;
     --angela-terminal-yellow: #ffff33;
-    
-    /* Spacing */
-    --angela-space-xs: 0.25rem;
-    --angela-space-sm: 0.5rem;
-    --angela-space-md: 1rem;
-    --angela-space-lg: 1.5rem;
-    --angela-space-xl: 2rem;
-    --angela-space-xxl: 3rem;
   }
   
   .angela-page {
@@ -143,17 +166,24 @@ const angelaEnhancedStyles = css`
     overflow-x: hidden;
     position: relative;
     min-height: 100vh;
+    width: 100%;
     
     * {
       box-sizing: border-box;
     }
 
-    /* Center all main content sections */
-    .angela-content {
+    /* Ensure all main content sections are centered properly */
+    section {
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: var(--angela-space-xl);
+      padding: 4rem 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      section {
+        padding: 3rem 1rem;
+      }
     }
     
     /* Add textured background */
@@ -163,8 +193,8 @@ const angelaEnhancedStyles = css`
       left: 0;
       right: 0;
       bottom: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      opacity: 0.07;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.08;
       pointer-events: none;
       z-index: -1;
     }
@@ -187,86 +217,6 @@ const angelaEnhancedStyles = css`
       pointer-events: none;
       z-index: 1;
       opacity: 0.25;
-    }
-    
-    /* Typography improvements */
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'VT323', 'Press Start 2P', monospace;
-      letter-spacing: 0.05em;
-      line-height: 1.2;
-    }
-    
-    .section-title {
-      font-size: 3rem;
-      color: var(--angela-text-primary);
-      text-align: center;
-      margin-bottom: 3rem;
-      text-transform: uppercase;
-      position: relative;
-    }
-    
-    .section-title::after {
-      content: "";
-      position: absolute;
-      bottom: -1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 4px;
-      background-color: var(--angela-accent-primary);
-    }
-    
-    /* Improve feature cards */
-    .feature-card {
-      background-color: var(--angela-bg-secondary);
-      border: 1px solid var(--angela-border-primary);
-      border-radius: 6px;
-      padding: 1.5rem;
-      transition: all 0.3s ease;
-      position: relative;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .feature-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--angela-accent-primary);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    }
-    
-    .feature-icon {
-      font-size: 2.5rem;
-      color: var(--angela-accent-primary);
-      margin-bottom: 1rem;
-      transition: all 0.3s ease;
-    }
-    
-    .feature-card:hover .feature-icon {
-      transform: scale(1.1);
-      color: var(--angela-accent-secondary);
-    }
-    
-    /* Improve code blocks */
-    .code-block {
-      position: relative;
-      background-color: var(--angela-bg-secondary);
-      border: 2px solid var(--angela-border-primary);
-      padding: 1.5rem;
-      margin: 2rem auto;
-      overflow-x: auto;
-      border-radius: 6px;
-    }
-    
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .angela-content {
-        padding: var(--angela-space-md);
-      }
-      
-      .section-title {
-        font-size: 2.25rem;
-      }
     }
   }
 `;
@@ -309,7 +259,7 @@ const SectionWrapper = styled.div`
   }
 `;
 
-// Section separator with improved styling
+// Enhanced section separator with improved styling
 const SectionSeparator = styled.div`
   width: 100%;
   max-width: 1200px;
@@ -343,8 +293,8 @@ const SectionSeparator = styled.div`
   }
 `;
 
-// Navigation button with improved styling
-const NavigationButton = styled.button`
+// Fixed scroll button with improved styling
+const ScrollButton = styled.button`
   position: fixed;
   bottom: 40px;
   right: 40px;
@@ -362,16 +312,14 @@ const NavigationButton = styled.button`
   transition: all 0.3s ${THEME.animations.curveEaseInOut};
   box-shadow: 0 0 10px rgba(51, 255, 51, 0.3);
   border-radius: 8px;
+  opacity: ${props => props.visible ? 1 : 0};
+  transform: translateY(${props => props.visible ? 0 : '20px'});
+  pointer-events: ${props => props.visible ? 'all' : 'none'};
   
   &:hover {
     background-color: ${THEME.colors.bgTertiary};
     transform: translateY(-5px);
     box-shadow: 0 5px 15px rgba(51, 255, 51, 0.4);
-  }
-  
-  &::after {
-    content: "⬆";
-    font-family: monospace;
   }
 `;
 
@@ -387,6 +335,8 @@ const AngelaPage = () => {
   const [glitchActive, setGlitchActive] = useState(false);
   const dialogueRef = useRef(null);
   const heroRef = useRef(null);
+  const featuresRef = useRef(null);
+  const installRef = useRef(null);
 
   // Track scroll position for effects
   useEffect(() => {
@@ -419,10 +369,10 @@ const AngelaPage = () => {
     });
   };
 
-  // Scroll to dialogue section
-  const scrollToDialogue = () => {
-    if (dialogueRef.current) {
-      dialogueRef.current.scrollIntoView({ behavior: 'smooth' });
+  // Scroll to specific sections
+  const scrollToSection = (ref) => {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -437,7 +387,10 @@ const AngelaPage = () => {
       <MatrixRain />
       
       {/* Main content */}
-      <HeroSection ref={heroRef} onExploreClick={scrollToDialogue} />
+      <HeroSection 
+        ref={heroRef} 
+        onExploreClick={() => scrollToSection(dialogueRef)} 
+      />
       
       <SectionSeparator />
       
@@ -449,32 +402,33 @@ const AngelaPage = () => {
             enableLooping={true}
             initialDepth={1}
             rightProgression={true} // Enable rightward and downward progression
+            loopAfterDepth={20}
           />
         </div>
       </SectionWrapper>
       
       <SectionSeparator />
       
-      <SectionWrapper>
-        <FeatureSection iconLibrary={
-          {
-            brain: <FaBrain />,
-            cogs: <FaCogs />,
-            search: <FaSearch />,
-            shield: <FaShieldAlt />,
-            terminal: <FaTerminal />,
-            code: <FaCode />,
-            globe: <FaGlobe />,
-            lightbulb: <FaLightbulb />
-          }
-        } />
-      </SectionWrapper>
+      <div ref={featuresRef}>
+        <FeatureSection 
+          icons={{
+            brain: <FaBrain size={30} />,
+            cogs: <FaCogs size={30} />,
+            search: <FaSearch size={30} />,
+            shield: <FaShieldAlt size={30} />,
+            terminal: <FaTerminal size={30} />,
+            code: <FaCode size={30} />,
+            globe: <FaGlobe size={30} />,
+            lightbulb: <FaLightbulb size={30} />
+          }} 
+        />
+      </div>
       
       <SectionSeparator />
       
-      <SectionWrapper>
+      <div ref={installRef}>
         <InstallSection />
-      </SectionWrapper>
+      </div>
       
       <SectionSeparator />
       
@@ -492,13 +446,14 @@ const AngelaPage = () => {
         zIndex={-1}
       />
       
-      {/* Navigation */}
-      {showScrollButton && (
-        <NavigationButton 
-          onClick={handleScrollToTop}
-          aria-label="Scroll to Top"
-        />
-      )}
+      {/* Scroll to top button */}
+      <ScrollButton 
+        onClick={handleScrollToTop}
+        visible={showScrollButton}
+        aria-label="Scroll to Top"
+      >
+        <FaChevronUp />
+      </ScrollButton>
     </AngelaPageContainer>
   );
 };
