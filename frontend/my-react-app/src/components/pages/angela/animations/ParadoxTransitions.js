@@ -1,6 +1,7 @@
 // frontend/my-react-app/src/components/pages/angela/animations/ParadoxTransitions.js
 import React, { useState, useEffect, useRef } from 'react';
-import styled, { keyframes } from '@emotion/styled';
+import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
 import { ANGELA_THEME as THEME } from '../styles/PhilosophicalTheme';
 
 // Keyframe animations for paradox effects

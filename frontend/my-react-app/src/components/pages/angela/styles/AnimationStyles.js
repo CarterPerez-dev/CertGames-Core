@@ -558,8 +558,8 @@ export const PulsingElement = styled.div`
   animation: ${pulseAnimation} ${props => props.duration || '2s'} ease-in-out infinite;
 `;
 
-export const FloatingElement = styled.div`
-  animation: ${floatingAnimation} ${props => props.duration || '6s'} ease-in-out infinite;
+export const FloatElement = styled.div`
+  animation: ${floatAnimation} ${props => props.duration || '6s'} ease-in-out infinite;
   transform-origin: center;
 `;
 
@@ -854,7 +854,7 @@ export default {
   TypewriterText,
   FlickeringText,
   PulsingElement,
-  FloatingElement,
+  FloatElement,
   RotatingElement,
   FadeInElement,
   SlideInUpElement,

@@ -217,7 +217,7 @@ function App() {
           <Route path="/" element={<HomeOrProfile />} />
           
           {/* Angela-cli webpage */}
-          <Route path="/angela" element={<InfoPage />} />
+          <Route path="/angela" element={<AngelaPage />} />
           
           {/* Added additional home route that always shows InfoPage */}         
           <Route path="/home" element={<InfoPage />} />
