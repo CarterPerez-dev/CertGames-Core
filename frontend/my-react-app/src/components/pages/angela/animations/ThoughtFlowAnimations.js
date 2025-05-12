@@ -1,353 +1,792 @@
-// frontend/my-react-app/src/components/pages/angela/animations/ThoughtFlowAnimations.js
-import React, { useState, useEffect, useRef } from 'react';
-import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
+// frontend/my-react-app/src/components/pages/angela/animations/PhilosophicalParticles.js
+import React, { useEffect, useRef, useState } from 'react';
 import { ANGELA_THEME as THEME } from '../styles/PhilosophicalTheme';
 
-// Keyframe animations for the thought particles
-const thoughtFlowAnimation = keyframes`
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.7;
-  }
-  90% {
-    opacity: 0.3;
-  }
-  100% {
-    transform: translate(var(--move-x, -50px), var(--move-y, -50px)) scale(var(--end-scale, 0.5));
-    opacity: 0;
-  }
-`;
-
-const pulseAnimation = keyframes`
-  0% {
-    transform: scale(1);
-    opacity: var(--max-opacity, 0.7);
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: var(--min-opacity, 0.3);
-  }
-  100% {
-    transform: scale(1);
-    opacity: var(--max-opacity, 0.7);
-  }
-`;
-
-const floatAnimation = keyframes`
-  0% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(var(--float-distance, -10px)) rotate(var(--float-rotation, 5deg));
-  }
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-`;
-
-// Styled components for the thought flow system
-const ThoughtFlowContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: ${props => props.zIndex || 0};
-`;
-
-const ThoughtParticle = styled.div`
-  position: absolute;
-  width: var(--size, 8px);
-  height: var(--size, 8px);
-  border-radius: 50%;
-  background-color: var(--color, rgba(255, 255, 255, 0.2));
-  opacity: 0;
-  animation: ${thoughtFlowAnimation} var(--duration, 5s) ease-out forwards;
-  animation-delay: var(--delay, 0s);
-`;
-
-const ThoughtBubble = styled.div`
-  position: absolute;
-  width: var(--size, 20px);
-  height: var(--size, 20px);
-  border-radius: 50%;
-  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.2));
-  background-color: var(--bg-color, rgba(20, 20, 20, 0.5));
-  box-shadow: 0 0 10px var(--glow-color, rgba(255, 255, 255, 0.1));
-  animation: ${pulseAnimation} var(--duration, 3s) ease-in-out infinite;
-  animation-delay: var(--delay, 0s);
-`;
-
-const ThoughtLine = styled.div`
-  position: absolute;
-  height: 1px;
-  width: var(--length, 50px);
-  background: linear-gradient(
-    to right,
-    transparent,
-    var(--color, rgba(255, 255, 255, 0.2)),
-    transparent
-  );
-  transform-origin: left center;
-  transform: rotate(var(--angle, 0deg));
-  opacity: var(--opacity, 0.5);
-  animation: ${floatAnimation} var(--duration, 6s) ease-in-out infinite;
-  animation-delay: var(--delay, 0s);
-`;
-
-const ThoughtCluster = styled.div`
-  position: absolute;
-  top: var(--top, 50%);
-  left: var(--left, 50%);
-  width: var(--size, 40px);
-  height: var(--size, 40px);
-  transform-origin: center;
-  animation: ${floatAnimation} var(--duration, 8s) ease-in-out infinite;
-  animation-delay: var(--delay, 0s);
-`;
-
 /**
- * ThoughtFlowEffect Component
- * 
- * Creates animated thought particles, bubbles, and connection lines
- * that flow upward/outward to simulate thought processes
- * 
- * @param {boolean} active - Whether the effect is active
- * @param {number} particleCount - Number of particles to generate
- * @param {number} bubbleCount - Number of thought bubbles
- * @param {number} lineCount - Number of connection lines
- * @param {number} clusterCount - Number of particle clusters
- * @param {string} baseColor - Base color for the effects
- * @param {number} zIndex - Z-index for positioning
- * @param {string} origin - Origin point ('center', 'bottom', etc.)
+ * Creates a particle system that reacts to philosophical concepts
+ * and forms symbolic patterns representing different types of thought
  */
-const ThoughtFlowEffect = ({
+const PhilosophicalParticles = ({
   active = true,
-  particleCount = 15,
-  bubbleCount = 5,
-  lineCount = 10,
-  clusterCount = 3,
-  baseColor = 'rgba(255, 255, 255, 0.2)',
-  accentColor = THEME.colors.accentPrimary + '33', // 33 = 20% opacity
+  type = 'default', // default, question, answer, paradox, consciousness, enlightenment, perception, dualism, dialogue
+  particleCount = 100,
+  intensity = 1,
+  size = '100%',
+  height = '100%',
+  backgroundColor = 'transparent',
+  responsive = true,
   zIndex = 0,
-  origin = 'center'
+  opacity = 0.7,
+  onReady = null,
 }) => {
-  const [particles, setParticles] = useState([]);
-  const [bubbles, setBubbles] = useState([]);
-  const [lines, setLines] = useState([]);
-  const [clusters, setClusters] = useState([]);
   const containerRef = useRef(null);
+  const canvasRef = useRef(null);
+  const requestIdRef = useRef(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const particlesRef = useRef([]);
+  const timeRef = useRef(0);
+  const [isInitialized, setIsInitialized] = useState(false);
   
-  // Generate all visual elements when component mounts or active state changes
+  // Update dimensions on window resize
   useEffect(() => {
-    if (!active) {
-      setParticles([]);
-      setBubbles([]);
-      setLines([]);
-      setClusters([]);
-      return;
+    if (!responsive || !containerRef.current) return;
+    
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        const { offsetWidth, offsetHeight } = containerRef.current;
+        setDimensions({
+          width: offsetWidth,
+          height: offsetHeight,
+        });
+        
+        if (canvasRef.current) {
+          canvasRef.current.width = offsetWidth;
+          canvasRef.current.height = offsetHeight;
+        }
+      }
+    };
+    
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    
+    return () => {
+      window.removeEventListener('resize', updateDimensions);
+    };
+  }, [responsive]);
+  
+  // Initialize particles based on philosophical type
+  useEffect(() => {
+    if (!active || !canvasRef.current || dimensions.width === 0 || dimensions.height === 0) return;
+    
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const { width, height } = dimensions;
+    
+    // Set canvas size
+    canvas.width = width;
+    canvas.height = height;
+    
+    // Create particles based on philosophical type
+    const createParticles = () => {
+      const particles = [];
+      
+      // Common properties for all particle types
+      const baseProperties = {
+        x: width / 2,
+        y: height / 2,
+        size: Math.random() * 4 + 1,
+        opacity: Math.random() * 0.5 + 0.3,
+      };
+      
+      // Get particle color based on philosophical type
+      const getColorForType = () => {
+        switch (type) {
+          case 'question':
+            return THEME.colors.textPrimary;
+          case 'answer':
+            return THEME.colors.textSecondary;
+          case 'paradox':
+            return THEME.colors.accentPrimary;
+          case 'consciousness':
+            return THEME.colors.accentSecondary;
+          case 'enlightenment':
+            return THEME.colors.accentTertiary;
+          case 'perception':
+            return THEME.colors.highlightPrimary;
+          case 'dualism':
+            return THEME.colors.highlightSecondary;
+          case 'dialogue':
+            return THEME.colors.highlightTertiary;
+          default:
+            return THEME.colors.textPrimary;
+        }
+      };
+      
+      // Behavior patterns based on philosophical type
+      const setParticleBehavior = (particle) => {
+        switch (type) {
+          case 'question':
+            // Questioning particles move outward in spirals
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * width * 0.4;
+            particle.x = width / 2 + Math.cos(angle) * distance;
+            particle.y = height / 2 + Math.sin(angle) * distance;
+            particle.vx = Math.cos(angle) * (Math.random() * 0.5 + 0.5) * 0.7;
+            particle.vy = Math.sin(angle) * (Math.random() * 0.5 + 0.5) * 0.7;
+            particle.spin = (Math.random() - 0.5) * 0.1;
+            particle.waveAmplitude = Math.random() * 5 + 2;
+            particle.waveFrequency = Math.random() * 0.02 + 0.01;
+            particle.wavePhase = Math.random() * Math.PI * 2;
+            break;
+            
+          case 'answer':
+            // Answer particles converge to form patterns
+            particle.x = Math.random() * width;
+            particle.y = Math.random() * height;
+            particle.targetX = width / 2 + (Math.random() - 0.5) * width * 0.6;
+            particle.targetY = height / 2 + (Math.random() - 0.5) * height * 0.6;
+            particle.speed = Math.random() * 0.05 + 0.02;
+            particle.wobbleFreq = Math.random() * 0.05 + 0.01;
+            particle.wobbleAmp = Math.random() * 10 + 5;
+            particle.phase = Math.random() * Math.PI * 2;
+            break;
+            
+          case 'paradox':
+            // Paradox particles move in contradictory patterns
+            particle.x = width / 2 + (Math.random() - 0.5) * width * 0.8;
+            particle.y = height / 2 + (Math.random() - 0.5) * height * 0.8;
+            particle.vx = (Math.random() - 0.5) * 2;
+            particle.vy = (Math.random() - 0.5) * 2;
+            particle.reverseTime = Math.random() * 100 + 50;
+            particle.reverseTick = 0;
+            particle.pulseSpeed = Math.random() * 0.05 + 0.02;
+            particle.pulseMagnitude = Math.random() * 0.5 + 0.5;
+            break;
+            
+          case 'consciousness':
+            // Consciousness particles form a neural network-like pattern
+            particle.x = Math.random() * width;
+            particle.y = Math.random() * height;
+            particle.size = Math.random() * 3 + 1;
+            particle.connections = [];
+            particle.connectionCount = Math.floor(Math.random() * 3) + 1;
+            particle.pulseSpeed = Math.random() * 0.05 + 0.01;
+            particle.pulsePhase = Math.random() * Math.PI * 2;
+            break;
+            
+          case 'enlightenment':
+            // Enlightenment particles emanate from center in radiating waves
+            const radius = Math.random() * (width > height ? height : width) * 0.4;
+            const rad = Math.random() * Math.PI * 2;
+            particle.x = width / 2 + Math.cos(rad) * radius;
+            particle.y = height / 2 + Math.sin(rad) * radius;
+            particle.angle = rad;
+            particle.radius = radius;
+            particle.speed = Math.random() * 0.5 + 0.5;
+            particle.waveFreq = Math.random() * 0.1 + 0.05;
+            particle.glowIntensity = Math.random() * 0.5 + 0.5;
+            break;
+            
+          case 'perception':
+            // Perception particles constantly shift and change perspective
+            particle.x = Math.random() * width;
+            particle.y = Math.random() * height;
+            particle.z = Math.random() * 200 - 100;
+            particle.perspective = 400;
+            particle.vz = (Math.random() - 0.5) * 2;
+            particle.rotationX = Math.random() * Math.PI * 2;
+            particle.rotationY = Math.random() * Math.PI * 2;
+            particle.rotationSpeedX = (Math.random() - 0.5) * 0.01;
+            particle.rotationSpeedY = (Math.random() - 0.5) * 0.01;
+            break;
+            
+          case 'dualism':
+            // Dualism particles split into two opposing groups
+            particle.group = Math.random() > 0.5 ? 1 : -1;
+            particle.x = width / 2 + (Math.random() - 0.5) * width * 0.5;
+            particle.y = height / 2 + (Math.random() - 0.5) * height * 0.5;
+            particle.targetX = width / 2 + particle.group * (Math.random() * width * 0.3 + width * 0.1);
+            particle.targetY = height / 2 + (Math.random() - 0.5) * height * 0.6;
+            particle.speed = Math.random() * 0.03 + 0.01;
+            particle.color = particle.group > 0 ? THEME.colors.highlightSecondary : THEME.colors.accentSecondary;
+            break;
+            
+          case 'dialogue':
+            // Dialogue particles form conversational flow patterns
+            const startSide = Math.random() > 0.5;
+            particle.x = startSide ? 0 : width;
+            particle.y = Math.random() * height;
+            particle.speed = Math.random() * 1 + 0.5;
+            particle.amplitude = Math.random() * height * 0.2 + height * 0.05;
+            particle.wavelength = Math.random() * width * 0.3 + width * 0.2;
+            particle.phase = Math.random() * Math.PI * 2;
+            break;
+            
+          default:
+            // Default particles move in a gentle flow
+            particle.x = Math.random() * width;
+            particle.y = Math.random() * height;
+            particle.vx = (Math.random() - 0.5) * 1;
+            particle.vy = (Math.random() - 0.5) * 1;
+            particle.friction = 0.95;
+            break;
+        }
+        
+        return particle;
+      };
+      
+      // Create particles with type-specific behavior
+      for (let i = 0; i < particleCount; i++) {
+        const particle = {
+          ...baseProperties,
+          color: getColorForType(),
+          id: i,
+        };
+        
+        particles.push(setParticleBehavior(particle));
+      }
+      
+      // For 'consciousness' type, create connections between particles
+      if (type === 'consciousness') {
+        // Create neural network-like connections
+        particles.forEach(particle => {
+          // Find nearest particles to connect to
+          const others = [...particles].filter(p => p.id !== particle.id);
+          others.sort((a, b) => {
+            const distA = Math.sqrt(Math.pow(particle.x - a.x, 2) + Math.pow(particle.y - a.y, 2));
+            const distB = Math.sqrt(Math.pow(particle.x - b.x, 2) + Math.pow(particle.y - b.y, 2));
+            return distA - distB;
+          });
+          
+          // Connect to nearest particles
+          for (let i = 0; i < particle.connectionCount && i < others.length; i++) {
+            particle.connections.push(others[i].id);
+          }
+        });
+      }
+      
+      return particles;
+    };
+    
+    particlesRef.current = createParticles();
+    setIsInitialized(true);
+    
+    // Notify when ready
+    if (onReady) {
+      onReady();
     }
-    
-    // Generate thought particles
-    const newParticles = Array.from({ length: particleCount }).map((_, i) => ({
-      id: `particle-${i}`,
-      size: `${Math.random() * 8 + 4}px`,
-      color: Math.random() > 0.7 ? accentColor : baseColor,
-      top: getOriginY(origin) + Math.random() * 50 - 25 + '%',
-      left: getOriginX(origin) + Math.random() * 50 - 25 + '%',
-      moveX: `${Math.random() * 100 - 50}px`,
-      moveY: `${Math.random() * -100 - 30}px`,
-      endScale: Math.random() * 0.5 + 0.2,
-      duration: `${Math.random() * 3 + 3}s`,
-      delay: `${Math.random() * 5}s`
-    }));
-    setParticles(newParticles);
-    
-    // Generate thought bubbles
-    const newBubbles = Array.from({ length: bubbleCount }).map((_, i) => ({
-      id: `bubble-${i}`,
-      size: `${Math.random() * 20 + 10}px`,
-      borderColor: Math.random() > 0.7 ? accentColor : baseColor,
-      bgColor: THEME.colors.bgSecondary + '80', // 80 = 50% opacity
-      glowColor: Math.random() > 0.7 ? THEME.colors.accentGlow : THEME.colors.enlightenmentGlow,
-      top: getOriginY(origin) + Math.random() * 70 - 35 + '%',
-      left: getOriginX(origin) + Math.random() * 70 - 35 + '%',
-      maxOpacity: Math.random() * 0.4 + 0.3,
-      minOpacity: Math.random() * 0.2 + 0.1,
-      duration: `${Math.random() * 4 + 4}s`,
-      delay: `${Math.random() * 5}s`
-    }));
-    setBubbles(newBubbles);
-    
-    // Generate connecting thought lines
-    const newLines = Array.from({ length: lineCount }).map((_, i) => ({
-      id: `line-${i}`,
-      length: `${Math.random() * 60 + 20}px`,
-      color: Math.random() > 0.8 ? accentColor : baseColor,
-      angle: `${Math.random() * 360}deg`,
-      top: getOriginY(origin) + Math.random() * 80 - 40 + '%',
-      left: getOriginX(origin) + Math.random() * 80 - 40 + '%',
-      opacity: Math.random() * 0.3 + 0.1,
-      floatDistance: `${Math.random() * 15 + 5}px`,
-      floatRotation: `${Math.random() * 20 - 10}deg`,
-      duration: `${Math.random() * 4 + 4}s`,
-      delay: `${Math.random() * 5}s`
-    }));
-    setLines(newLines);
-    
-    // Generate particle clusters
-    const newClusters = Array.from({ length: clusterCount }).map((_, i) => ({
-      id: `cluster-${i}`,
-      size: `${Math.random() * 30 + 20}px`,
-      top: getOriginY(origin) + Math.random() * 60 - 30 + '%',
-      left: getOriginX(origin) + Math.random() * 60 - 30 + '%',
-      floatDistance: `${Math.random() * 20 + 10}px`,
-      floatRotation: `${Math.random() * 20 - 10}deg`,
-      duration: `${Math.random() * 5 + 5}s`,
-      delay: `${Math.random() * 4}s`
-    }));
-    setClusters(newClusters);
-    
-  }, [active, particleCount, bubbleCount, lineCount, clusterCount, baseColor, accentColor, origin]);
+  }, [active, dimensions, type, particleCount, onReady]);
   
-  // Helper functions to get origin coordinates
-  const getOriginX = (origin) => {
-    if (origin === 'center') return 50;
-    if (origin === 'left') return 20;
-    if (origin === 'right') return 80;
-    if (origin.includes('left')) return 20;
-    if (origin.includes('right')) return 80;
-    return 50;
-  };
-  
-  const getOriginY = (origin) => {
-    if (origin === 'center') return 50;
-    if (origin === 'top') return 20;
-    if (origin === 'bottom') return 80;
-    if (origin.includes('top')) return 20;
-    if (origin.includes('bottom')) return 80;
-    return 50;
-  };
-  
-  // Render cluster with child particles
-  const renderCluster = (cluster) => {
-    // Generate 3-5 child particles within the cluster
-    const childParticles = Array.from({ length: Math.floor(Math.random() * 3) + 3 }).map((_, i) => ({
-      id: `${cluster.id}-child-${i}`,
-      size: `${Math.random() * 6 + 2}px`,
-      color: Math.random() > 0.7 ? accentColor : baseColor,
-      top: `${Math.random() * 100}%`,
-      left: `${Math.random() * 100}%`,
-      moveX: `${Math.random() * 20 - 10}px`,
-      moveY: `${Math.random() * 20 - 15}px`,
-      endScale: Math.random() * 0.3 + 0.2,
-      duration: `${Math.random() * 2 + 2}s`,
-      delay: `${Math.random() * 1}s`
-    }));
+  // Animate particles
+  useEffect(() => {
+    if (!active || !isInitialized || !canvasRef.current) return;
     
-    return (
-      <ThoughtCluster
-        key={cluster.id}
-        style={{
-          '--top': cluster.top,
-          '--left': cluster.left,
-          '--size': cluster.size,
-          '--float-distance': cluster.floatDistance,
-          '--float-rotation': cluster.floatRotation,
-          '--duration': cluster.duration,
-          '--delay': cluster.delay
-        }}
-      >
-        {childParticles.map(particle => (
-          <ThoughtParticle
-            key={particle.id}
-            style={{
-              '--size': particle.size,
-              '--color': particle.color,
-              '--move-x': particle.moveX,
-              '--move-y': particle.moveY,
-              '--end-scale': particle.endScale,
-              '--duration': particle.duration,
-              '--delay': particle.delay,
-              top: particle.top,
-              left: particle.left
-            }}
-          />
-        ))}
-      </ThoughtCluster>
-    );
-  };
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const { width, height } = dimensions;
+    
+    // Animation loop
+    const animate = () => {
+      // Increment time
+      timeRef.current += 0.01;
+      const time = timeRef.current;
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, width, height);
+      
+      // Set background if not transparent
+      if (backgroundColor !== 'transparent') {
+        ctx.fillStyle = backgroundColor;
+        ctx.fillRect(0, 0, width, height);
+      }
+      
+      // Update and draw particles based on type
+      switch (type) {
+        case 'question':
+          // Draw questioning particle spirals
+          ctx.globalCompositeOperation = 'lighter';
+          particlesRef.current.forEach(particle => {
+            // Update position with outward spiral
+            particle.x += particle.vx * intensity;
+            particle.y += particle.vy * intensity;
+            
+            // Add wave motion
+            const waveOffset = Math.sin(time * particle.waveFrequency + particle.wavePhase) * particle.waveAmplitude;
+            const x = particle.x + Math.cos(particle.spin * time) * waveOffset;
+            const y = particle.y + Math.sin(particle.spin * time) * waveOffset;
+            
+            // Reset if out of bounds
+            if (x < -50 || x > width + 50 || y < -50 || y > height + 50) {
+              const angle = Math.random() * Math.PI * 2;
+              particle.x = width / 2;
+              particle.y = height / 2;
+              particle.vx = Math.cos(angle) * (Math.random() * 0.5 + 0.5) * 0.7;
+              particle.vy = Math.sin(angle) * (Math.random() * 0.5 + 0.5) * 0.7;
+            }
+            
+            // Draw particle
+            ctx.beginPath();
+            ctx.arc(x, y, particle.size, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0');
+            ctx.fill();
+            
+            // Add glow
+            ctx.shadowBlur = particle.size * 3;
+            ctx.shadowColor = particle.color;
+          });
+          break;
+          
+        case 'answer':
+          // Draw converging answer particles
+          ctx.globalCompositeOperation = 'source-over';
+          
+          // First draw connections
+          ctx.strokeStyle = THEME.colors.textSecondary + '33';
+          ctx.lineWidth = 0.5;
+          
+          let lastX = null, lastY = null;
+          
+          particlesRef.current.forEach(particle => {
+            // Move particle toward target with wobble
+            const dx = particle.targetX - particle.x;
+            const dy = particle.targetY - particle.y;
+            const wobbleX = Math.sin(time * particle.wobbleFreq + particle.phase) * particle.wobbleAmp;
+            const wobbleY = Math.cos(time * particle.wobbleFreq + particle.phase) * particle.wobbleAmp;
+            
+            particle.x += dx * particle.speed * intensity + wobbleX * 0.01;
+            particle.y += dy * particle.speed * intensity + wobbleY * 0.01;
+            
+            // Draw connection line to previous particle
+            if (lastX !== null && lastY !== null) {
+              ctx.beginPath();
+              ctx.moveTo(lastX, lastY);
+              ctx.lineTo(particle.x, particle.y);
+              ctx.stroke();
+            }
+            
+            lastX = particle.x;
+            lastY = particle.y;
+          });
+          
+          // Then draw particles
+          ctx.globalCompositeOperation = 'lighter';
+          particlesRef.current.forEach(particle => {
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0');
+            ctx.fill();
+          });
+          break;
+          
+        case 'paradox':
+          // Draw paradoxical motion
+          ctx.globalCompositeOperation = 'lighter';
+          particlesRef.current.forEach(particle => {
+            // Update position with occasional direction reversal
+            particle.reverseTick++;
+            if (particle.reverseTick >= particle.reverseTime) {
+              particle.vx *= -1;
+              particle.vy *= -1;
+              particle.reverseTick = 0;
+              particle.reverseTime = Math.random() * 100 + 50;
+            }
+            
+            particle.x += particle.vx * intensity;
+            particle.y += particle.vy * intensity;
+            
+            // Bounce off edges with randomized response
+            if (particle.x < 0 || particle.x > width) {
+              particle.vx *= -1;
+              particle.vx += (Math.random() - 0.5) * 0.5;
+            }
+            if (particle.y < 0 || particle.y > height) {
+              particle.vy *= -1;
+              particle.vy += (Math.random() - 0.5) * 0.5;
+            }
+            
+            // Apply pulsing effect
+            const pulse = 1 + Math.sin(time * particle.pulseSpeed) * particle.pulseMagnitude;
+            const currentSize = particle.size * pulse;
+            
+            // Draw particle with inverted color during pulse transitions
+            const invert = Math.sin(time * particle.pulseSpeed) > 0;
+            const currentColor = invert ? THEME.colors.bgPrimary : particle.color;
+            
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, currentSize, 0, Math.PI * 2);
+            ctx.fillStyle = currentColor + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0');
+            ctx.fill();
+            
+            // Add contrast outline for inverted particles
+            if (invert) {
+              ctx.strokeStyle = particle.color + 'cc';
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+            
+            // Add color trail
+            ctx.globalAlpha = 0.3;
+            ctx.beginPath();
+            ctx.arc(
+              particle.x - particle.vx * 3,
+              particle.y - particle.vy * 3,
+              currentSize * 0.7,
+              0,
+              Math.PI * 2
+            );
+            ctx.fillStyle = invert ? particle.color : THEME.colors.bgPrimary;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+          });
+          break;
+        
+        case 'consciousness':
+          // Draw neural network pattern
+          ctx.globalCompositeOperation = 'lighter';
+          
+          // First draw connections
+          particlesRef.current.forEach(particle => {
+            // Draw pulse-animated connections
+            particle.connections.forEach(targetId => {
+              const target = particlesRef.current[targetId];
+              if (target) {
+                const dx = target.x - particle.x;
+                const dy = target.y - particle.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Only draw connections below a certain distance
+                if (distance < width * 0.25) {
+                  // Calculate connection opacity based on distance
+                  const opacity = 0.15 * (1 - distance / (width * 0.25));
+                  
+                  // Create pulse effect along connection
+                  const pulseTime = time * 0.5;
+                  const pulseFactor = ((pulseTime + particle.pulsePhase) % 2) / 2;
+                  const pulseX = particle.x + dx * pulseFactor;
+                  const pulseY = particle.y + dy * pulseFactor;
+                  
+                  // Draw connection line
+                  ctx.beginPath();
+                  ctx.moveTo(particle.x, particle.y);
+                  ctx.lineTo(target.x, target.y);
+                  ctx.strokeStyle = particle.color + Math.floor(opacity * 255).toString(16).padStart(2, '0');
+                  ctx.lineWidth = 0.5;
+                  ctx.stroke();
+                  
+                  // Draw pulse point moving along the connection
+                  if (distance > 30) {
+                    ctx.beginPath();
+                    ctx.arc(pulseX, pulseY, 1, 0, Math.PI * 2);
+                    ctx.fillStyle = THEME.colors.accentPrimary + 'aa';
+                    ctx.fill();
+                  }
+                }
+              }
+            });
+          });
+          
+          // Then draw particles
+          particlesRef.current.forEach(particle => {
+            // Add subtle movement
+            particle.x += (Math.random() - 0.5) * 0.2 * intensity;
+            particle.y += (Math.random() - 0.5) * 0.2 * intensity;
+            
+            // Contain within bounds
+            if (particle.x < 0) particle.x = 0;
+            if (particle.x > width) particle.x = width;
+            if (particle.y < 0) particle.y = 0;
+            if (particle.y > height) particle.y = height;
+            
+            // Pulsing effect
+            const pulseOpacity = (0.7 + Math.sin(time * particle.pulseSpeed + particle.pulsePhase) * 0.3) * particle.opacity;
+            
+            // Draw neuron
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color + Math.floor(pulseOpacity * 255).toString(16).padStart(2, '0');
+            ctx.fill();
+            
+            // Add glow for active neurons
+            if (pulseOpacity > 0.8) {
+              ctx.shadowBlur = particle.size * 5;
+              ctx.shadowColor = particle.color;
+              ctx.beginPath();
+              ctx.arc(particle.x, particle.y, particle.size * 1.5, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.shadowBlur = 0;
+            }
+          });
+          break;
+          
+        case 'enlightenment':
+          // Draw radiating light waves
+          ctx.globalCompositeOperation = 'lighter';
+          
+          // Draw central light source
+          const gradient = ctx.createRadialGradient(
+            width / 2, height / 2, 0,
+            width / 2, height / 2, Math.min(width, height) * 0.25
+          );
+          gradient.addColorStop(0, THEME.colors.accentTertiary + 'aa');
+          gradient.addColorStop(0.5, THEME.colors.accentTertiary + '44');
+          gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, width, height);
+          
+          // Draw particles
+          particlesRef.current.forEach(particle => {
+            // Update radius with outward motion
+            particle.radius += particle.speed * intensity;
+            
+            // Reset particle when it goes too far
+            if (particle.radius > Math.max(width, height)) {
+              particle.radius = 0;
+              particle.angle = Math.random() * Math.PI * 2;
+              particle.speed = Math.random() * 0.5 + 0.5;
+            }
+            
+            // Calculate position
+            particle.x = width / 2 + Math.cos(particle.angle) * particle.radius;
+            particle.y = height / 2 + Math.sin(particle.angle) * particle.radius;
+            
+            // Calculate wave effect
+            const waveEffect = Math.sin(particle.radius * particle.waveFreq + time) * particle.glowIntensity;
+            const currentOpacity = Math.max(0, Math.min(1, particle.opacity * (1 - particle.radius / Math.max(width, height)) * (1 + waveEffect)));
+            
+            // Skip rendering if too faint
+            if (currentOpacity < 0.05) return;
+            
+            // Draw particle
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color + Math.floor(currentOpacity * 255).toString(16).padStart(2, '0');
+            ctx.fill();
+            
+            // Add glow
+            ctx.shadowBlur = particle.size * 3 * particle.glowIntensity * (1 + waveEffect);
+            ctx.shadowColor = particle.color;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          });
+          break;
+          
+        case 'perception':
+          // Draw 3D perspective-shifting particles
+          ctx.globalCompositeOperation = 'lighter';
+          
+          // Sort by z-depth for pseudo-3D rendering
+          const sortedParticles = [...particlesRef.current].sort((a, b) => a.z - b.z);
+          
+          sortedParticles.forEach(particle => {
+            // Update 3D position
+            particle.z += particle.vz * intensity;
+            
+            // Invert direction at bounds
+            if (particle.z < -100 || particle.z > 100) {
+              particle.vz *= -1;
+            }
+            
+            // Update rotation
+            particle.rotationX += particle.rotationSpeedX;
+            particle.rotationY += particle.rotationSpeedY;
+            
+            // Project 3D position to 2D (basic perspective projection)
+            const scale = particle.perspective / (particle.perspective + particle.z);
+            const projX = width / 2 + (particle.x - width / 2) * scale;
+            const projY = height / 2 + (particle.y - height / 2) * scale;
+            
+            // Calculate size with perspective
+            const projSize = particle.size * scale;
+            
+            // Calculate opacity based on depth
+            const depthOpacity = (particle.z + 100) / 200;
+            const currentOpacity = particle.opacity * depthOpacity;
+            
+            // Draw projected particle
+            ctx.beginPath();
+            ctx.arc(projX, projY, projSize, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color + Math.floor(currentOpacity * 255).toString(16).padStart(2, '0');
+            ctx.fill();
+            
+            // Add depth perception lines
+            if (particle.z > 0) {
+              ctx.beginPath();
+              ctx.moveTo(projX, projY);
+              ctx.lineTo(width / 2, height / 2);
+              ctx.strokeStyle = particle.color + '22';
+              ctx.lineWidth = 0.5 * scale;
+              ctx.stroke();
+            }
+          });
+          break;
+          
+        case 'dualism':
+          // Draw particles split into opposing groups
+          ctx.globalCompositeOperation = 'lighter';
+          
+          // First draw group connections
+          particlesRef.current.forEach(particle => {
+            // Find nearby particles in same group
+            const neighbors = particlesRef.current.filter(p => 
+              p.id !== particle.id && 
+              p.group === particle.group &&
+              Math.abs(p.x - particle.x) < width * 0.2 &&
+              Math.abs(p.y - particle.y) < height * 0.2
+            );
+            
+            // Draw connections to nearby group members
+            neighbors.slice(0, 3).forEach(neighbor => {
+              ctx.beginPath();
+              ctx.moveTo(particle.x, particle.y);
+              ctx.lineTo(neighbor.x, neighbor.y);
+              ctx.strokeStyle = particle.color + '33';
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            });
+            
+            // Move toward target with some group cohesion
+            const dx = particle.targetX - particle.x;
+            const dy = particle.targetY - particle.y;
+            particle.x += dx * particle.speed * intensity;
+            particle.y += dy * particle.speed * intensity;
+            
+            // Apply boundary forces to keep groups on their sides
+            if ((particle.group > 0 && particle.x < width / 2) ||
+                (particle.group < 0 && particle.x > width / 2)) {
+              particle.x += particle.group * intensity;
+            }
+          });
+          
+          // Draw dividing line
+          const lineGradient = ctx.createLinearGradient(width / 2 - 10, 0, width / 2 + 10, 0);
+          lineGradient.addColorStop(0, THEME.colors.accentSecondary + '55');
+          lineGradient.addColorStop(0.5, THEME.colors.textPrimary + '88');
+          lineGradient.addColorStop(1, THEME.colors.highlightSecondary + '55');
+          
+          ctx.beginPath();
+          ctx.moveTo(width / 2, 0);
+          ctx.lineTo(width / 2, height);
+          ctx.strokeStyle = lineGradient;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          
+          // Then draw particles
+          particlesRef.current.forEach(particle => {
+            // Pulse effect synchronized with group
+            const pulse = 1 + Math.sin(time * 2 + (particle.group > 0 ? 0 : Math.PI)) * 0.3;
+            const currentSize = particle.size * pulse;
+            
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, currentSize, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color + Math.floor(particle.opacity * pulse * 255).toString(16).padStart(2, '0');
+            ctx.fill();
+            
+            // Add glow during pulse peaks
+            if (pulse > 1.2) {
+              ctx.shadowBlur = particle.size * 3;
+              ctx.shadowColor = particle.color;
+              ctx.fill();
+              ctx.shadowBlur = 0;
+            }
+          });
+          break;
+          
+        case 'dialogue':
+          // Draw conversational flow patterns
+          ctx.globalCompositeOperation = 'lighter';
+          
+          particlesRef.current.forEach(particle => {
+            // Update position with wave pattern
+            particle.x += particle.speed * intensity;
+            
+            // Apply wave pattern to y position
+            const waveY = Math.sin((particle.x / particle.wavelength) + particle.phase) * particle.amplitude;
+            const y = particle.y + waveY;
+            
+            // Reset if out of bounds
+            if (particle.x > width) {
+              particle.x = 0;
+              particle.y = Math.random() * height;
+              particle.speed = Math.random() * 1 + 0.5;
+              particle.amplitude = Math.random() * height * 0.2 + height * 0.05;
+              particle.wavelength = Math.random() * width * 0.3 + width * 0.2;
+            }
+            
+            // Draw particle
+            ctx.beginPath();
+            ctx.arc(particle.x, y, particle.size, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0');
+            ctx.fill();
+            
+            // Draw particle trail
+            ctx.beginPath();
+            ctx.moveTo(particle.x, y);
+            ctx.lineTo(Math.max(0, particle.x - particle.speed * 10), y - Math.sin((particle.x - particle.speed * 10) / particle.wavelength + particle.phase) * particle.amplitude);
+            ctx.strokeStyle = particle.color + '77';
+            ctx.lineWidth = particle.size * 0.7;
+            ctx.stroke();
+          });
+          break;
+          
+        default:
+          // Default particle animation
+          ctx.globalCompositeOperation = 'source-over';
+          
+          particlesRef.current.forEach(particle => {
+            // Update position
+            particle.x += particle.vx * intensity;
+            particle.y += particle.vy * intensity;
+            
+            // Apply friction
+            particle.vx *= particle.friction;
+            particle.vy *= particle.friction;
+            
+            // Bounce off edges
+            if (particle.x < 0 || particle.x > width) {
+              particle.vx *= -1;
+            }
+            if (particle.y < 0 || particle.y > height) {
+              particle.vy *= -1;
+            }
+            
+            // Add small random impulse occasionally
+            if (Math.random() < 0.05) {
+              particle.vx += (Math.random() - 0.5) * 0.5;
+              particle.vy += (Math.random() - 0.5) * 0.5;
+            }
+            
+            // Draw particle
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0');
+            ctx.fill();
+          });
+          break;
+      }
+      
+      // Continue animation loop
+      requestIdRef.current = requestAnimationFrame(animate);
+    };
+    
+    // Start animation
+    requestIdRef.current = requestAnimationFrame(animate);
+    
+    // Cleanup
+    return () => {
+      if (requestIdRef.current) {
+        cancelAnimationFrame(requestIdRef.current);
+      }
+    };
+  }, [active, isInitialized, dimensions, type, backgroundColor, intensity]);
   
   if (!active) return null;
   
   return (
-    <ThoughtFlowContainer ref={containerRef} zIndex={zIndex} className="thought-flow-effect">
-      {/* Individual thought particles */}
-      {particles.map(particle => (
-        <ThoughtParticle
-          key={particle.id}
-          style={{
-            '--size': particle.size,
-            '--color': particle.color,
-            '--move-x': particle.moveX,
-            '--move-y': particle.moveY,
-            '--end-scale': particle.endScale,
-            '--duration': particle.duration,
-            '--delay': particle.delay,
-            top: particle.top,
-            left: particle.left
-          }}
-        />
-      ))}
-      
-      {/* Thought bubbles */}
-      {bubbles.map(bubble => (
-        <ThoughtBubble
-          key={bubble.id}
-          style={{
-            '--size': bubble.size,
-            '--border-color': bubble.borderColor,
-            '--bg-color': bubble.bgColor,
-            '--glow-color': bubble.glowColor,
-            '--max-opacity': bubble.maxOpacity,
-            '--min-opacity': bubble.minOpacity,
-            '--duration': bubble.duration,
-            '--delay': bubble.delay,
-            top: bubble.top,
-            left: bubble.left
-          }}
-        />
-      ))}
-      
-      {/* Connecting thought lines */}
-      {lines.map(line => (
-        <ThoughtLine
-          key={line.id}
-          style={{
-            '--length': line.length,
-            '--color': line.color,
-            '--angle': line.angle,
-            '--opacity': line.opacity,
-            '--float-distance': line.floatDistance,
-            '--float-rotation': line.floatRotation,
-            '--duration': line.duration,
-            '--delay': line.delay,
-            top: line.top,
-            left: line.left
-          }}
-        />
-      ))}
-      
-      {/* Particle clusters */}
-      {clusters.map(cluster => renderCluster(cluster))}
-    </ThoughtFlowContainer>
+    <div
+      ref={containerRef}
+      style={{
+        position: 'relative',
+        width: size,
+        height: height,
+        overflow: 'hidden',
+        zIndex,
+        opacity,
+      }}
+    >
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          pointerEvents: 'none',
+        }}
+      />
+    </div>
   );
 };
 
-export default ThoughtFlowEffect;
+export default PhilosophicalParticles;
