@@ -2,7 +2,10 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import styled from '@emotion/styled';
 import { ANGELA_THEME as THEME } from '../styles/PhilosophicalTheme';
-import { TypewriterText, GlitchEffect } from '../styles/AnimationStyles';
+import { 
+  EnhancedGlitchText, 
+  EnhancedTypewriterText 
+} from '../styles/AnimationStyles';
 import ExpansionEffect from '../animations/ExpansionEffects';
 
 // Container for the hero section
@@ -109,7 +112,7 @@ const TerminalWindow = styled.div`
   max-width: 800px;
   background-color: ${THEME.colors.bgPrimary};
   border: 2px solid ${THEME.colors.borderPrimary};
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
   margin: 2rem 0;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
@@ -374,7 +377,7 @@ const HeroSection = forwardRef(({ onExploreClick }, ref) => {
       {/* Logo */}
       <LogoContainer>
         <AngelaLogo data-text="ANGELA">
-          <GlitchEffect data-text="ANGELA">ANGELA</GlitchEffect>
+          <EnhancedGlitchText data-text="ANGELA">ANGELA</EnhancedGlitchText>
           <span className="cli-text">CLI</span>
         </AngelaLogo>
       </LogoContainer>

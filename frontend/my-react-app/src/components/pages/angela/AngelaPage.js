@@ -31,6 +31,12 @@ const angelaEnhancedStyles = css`
   /* Import required fonts */
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600&family=VT323&family=Press+Start+2P&display=swap');
   
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
   :root {
     --angela-bg-primary: #0a0a0a;
     --angela-bg-secondary: #121215;
@@ -49,6 +55,12 @@ const angelaEnhancedStyles = css`
     --angela-terminal-yellow: #ffff33;
   }
   
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
   .angela-page {
     background-color: var(--angela-bg-primary);
     color: var(--angela-text-primary);
@@ -60,10 +72,6 @@ const angelaEnhancedStyles = css`
     width: 100%;
     scroll-behavior: smooth;
     
-    * {
-      box-sizing: border-box;
-    }
-
     /* Ensure all main content sections are centered properly with consistent max-width */
     section, .section-inner {
       width: 100%;
@@ -145,6 +153,9 @@ const AngelaPageContainer = styled.div`
   color: ${THEME.colors.textPrimary};
   position: relative;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   
   /* Enhanced radial gradient background */
   &::before {
@@ -188,6 +199,9 @@ const SectionWrapper = styled.div`
   display: flex;
   justify-content: center;
   position: relative;
+  padding: 0 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
   
   /* Horizontal line divider */
   &::before {
@@ -211,7 +225,7 @@ const SectionWrapper = styled.div`
 const SectionSeparator = styled.div`
   width: 100%;
   max-width: 1200px;
-  margin: 4rem auto;
+  margin: 2rem auto;
   height: 1px;
   background: linear-gradient(
     to right,
@@ -349,16 +363,18 @@ const AngelaPage = () => {
       <MatrixRain />
       
       {/* Hero Section */}
-      <HeroSection 
-        ref={heroRef} 
-        onExploreClick={() => scrollToSection(dialogueRef)} 
-      />
+      <div style={{ width: '100%' }}>
+        <HeroSection 
+          ref={heroRef} 
+          onExploreClick={() => scrollToSection(dialogueRef)} 
+        />
+      </div>
       
       <SectionSeparator />
       
       {/* Dialogue System - Properly centered */}
       <SectionWrapper>
-        <div className="section-inner" ref={dialogueRef}>
+        <div ref={dialogueRef} style={{ width: '100%', maxWidth: '1200px' }}>
           <DialogueSystem 
             dialogueData={dialogueData}
             philosophical={true}
@@ -374,7 +390,7 @@ const AngelaPage = () => {
       
       {/* Features Section */}
       <SectionWrapper>
-        <div className="section-inner" ref={featuresRef}>
+        <div ref={featuresRef} style={{ width: '100%', maxWidth: '1200px' }}>
           <FeatureSection 
             icons={{
               brain: <FaBrain />,
@@ -394,7 +410,7 @@ const AngelaPage = () => {
       
       {/* Installation Section */}
       <SectionWrapper>
-        <div className="section-inner" ref={installRef}>
+        <div ref={installRef} style={{ width: '100%', maxWidth: '1200px' }}>
           <InstallSection />
         </div>
       </SectionWrapper>

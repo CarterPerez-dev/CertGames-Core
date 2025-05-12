@@ -534,6 +534,7 @@ export const enhancedScanline = (duration = '10s', delay = '0ms', curve = 'linea
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 2;
 `;
 
 // ======================================================
@@ -826,6 +827,10 @@ export const EnhancedParadoxTransitionAnimation = css`
 // EXPORTS
 // ======================================================
 
+// Make sure to export both the original Glitch component and the Enhanced version
+export const GlitchEffect = EnhancedGlitchText;
+export const TypewriterText = EnhancedTypewriterText;
+
 export default {
   // Enhanced keyframes
   enhancedGlitchAnimation,
@@ -886,4 +891,11 @@ export default {
   EnhancedDialogueExpansionAnimation,
   EnhancedThoughtFlowEffectAnimation,
   EnhancedParadoxTransitionAnimation,
+  
+  // Original named components for compatibility
+  GlitchEffect: EnhancedGlitchText,
+  TypewriterText: EnhancedTypewriterText,
+  DialogueExpansionAnimation: EnhancedDialogueExpansionAnimation,
+  ThoughtFlowEffectAnimation: EnhancedThoughtFlowEffectAnimation,
+  ParadoxTransitionAnimation: EnhancedParadoxTransitionAnimation,
 };
