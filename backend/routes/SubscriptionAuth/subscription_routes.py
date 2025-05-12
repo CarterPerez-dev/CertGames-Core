@@ -46,7 +46,7 @@ def create_checkout_session():
     """
     data = request.json
     user_id = data.get('userId')
-    registration_data = data.get('registrationData')  # For new user registrations
+    registration_data = data.get('registrationData')  
     
     # Validate inputs
     if not user_id and not registration_data:

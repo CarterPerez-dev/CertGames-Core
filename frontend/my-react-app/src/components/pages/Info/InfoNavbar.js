@@ -1,7 +1,7 @@
 // src/components/pages/Info/InfoNavbar.js
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaUserPlus, FaPlayCircle, FaList, FaTrophy, FaEnvelope, FaSignInAlt, FaBars, FaTimes, FaBook } from 'react-icons/fa';
+import { FaHome, FaUserPlus, FaPlayCircle, FaList, FaTrophy, FaEnvelope, FaSignInAlt, FaBars, FaTimes, FaBook, FaLinux } from 'react-icons/fa';
 import { setupScrollListener } from './navbarScrollUtils';
 import './css/InfoNavbar.css';
 
@@ -45,6 +45,8 @@ const InfoNavbar = () => {
       setActiveTab('login');
     } else if (path === '/blog') {
       setActiveTab('blog');
+    } else if (path === '/angela') {
+      setActiveTab('angela');      
     }
   }, [location]);
 
@@ -131,6 +133,12 @@ const InfoNavbar = () => {
                 <FaSignInAlt className="nav-icon" />
                 <span>Login</span>
               </Link>
+            </li>
+            <li className={activeTab === 'angela' ? 'active' : ''}>
+              <Link to="/angela" onClick={() => handleTabClick('angela')}>
+                <FaLinux className="nav-icon" />
+                <span>Angela-CLI</span>
+              </Link>                
             </li>
           </ul>
         </div>

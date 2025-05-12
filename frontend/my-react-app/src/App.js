@@ -7,6 +7,12 @@ import { fetchUserData } from './components/pages/store/slice/userSlice';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
+// Angela
+import AngelaPage from './components/pages/angela/AngelaPage';
+
+
+
 // Public pages
 import InfoPage from './components/pages/Info/InfoPage';
 import DemosPage from './components/pages/Info/DemosPage';
@@ -210,7 +216,10 @@ function App() {
           {/* The default route depends on whether the user is logged in */}
           <Route path="/" element={<HomeOrProfile />} />
           
-          {/* Added additional home route that always shows InfoPage */}
+          {/* Angela-cli webpage */}
+          <Route path="/angela" element={<InfoPage />} />
+          
+          {/* Added additional home route that always shows InfoPage */}         
           <Route path="/home" element={<InfoPage />} />
           
           {/* public marketing routes */}
@@ -220,6 +229,9 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:postId" element={<BlogPostPage />} />
+
+
+          <Route path="/angela" element={<InfoPage />} />
           
           {/* Authentication routes */}
           <Route path="/login" element={<Login />} />
