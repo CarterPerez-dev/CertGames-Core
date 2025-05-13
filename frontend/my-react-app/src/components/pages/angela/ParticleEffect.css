@@ -1,0 +1,52 @@
+/* src/components/pages/angela/ParticleEffect.css */
+
+.angela-particle-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.angela-hero {
+  position: relative;
+}
+
+/* Ensure the hero content stays on top of the particles */
+.angela-hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.angela-hero-terminal {
+  position: relative;
+  z-index: 2;
+}
+
+/* Make particles more visible in certain sections */
+.angela-hero.with-particles::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(5, 5, 16, 0.6) 0%, rgba(5, 5, 16, 0.8) 70%);
+  z-index: 1;
+}
+
+/* Make particles glow effect more visible */
+.angela-glow-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(0, 255, 150, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+}

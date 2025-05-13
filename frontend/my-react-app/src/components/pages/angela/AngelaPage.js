@@ -1,8 +1,11 @@
-// src/components/pages/angela/AngelaPage.js
+// Modified src/components/pages/angela/AngelaPage.js with particle effect integration
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { FaGithub, FaTerminal, FaDownload, FaArrowRight, FaPlayCircle, FaStar, FaCode, FaLaptopCode, FaShield, FaTools, FaRocket, FaBrain, FaNetworkWired, FaUserPlus, FaRegLightbulb } from 'react-icons/fa';
+import { FaGithub, FaTerminal, FaDownload, FaArrowRight, FaPlayCircle, FaStar, FaCode, FaLaptopCode, FaUserSecret, FaTools, FaRocket, FaBrain, FaNetworkWired, FaUserPlus, FaRegLightbulb } from 'react-icons/fa';
 import './AngelaCLI.css';
+import './ParticleEffect.css'; // Import the particle effect CSS
+import ParticleEffect from './ParticleEffect'; // Import the particle effect component
 
 const AngelaPage = () => {
   // State for animations and interactions
@@ -16,6 +19,7 @@ const AngelaPage = () => {
   const [userCommand, setUserCommand] = useState('');
   const [installCopied, setInstallCopied] = useState(false);
   const [isDemoPlaying, setIsDemoPlaying] = useState(false);
+  const [particleShape, setParticleShape] = useState('cube');
   
   // Refs for scrolling
   const featuresRef = useRef(null);
@@ -102,7 +106,7 @@ const AngelaPage = () => {
         "        ",
         "    # Check domain part",
         "    domain = email.split('@')[1]",
-        "    if '..' in domain or domain.startswith('.') or domain.endswith('.'):",
+        "    if '..' in domain or domain.startsWith('.') or domain.endsWith('.'):",
         "        return False",
         "        ",
         "    return True",
@@ -126,7 +130,7 @@ const AngelaPage = () => {
       description: "Angela understands your project context, frameworks, and dependencies to provide relevant assistance."
     },
     {
-      icon: <FaShield />,
+      icon: <FaUserSecret />,
       title: "Advanced Safety",
       description: "Risk assessment, command previews, and comprehensive rollback capabilities keep your system safe."
     },
@@ -216,6 +220,28 @@ const AngelaPage = () => {
       answer: "Angela can detect and understand most popular languages and frameworks including Python, JavaScript/Node.js, React, Ruby, Java, Go, Rust, C#, PHP, and many more."
     }
   ];
+  
+  // Change particle shape based on scroll position
+  useEffect(() => {
+    const handleShapeChange = () => {
+      const scrollPosition = window.scrollY;
+      
+      if (scrollPosition < 800) {
+        setParticleShape('bust'); // Use the bust for the hero section
+      } else if (scrollPosition < 1600) {
+        setParticleShape('sphere');
+      } else if (scrollPosition < 2400) {
+        setParticleShape('torus');
+      } else if (scrollPosition < 3200) {
+        setParticleShape('wave');
+      } else {
+        setParticleShape('morph'); // Use morphing particles for the bottom sections
+      }
+    };
+    
+    window.addEventListener('scroll', handleShapeChange);
+    return () => window.removeEventListener('scroll', handleShapeChange);
+  }, []);
   
   // Typing animation effect for hero section
   useEffect(() => {
@@ -348,6 +374,12 @@ const AngelaPage = () => {
   
   return (
     <div className="angela-container">
+      {/* 3D Particle Effect */}
+      <ParticleEffect shape={particleShape} particleCount={7000} mouseEffect={2.5} particleColor="#00ff96" />
+      
+      {/* Additional glow effect layer */}
+      <div className="angela-glow-effect"></div>
+      
       {/* Animated grid background */}
       <div className="angela-grid-background">
         <div className="angela-grid-lines"></div>
@@ -385,7 +417,7 @@ const AngelaPage = () => {
       </nav>
       
       {/* Hero Section */}
-      <section className="angela-hero">
+      <section className="angela-hero with-particles">
         <div className="angela-hero-content">
           <div className="angela-hero-title">
             <div className="angela-title-animation">
