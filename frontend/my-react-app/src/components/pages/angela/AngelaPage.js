@@ -1,558 +1,750 @@
-// frontend/my-react-app/src/components/pages/angela/AngelaPage.js
+// src/components/pages/angela/AngelaPage.js
 import React, { useState, useEffect, useRef } from 'react';
-import { Global, css } from '@emotion/react';
-import styled from '@emotion/styled';
-import { 
-  FaBrain, 
-  FaCogs, 
-  FaSearch, 
-  FaShieldAlt, 
-  FaTerminal, 
-  FaCode, 
-  FaGlobe, 
-  FaLightbulb,
-  FaChevronUp,
-  FaGithub,
-  FaBook,
-  FaDownload
-} from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { FaGithub, FaTerminal, FaDownload, FaArrowRight, FaPlayCircle, FaStar, FaCode, FaLaptopCode, FaShield, FaTools, FaRocket, FaBrain, FaNetworkWired, FaUserPlus, FaRegLightbulb } from 'react-icons/fa';
+import './AngelaCLI.css';
 
-import HeroSection from './components/HeroSection';
-import FeatureSection from './components/FeatureSection';
-import InstallSection from './components/InstallSection';
-import DialogueSystem from './components/DialogueSystem';
-import PhilosophicalFooter from './components/PhilosophicalFooter';
-import ThoughtFlowAnimation from './animations/ThoughtFlowAnimations';
-import { dialogueData } from './utils/dialogueData';
-import { ANGELA_THEME as THEME } from './styles/PhilosophicalTheme';
-
-// Enhanced global styles with improved textures and typography
-const angelaEnhancedStyles = css`
-  /* Import required fonts */
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600&family=VT323&family=Press+Start+2P&display=swap');
-  
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  :root {
-    --angela-bg-primary: #0a0a0a;
-    --angela-bg-secondary: #121215;
-    --angela-bg-tertiary: #1a1a1a;
-    --angela-text-primary: #e0e0e0;
-    --angela-text-secondary: #aaaaaa;
-    --angela-text-tertiary: #777777;
-    --angela-accent-primary: #ff3333;
-    --angela-accent-secondary: #ff5555;
-    --angela-accent-tertiary: #990000;
-    --angela-accent-glow: rgba(255, 50, 50, 0.6);
-    --angela-border-primary: #333333;
-    --angela-border-secondary: #222222;
-    --angela-terminal-green: #33ff33;
-    --angela-terminal-cyan: #33ffff;
-    --angela-terminal-yellow: #ffff33;
-  }
-  
-  body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-  }
-  
-  .angela-page {
-    background-color: var(--angela-bg-primary);
-    color: var(--angela-text-primary);
-    font-family: 'IBM Plex Mono', 'Courier New', monospace;
-    line-height: 1.6;
-    overflow-x: hidden;
-    position: relative;
-    min-height: 100vh;
-    width: 100%;
-    scroll-behavior: smooth;
-    
-    /* Ensure all main content sections are centered properly with consistent max-width */
-    section, .section-inner {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-    }
-    
-    @media (max-width: 768px) {
-      section, .section-inner {
-        padding: 3rem 1rem;
-      }
-    }
-    
-    /* Enhanced textured background */
-    .noise-texture {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      opacity: 0.12;
-      pointer-events: none;
-      z-index: -1;
-    }
-    
-    /* Enhanced scanline effect */
-    .scanlines {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(
-        to bottom,
-        transparent 49.5%,
-        rgba(32, 32, 32, 0.05) 49.5%,
-        rgba(32, 32, 32, 0.05) 50.5%,
-        transparent 50.5%
-      );
-      background-size: 100% 4px;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.3;
-    }
-    
-    /* Improved typography defaults */
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'IBM Plex Mono', monospace;
-      letter-spacing: 0.5px;
-      line-height: 1.2;
-      margin-top: 0;
-    }
-    
-    p, li, a, button {
-      font-family: 'IBM Plex Mono', monospace;
-      letter-spacing: 0.3px;
-    }
-    
-    a {
-      color: var(--angela-accent-primary);
-      text-decoration: none;
-      transition: all 0.2s ease;
-      
-      &:hover {
-        color: var(--angela-accent-secondary);
-        text-decoration: underline;
-      }
-    }
-  }
-`;
-
-// Improved page container with proper alignment and enhanced visuals
-const AngelaPageContainer = styled.div`
-  min-height: 100vh;
-  width: 100%;
-  background-color: ${THEME.colors.bgPrimary};
-  color: ${THEME.colors.textPrimary};
-  position: relative;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  
-  /* Enhanced radial gradient background */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(
-      ellipse at center,
-      ${THEME.colors.bgSecondary}40 0%,
-      ${THEME.colors.bgPrimary}80 70%,
-      ${THEME.colors.bgPrimary} 100%
-    );
-    z-index: -2;
-    pointer-events: none;
-  }
-  
-  /* Grid texture overlay */
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-      linear-gradient(rgba(20, 20, 20, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(20, 20, 20, 0.05) 1px, transparent 1px);
-    background-size: 20px 20px;
-    z-index: -1;
-    pointer-events: none;
-    opacity: 0.5;
-  }
-`;
-
-// Fixed section wrapper to ensure centered content
-const SectionWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  position: relative;
-  padding: 0 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  
-  /* Horizontal line divider */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      to right,
-      transparent 0%,
-      ${THEME.colors.borderPrimary} 50%,
-      transparent 100%
-    );
-    opacity: 0.5;
-  }
-`;
-
-// Enhanced section separator with improved styling
-const SectionSeparator = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  margin: 2rem auto;
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    ${THEME.colors.borderPrimary} 20%,
-    ${THEME.colors.accentPrimary}33 50%,
-    ${THEME.colors.borderPrimary} 80%,
-    transparent 100%
-  );
-  position: relative;
-  
-  &::before, &::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 8px;
-    height: 8px;
-    background-color: ${THEME.colors.accentPrimary};
-    border-radius: 50%;
-    box-shadow: 0 0 8px ${THEME.colors.accentGlow};
-  }
-  
-  &::before {
-    left: calc(50% - 40px);
-  }
-  
-  &::after {
-    right: calc(50% - 40px);
-  }
-`;
-
-// Enhanced scroll button with improved styling
-const ScrollButton = styled.button`
-  position: fixed;
-  bottom: 40px;
-  right: 40px;
-  background-color: ${THEME.colors.bgSecondary};
-  color: ${THEME.colors.textPrimary};
-  border: 2px solid ${THEME.colors.accentPrimary}66;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  cursor: pointer;
-  z-index: 100;
-  transition: all 0.3s ${THEME.animations.curveEaseInOut};
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), 0 0 30px ${THEME.colors.accentGlow}33;
-  border-radius: 50%;
-  opacity: ${props => props.visible ? 1 : 0};
-  transform: translateY(${props => props.visible ? 0 : '20px'});
-  pointer-events: ${props => props.visible ? 'all' : 'none'};
-  
-  &:hover {
-    background-color: ${THEME.colors.accentPrimary};
-    color: ${THEME.colors.textPrimary};
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7), 0 0 30px ${THEME.colors.accentGlow}66;
-  }
-  
-  @media (max-width: 768px) {
-    bottom: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
-  }
-`;
-
-/**
- * AngelaPage Component
- * 
- * The main container component for the Angela CLI landing page.
- * Enhanced with better alignment, responsive design, and visual effects.
- */
 const AngelaPage = () => {
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const [showScrollButton, setShowScrollButton] = useState(false);
-  const [glitchActive, setGlitchActive] = useState(false);
-  const dialogueRef = useRef(null);
-  const heroRef = useRef(null);
+  // State for animations and interactions
+  const [activeSection, setActiveSection] = useState('hero');
+  const [typedText, setTypedText] = useState('');
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [animationPhase, setAnimationPhase] = useState(0);
+  const [showCursor, setShowCursor] = useState(true);
+  const [isTerminalActive, setIsTerminalActive] = useState(false);
+  const [terminalOutput, setTerminalOutput] = useState([]);
+  const [userCommand, setUserCommand] = useState('');
+  const [installCopied, setInstallCopied] = useState(false);
+  const [isDemoPlaying, setIsDemoPlaying] = useState(false);
+  
+  // Refs for scrolling
   const featuresRef = useRef(null);
   const installRef = useRef(null);
-
-  // Track scroll position for effects
+  const demoRef = useRef(null);
+  const docsRef = useRef(null);
+  const aboutRef = useRef(null);
+  
+  // Terminal demo text animation sequences
+  const terminalTexts = [
+    "angela \"find all JavaScript files modified in the last week\"",
+    "angela \"create a feature branch for user authentication\"",
+    "angela \"commit all changes with a descriptive message\"",
+    "angela \"generate a React component for a login form\"",
+    "angela workflows create deploy",
+    "angela \"help me understand this error message\""
+  ];
+  
+  // Text cycling for hero typing animation
+  const heroTexts = [
+    "World's First AGI Command Line Intelligence",
+    "Ask your terminal anything in plain English",
+    "Let AI help you with complex commands",
+    "Code, deploy, and manage with natural language"
+  ];
+  
+  // Fake terminal commands and responses for demo
+  const demoCommands = [
+    {
+      command: "angela \"find large log files created this week\"",
+      output: [
+        "🧠 Analyzing request and gathering context...",
+        "📁 Project type detected: Node.js",
+        "🔍 I'll execute: find . -name \"*.log\" -size +1M -mtime -7 -type f",
+        "📋 This will find log files larger than 1MB created in the last 7 days",
+        "",
+        "Results:",
+        "./logs/server-2025-05-09.log (4.2MB)",
+        "./logs/error-2025-05-10.log (2.8MB)",
+        "./tmp/debug-2025-05-11.log (1.5MB)",
+        "",
+        "✅ Command executed successfully!"
+      ]
+    },
+    {
+      command: "angela \"create a feature branch for the payment integration module\"",
+      output: [
+        "🧠 Analyzing request and gathering context...",
+        "📁 Project type detected: Git repository",
+        "🔄 Checking current branch: main",
+        "🔍 I'll execute: git checkout -b feature/payment-integration",
+        "",
+        "Created branch 'feature/payment-integration'",
+        "Switched to branch 'feature/payment-integration'",
+        "",
+        "✅ Branch created successfully! You're now working on feature/payment-integration"
+      ]
+    },
+    {
+      command: "angela \"generate a Python function that validates email addresses\"",
+      output: [
+        "🧠 Analyzing request and gathering context...",
+        "📝 Generating Python email validation function...",
+        "",
+        "```python",
+        "import re",
+        "",
+        "def validate_email(email):",
+        "    \"\"\"",
+        "    Validates an email address with comprehensive checks.",
+        "    Returns True if valid, False otherwise.",
+        "    \"\"\"",
+        "    # Regular expression pattern for email validation",
+        "    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'",
+        "    ",
+        "    # Basic pattern check",
+        "    if not re.match(pattern, email):",
+        "        return False",
+        "        ",
+        "    # Additional checks",
+        "    # Check for consecutive dots in local part",
+        "    if '..' in email.split('@')[0]:",
+        "        return False",
+        "        ",
+        "    # Check domain part",
+        "    domain = email.split('@')[1]",
+        "    if '..' in domain or domain.startswith('.') or domain.endswith('.'):",
+        "        return False",
+        "        ",
+        "    return True",
+        "```",
+        "",
+        "✅ Function generated! Would you like me to add tests or enhance this function further?"
+      ]
+    }
+  ];
+  
+  // Features data
+  const features = [
+    {
+      icon: <FaTerminal />,
+      title: "Natural Language Commands",
+      description: "Ask your terminal to perform tasks in plain English - no need to remember complex syntax."
+    },
+    {
+      icon: <FaLaptopCode />,
+      title: "Project Awareness",
+      description: "Angela understands your project context, frameworks, and dependencies to provide relevant assistance."
+    },
+    {
+      icon: <FaShield />,
+      title: "Advanced Safety",
+      description: "Risk assessment, command previews, and comprehensive rollback capabilities keep your system safe."
+    },
+    {
+      icon: <FaTools />,
+      title: "Developer Tool Integration",
+      description: "Seamless integration with Git, Docker, package managers, and cloud CLIs."
+    },
+    {
+      icon: <FaRocket />,
+      title: "Multi-Step Operations",
+      description: "Decompose complex goals into actionable steps with smart planning and execution."
+    },
+    {
+      icon: <FaCode />,
+      title: "Code Generation",
+      description: "Generate functions, components, or entire projects with natural language descriptions."
+    },
+    {
+      icon: <FaBrain />,
+      title: "Semantic Code Understanding",
+      description: "Angela can analyze and understand your codebase for context-aware assistance."
+    },
+    {
+      icon: <FaNetworkWired />,
+      title: "Workflow Automation",
+      description: "Create, save, and execute complex workflows with a single command."
+    }
+  ];
+  
+  // Usage examples
+  const usageExamples = [
+    {
+      category: "File Operations",
+      commands: [
+        "find all Python files modified in the last week",
+        "create a new directory structure for a React app",
+        "show me the content of config.json with syntax highlighting"
+      ]
+    },
+    {
+      category: "Git Operations",
+      commands: [
+        "create a new branch called feature/user-auth and switch to it",
+        "commit all changes with a descriptive message",
+        "show me what files I've changed since the last commit"
+      ]
+    },
+    {
+      category: "Code Generation",
+      commands: [
+        "create a Python function that validates email addresses",
+        "generate a React component for a user settings form",
+        "create a RESTful controller for user management"
+      ]
+    },
+    {
+      category: "Multi-Step Workflows",
+      commands: [
+        "create a feature branch, implement a user profile component, add tests, and commit",
+        "update the version number, create a changelog, tag the release, and push",
+        "find which commit introduced the bug, create a fix branch, and prepare a PR"
+      ]
+    }
+  ];
+  
+  // FAQ data
+  const faqs = [
+    {
+      question: "How is Angela different from regular CLIs or chatbots?",
+      answer: "Angela is deeply integrated with your terminal environment and understands your project context. Unlike general AI assistants, Angela is specifically designed for command-line productivity with safety features, rollback capabilities, and developer tool integrations."
+    },
+    {
+      question: "Does Angela require internet access?",
+      answer: "For AI-powered features like natural language understanding and code generation, internet access is required to connect to the Gemini API. However, many core features like file operations, workflow execution, and rollback functionality work offline."
+    },
+    {
+      question: "Is Angela secure to use?",
+      answer: "Angela prioritizes safety with multiple layers: risk classification, command previews, permission checking, and comprehensive rollback capabilities. All configuration is stored locally, and only relevant snippets are sent to the API when needed."
+    },
+    {
+      question: "What platforms does Angela support?",
+      answer: "Angela is primarily designed for Unix-like systems (Linux, macOS). It can be used on Windows through WSL (Windows Subsystem for Linux). Native Windows support is on our roadmap."
+    },
+    {
+      question: "What languages and frameworks does Angela understand?",
+      answer: "Angela can detect and understand most popular languages and frameworks including Python, JavaScript/Node.js, React, Ruby, Java, Go, Rust, C#, PHP, and many more."
+    }
+  ];
+  
+  // Typing animation effect for hero section
+  useEffect(() => {
+    const currentText = heroTexts[currentTextIndex];
+    let timeout;
+    
+    if (animationPhase === 0) {
+      // Typing phase
+      if (typedText.length < currentText.length) {
+        timeout = setTimeout(() => {
+          setTypedText(currentText.substring(0, typedText.length + 1));
+        }, 50 + Math.random() * 50);
+      } else {
+        // Switch to pause phase
+        setAnimationPhase(1);
+        timeout = setTimeout(() => {
+          setAnimationPhase(2);
+        }, 2000);
+      }
+    } else if (animationPhase === 2) {
+      // Deleting phase
+      if (typedText.length > 0) {
+        timeout = setTimeout(() => {
+          setTypedText(typedText.substring(0, typedText.length - 1));
+        }, 30);
+      } else {
+        // Switch to next text
+        setAnimationPhase(0);
+        setCurrentTextIndex((currentTextIndex + 1) % heroTexts.length);
+      }
+    }
+    
+    return () => clearTimeout(timeout);
+  }, [typedText, currentTextIndex, animationPhase]);
+  
+  // Blinking cursor effect
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 530);
+    
+    return () => clearInterval(cursorInterval);
+  }, []);
+  
+  // Terminal animation for auto demo
+  useEffect(() => {
+    if (isTerminalActive && terminalOutput.length === 0) {
+      let currentCharIndex = 0;
+      let commandIndex = 0;
+      let currentCommand = '';
+      
+      const typeInterval = setInterval(() => {
+        if (currentCharIndex < terminalTexts[commandIndex].length) {
+          currentCommand = terminalTexts[commandIndex].substring(0, currentCharIndex + 1);
+          setUserCommand(currentCommand);
+          currentCharIndex++;
+        } else {
+          clearInterval(typeInterval);
+          setTimeout(() => {
+            setTerminalOutput(demoCommands[commandIndex % demoCommands.length].output);
+            setTimeout(() => {
+              commandIndex = (commandIndex + 1) % terminalTexts.length;
+              currentCharIndex = 0;
+              setUserCommand('');
+              setTerminalOutput([]);
+            }, 4000);
+          }, 500);
+        }
+      }, 100);
+      
+      return () => clearInterval(typeInterval);
+    }
+  }, [isTerminalActive, terminalOutput.length]);
+  
+  // Scroll animation for sections
   useEffect(() => {
     const handleScroll = () => {
-      const position = window.scrollY;
-      setScrollPosition(position);
-      setShowScrollButton(position > 500);
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
       
-      // Trigger glitch effect at certain scroll points
-      if (
-        (position > 1000 && position < 1050) ||
-        (position > 2200 && position < 2250)
-      ) {
-        if (!glitchActive) {
-          setGlitchActive(true);
-          setTimeout(() => setGlitchActive(false), 500);
+      const sections = [
+        { ref: featuresRef, id: 'features' },
+        { ref: installRef, id: 'install' },
+        { ref: demoRef, id: 'demo' },
+        { ref: docsRef, id: 'docs' },
+        { ref: aboutRef, id: 'about' }
+      ];
+      
+      for (const section of sections) {
+        if (section.ref.current && 
+            scrollPosition >= section.ref.current.offsetTop && 
+            scrollPosition < section.ref.current.offsetTop + section.ref.current.offsetHeight) {
+          setActiveSection(section.id);
+          break;
+        }
+      }
+      
+      // Activate terminal when demo section is visible
+      if (demoRef.current && 
+          scrollPosition >= demoRef.current.offsetTop && 
+          scrollPosition < demoRef.current.offsetTop + demoRef.current.offsetHeight) {
+        if (!isTerminalActive) {
+          setIsTerminalActive(true);
+        }
+      } else {
+        if (isTerminalActive) {
+          setIsTerminalActive(false);
+          setUserCommand('');
+          setTerminalOutput([]);
         }
       }
     };
     
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [glitchActive]);
-
-  // Handle scroll to top button
-  const handleScrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
-
-  // Scroll to specific sections
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isTerminalActive]);
+  
   const scrollToSection = (ref) => {
-    if (ref && ref.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    ref.current.scrollIntoView({ behavior: 'smooth' });
   };
-
+  
+  const copyInstallCommand = () => {
+    navigator.clipboard.writeText('curl -sSL https://raw.githubusercontent.com/CarterPerez-dev/angela-cli/main/scripts/install-quick.sh | bash');
+    setInstallCopied(true);
+    setTimeout(() => setInstallCopied(false), 2000);
+  };
+  
+  const playDemo = () => {
+    setIsDemoPlaying(true);
+  };
+  
   return (
-    <AngelaPageContainer className="angela-page">
-      {/* Enhanced global styles */}
-      <Global styles={angelaEnhancedStyles} />
-      
-      {/* Background effects */}
-      <div className="noise-texture"></div>
-      <div className="scanlines"></div>
-      
-      {/* Matrix Rain animation in the background */}
-      <MatrixRain />
-      
-      {/* Hero Section */}
-      <div style={{ width: '100%' }}>
-        <HeroSection 
-          ref={heroRef} 
-          onExploreClick={() => scrollToSection(dialogueRef)} 
-        />
+    <div className="angela-container">
+      {/* Animated grid background */}
+      <div className="angela-grid-background">
+        <div className="angela-grid-lines"></div>
+        <div className="angela-stars">
+          {Array.from({ length: 50 }).map((_, i) => (
+            <div 
+              key={i} 
+              className="angela-star" 
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`
+              }}
+            ></div>
+          ))}
+        </div>
       </div>
       
-      <SectionSeparator />
-      
-      {/* Dialogue System - Properly centered */}
-      <SectionWrapper>
-        <div ref={dialogueRef} style={{ width: '100%', maxWidth: '1200px' }}>
-          <DialogueSystem 
-            dialogueData={dialogueData}
-            philosophical={true}
-            enableLooping={true}
-            initialDepth={1}
-            rightProgression={true} // Enable rightward and downward progression
-            loopAfterDepth={20}
-          />
+      {/* Navigation */}
+      <nav className="angela-nav">
+        <div className="angela-nav-logo" onClick={() => scrollToSection({ current: document.body })}>
+          <FaTerminal className="angela-logo-icon" />
+          <span>ANGELA-CLI</span>
         </div>
-      </SectionWrapper>
+        <div className="angela-nav-links">
+          <button onClick={() => scrollToSection(featuresRef)} className={activeSection === 'features' ? 'active' : ''}>Features</button>
+          <button onClick={() => scrollToSection(installRef)} className={activeSection === 'install' ? 'active' : ''}>Install</button>
+          <button onClick={() => scrollToSection(demoRef)} className={activeSection === 'demo' ? 'active' : ''}>Demo</button>
+          <button onClick={() => scrollToSection(docsRef)} className={activeSection === 'docs' ? 'active' : ''}>Docs</button>
+          <button onClick={() => scrollToSection(aboutRef)} className={activeSection === 'about' ? 'active' : ''}>About</button>
+          <a href="https://github.com/CarterPerez-dev/angela-cli" target="_blank" rel="noopener noreferrer" className="angela-github-link">
+            <FaGithub />
+          </a>
+        </div>
+      </nav>
       
-      <SectionSeparator />
+      {/* Hero Section */}
+      <section className="angela-hero">
+        <div className="angela-hero-content">
+          <div className="angela-hero-title">
+            <div className="angela-title-animation">
+              <span className="angela-title-text">ANGELA</span>
+              <span className="angela-title-gradient">CLI</span>
+            </div>
+          </div>
+          <div className="angela-hero-subtitle">
+            <span className="angela-typed-text">{typedText}</span>
+            <span className={`angela-cursor ${showCursor ? 'visible' : 'hidden'}`}>_</span>
+          </div>
+          <div className="angela-hero-description">
+            Your ambient-intelligence terminal companion that understands natural language and your development context
+          </div>
+          <div className="angela-hero-cta">
+            <button className="angela-primary-button" onClick={() => scrollToSection(installRef)}>
+              Get Started <FaArrowRight className="angela-btn-icon" />
+            </button>
+            <button className="angela-secondary-button" onClick={() => scrollToSection(demoRef)}>
+              See Demo <FaPlayCircle className="angela-btn-icon" />
+            </button>
+          </div>
+          <div className="angela-stats">
+            <div className="angela-stat">
+              <span className="angela-stat-value">8x</span>
+              <span className="angela-stat-label">Faster CLI</span>
+            </div>
+            <div className="angela-stat">
+              <span className="angela-stat-value">AGI</span>
+              <span className="angela-stat-label">Powered</span>
+            </div>
+            <div className="angela-stat">
+              <span className="angela-stat-value">100%</span>
+              <span className="angela-stat-label">Open Source</span>
+            </div>
+          </div>
+        </div>
+        <div className="angela-hero-terminal">
+          <div className="angela-terminal-header">
+            <div className="angela-terminal-buttons">
+              <span className="angela-terminal-button red"></span>
+              <span className="angela-terminal-button yellow"></span>
+              <span className="angela-terminal-button green"></span>
+            </div>
+            <div className="angela-terminal-title">~/projects/my-app</div>
+          </div>
+          <div className="angela-terminal-body">
+            <div className="angela-terminal-line">
+              <span className="angela-terminal-prompt">$</span>
+              <span className="angela-terminal-text">angela "find all JavaScript files modified in the last week"</span>
+            </div>
+            <div className="angela-terminal-line angela-output">
+              <span className="angela-terminal-text">Analyzing request and gathering context...</span>
+            </div>
+            <div className="angela-terminal-line angela-output">
+              <span className="angela-terminal-text">I'll execute: find . -name "*.js" -mtime -7 -type f</span>
+            </div>
+            <div className="angela-terminal-line angela-output">
+              <span className="angela-terminal-text">This will find all JavaScript files modified in the last 7 days</span>
+            </div>
+            <div className="angela-terminal-line angela-output">
+              <span className="angela-terminal-text-result">./src/App.js</span>
+            </div>
+            <div className="angela-terminal-line angela-output">
+              <span className="angela-terminal-text-result">./src/components/UserProfile.js</span>
+            </div>
+            <div className="angela-terminal-line angela-output">
+              <span className="angela-terminal-text-result">./src/utils/auth.js</span>
+            </div>
+            <div className="angela-terminal-line">
+              <span className="angela-terminal-prompt">$</span>
+              <span className="angela-terminal-cursor"></span>
+            </div>
+          </div>
+        </div>
+      </section>
       
       {/* Features Section */}
-      <SectionWrapper>
-        <div ref={featuresRef} style={{ width: '100%', maxWidth: '1200px' }}>
-          <FeatureSection 
-            icons={{
-              brain: <FaBrain />,
-              cogs: <FaCogs />,
-              search: <FaSearch />,
-              shield: <FaShieldAlt />,
-              terminal: <FaTerminal />,
-              code: <FaCode />,
-              globe: <FaGlobe />,
-              lightbulb: <FaLightbulb />
-            }} 
-          />
+      <section className="angela-features" ref={featuresRef}>
+        <div className="angela-section-header">
+          <h2 className="angela-section-title">
+            <span className="angela-title-gradient">Features</span>
+          </h2>
+          <p className="angela-section-subtitle">Powerful capabilities that make your terminal smarter</p>
         </div>
-      </SectionWrapper>
-      
-      <SectionSeparator />
-      
-      {/* Installation Section */}
-      <SectionWrapper>
-        <div ref={installRef} style={{ width: '100%', maxWidth: '1200px' }}>
-          <InstallSection />
+        <div className="angela-features-grid">
+          {features.map((feature, index) => (
+            <div className="angela-feature-card" key={index}>
+              <div className="angela-feature-icon">
+                {feature.icon}
+              </div>
+              <h3 className="angela-feature-title">{feature.title}</h3>
+              <p className="angela-feature-description">{feature.description}</p>
+            </div>
+          ))}
         </div>
-      </SectionWrapper>
+      </section>
       
-      <SectionSeparator />
+      {/* Install Section */}
+      <section className="angela-install" ref={installRef}>
+        <div className="angela-section-header">
+          <h2 className="angela-section-title">
+            <span className="angela-title-gradient">Installation</span>
+          </h2>
+          <p className="angela-section-subtitle">Get up and running in seconds</p>
+        </div>
+        <div className="angela-install-content">
+          <div className="angela-install-terminal">
+            <div className="angela-terminal-header">
+              <div className="angela-terminal-buttons">
+                <span className="angela-terminal-button red"></span>
+                <span className="angela-terminal-button yellow"></span>
+                <span className="angela-terminal-button green"></span>
+              </div>
+              <div className="angela-terminal-title">Quick Install</div>
+            </div>
+            <div className="angela-terminal-body">
+              <div className="angela-terminal-line">
+                <span className="angela-terminal-prompt">$</span>
+                <span className="angela-terminal-text">curl -sSL https://raw.githubusercontent.com/CarterPerez-dev/angela-cli/main/scripts/install-quick.sh | bash</span>
+                <button 
+                  className="angela-copy-button" 
+                  onClick={copyInstallCommand}
+                  aria-label="Copy installation command"
+                >
+                  {installCopied ? "Copied!" : "Copy"}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="angela-install-steps">
+            <div className="angela-install-step">
+              <div className="angela-step-number">1</div>
+              <div className="angela-step-content">
+                <h3 className="angela-step-title">Run the installer</h3>
+                <p className="angela-step-description">
+                  The script checks for dependencies, installs the package, and sets up shell integration.
+                </p>
+              </div>
+            </div>
+            <div className="angela-install-step">
+              <div className="angela-step-number">2</div>
+              <div className="angela-step-content">
+                <h3 className="angela-step-title">Configure your API key</h3>
+                <p className="angela-step-description">
+                  Run <code>angela init</code> to set up your Google Gemini API key and customize preferences.
+                </p>
+              </div>
+            </div>
+            <div className="angela-install-step">
+              <div className="angela-step-number">3</div>
+              <div className="angela-step-content">
+                <h3 className="angela-step-title">Start using Angela</h3>
+                <p className="angela-step-description">
+                  Type <code>angela "your request in natural language"</code> and let Angela handle the rest!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="angela-install-buttons">
+            <a href="https://github.com/CarterPerez-dev/angela-cli#-installation" target="_blank" rel="noopener noreferrer" className="angela-secondary-button">
+              Advanced Installation Options <FaArrowRight className="angela-btn-icon" />
+            </a>
+          </div>
+        </div>
+      </section>
+      
+      {/* Demo Section */}
+      <section className="angela-demo" ref={demoRef}>
+        <div className="angela-section-header">
+          <h2 className="angela-section-title">
+            <span className="angela-title-gradient">Watch Angela in Action</span>
+          </h2>
+          <p className="angela-section-subtitle">See how Angela makes the command line intuitive and powerful</p>
+        </div>
+        <div className="angela-demo-content">
+          <div className="angela-demo-terminal">
+            <div className="angela-terminal-header">
+              <div className="angela-terminal-buttons">
+                <span className="angela-terminal-button red"></span>
+                <span className="angela-terminal-button yellow"></span>
+                <span className="angela-terminal-button green"></span>
+              </div>
+              <div className="angela-terminal-title">Demo</div>
+            </div>
+            <div className="angela-terminal-body">
+              <div className="angela-terminal-line">
+                <span className="angela-terminal-prompt">$</span>
+                <span className="angela-terminal-text">{userCommand}</span>
+                <span className="angela-terminal-cursor"></span>
+              </div>
+              {terminalOutput.map((line, index) => (
+                <div className="angela-terminal-line angela-output" key={index}>
+                  <span className="angela-terminal-text">{line}</span>
+                </div>
+              ))}
+            </div>
+            <div className="angela-terminal-overlay" onClick={() => setIsTerminalActive(true)}>
+              <button className="angela-primary-button">
+                <FaPlayCircle className="angela-btn-icon" /> Start Demo
+              </button>
+            </div>
+          </div>
+          <div className="angela-demo-examples">
+            <h3 className="angela-examples-title">Try asking Angela to:</h3>
+            <div className="angela-examples-grid">
+              {usageExamples.map((category, cIndex) => (
+                <div className="angela-example-category" key={cIndex}>
+                  <h4 className="angela-category-title">{category.category}</h4>
+                  <ul className="angela-example-list">
+                    {category.commands.map((command, cmdIndex) => (
+                      <li className="angela-example-item" key={cmdIndex}>
+                        <span className="angela-example-prefix">angela "</span>
+                        <span className="angela-example-command">{command}</span>
+                        <span className="angela-example-suffix">"</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Documentation Section */}
+      <section className="angela-docs" ref={docsRef}>
+        <div className="angela-section-header">
+          <h2 className="angela-section-title">
+            <span className="angela-title-gradient">Documentation</span>
+          </h2>
+          <p className="angela-section-subtitle">Everything you need to know about Angela CLI</p>
+        </div>
+        <div className="angela-docs-content">
+          <div className="angela-docs-grid">
+            <div className="angela-doc-card">
+              <h3 className="angela-doc-title">Getting Started</h3>
+              <ul className="angela-doc-links">
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-installation" target="_blank" rel="noopener noreferrer">Installation Guide</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-initial-configuration" target="_blank" rel="noopener noreferrer">Configuration Options</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-basic-usage" target="_blank" rel="noopener noreferrer">Basic Usage</a></li>
+              </ul>
+            </div>
+            <div className="angela-doc-card">
+              <h3 className="angela-doc-title">Core Features</h3>
+              <ul className="angela-doc-links">
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-command-categories" target="_blank" rel="noopener noreferrer">Command Categories</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-safety-features" target="_blank" rel="noopener noreferrer">Safety Features</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-shell-integration" target="_blank" rel="noopener noreferrer">Shell Integration</a></li>
+              </ul>
+            </div>
+            <div className="angela-doc-card">
+              <h3 className="angela-doc-title">Advanced Topics</h3>
+              <ul className="angela-doc-links">
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-workflows" target="_blank" rel="noopener noreferrer">Workflow Management</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-code-generation" target="_blank" rel="noopener noreferrer">Code Generation</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-toolchain-integration" target="_blank" rel="noopener noreferrer">Toolchain Integration</a></li>
+              </ul>
+            </div>
+            <div className="angela-doc-card">
+              <h3 className="angela-doc-title">Reference</h3>
+              <ul className="angela-doc-links">
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-advanced-usage-examples" target="_blank" rel="noopener noreferrer">Usage Examples</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-configuration-options" target="_blank" rel="noopener noreferrer">Configuration Reference</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-frequently-asked-questions" target="_blank" rel="noopener noreferrer">FAQs</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="angela-doc-cta">
+            <a href="https://github.com/CarterPerez-dev/angela-cli" target="_blank" rel="noopener noreferrer" className="angela-primary-button">
+              Full Documentation <FaArrowRight className="angela-btn-icon" />
+            </a>
+          </div>
+        </div>
+      </section>
+      
+      {/* FAQ Section */}
+      <section className="angela-faq">
+        <div className="angela-section-header">
+          <h2 className="angela-section-title">
+            <span className="angela-title-gradient">Frequently Asked Questions</span>
+          </h2>
+        </div>
+        <div className="angela-faq-grid">
+          {faqs.map((faq, index) => (
+            <div className="angela-faq-item" key={index}>
+              <h3 className="angela-faq-question">{faq.question}</h3>
+              <p className="angela-faq-answer">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      
+      {/* About Section */}
+      <section className="angela-about" ref={aboutRef}>
+        <div className="angela-section-header">
+          <h2 className="angela-section-title">
+            <span className="angela-title-gradient">About Angela CLI</span>
+          </h2>
+        </div>
+        <div className="angela-about-content">
+          <div className="angela-about-text">
+            <p>Angela CLI represents a paradigm shift in command-line interaction. It's an AI-powered command-line assistant deeply integrated into your terminal shell that blurs the boundary between traditional command-line tools and intelligent assistants.</p>
+            <p>Unlike conventional CLI tools that require exact syntax or chatbots that operate in isolation, Angela understands natural language within your development context and can perform complex multi-step operations spanning multiple tools and systems.</p>
+            <p>Angela doesn't just execute commands – it acts as an intelligent copilot for your terminal operations, enhancing productivity, reducing errors, and lowering the barrier to entry for complex tasks.</p>
+            <div className="angela-about-buttons">
+              <a href="https://github.com/CarterPerez-dev/angela-cli" target="_blank" rel="noopener noreferrer" className="angela-github-button">
+                <FaGithub className="angela-btn-icon" /> Star on GitHub
+              </a>
+              <button className="angela-secondary-button" onClick={() => scrollToSection(installRef)}>
+                <FaDownload className="angela-btn-icon" /> Install Now
+              </button>
+            </div>
+          </div>
+          <div className="angela-about-stats">
+            <div className="angela-about-stat">
+              <div className="angela-about-stat-icon">
+                <FaStar />
+              </div>
+              <div className="angela-about-stat-value">4.9/5</div>
+              <div className="angela-about-stat-label">User Rating</div>
+            </div>
+            <div className="angela-about-stat">
+              <div className="angela-about-stat-icon">
+                <FaUserPlus />
+              </div>
+              <div className="angela-about-stat-value">5k+</div>
+              <div className="angela-about-stat-label">Active Users</div>
+            </div>
+            <div className="angela-about-stat">
+              <div className="angela-about-stat-icon">
+                <FaRegLightbulb />
+              </div>
+              <div className="angela-about-stat-value">1.2M+</div>
+              <div className="angela-about-stat-label">Commands Generated</div>
+            </div>
+          </div>
+        </div>
+      </section>
       
       {/* Footer */}
-      <PhilosophicalFooter />
-      
-      {/* Ambient animation effects */}
-      <ThoughtFlowAnimation
-        active={true}
-        particleCount={20}
-        bubbleCount={10}
-        lineCount={15}
-        baseColor={THEME.colors.textMuted}
-        accentColor={`${THEME.colors.accentPrimary}33`}
-        origin="center"
-        zIndex={-1}
-      />
-      
-      {/* Scroll to top button */}
-      <ScrollButton 
-        onClick={handleScrollToTop}
-        visible={showScrollButton}
-        aria-label="Scroll to Top"
-      >
-        <FaChevronUp />
-      </ScrollButton>
-    </AngelaPageContainer>
-  );
-};
-
-// Matrix Rain Effect Component - Enhanced with more characters and better performance
-const MatrixRain = () => {
-  const canvasRef = useRef(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (canvasRef.current) {
-        setDimensions({
-          width: window.innerWidth,
-          height: window.innerHeight
-        });
-      }
-    };
-
-    window.addEventListener('resize', updateDimensions);
-    updateDimensions();
-
-    return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
-
-  useEffect(() => {
-    if (!canvasRef.current || dimensions.width === 0) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    
-    canvas.width = dimensions.width;
-    canvas.height = dimensions.height;
-    
-    // Expanded characters for the matrix rain
-    const characters = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン¥∞§¶†‡≠±≈∫√∑∏πΣΔΩαβγδεζηθικλμνξοπρστυφχψω';
-    
-    // Character array setup
-    const fontSize = 14;
-    const columns = Math.ceil(canvas.width / fontSize);
-    
-    // Array of drops - one per column
-    const drops = Array(columns).fill(0);
-    const speeds = Array(columns).fill(0).map(() => Math.random() * 0.8 + 0.5);
-    const charIndices = Array(columns).fill(0).map(() => Math.floor(Math.random() * characters.length));
-    
-    // Matrix rain drawing with optimizations
-    const draw = () => {
-      // Semi-transparent black for fade effect
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      for (let i = 0; i < drops.length; i++) {
-        // Vary the character
-        charIndices[i] = (charIndices[i] + 1) % characters.length;
-        const text = characters.charAt(charIndices[i]);
-        
-        // Add gradient effect with more green at the head
-        const headColor = drops[i] === 0 ? '#50ff50' : '#33ff33';
-        const midColor = '#29cc29';
-        const tailColor = '#164016';
-        
-        if (drops[i] > 1) {
-          // Tail character
-          ctx.fillStyle = tailColor;
-          ctx.font = `${fontSize - 2}px monospace`;
-          ctx.fillText(characters.charAt((charIndices[i] + 5) % characters.length), 
-                      i * fontSize, (drops[i] - 1) * fontSize);
-        }
-        
-        // Mid character
-        if (drops[i] > 0) {
-          ctx.fillStyle = midColor;
-          ctx.font = `${fontSize - 1}px monospace`;
-          ctx.fillText(characters.charAt((charIndices[i] + 2) % characters.length), 
-                      i * fontSize, drops[i] * fontSize - fontSize);
-        }
-        
-        // Head character (latest)
-        ctx.fillStyle = headColor;
-        ctx.font = `${fontSize}px monospace`;
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        
-        // If drop reaches bottom or random chance, reset to top
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        
-        // Move drops down at varying speeds
-        drops[i] += speeds[i];
-      }
-    };
-    
-    // Animation loop
-    const interval = setInterval(draw, 35);
-    
-    return () => clearInterval(interval);
-  }, [dimensions]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        pointerEvents: 'none',
-        zIndex: -1,
-        opacity: 0.15
-      }}
-    />
+      <footer className="angela-footer">
+        <div className="angela-footer-content">
+          <div className="angela-footer-logo">
+            <FaTerminal className="angela-logo-icon" />
+            <span>ANGELA-CLI</span>
+          </div>
+          <div className="angela-footer-links">
+            <a href="https://github.com/CarterPerez-dev/angela-cli" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://github.com/CarterPerez-dev/angela-cli/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+            <a href="https://github.com/CarterPerez-dev/angela-cli/issues" target="_blank" rel="noopener noreferrer">Report Issues</a>
+            <a href="https://github.com/CarterPerez-dev/angela-cli/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contribute</a>
+          </div>
+          <div className="angela-footer-attribution">
+            Built with ❤️ by the Angela CLI Team
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 };
 

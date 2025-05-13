@@ -1,0 +1,1165 @@
+/* src/components/pages/angela/AngelaCLI.css */
+
+/* Global styles specific to Angela page */
+.angela-container {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #050510;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: 'VT323', 'Press Start 2P', monospace;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Grid background effect */
+.angela-grid-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.angela-grid-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(to right, rgba(0, 255, 150, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 255, 150, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 60s linear infinite;
+}
+
+.angela-stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.angela-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: starTwinkle 3s infinite alternate;
+}
+
+@keyframes gridMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-50px, -50px);
+  }
+}
+
+@keyframes starTwinkle {
+  0% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1.5);
+  }
+}
+
+/* Navigation */
+.angela-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(5, 5, 16, 0.8);
+  backdrop-filter: blur(5px);
+  z-index: 10;
+  border-bottom: 1px solid rgba(0, 255, 150, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.angela-nav-logo {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.5);
+  letter-spacing: 2px;
+}
+
+.angela-logo-icon {
+  margin-right: 8px;
+  color: #00ff96;
+}
+
+.angela-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.angela-nav-links button {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'VT323', 'Press Start 2P', monospace;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 5px 10px;
+  position: relative;
+}
+
+.angela-nav-links button:hover,
+.angela-nav-links button.active {
+  color: #00ff96;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.5);
+}
+
+.angela-nav-links button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background-color: #00ff96;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 255, 150, 0.5);
+}
+
+.angela-github-link {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.angela-github-link:hover {
+  color: #00ff96;
+  transform: scale(1.1);
+}
+
+/* Hero Section */
+.angela-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.angela-hero-content {
+  max-width: 800px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.angela-hero-title {
+  font-size: 42px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 0 0 15px rgba(0, 255, 150, 0.5);
+  position: relative;
+}
+
+.angela-title-animation {
+  position: relative;
+  display: inline-block;
+}
+
+.angela-title-text {
+  font-size: 72px;
+  letter-spacing: 4px;
+  color: white;
+}
+
+.angela-title-gradient {
+  background: linear-gradient(to right, #00ff96, #00a6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+}
+
+.angela-hero-subtitle {
+  font-size: 28px;
+  margin-bottom: 20px;
+  min-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.angela-typed-text {
+  display: inline-block;
+}
+
+.angela-cursor {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #00ff96;
+}
+
+.angela-cursor.visible {
+  opacity: 1;
+}
+
+.angela-cursor.hidden {
+  opacity: 0;
+}
+
+.angela-hero-description {
+  font-size: 18px;
+  max-width: 700px;
+  margin: 0 auto 30px auto;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+.angela-hero-cta {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.angela-stats {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.angela-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.angela-stat-value {
+  font-size: 36px;
+  font-weight: bold;
+  color: #00ff96;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.5);
+}
+
+.angela-stat-label {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+.angela-hero-terminal {
+  width: 100%;
+  max-width: 800px;
+  height: 300px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid #00ff96;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 255, 150, 0.2), 0 0 40px rgba(0, 255, 150, 0.1);
+  margin-top: 20px;
+}
+
+.angela-terminal-header {
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid rgba(0, 255, 150, 0.3);
+}
+
+.angela-terminal-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.angela-terminal-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.angela-terminal-button.red {
+  background-color: #ff5f56;
+}
+
+.angela-terminal-button.yellow {
+  background-color: #ffbd2e;
+}
+
+.angela-terminal-button.green {
+  background-color: #27c93f;
+}
+
+.angela-terminal-title {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.angela-terminal-body {
+  height: calc(100% - 30px);
+  padding: 10px;
+  overflow-y: auto;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.angela-terminal-line {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.angela-terminal-prompt {
+  color: #00ff96;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.angela-terminal-text {
+  color: rgba(255, 255, 255, 0.9);
+  word-break: break-word;
+}
+
+.angela-terminal-text-result {
+  color: #00a6ff;
+  word-break: break-word;
+}
+
+.angela-output {
+  padding-left: 20px;
+  opacity: 0.8;
+}
+
+.angela-terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background-color: #00ff96;
+  margin-left: 2px;
+  animation: blink 1s infinite step-end;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Button styles */
+.angela-primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background: linear-gradient(to right, #00ff96, #00a6ff);
+  border: none;
+  border-radius: 5px;
+  color: #050510;
+  font-family: 'VT323', 'Press Start 2P', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.angela-primary-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.angela-primary-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 255, 150, 0.4);
+}
+
+.angela-primary-button:hover::before {
+  opacity: 1;
+  animation: shine 1.5s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.angela-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background-color: transparent;
+  border: 1px solid #00ff96;
+  border-radius: 5px;
+  color: #00ff96;
+  font-family: 'VT323', 'Press Start 2P', monospace;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.angela-secondary-button:hover {
+  background-color: rgba(0, 255, 150, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 255, 150, 0.2);
+}
+
+.angela-btn-icon {
+  margin-left: 8px;
+}
+
+.angela-github-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background-color: #171515;
+  border: 1px solid #343434;
+  border-radius: 5px;
+  color: white;
+  font-family: 'VT323', 'Press Start 2P', monospace;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.angela-github-button:hover {
+  background-color: #252525;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.angela-github-button .angela-btn-icon {
+  margin-right: 8px;
+  margin-left: 0;
+}
+
+/* Common section styles */
+.angela-features,
+.angela-install,
+.angela-demo,
+.angela-docs,
+.angela-faq,
+.angela-about {
+  padding: 100px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.angela-section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.angela-section-title {
+  font-size: 38px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.3);
+  position: relative;
+  display: inline-block;
+  padding: 0 40px;
+}
+
+.angela-section-title::before,
+.angela-section-title::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(to right, #00ff96, transparent);
+}
+
+.angela-section-title::before {
+  left: 0;
+}
+
+.angela-section-title::after {
+  right: 0;
+  background: linear-gradient(to left, #00ff96, transparent);
+}
+
+.angela-section-subtitle {
+  font-size: 18px;
+  opacity: 0.8;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Features section */
+.angela-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.angela-feature-card {
+  padding: 25px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 150, 0.2);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.angela-feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom right, rgba(0, 255, 150, 0.05), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.angela-feature-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(0, 255, 150, 0.4);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 255, 150, 0.1);
+}
+
+.angela-feature-card:hover::before {
+  opacity: 1;
+}
+
+.angela-feature-icon {
+  font-size: 32px;
+  color: #00ff96;
+  margin-bottom: 20px;
+}
+
+.angela-feature-title {
+  font-size: 22px;
+  margin-bottom: 15px;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.3);
+}
+
+.angela-feature-description {
+  font-size: 16px;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+/* Install section */
+.angela-install-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.angela-install-terminal {
+  width: 100%;
+  max-width: 800px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid #00ff96;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 255, 150, 0.2), 0 0 40px rgba(0, 255, 150, 0.1);
+  margin: 0 auto 40px;
+}
+
+.angela-copy-button {
+  margin-left: 10px;
+  padding: 3px 8px;
+  background-color: rgba(0, 255, 150, 0.2);
+  border: 1px solid #00ff96;
+  border-radius: 4px;
+  color: #00ff96;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.angela-copy-button:hover {
+  background-color: rgba(0, 255, 150, 0.3);
+}
+
+.angela-install-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.angela-install-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 150, 0.2);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.angela-install-step:hover {
+  border-color: rgba(0, 255, 150, 0.4);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(0, 255, 150, 0.1);
+}
+
+.angela-step-number {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to right, #00ff96, #00a6ff);
+  border-radius: 50%;
+  color: #050510;
+  font-size: 20px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.angela-step-content {
+  flex: 1;
+}
+
+.angela-step-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.3);
+}
+
+.angela-step-description {
+  font-size: 16px;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+.angela-step-description code {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #00ff96;
+}
+
+.angela-install-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Demo section */
+.angela-demo-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.angela-demo-terminal {
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid #00ff96;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 255, 150, 0.2), 0 0 40px rgba(0, 255, 150, 0.1);
+  margin: 0 auto;
+  position: relative;
+}
+
+.angela-terminal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.angela-demo-examples {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.angela-examples-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.3);
+}
+
+.angela-examples-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.angela-example-category {
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 150, 0.2);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.angela-example-category:hover {
+  border-color: rgba(0, 255, 150, 0.4);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(0, 255, 150, 0.1);
+}
+
+.angela-category-title {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #00ff96;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.3);
+}
+
+.angela-example-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.angela-example-item {
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.angela-example-prefix,
+.angela-example-suffix {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+.angela-example-command {
+  color: #00ff96;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+/* Documentation section */
+.angela-docs-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.angela-docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.angela-doc-card {
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 150, 0.2);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.angela-doc-card:hover {
+  border-color: rgba(0, 255, 150, 0.4);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(0, 255, 150, 0.1);
+}
+
+.angela-doc-title {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #00ff96;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.3);
+}
+
+.angela-doc-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.angela-doc-links li {
+  margin-bottom: 10px;
+}
+
+.angela-doc-links a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  padding-left: 15px;
+  display: inline-block;
+}
+
+.angela-doc-links a::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: #00ff96;
+  transition: all 0.3s ease;
+}
+
+.angela-doc-links a:hover {
+  color: white;
+  transform: translateX(5px);
+}
+
+.angela-doc-links a:hover::before {
+  color: #00ff96;
+  transform: scale(1.2);
+}
+
+.angela-doc-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* FAQ section */
+.angela-faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.angela-faq-item {
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 150, 0.2);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.angela-faq-item:hover {
+  border-color: rgba(0, 255, 150, 0.4);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(0, 255, 150, 0.1);
+}
+
+.angela-faq-question {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #00ff96;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.3);
+}
+
+.angela-faq-answer {
+  font-size: 16px;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+/* About section */
+.angela-about-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+}
+
+.angela-about-text {
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 150, 0.2);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.angela-about-text:hover {
+  border-color: rgba(0, 255, 150, 0.4);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(0, 255, 150, 0.1);
+}
+
+.angela-about-text p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  opacity: 0.9;
+}
+
+.angela-about-buttons {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.angela-about-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.angela-about-stat {
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 150, 0.2);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+.angela-about-stat:hover {
+  border-color: rgba(0, 255, 150, 0.4);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(0, 255, 150, 0.1);
+  transform: translateY(-5px);
+}
+
+.angela-about-stat-icon {
+  font-size: 30px;
+  color: #00ff96;
+  margin-bottom: 15px;
+}
+
+.angela-about-stat-value {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.3);
+}
+
+.angela-about-stat-label {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+/* Footer */
+.angela-footer {
+  padding: 50px 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-top: 1px solid rgba(0, 255, 150, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.angela-footer-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.angela-footer-logo {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.5);
+}
+
+.angela-footer-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.angela-footer-links a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.angela-footer-links a:hover {
+  color: #00ff96;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.3);
+}
+
+.angela-footer-attribution {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .angela-nav {
+    flex-direction: column;
+    height: auto;
+    padding: 15px;
+    gap: 10px;
+  }
+  
+  .angela-nav-links {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .angela-nav-links button {
+    font-size: 14px;
+    padding: 5px;
+  }
+  
+  .angela-hero-title .angela-title-text {
+    font-size: 48px;
+  }
+  
+  .angela-hero-subtitle {
+    font-size: 20px;
+  }
+  
+  .angela-hero-cta {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .angela-stats {
+    gap: 20px;
+  }
+  
+  .angela-hero-terminal {
+    height: 250px;
+  }
+  
+  .angela-features-grid,
+  .angela-docs-grid,
+  .angela-examples-grid,
+  .angela-faq-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .angela-about-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .angela-about-buttons {
+    justify-content: center;
+  }
+  
+  .angela-section-title {
+    font-size: 30px;
+  }
+  
+  .angela-feature-card,
+  .angela-faq-item,
+  .angela-doc-card,
+  .angela-about-text,
+  .angela-about-stat {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .angela-hero-title .angela-title-text {
+    font-size: 36px;
+  }
+  
+  .angela-hero-subtitle {
+    font-size: 18px;
+  }
+  
+  .angela-hero-description {
+    font-size: 16px;
+  }
+  
+  .angela-hero-terminal {
+    height: 200px;
+  }
+  
+  .angela-stat-value {
+    font-size: 28px;
+  }
+  
+  .angela-stat-label {
+    font-size: 14px;
+  }
+  
+  .angela-section-title {
+    font-size: 26px;
+    padding: 0 20px;
+  }
+  
+  .angela-section-title::before,
+  .angela-section-title::after {
+    width: 15px;
+  }
+  
+  .angela-primary-button,
+  .angela-secondary-button,
+  .angela-github-button {
+    width: 100%;
+  }
+  
+  .angela-terminal-body {
+    font-size: 12px;
+  }
+  
+  .angela-features,
+  .angela-install,
+  .angela-demo,
+  .angela-docs,
+  .angela-faq,
+  .angela-about {
+    padding: 60px 15px;
+  }
+}
