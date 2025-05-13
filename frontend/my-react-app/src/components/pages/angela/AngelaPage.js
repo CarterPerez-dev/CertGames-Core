@@ -1,11 +1,11 @@
-// Modified src/components/pages/angela/AngelaPage.js with particle effect integration
+// src/components/pages/angela/AngelaPage.js
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaGithub, FaTerminal, FaDownload, FaArrowRight, FaPlayCircle, FaStar, FaCode, FaLaptopCode, FaUserSecret, FaTools, FaRocket, FaBrain, FaNetworkWired, FaUserPlus, FaRegLightbulb } from 'react-icons/fa';
 import './AngelaCLI.css';
-import './ParticleEffect.css'; // Import the particle effect CSS
-import ParticleEffect from './ParticleEffect'; // Import the particle effect component
+import './ParticleEffect.css'; // Keep the CSS for grid styling
+import OctocatDisplay from './OctocatDisplay'; // Import the new OctocatDisplay component
 
 const AngelaPage = () => {
   // State for animations and interactions
@@ -19,7 +19,6 @@ const AngelaPage = () => {
   const [userCommand, setUserCommand] = useState('');
   const [installCopied, setInstallCopied] = useState(false);
   const [isDemoPlaying, setIsDemoPlaying] = useState(false);
-  const [particleShape, setParticleShape] = useState('cube');
   
   // Refs for scrolling
   const featuresRef = useRef(null);
@@ -27,6 +26,7 @@ const AngelaPage = () => {
   const demoRef = useRef(null);
   const docsRef = useRef(null);
   const aboutRef = useRef(null);
+  const octocatRef = useRef(null); // Reference for the octocat section
   
   // Terminal demo text animation sequences
   const terminalTexts = [
@@ -221,28 +221,6 @@ const AngelaPage = () => {
     }
   ];
   
-  // Change particle shape based on scroll position
-  useEffect(() => {
-    const handleShapeChange = () => {
-      const scrollPosition = window.scrollY;
-      
-      if (scrollPosition < 800) {
-        setParticleShape('bust'); // Use the bust for the hero section
-      } else if (scrollPosition < 1600) {
-        setParticleShape('sphere');
-      } else if (scrollPosition < 2400) {
-        setParticleShape('torus');
-      } else if (scrollPosition < 3200) {
-        setParticleShape('wave');
-      } else {
-        setParticleShape('morph'); // Use morphing particles for the bottom sections
-      }
-    };
-    
-    window.addEventListener('scroll', handleShapeChange);
-    return () => window.removeEventListener('scroll', handleShapeChange);
-  }, []);
-  
   // Typing animation effect for hero section
   useEffect(() => {
     const currentText = heroTexts[currentTextIndex];
@@ -326,7 +304,8 @@ const AngelaPage = () => {
         { ref: installRef, id: 'install' },
         { ref: demoRef, id: 'demo' },
         { ref: docsRef, id: 'docs' },
-        { ref: aboutRef, id: 'about' }
+        { ref: aboutRef, id: 'about' },
+        { ref: octocatRef, id: 'octocat' }
       ];
       
       for (const section of sections) {
@@ -374,12 +353,6 @@ const AngelaPage = () => {
   
   return (
     <div className="angela-container">
-      {/* 3D Particle Effect */}
-      <ParticleEffect shape={particleShape} particleCount={7000} mouseEffect={2.5} particleColor="#00ff96" />
-      
-      {/* Additional glow effect layer */}
-      <div className="angela-glow-effect"></div>
-      
       {/* Animated grid background */}
       <div className="angela-grid-background">
         <div className="angela-grid-lines"></div>
@@ -405,6 +378,7 @@ const AngelaPage = () => {
           <span>ANGELA-CLI</span>
         </div>
         <div className="angela-nav-links">
+          <button onClick={() => scrollToSection(octocatRef)} className={activeSection === 'octocat' ? 'active' : ''}>Octocat</button>
           <button onClick={() => scrollToSection(featuresRef)} className={activeSection === 'features' ? 'active' : ''}>Features</button>
           <button onClick={() => scrollToSection(installRef)} className={activeSection === 'install' ? 'active' : ''}>Install</button>
           <button onClick={() => scrollToSection(demoRef)} className={activeSection === 'demo' ? 'active' : ''}>Demo</button>
@@ -495,6 +469,11 @@ const AngelaPage = () => {
         </div>
       </section>
       
+      {/* GitHub Octocat Display */}
+      <div ref={octocatRef}>
+        <OctocatDisplay />
+      </div>
+      
       {/* Features Section */}
       <section className="angela-features" ref={featuresRef}>
         <div className="angela-section-header">
@@ -516,6 +495,7 @@ const AngelaPage = () => {
         </div>
       </section>
       
+      {/* Rest of your components... */}
       {/* Install Section */}
       <section className="angela-install" ref={installRef}>
         <div className="angela-section-header">

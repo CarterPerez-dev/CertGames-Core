@@ -229,10 +229,131 @@ export function morphPoints(sourcePoints, targetPoints, progress) {
   });
 }
 
+// Function to generate points in the shape of a GitHub Octocat
+export function generateOctocatPoints(count = 20000, scale = 1) {
+  // Create an array to hold all the points
+  const points = [];
+  
+  // Generate the head (spherical base)
+  const headCount = Math.floor(count * 0.4);
+  const headRadius = 0.8 * scale;
+  for (let i = 0; i < headCount; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos((Math.random() * 2) - 1);
+    const x = headRadius * Math.sin(phi) * Math.cos(theta);
+    const y = headRadius * Math.sin(phi) * Math.sin(theta) + 0.2 * scale; // Shift up a bit
+    const z = headRadius * Math.cos(phi);
+    
+    // Only keep points that are not in the bottom section
+    if (z > -headRadius * 0.5) {
+      points.push({
+        position: [x, y, z],
+        normal: [Math.sin(phi) * Math.cos(theta), Math.sin(phi) * Math.sin(theta), Math.cos(phi)]
+      });
+    }
+  }
+  
+  // Generate the body
+  const bodyCount = Math.floor(count * 0.3);
+  const bodyWidth = 0.65 * scale;
+  const bodyHeight = 0.8 * scale;
+  for (let i = 0; i < bodyCount; i++) {
+    // Make the body more oval-shaped and tapered at the bottom
+    const u = Math.random() * Math.PI * 2;
+    const v = Math.random();
+    const radius = bodyWidth * (1 - v * 0.3); // Taper at the bottom
+    
+    const x = radius * Math.cos(u);
+    const y = -bodyHeight * v - 0.3 * scale; // Position below the head
+    const z = radius * Math.sin(u);
+    
+    points.push({
+      position: [x, y, z],
+      normal: [Math.cos(u), 0, Math.sin(u)]
+    });
+  }
+  
+  // Generate the tentacles
+  const tentacleCount = Math.floor(count * 0.3);
+  const numTentacles = 5; // Create 5 tentacles
+  
+  for (let t = 0; t < numTentacles; t++) {
+    const angle = (t / numTentacles) * Math.PI * 2;
+    const baseX = Math.cos(angle) * bodyWidth * 0.9;
+    const baseZ = Math.sin(angle) * bodyWidth * 0.9;
+    const baseY = -0.6 * scale - Math.random() * 0.4 * scale;
+    
+    const pointsPerTentacle = Math.floor(tentacleCount / numTentacles);
+    
+    // Create a curved tentacle
+    for (let i = 0; i < pointsPerTentacle; i++) {
+      const progress = i / pointsPerTentacle;
+      const tentacleLength = 0.8 * scale + (Math.random() * 0.4 * scale);
+      
+      // Create a curve with sine wave
+      const curve = Math.sin(progress * Math.PI * 2) * 0.2 * scale;
+      
+      const x = baseX + curve * Math.cos(angle + Math.PI/2);
+      const y = baseY - progress * tentacleLength;
+      const z = baseZ + curve * Math.sin(angle + Math.PI/2);
+      
+      // Calculate normal approximation
+      const tangent = new THREE.Vector3(
+        Math.cos(angle + Math.PI/2) * 0.2 * Math.PI * 2 * Math.cos(progress * Math.PI * 2),
+        -tentacleLength,
+        Math.sin(angle + Math.PI/2) * 0.2 * Math.PI * 2 * Math.cos(progress * Math.PI * 2)
+      ).normalize();
+      
+      const normal = new THREE.Vector3(x, 0, z).normalize();
+      normal.cross(tangent).normalize();
+      
+      points.push({
+        position: [x, y, z],
+        normal: [normal.x, normal.y, normal.z]
+      });
+    }
+  }
+  
+  // Add eyes
+  const eyeCount = Math.floor(count * 0.05);
+  const eyeSize = 0.15 * scale;
+  const eyeSpacing = 0.3 * scale;
+  
+  for (let i = 0; i < eyeCount; i++) {
+    const side = i < eyeCount / 2 ? -1 : 1; // Left or right eye
+    
+    const theta = Math.random() * Math.PI * 0.5 - Math.PI * 0.25; // Front-facing
+    const phi = Math.random() * Math.PI * 0.5 + Math.PI * 0.25; // Upper half
+    
+    const eyeX = side * eyeSpacing + (Math.random() - 0.5) * eyeSize;
+    const eyeY = 0.2 * scale + (Math.random() - 0.5) * eyeSize;
+    const eyeZ = headRadius * 0.8 + (Math.random() - 0.5) * eyeSize; // Push to front
+    
+    points.push({
+      position: [eyeX, eyeY, eyeZ],
+      normal: [0, 0, 1] // Eyes face forward
+    });
+  }
+  
+  // Add jitter to all points for a more natural look
+  return points.map(point => {
+    const jitter = 0.02 * scale * Math.random();
+    return {
+      position: [
+        point.position[0] + jitter * (Math.random() - 0.5),
+        point.position[1] + jitter * (Math.random() - 0.5),
+        point.position[2] + jitter * (Math.random() - 0.5)
+      ],
+      normal: point.normal
+    };
+  });
+}
+
 export default {
   useModelPoints,
   generateHeadPoints,
   generateTorsoPoints,
   generateBustPoints,
-  morphPoints
+  morphPoints,
+  generateOctocatPoints
 };
