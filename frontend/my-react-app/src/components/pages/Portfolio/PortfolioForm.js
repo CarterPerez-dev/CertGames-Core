@@ -116,8 +116,7 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
     }));
   };
 
-  // In frontend/my-react-app/src/components/pages/Portfolio/PortfolioForm.js
-  // Find the handleGeneratePortfolio function and update it like this:
+
   
   const handleGeneratePortfolio = async (e) => {
     e.preventDefault();
@@ -135,7 +134,7 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
     try {
       setFormSubmitting(true);
       
-      // Add this line here to track generation start time
+      // Track generation start time
       const generationStartTime = Date.now();
       
       // Initial loading message
@@ -168,15 +167,20 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
       // Step 2: Start polling for completion
       const startTime = Date.now();
       const maxWaitTime = 10 * 60 * 1000; // 10 minutes max wait
+      let attemptCount = 0;
       const checkStatusInterval = setInterval(async () => {
         try {
-          // Add this block here to update the loading message based on elapsed time
+          attemptCount++;
+          // Log the attempt count for debugging
+          console.log(`Checking portfolio status: attempt ${attemptCount}`);
+          
+          // Update loading message based on elapsed time
           if (onGenerationStart) {
             const loadingMessage = getPortfolioGenerationMessage(generationStartTime);
             onGenerationStart(loadingMessage);
           }
           
-          // Check if generation completed - FIXED URL
+          // Check if generation completed
           const statusResponse = await fetch('/api/portfolio/status/generation', {
             headers: {
               'X-User-Id': userId
@@ -185,9 +189,11 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
           
           if (statusResponse.ok) {
             const statusData = await statusResponse.json();
+            console.log("Status check response:", statusData);
             
             // Portfolio is ready
             if (statusData.success && statusData.status === 'completed') {
+              console.log("Portfolio generation completed! ID:", statusData.portfolio_id);
               clearInterval(checkStatusInterval);
               
               // Fetch the complete portfolio
@@ -199,19 +205,24 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
               
               if (portfolioResponse.ok) {
                 const portfolioData = await portfolioResponse.json();
-                console.log("Portfolio generation successful:", {
-                  portfolioId: statusData.portfolio_id,
-                  componentCount: statusData.components_count
-                });
+                console.log("Portfolio data received:", portfolioData);
+                
+                // Check if portfolio data is valid
+                if (!portfolioData.portfolio || Object.keys(portfolioData.portfolio.components || {}).length === 0) {
+                  throw new Error('Received empty portfolio data');
+                }
                 
                 onGenerationComplete(portfolioData.portfolio);
                 setFormSubmitting(false);
+              } else {
+                console.error("Error fetching portfolio:", await portfolioResponse.text());
+                throw new Error('Failed to fetch the generated portfolio');
               }
             } else {
               console.log("Portfolio generation still in progress:", statusData);
             }
           } else {
-            console.warn("Error checking portfolio status:", statusResponse.status);
+            console.warn("Error checking portfolio status:", await statusResponse.text());
           }
           
           // Check if we've waited too long

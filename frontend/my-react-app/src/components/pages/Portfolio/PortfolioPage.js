@@ -278,16 +278,29 @@ const PortfolioPage = () => {
                   // Use the custom message if provided, otherwise use default
                   setLoadingMessage(message || 'Generating your portfolio...');
                   
-                  // Simulate loading progress for generation
+                  // Clear any existing interval to prevent multiple intervals running
+                  if (window.progressInterval) {
+                    clearInterval(window.progressInterval);
+                  }
+                  
+                  // Reset progress to ensure we start from 0
+                  setLoadingProgress(0);
+                  
+                  // Improved progressive simulation - no back and forth
                   let progress = 0;
                   const progressInterval = setInterval(() => {
-                    progress += 5;
+                    // Gradually slow down progress as we approach 95%
+                    const increment = progress < 30 ? 3 : 
+                                      progress < 60 ? 2 : 
+                                      progress < 85 ? 1 : 0.5;
+                    
+                    progress += increment;
                     if (progress >= 95) {
                       clearInterval(progressInterval);
-                      progress = 95;
+                      progress = 95; // Cap at 95% until complete
                     }
                     setLoadingProgress(progress);
-                  }, 800);
+                  }, 1000); // Longer interval for more stable appearance
                   
                   // Store interval ID to clear it when generation completes
                   window.progressInterval = progressInterval;

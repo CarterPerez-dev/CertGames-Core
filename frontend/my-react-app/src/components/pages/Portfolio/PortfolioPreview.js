@@ -19,29 +19,21 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
 
   // Process portfolio data when it changes
   useEffect(() => {
-    console.log("Portfolio data changed or component mounted");
-    
     if (portfolio && portfolio.components) {
-      // Organize files into a tree structure
-      const tree = organizeFilesIntoTree(portfolio.components);
-      setFileTree(tree);
+      console.log("Portfolio provided to preview:", {
+        id: portfolio._id,
+        componentCount: Object.keys(portfolio.components).length
+      });
       
-      // Set the first file as active by default or maintain current selection
-      const files = Object.keys(portfolio.components);
-      if (files.length > 0) {
-        if (!activeFile || !portfolio.components[activeFile]) {
+      // If we have a portfolio but no activeFile is set, set the first file as active
+      if (!activeFile || !portfolio.components[activeFile]) {
+        const files = Object.keys(portfolio.components);
+        if (files.length > 0) {
           const defaultFile = files.find(f => f.endsWith('App.js')) || files[0];
           console.log(`Setting default active file: ${defaultFile}`);
           handleFileSelect(defaultFile);
-        } else {
-          // Update content for currently selected file
-          console.log(`Maintaining current active file: ${activeFile}`);
-          setFileContent(portfolio.components[activeFile]);
         }
       }
-      
-      // Generate preview HTML
-      generatePreviewHtml(portfolio.components);
     }
   }, [portfolio]);
 
