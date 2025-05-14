@@ -25,7 +25,7 @@ from routes.AI.analogy_routes import analogy_bp
 from routes.AI.grc_routes import grc_bp
 from routes.AI.scenario_routes import scenario_bp
 from routes.AI.xploit_routes import xploit_bp
-from routes.AI.xploit_routes import portfolio_bp
+from routes.AI.gemini_routes import portfolio_bp
 
 
 # SubscriptionAuth Blueprints
