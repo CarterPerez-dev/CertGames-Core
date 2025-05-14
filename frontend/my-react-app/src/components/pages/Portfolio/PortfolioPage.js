@@ -273,9 +273,10 @@ const PortfolioPage = () => {
             {activeTab === 'create' && (
               <PortfolioForm 
                 userId={userId}
-                onGenerationStart={() => {
+                onGenerationStart={(message) => {
                   setLoading(true);
-                  setLoadingMessage('Generating your portfolio...');
+                  // Use the custom message if provided, otherwise use default
+                  setLoadingMessage(message || 'Generating your portfolio...');
                   
                   // Simulate loading progress for generation
                   let progress = 0;
@@ -305,31 +306,6 @@ const PortfolioPage = () => {
                   }, 500);
                 }}
                 onError={handlePortfolioError}
-              />
-            )}
-            
-            {activeTab === 'list' && (
-              <PortfolioList 
-                portfolios={portfolios}
-                onSelectPortfolio={handleSelectPortfolio}
-                onRefresh={handleRefresh}
-              />
-            )}
-            
-            {activeTab === 'preview' && currentPortfolio && (
-              <PortfolioPreview 
-                portfolio={currentPortfolio}
-                onFixError={(isFixing) => {
-                  setLoading(isFixing);
-                  if (isFixing) {
-                    setLoadingMessage('Fixing code errors...');
-                    setLoadingProgress(50);
-                  } else {
-                    setLoadingProgress(100);
-                    setTimeout(() => setLoadingProgress(0), 500);
-                  }
-                }}
-                userId={userId}
               />
             )}
             

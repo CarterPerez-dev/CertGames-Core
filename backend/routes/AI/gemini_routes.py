@@ -92,7 +92,10 @@ def generate_portfolio_stream():
 
 
 
-@portfolio_bp.route('/status/generation', methods=['GET'])  # <-- Changed path
+# In backend/routes/AI/gemini_routes.py
+# Replace the route definition
+
+@portfolio_bp.route('/status/generation', methods=['GET'])  # Fixed correct path
 @jwt_required_wrapper
 def get_generation_status():
     """Check if the user has any recently generated portfolios"""
@@ -102,12 +105,15 @@ def get_generation_status():
         # Look for portfolios created in the last 10 minutes
         cutoff_time = time.time() - (10 * 60)  # 10 minutes ago
         
+        from mongodb.database import db  # Add this import
+        
         recent_portfolio = db.portfolios.find_one({
             "user_id": ObjectId(user_id),
             "created_at": {"$gt": cutoff_time}
         }, sort=[("created_at", -1)])
         
         if recent_portfolio:
+            logger.info(f"Found recent portfolio for user {user_id}: {recent_portfolio['_id']}")
             return jsonify({
                 "success": True,
                 "status": "completed",
@@ -115,6 +121,7 @@ def get_generation_status():
                 "components_count": len(recent_portfolio.get("components", {}))
             })
         else:
+            logger.info(f"No recent portfolios found for user {user_id}")
             return jsonify({
                 "success": False,
                 "status": "pending"

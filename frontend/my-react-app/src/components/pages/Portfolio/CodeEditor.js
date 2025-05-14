@@ -8,16 +8,29 @@ const CodeEditor = ({ value, language, theme, onChange, onError }) => {
   const containerRef = useRef(null);
 
   // Resize handler to make editor responsive
+  // In frontend/my-react-app/src/components/pages/Portfolio/CodeEditor.js
+  // Find the useEffect hook that handles resize and modify it to:
+  
   useEffect(() => {
+    let resizeTimeout = null;
+    
     const handleResize = () => {
-      if (containerRef.current) {
-        // Calculate available height (viewport height minus offset for other UI elements)
-        const viewportHeight = window.innerHeight;
-        const newHeight = Math.max(500, viewportHeight * 0.6); // At least 500px, up to 60% of viewport
-        setEditorHeight(`${newHeight}px`);
+      // Clear previous timeout to debounce frequent resize events
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
       }
+      
+      // Set a new timeout to update height after resize events have stopped
+      resizeTimeout = setTimeout(() => {
+        if (containerRef.current) {
+          // Calculate available height (viewport height minus offset for other UI elements)
+          const viewportHeight = window.innerHeight;
+          const newHeight = Math.max(500, viewportHeight * 0.6); // At least 500px, up to 60% of viewport
+          setEditorHeight(`${newHeight}px`);
+        }
+      }, 100); // 100ms debounce
     };
-
+  
     // Initial sizing
     handleResize();
     
@@ -26,6 +39,10 @@ const CodeEditor = ({ value, language, theme, onChange, onError }) => {
     
     return () => {
       window.removeEventListener('resize', handleResize);
+      // Clean up timeout if component unmounts
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
     };
   }, []);
 
