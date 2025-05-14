@@ -27,7 +27,7 @@ class GeminiHelper:
         
         logger.info(f"GeminiHelper initialized with model: {self.model}")
     
-    def generate_portfolio(self, resume_text, preferences, max_tokens=20000, temperature=0.2):
+    def generate_portfolio(self, resume_text, preferences, max_tokens=25000, temperature=0.2):
         """
         Generate a complete portfolio website based on resume text and user preferences.
         
@@ -91,7 +91,7 @@ class GeminiHelper:
             logger.error(f"Error fixing portfolio code: {str(e)}")
             raise
     
-    def _call_gemini_api(self, prompt, max_tokens=20000, temperature=0.2):
+    def _call_gemini_api(self, prompt, max_tokens=25000, temperature=0.2):
         """Call the Gemini API with given parameters"""
         url = f"{self.base_url}/{self.model}:generateContent?key={self.api_key}"
         
@@ -121,10 +121,21 @@ class GeminiHelper:
         response = requests.post(url, json=payload)
         
         if response.status_code != 200:
-            logger.error(f"Gemini API error: {response.status_code} - {response.text}")
-            raise Exception(f"API Error: {response.status_code} - {response.text}")
+            # Check if response is HTML
+            if response.text.strip().startswith('<!DOCTYPE') or response.text.strip().startswith('<html'):
+                logger.error(f"Received HTML response from Gemini API instead of JSON. Status: {response.status_code}")
+                logger.error(f"Response preview: {response.text[:200]}...")
+                raise Exception(f"API returned HTML instead of JSON. Status: {response.status_code}. Please check API key validity and quotas.")
+            else:
+                logger.error(f"Gemini API error: {response.status_code} - {response.text}")
+                raise Exception(f"API Error: {response.status_code} - {response.text}")
         
-        return response.json()
+        try:
+            return response.json()
+        except ValueError as e:
+            logger.error(f"Failed to parse JSON response: {str(e)}")
+            logger.error(f"Response preview: {response.text[:200]}...")
+            raise Exception(f"Invalid JSON response from API: {str(e)}")
     
     def _construct_portfolio_prompt(self, resume_text, preferences):
         """Construct a detailed prompt for portfolio generation"""
