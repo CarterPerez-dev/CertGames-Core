@@ -8,7 +8,7 @@ import PortfolioList from './PortfolioList';
 import PortfolioDeployment from './PortfolioDeployment';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../common/ErrorMessage';
-import { FaCode, FaRocket, FaList, FaPlus, FaStar, FaExclamationCircle, FaSync } from 'react-icons/fa';
+import { FaCode, FaRocket, FaList, FaPlus, FaStar, FaExclamationCircle, FaSync, FaGithub} from 'react-icons/fa';
 
 const PortfolioPage = () => {
   const { userId } = useSelector((state) => state.user);
@@ -225,7 +225,7 @@ const PortfolioPage = () => {
               className={`portfolio-tab-button ${activeTab === 'deploy' ? 'active' : ''}`}
               onClick={() => setActiveTab('deploy')}
             >
-              <FaRocket className="tab-icon" />
+              <FaGithub className="tab-icon" />
               <span>Deploy</span>
             </button>
           </>

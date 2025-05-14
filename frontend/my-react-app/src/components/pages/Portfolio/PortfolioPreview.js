@@ -1,7 +1,7 @@
 // frontend/my-react-app/src/components/pages/Portfolio/PortfolioPreview.js
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import CodeEditor from './CodeEditor';
-import { FaCode, FaEye, FaDesktop, FaMobile, FaSync, FaCheck, FaTimes, FaFile, FaFolder, FaInfo, FaExclamationTriangle, FaWrench, FaBug } from 'react-icons/fa';
+import { FaCode, FaEye, FaDesktop, FaMobile, FaSync, FaCheck, FaTimes, FaFile, FaFolder, FaInfo, FaExclamationTriangle, FaWrench, FaBug, FaCopy, FaDownload, FaClipboard } from 'react-icons/fa';
 import './portfolio.css';
 
 const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
@@ -643,6 +643,10 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
               }
             </div>
           </div>
+
+
+
+
           
           <div className="portfolio-code-editor-container">
             {activeFile ? (
@@ -652,7 +656,27 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                     {getFileIcon(activeFile)}
                     <span className="file-path">{activeFile}</span>
                   </div>
-                  <div className="portfolio-editor-actions">
+                <div className="portfolio-editor-actions">
+                    <button 
+                      className="portfolio-editor-action-btn"
+                      onClick={() => {
+                        navigator.clipboard.writeText(fileContent);
+                        // Show a brief "Copied!" message
+                        const tempBtn = document.getElementById('copy-button');
+                        if (tempBtn) {
+                          const originalText = tempBtn.innerHTML;
+                          tempBtn.innerHTML = `<FaCheck className="copied-icon" /> Copied!`;
+                          setTimeout(() => {
+                            tempBtn.innerHTML = originalText;
+                          }, 2000);
+                        }
+                      }}
+                      id="copy-button"
+                    >
+                      <FaCopy className="action-icon" />
+                      <span>Copy All</span>
+                    </button>
+                  </div>
                     <button 
                       className="portfolio-editor-action-btn"
                       onClick={handleRefreshPreview}
@@ -661,7 +685,6 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                       <span>Refresh Preview</span>
                     </button>
                   </div>
-                </div>
                 <CodeEditor
                   value={fileContent}
                   language={getFileLanguage(activeFile)}

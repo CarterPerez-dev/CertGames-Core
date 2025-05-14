@@ -615,12 +615,12 @@
 }
 
 .modern-preview {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23f8f9fa"/><rect x="80" y="30" width="240" height="20" rx="2" fill="%232a4365"/><rect x="80" y="70" width="240" height="10" rx="2" fill="%23718096"/><rect x="80" y="90" width="240" height="10" rx="2" fill="%23718096"/><rect x="80" y="150" width="80" height="25" rx="4" fill="%233182ce"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23111827"/><rect x="0" y="0" width="400" height="40" fill="%230f172a"/><circle cx="20" cy="20" r="5" fill="%233b82f6"/><circle cx="40" cy="20" r="5" fill="%2310b981"/><rect x="60" y="60" width="280" height="30" rx="2" fill="%233b82f6"/><rect x="60" y="100" width="180" height="12" rx="2" fill="%23e2e8f0"/><rect x="60" y="120" width="240" height="12" rx="2" fill="%239ca3af"/><rect x="60" y="150" width="100" height="30" rx="4" fill="%233b82f6"/><rect x="300" y="70" width="40" height="40" rx="20" fill="%230ea5e9"/></svg>');
   background-size: cover;
 }
 
 .creative-preview {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23b83280;stop-opacity:0.3" /><stop offset="100%" style="stop-color:%239f7aea;stop-opacity:0.3" /></linearGradient></defs><rect width="400" height="200" fill="url(%23grad)"/><rect x="60" y="40" width="280" height="25" rx="12.5" fill="%23b83280"/><rect x="100" y="85" width="200" height="10" rx="5" fill="%23718096"/><rect x="100" y="105" width="200" height="10" rx="5" fill="%23718096"/><circle cx="200" cy="160" r="20" fill="%239f7aea"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23dc2626;stop-opacity:0.3" /><stop offset="100%" style="stop-color:%23f97316;stop-opacity:0.3" /></linearGradient></defs><rect width="400" height="200" fill="url(%23grad)"/><rect x="40" y="40" width="320" height="30" rx="2" fill="%23dc2626"/><rect x="40" y="85" width="150" height="12" rx="2" fill="%23f8fafc"/><rect x="40" y="105" width="200" height="12" rx="2" fill="%23f8fafc"/><rect x="40" y="130" width="120" height="12" rx="2" fill="%23f8fafc"/><circle cx="330" cy="100" r="30" fill="%23f97316" stroke="%23dc2626" stroke-width="2"/><rect x="40" y="150" width="80" height="30" rx="4" fill="%23dc2626"/></svg>');
   background-size: cover;
 }
 
@@ -1963,7 +1963,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
+  padding: 8px 12px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
@@ -1976,8 +1976,16 @@
 .portfolio-editor-action-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   color: var(--portfolio-text);
+  transform: translateY(-2px);
 }
 
+.portfolio-editor-action-btn .action-icon {
+  color: var(--portfolio-accent);
+}
+
+.portfolio-editor-action-btn .copied-icon {
+  color: var(--portfolio-success);
+}
 .refreshing {
   animation: spin 1s linear infinite;
 }
@@ -2245,26 +2253,129 @@
 }
 
 .portfolio-deployment-header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 30px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 25px;
+  border: 1px solid var(--portfolio-border);
+  overflow: hidden;
+  position: relative;
+}
+
+.deployment-header-content {
+  max-width: 60%;
+  z-index: 2;
 }
 
 .deployment-title-icon {
   font-size: 30px;
   color: var(--portfolio-primary);
   margin-bottom: 15px;
+  filter: drop-shadow(0 0 10px rgba(101, 67, 204, 0.5));
 }
 
 .portfolio-deployment-header h2 {
   font-size: 28px;
   margin: 0 0 10px;
   color: var(--portfolio-text);
+  background: var(--portfolio-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .portfolio-deployment-subtitle {
   font-size: 16px;
   color: var(--portfolio-text-secondary);
   margin: 0;
+}
+
+.deployment-header-graphic {
+  position: relative;
+  width: 180px;
+  height: 150px;
+  z-index: 1;
+}
+
+.deployment-illustration {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.deployment-rocket {
+  position: absolute;
+  font-size: 24px;
+  color: var(--portfolio-primary);
+  animation: rocket-float 4s ease-in-out infinite;
+  top: 30%;
+  left: 30%;
+  z-index: 3;
+  filter: drop-shadow(0 0 8px rgba(101, 67, 204, 0.7));
+}
+
+.deployment-planet {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, var(--portfolio-accent-glow), var(--portfolio-accent));
+  bottom: 10px;
+  right: 10px;
+  opacity: 0.8;
+  box-shadow: 0 0 20px rgba(101, 67, 204, 0.4);
+}
+
+.deployment-stars .star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  filter: blur(1px);
+  animation: twinkle 2s infinite alternate;
+}
+
+.star.s1 {
+  width: 3px;
+  height: 3px;
+  top: 20%;
+  left: 15%;
+  animation-delay: 0s;
+}
+
+.star.s2 {
+  width: 2px;
+  height: 2px;
+  top: 50%;
+  left: 60%;
+  animation-delay: 0.3s;
+}
+
+.star.s3 {
+  width: 4px;
+  height: 4px;
+  top: 70%;
+  left: 30%;
+  animation-delay: 0.7s;
+}
+
+@keyframes rocket-float {
+  0%, 100% {
+    transform: translateY(0) rotate(45deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(45deg);
+  }
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0.8;
+  }
 }
 
 .portfolio-deployment-success {
@@ -2520,18 +2631,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  padding: 25px;
+  gap: 10px;
+  padding: 5px;
   background: var(--portfolio-gradient-primary);
-  border: none;
+  border: 1px solid var(--portfolio-text-secondary);
   border-radius: 10px;
   color: white;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 19px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(101, 67, 204, 0.3);
-  height: 150px;
+  height: 69px;
 }
 
 .start-deployment-button:hover {
@@ -2540,7 +2649,7 @@
 }
 
 .button-icon {
-  font-size: 30px;
+  font-size: 50px;
 }
 
 .portfolio-deployment-form {
@@ -2592,11 +2701,12 @@
 
 .input-icon {
   position: absolute;
-  left: 12px;
+  left: 20px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--portfolio-text-secondary);
   font-size: 14px;
+  margin-left: 210px;
 }
 
 .form-group input {
@@ -2674,8 +2784,7 @@
   border: none;
   border-radius: 8px;
   color: white;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -2756,11 +2865,11 @@
 @keyframes rocketMove {
   0% {
     left: 0;
-    transform: translateY(-50%) rotate(0deg);
+    transform: translateY(-80%) rotate(0deg);
   }
   100% {
-    left: 300px;
-    transform: translateY(-50%) rotate(0deg);
+    left: 1200px;
+    transform: translateY(-80%) rotate(0deg);
   }
 }
 
@@ -2901,7 +3010,7 @@
 }
 
 .faq-item {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--portfolio-border);

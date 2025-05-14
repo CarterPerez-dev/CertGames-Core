@@ -343,11 +343,11 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
               </div>
               <div className="template-info">
                 <h3>Modern</h3>
-                <p>Clean, minimalist design with ample white space and sharp typography</p>
+                <p>Sleek dark interface with vibrant blue accents, perfect for developers and tech professionals</p>
                 <div className="template-features">
-                  <span className="feature-tag">Minimalist</span>
-                  <span className="feature-tag">Clean</span>
-                  <span className="feature-tag">Elegant</span>
+                  <span className="feature-tag">Sleek UI</span>
+                  <span className="feature-tag">Developer-Focused</span>
+                  <span className="feature-tag">Professional</span>
                 </div>
               </div>
             </div>
@@ -363,10 +363,10 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
               </div>
               <div className="template-info">
                 <h3>Creative</h3>
-                <p>Bold, eye-catching design with unique layouts for creative professionals</p>
+                <p>Bold design with vibrant red and orange gradients to showcase your creative talents and stand out</p>
                 <div className="template-features">
-                  <span className="feature-tag">Bold</span>
-                  <span className="feature-tag">Artistic</span>
+                  <span className="feature-tag">Eye-Catching</span>
+                  <span className="feature-tag">Vibrant</span>
                   <span className="feature-tag">Dynamic</span>
                 </div>
               </div>
@@ -383,11 +383,11 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
               </div>
               <div className="template-info">
                 <h3>Corporate</h3>
-                <p>Professional design with structured layouts suitable for business environments</p>
+                <p>Clean professional layout with strategic use of white space and navy blue accents for business portfolios</p>
                 <div className="template-features">
-                  <span className="feature-tag">Professional</span>
+                  <span className="feature-tag">Business-Ready</span>
                   <span className="feature-tag">Structured</span>
-                  <span className="feature-tag">Formal</span>
+                  <span className="feature-tag">Professional</span>
                 </div>
               </div>
             </div>
@@ -403,11 +403,11 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
               </div>
               <div className="template-info">
                 <h3>Tech</h3>
-                <p>Modern tech-inspired design with code elements and interactive features</p>
+                <p>Dark-themed developer portfolio with code elements, terminal-inspired UI, and teal accent highlights</p>
                 <div className="template-features">
-                  <span className="feature-tag">Digital</span>
-                  <span className="feature-tag">Futuristic</span>
-                  <span className="feature-tag">Interactive</span>
+                  <span className="feature-tag">Code-Inspired</span>
+                  <span className="feature-tag">Terminal UI</span>
+                  <span className="feature-tag">Dark Theme</span>
                 </div>
               </div>
             </div>

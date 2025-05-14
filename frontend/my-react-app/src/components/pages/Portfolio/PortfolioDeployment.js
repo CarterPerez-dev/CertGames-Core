@@ -1,6 +1,6 @@
 // Enhanced PortfolioDeployment Component
 import React, { useState, useEffect } from 'react';
-import { FaRocket, FaGithub, FaLink, FaCheckCircle, FaInfoCircle, FaClipboard, FaCode, FaQuestion, FaChevronDown, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaFighterJet, FaGithub, FaLink, FaCheckCircle, FaInfoCircle, FaClipboard, FaCode, FaQuestion, FaChevronDown, FaExternalLinkAlt } from 'react-icons/fa';
 import './portfolio.css';
 
 const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymentComplete, onError }) => {
@@ -143,14 +143,26 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
   const deploymentUrl = portfolio?.deployment?.url;
 
   return (
-    <div className="portfolio-deployment-container">
       <div className="portfolio-deployment-header">
-        <h2>
-          <FaRocket className="deployment-title-icon" />
-          Deploy Your Portfolio
-        </h2>
-        <p className="portfolio-deployment-subtitle">Make your portfolio accessible online with just a few clicks</p>
-      </div>
+        <div className="deployment-header-content">
+          <FaFighterJet className="deployment-title-icon" />
+          <h2>Deploy Your Portfolio</h2>
+          <p className="portfolio-deployment-subtitle">Make your portfolio accessible online with just a few clicks</p>
+        </div>
+        <div className="deployment-header-graphic">
+          <div className="deployment-illustration">
+            <div className="deployment-rocket">
+              <FaFighterJet />
+            </div>
+            <div className="deployment-planet"></div>
+            <div className="deployment-stars">
+              <div className="star s1"></div>
+              <div className="star s2"></div>
+              <div className="star s3"></div>
+            </div>
+          </div>
+        </div>
+
       
       {isDeployed ? (
         <div className="portfolio-deployment-success">
@@ -223,7 +235,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
               <div className="deployment-progress-animation">
                 <div className="deployment-rocket-container">
                   <div className="deployment-rocket">
-                    <FaRocket />
+                    <FaFighterJet />
                   </div>
                   <div className="deployment-trail"></div>
                 </div>
@@ -310,26 +322,36 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                         className="start-deployment-button"
                         onClick={() => setShowTokenFields(true)}
                       >
-                        <FaRocket className="button-icon" />
+                        <FaGithub className="button-icon" />
                         <span>Start Deployment</span>
                       </button>
                     </div>
                   ) : (
-                    <form className="portfolio-deployment-form" onSubmit={handleDeploy}>
+<form className="portfolio-deployment-form" onSubmit={handleDeploy}>
                       <div className="form-section">
-                        <h4 className="form-section-title">
+                        <div className="form-section-header">
                           <FaGithub className="form-section-icon" />
-                          GitHub Configuration
-                        </h4>
+                          <h4 className="form-section-title">GitHub Configuration</h4>
+                        </div>
                         
                         <p className="form-section-description">
                           Your portfolio code will be stored in a GitHub repository. This allows 
                           for version control and easy updates.
                         </p>
                         
+                        <div className="deployment-visual-container">
+                          <div className="deployment-visual">
+                            <div className="deployment-github-icon">
+                            </div>
+                            <div className="deployment-visual-arrow"></div>
+                            <div className="deployment-code-icon">
+                            </div>
+                          </div>
+                        </div>
+                        
                         <div className="form-group">
                           <label htmlFor="github-token">GitHub Access Token</label>
-                          <div className="input-with-icon">
+                          <div className="">
                             <FaGithub className="input-icon" />
                             <input 
                               type="password"
@@ -348,6 +370,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                               href="https://github.com/settings/tokens/new" 
                               target="_blank" 
                               rel="noopener noreferrer"
+                              className="token-help-link"
                             >
                               Create a GitHub token
                             </a> with 'repo' and 'workflow' permissions.
@@ -356,19 +379,32 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                       </div>
                       
                       <div className="form-section">
-                        <h4 className="form-section-title">
-                          <FaRocket className="form-section-icon" />
-                          Vercel Configuration
-                        </h4>
+                        <div className="form-section-header">
+                          <FaFighterJet className="form-section-icon" />
+                          <h4 className="form-section-title">Vercel Configuration</h4>
+                        </div>
                         
                         <p className="form-section-description">
-                          Vercel will build and host your portfolio, making it accessible online.
+                          Vercel will build and host your portfolio, making it accessible online with a custom URL.
                         </p>
+                        
+                        <div className="deployment-visual-container">
+                          <div className="deployment-visual">
+                            <div className="deployment-code-icon">
+                            </div>
+                            <div className="deployment-visual-arrow"></div>
+                            <div className="deployment-vercel-icon">
+                            </div>
+                            <div className="deployment-visual-arrow"></div>
+                            <div className="deployment-globe-icon">
+                            </div>
+                          </div>
+                        </div>
                         
                         <div className="form-group">
                           <label htmlFor="vercel-token">Vercel Access Token</label>
                           <div className="input-with-icon">
-                            <FaRocket className="input-icon" />
+                            <span className="input-icon vercel-icon"></span>
                             <input 
                               type="password"
                               id="vercel-token"
@@ -386,6 +422,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                               href="https://vercel.com/account/tokens" 
                               target="_blank" 
                               rel="noopener noreferrer"
+                              className="token-help-link"
                             >
                               Create a Vercel token
                             </a> from your account settings.
@@ -407,7 +444,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                           className="deploy-button"
                           disabled={!validateForm()}
                         >
-                          <FaRocket className="button-icon" />
+                          <FaGithub className="button-icon" />
                           <span>Deploy Portfolio</span>
                         </button>
                       </div>
