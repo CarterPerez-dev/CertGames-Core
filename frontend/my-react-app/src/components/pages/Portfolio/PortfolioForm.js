@@ -166,8 +166,10 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
       
       // Step 2: Start polling for completion
       const startTime = Date.now();
-      const maxWaitTime = 10 * 60 * 1000; // 10 minutes max wait
+      const maxWaitTime = 10 * 60 * 1200; // 12 minutes max wait
       let attemptCount = 0;
+      let lastStatusData = null;
+      
       const checkStatusInterval = setInterval(async () => {
         try {
           attemptCount++;
@@ -190,6 +192,7 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
           if (statusResponse.ok) {
             const statusData = await statusResponse.json();
             console.log("Status check response:", statusData);
+            lastStatusData = statusData;
             
             // Portfolio is ready
             if (statusData.success && statusData.status === 'completed') {
@@ -212,12 +215,28 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
                   throw new Error('Received empty portfolio data');
                 }
                 
+                // Log component details
+                const components = portfolioData.portfolio.components || {};
+                const componentCount = Object.keys(components).length;
+                const keyFiles = ['src/App.js', 'src/index.js', 'public/index.html']
+                  .filter(key => components[key])
+                  .map(key => `${key}: ${components[key]?.length || 0} bytes`);
+                  
+                console.log(`Portfolio components breakdown: 
+                  Total count: ${componentCount}
+                  Key files: ${keyFiles.join(', ')}
+                `);
+                
                 onGenerationComplete(portfolioData.portfolio);
                 setFormSubmitting(false);
               } else {
                 console.error("Error fetching portfolio:", await portfolioResponse.text());
                 throw new Error('Failed to fetch the generated portfolio');
               }
+            } else if (statusData.status === 'failed') {
+              console.error("Generation failed:", statusData.error);
+              clearInterval(checkStatusInterval);
+              throw new Error(`Portfolio generation failed: ${statusData.error || 'Unknown error'}`);
             } else {
               console.log("Portfolio generation still in progress:", statusData);
             }
@@ -228,7 +247,13 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
           // Check if we've waited too long
           if (Date.now() - startTime > maxWaitTime) {
             clearInterval(checkStatusInterval);
-            throw new Error('Portfolio generation is taking longer than expected. Please check "My Portfolios" in a few minutes.');
+            
+            // Include last status data if available for better error context
+            const statusInfo = lastStatusData 
+              ? `Last status: ${JSON.stringify(lastStatusData)}` 
+              : 'No status data available';
+              
+            throw new Error(`Portfolio generation is taking longer than expected (${Math.floor((Date.now() - startTime)/1000)}s elapsed). ${statusInfo}`);
           }
         } catch (checkError) {
           clearInterval(checkStatusInterval);

@@ -50,10 +50,23 @@ class GeminiHelper:
             try:
                 response = self._call_gemini_api(prompt, max_tokens, temperature)
                 
+                # Log the raw response for debugging
+                logger.debug(f"Raw Gemini API response length: {len(str(response))}")
+                
+                # Extract the generated text for logging (truncated)
+                full_text = self._extract_text_from_response(response)
+                logger.debug(f"Generated text preview (first 500 chars): {full_text[:500]}")
+                
                 # Parse the response into portfolio components
                 portfolio = self._parse_portfolio_response(response)
                 
-                logger.info("Successfully generated portfolio components")
+                # Log successful component extraction
+                component_count = len(portfolio) if portfolio else 0
+                logger.info(f"Successfully generated {component_count} portfolio components")
+                
+                # Validate the required components are present
+                self._validate_portfolio_components(portfolio)
+                
                 return portfolio
                 
             except Exception as e:
@@ -67,6 +80,38 @@ class GeminiHelper:
         
         # Should never reach here due to exception in the loop
         return None
+    
+    def _extract_text_from_response(self, response):
+        """Extract full text from response for debugging purposes"""
+        generated_text = ""
+        candidates = response.get('candidates', [])
+        if candidates and 'content' in candidates[0]:
+            content = candidates[0]['content']
+            if 'parts' in content:
+                for part in content['parts']:
+                    if 'text' in part:
+                        generated_text += part['text']
+        return generated_text
+    
+    def _validate_portfolio_components(self, components):
+        """Validate that all required components are present"""
+        required_components = [
+            'public/index.html',
+            'src/index.js', 
+            'src/App.js', 
+            'src/index.css'
+        ]
+        
+        missing = [comp for comp in required_components if comp not in components]
+        if missing:
+            logger.error(f"Missing required components: {missing}")
+            raise ValueError(f"Generated portfolio is missing required components: {missing}")
+        
+        # Ensure we have at least one component file
+        component_files = [k for k in components.keys() if k.startswith('src/components/')]
+        if not component_files:
+            logger.error("No component files found in generated portfolio")
+            raise ValueError("Generated portfolio has no component files")
     
     def fix_portfolio_error(self, error_message, component_code, resume_text, preferences):
         """
@@ -266,6 +311,15 @@ class GeminiHelper:
                 logger.error("No generated text found in API response")
                 raise ValueError("Empty response from Gemini API")
             
+            # Save raw response to a debug file for inspection
+            try:
+                debug_dir = os.path.join(os.getcwd(), 'debug_logs')
+                os.makedirs(debug_dir, exist_ok=True)
+                with open(os.path.join(debug_dir, f'gemini_response_{int(time.time())}.txt'), 'w') as f:
+                    f.write(generated_text)
+            except Exception as log_err:
+                logger.warning(f"Could not save debug response: {log_err}")
+            
             # Parse the code blocks from the generated text
             portfolio_components = self._extract_components_from_text(generated_text)
             
@@ -283,19 +337,24 @@ class GeminiHelper:
         """Extract code components from the generated text using regex"""
         import re
         
-        # Define patterns for different code blocks
+        # Define patterns for different code blocks - IMPROVED to be more flexible
         patterns = {
-            'analysis': r'```analysis\s*([\s\S]*?)```',
-            'package.json': r'```(?:package\.json|json:package\.json)\s*([\s\S]*?)```',
-            'public/index.html': r'```(?:html:public/index\.html|public/index\.html)\s*([\s\S]*?)```',
-            'src/index.js': r'```(?:javascript:src/index\.js|src/index\.js)\s*([\s\S]*?)```',
-            'src/index.css': r'```(?:css:src/index\.css|src/index\.css)\s*([\s\S]*?)```',
-            'src/App.js': r'```(?:javascript:src/App\.js|src/App\.js)\s*([\s\S]*?)```',
+            'analysis': r'```(?:analysis)\s*([\s\S]*?)```',
+            'package.json': r'```(?:package\.json|json:package\.json|json)\s*([\s\S]*?)```',
+            'public/index.html': r'```(?:html:public/index\.html|public/index\.html|html)\s*([\s\S]*?)```',
+            'src/index.js': r'```(?:javascript:src/index\.js|src/index\.js|js:src/index\.js|javascript)\s*([\s\S]*?)```',
+            'src/index.css': r'```(?:css:src/index\.css|src/index\.css|css)\s*([\s\S]*?)```',
+            'src/App.js': r'```(?:javascript:src/App\.js|src/App\.js|js:src/App\.js)\s*([\s\S]*?)```',
         }
         
-        # Pattern for component files
-        component_pattern = r'```(?:javascript|js):src/components/(\w+)\.js\s*([\s\S]*?)```'
-        component_css_pattern = r'```(?:css):src/components/(\w+)\.css\s*([\s\S]*?)```'
+        # More flexible patterns for component files
+        component_pattern = r'```(?:javascript|js):src/components/([a-zA-Z0-9_-]+)\.js\s*([\s\S]*?)```'
+        # Fallback pattern if the more specific one doesn't find matches
+        component_fallback_pattern = r'```(?:javascript|js)\s*(?:\/\/|#)\s*src\/components\/([a-zA-Z0-9_-]+)\.js\s*([\s\S]*?)```'
+        
+        component_css_pattern = r'```(?:css):src/components/([a-zA-Z0-9_-]+)\.css\s*([\s\S]*?)```'
+        # Fallback pattern for CSS
+        component_css_fallback_pattern = r'```(?:css)\s*(?:\/\/|#)\s*src\/components\/([a-zA-Z0-9_-]+)\.css\s*([\s\S]*?)```'
         
         # Extract components
         components = {}
@@ -305,17 +364,53 @@ class GeminiHelper:
             match = re.search(pattern, text)
             if match:
                 components[key] = match.group(1).strip()
+                logger.debug(f"Extracted {key}")
+            else:
+                logger.warning(f"Failed to extract {key} using pattern {pattern}")
         
         # Extract component files
         component_matches = re.findall(component_pattern, text)
+        if not component_matches:
+            # Try fallback pattern
+            logger.info("No component matches with primary pattern, trying fallback pattern")
+            component_matches = re.findall(component_fallback_pattern, text)
+        
         for name, code in component_matches:
             components[f'src/components/{name}.js'] = code.strip()
+            logger.debug(f"Extracted component src/components/{name}.js")
         
         # Extract component CSS files
         component_css_matches = re.findall(component_css_pattern, text)
+        if not component_css_matches:
+            # Try fallback pattern
+            logger.info("No CSS component matches with primary pattern, trying fallback pattern")
+            component_css_matches = re.findall(component_css_fallback_pattern, text)
+            
         for name, code in component_css_matches:
             components[f'src/components/{name}.css'] = code.strip()
+            logger.debug(f"Extracted CSS src/components/{name}.css")
         
+        # Additional fallback: look for code blocks that might be components but not properly formatted
+        if len(component_matches) == 0:
+            logger.warning("No component files found with standard patterns. Attempting deep extraction...")
+            # Look for code blocks that might contain component definitions
+            js_blocks = re.findall(r'```(?:javascript|js)\s*([\s\S]*?)```', text)
+            
+            for i, block in enumerate(js_blocks):
+                # Look for React component patterns
+                if ('import React' in block or 'function ' in block) and 'export default' in block:
+                    # Try to determine the component name
+                    name_match = re.search(r'function\s+([A-Za-z][A-Za-z0-9_]*)', block)
+                    if name_match:
+                        name = name_match.group(1)
+                        components[f'src/components/{name}.js'] = block.strip()
+                        logger.info(f"Deep extraction: Found component {name} in unformatted block")
+                    else:
+                        # Use a generic name
+                        components[f'src/components/Component{i+1}.js'] = block.strip()
+                        logger.info(f"Deep extraction: Created generic component Component{i+1}")
+        
+        logger.info(f"Extracted {len(components)} total components")
         return components
     
     def _extract_code_from_response(self, response):

@@ -18,6 +18,10 @@ from helpers.jwt_auth import jwt_required_wrapper
 portfolio_bp = Blueprint('portfolio', __name__)
 logger = logging.getLogger(__name__)
 
+# Create a state dictionary to track generation tasks
+# Keys: user_id, Values: {"status": "pending|completed|failed", "error": "error message", "portfolio_id": "id if completed"}
+generation_tasks = {}
+
 @portfolio_bp.route('/generate-stream', methods=['POST'])
 @jwt_required_wrapper
 @rate_limit('general')
@@ -42,12 +46,25 @@ def generate_portfolio_stream():
         if not proceed:
             return jsonify({"error": message}), 422
         
+        # Initialize task status
+        generation_tasks[user_id] = {
+            "status": "pending",
+            "started_at": time.time(),
+            "error": None,
+            "portfolio_id": None
+        }
+        
+        logger.info(f"Starting portfolio generation for user {user_id} with {len(sanitized_resume)} chars of resume")
+        
         # Initialize portfolio generation in a background thread
         def generate_portfolio_task():
             try:
                 # Get user info
                 user = get_user_by_id(user_id)
                 if not user:
+                    logger.error(f"User {user_id} not found")
+                    generation_tasks[user_id]["status"] = "failed"
+                    generation_tasks[user_id]["error"] = "User not found"
                     return
                 
                 # Generate components with retries
@@ -62,17 +79,40 @@ def generate_portfolio_stream():
                         logger.error(f"Generation attempt {attempt+1} failed: {str(e)}")
                         if attempt == max_retries - 1:
                             logger.error(f"All attempts failed for user {user_id}")
+                            generation_tasks[user_id]["status"] = "failed"
+                            generation_tasks[user_id]["error"] = f"Generation failed after {max_retries} attempts: {str(e)}"
                             return
                         # Wait before retrying
                         time.sleep(2 ** attempt)  # Exponential backoff
                 
                 if portfolio_components:
+                    # Check for minimum required components
+                    required_files = ['public/index.html', 'src/index.js', 'src/App.js']
+                    missing_files = [f for f in required_files if f not in portfolio_components]
+                    
+                    if missing_files:
+                        logger.error(f"Generated portfolio missing required files: {missing_files}")
+                        generation_tasks[user_id]["status"] = "failed"
+                        generation_tasks[user_id]["error"] = f"Generated portfolio missing required files: {missing_files}"
+                        return
+                    
                     # Save to database once generation succeeds
                     portfolio_id = save_portfolio(user_id, portfolio_components, preferences, resume_text)
                     logger.info(f"Portfolio {portfolio_id} successfully generated and saved")
+                    
+                    # Update task status
+                    generation_tasks[user_id]["status"] = "completed"
+                    generation_tasks[user_id]["portfolio_id"] = str(portfolio_id)
+                    generation_tasks[user_id]["completed_at"] = time.time()
+                else:
+                    logger.error(f"Empty portfolio components returned for user {user_id}")
+                    generation_tasks[user_id]["status"] = "failed"
+                    generation_tasks[user_id]["error"] = "Portfolio generation returned empty components"
                 
             except Exception as e:
                 logger.exception(f"Background task error: {str(e)}")
+                generation_tasks[user_id]["status"] = "failed"
+                generation_tasks[user_id]["error"] = str(e)
 
         # Start background task
         thread = threading.Thread(target=generate_portfolio_task)
@@ -91,10 +131,6 @@ def generate_portfolio_stream():
         return jsonify({"error": "Failed to start portfolio generation. Please try again."}), 500
 
 
-
-# In backend/routes/AI/gemini_routes.py
-# Replace the route definition
-
 @portfolio_bp.route('/status/generation', methods=['GET'])
 @jwt_required_wrapper
 def get_generation_status():
@@ -102,6 +138,41 @@ def get_generation_status():
     user_id = g.user_id
     
     try:
+        # First, check the in-memory task tracker
+        if user_id in generation_tasks:
+            task = generation_tasks[user_id]
+            
+            # If task is completed, return the portfolio ID
+            if task["status"] == "completed":
+                logger.info(f"Returning completed status for user {user_id}, portfolio {task['portfolio_id']}")
+                return jsonify({
+                    "success": True,
+                    "status": "completed",
+                    "portfolio_id": task["portfolio_id"],
+                    "duration": time.time() - task["started_at"]
+                })
+            
+            # If task failed, return the error
+            elif task["status"] == "failed":
+                logger.info(f"Returning failed status for user {user_id}: {task['error']}")
+                return jsonify({
+                    "success": False,
+                    "status": "failed",
+                    "error": task["error"],
+                    "duration": time.time() - task["started_at"]
+                })
+            
+            # Task is still in progress
+            else:
+                duration = time.time() - task["started_at"]
+                logger.info(f"Generation still in progress for user {user_id} ({duration:.1f}s)")
+                return jsonify({
+                    "success": False,
+                    "status": "pending",
+                    "duration": duration
+                })
+        
+        # If not in task tracker, check the database (fallback for server restarts)
         # Look for portfolios created in the last 10 minutes
         cutoff_time = time.time() - (10 * 60)  # 10 minutes ago
         
@@ -116,31 +187,39 @@ def get_generation_status():
             # Convert ObjectIds to strings
             portfolio_id = str(recent_portfolio["_id"])
             
-            logger.info(f"Found recent portfolio for user {user_id}: {portfolio_id}")
+            logger.info(f"Found recent portfolio for user {user_id} in database: {portfolio_id}")
             
-            # Add more detailed logging for debugging
-            logger.debug(f"Portfolio components count: {len(recent_portfolio.get('components', {}))}")
+            # Log component count for debugging
+            component_count = len(recent_portfolio.get("components", {}))
+            logger.debug(f"Portfolio components count: {component_count}")
+            
+            # If we found a portfolio but it wasn't in our task tracker, 
+            # add it to avoid future DB lookups
+            generation_tasks[user_id] = {
+                "status": "completed",
+                "portfolio_id": portfolio_id,
+                "started_at": recent_portfolio.get("created_at", time.time() - 60),
+                "completed_at": time.time()
+            }
             
             return jsonify({
                 "success": True,
                 "status": "completed",
                 "portfolio_id": portfolio_id,
-                "components_count": len(recent_portfolio.get("components", {})),
-                # Add creation timestamp to help with tracking
-                "created_at": recent_portfolio.get("created_at")
+                "components_count": component_count
             })
         else:
             logger.info(f"No recent portfolios found for user {user_id}")
             return jsonify({
                 "success": False,
-                "status": "pending"
+                "status": "pending" 
             })
     except Exception as e:
         logger.error(f"Error checking generation status: {str(e)}")
         return jsonify({
             "success": False,
             "status": "error",
-            "message": "Failed to check generation status"
+            "message": f"Failed to check generation status: {str(e)}"
         }), 500
 
 @portfolio_bp.route('/fix-error', methods=['POST'])
@@ -177,12 +256,16 @@ def fix_portfolio_error():
         resume_text = portfolio.get('resume_text', '')
         preferences = portfolio.get('preferences', {})
         
+        logger.info(f"Attempting to fix error in {component_path} for portfolio {portfolio_id}")
+        
         # Fix the error
         fixed_code = gemini_helper.fix_portfolio_error(
             error_message, component_code, resume_text, preferences)
         
         # Update the portfolio in the database
         update_portfolio_component(user_id, portfolio_id, component_path, fixed_code)
+        
+        logger.info(f"Successfully fixed error in {component_path}")
         
         return jsonify({
             "success": True,
@@ -280,6 +363,14 @@ def get_portfolio_by_id(portfolio_id):
         portfolio = get_portfolio(user_id, portfolio_obj_id)
         if not portfolio:
             return jsonify({"error": "Portfolio not found"}), 404
+        
+        # Check if the portfolio has components
+        if not portfolio.get('components'):
+            logger.warning(f"Portfolio {portfolio_id} has no components")
+            return jsonify({"error": "Portfolio has no components"}), 500
+            
+        component_count = len(portfolio.get('components', {}))
+        logger.info(f"Returning portfolio {portfolio_id} with {component_count} components")
         
         return jsonify({
             "success": True,

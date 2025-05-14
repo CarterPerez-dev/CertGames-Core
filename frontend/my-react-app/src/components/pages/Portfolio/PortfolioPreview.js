@@ -1,7 +1,7 @@
-// Enhanced PortfolioPreview Component
+// frontend/my-react-app/src/components/pages/Portfolio/PortfolioPreview.js
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import CodeEditor from './CodeEditor';
-import { FaCode, FaEye, FaDesktop, FaMobile, FaSync, FaCheck, FaTimes, FaFile, FaFolder, FaInfo, FaExclamationTriangle, FaWrench } from 'react-icons/fa';
+import { FaCode, FaEye, FaDesktop, FaMobile, FaSync, FaCheck, FaTimes, FaFile, FaFolder, FaInfo, FaExclamationTriangle, FaWrench, FaBug } from 'react-icons/fa';
 import './portfolio.css';
 
 const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
@@ -15,6 +15,8 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
   const [previewDevice, setPreviewDevice] = useState('desktop');
   const [searchQuery, setSearchQuery] = useState('');
   const [isPreviewRefreshing, setIsPreviewRefreshing] = useState(false);
+  const [previewError, setPreviewError] = useState(null);
+  const [isPreviewGenerated, setIsPreviewGenerated] = useState(false);
   const iframeRef = useRef(null);
 
   // Process portfolio data when it changes
@@ -22,8 +24,13 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     if (portfolio && portfolio.components) {
       console.log("Portfolio provided to preview:", {
         id: portfolio._id,
-        componentCount: Object.keys(portfolio.components).length
+        componentCount: Object.keys(portfolio.components).length,
+        componentKeys: Object.keys(portfolio.components)
       });
+      
+      // Organize files into a tree structure
+      const tree = organizeFilesIntoTree(portfolio.components);
+      setFileTree(tree);
       
       // If we have a portfolio but no activeFile is set, set the first file as active
       if (!activeFile || !portfolio.components[activeFile]) {
@@ -33,6 +40,16 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
           console.log(`Setting default active file: ${defaultFile}`);
           handleFileSelect(defaultFile);
         }
+      }
+      
+      // Generate preview HTML
+      try {
+        generatePreviewHtml(portfolio.components);
+        setIsPreviewGenerated(true);
+      } catch (err) {
+        console.error("Failed to generate preview HTML:", err);
+        setPreviewError("Failed to generate preview HTML. Please check the code for errors.");
+        setIsPreviewGenerated(false);
       }
     }
   }, [portfolio]);
@@ -66,10 +83,16 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
   // Generate preview HTML from portfolio components
   const generatePreviewHtml = useCallback((components) => {
     console.log("Generating preview HTML");
+    
+    // Debug what components we have
+    const componentKeys = Object.keys(components);
+    console.log("Available components:", componentKeys);
+    
     // First check if we have the necessary files
     const htmlFile = components['public/index.html'] || '';
     
     if (!htmlFile) {
+      console.error("No HTML template found in components");
       setPreviewHtml('<div style="padding: 20px; color: #666;">No HTML template found</div>');
       return;
     }
@@ -83,6 +106,8 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       .map(([_, content]) => content)
       .join('\n');
     
+    console.log(`Found ${cssContent.length} bytes of CSS content to inject`);
+    
     // Inject inline CSS
     const styleTag = `<style>${cssContent}</style>`;
     processedHtml = processedHtml.replace('</head>', `${styleTag}</head>`);
@@ -92,39 +117,194 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       const appJs = components['src/App.js'] || '';
       const indexJs = components['src/index.js'] || '';
       
-      // Extract React components from App.js (very simplified)
-      const appContent = appJs.replace(/import\s+.*?from\s+['"].*?['"]/g, '')
-                            .replace(/export\s+default\s+\w+/g, '');
+      if (!appJs) {
+        console.error("App.js not found in components");
+      }
       
-      // Create a minimal JS to render something
+      if (!indexJs) {
+        console.error("index.js not found in components");
+      }
+      
+      // Create a more robust approach: extract component imports and transform them
+      const extractedComponents = {};
+      
+      // Extract all component files
+      Object.entries(components)
+        .filter(([key]) => key.startsWith('src/components/') && key.endsWith('.js'))
+        .forEach(([key, content]) => {
+          // Extract component name from path
+          const componentName = key.split('/').pop().replace('.js', '');
+          
+          // Clean up imports and exports for inline use
+          const cleanedComponent = content
+            .replace(/import\s+.*?from\s+['"].*?['"]/g, '')
+            .replace(/export\s+default\s+/g, 'const ')
+            .trim();
+            
+          extractedComponents[componentName] = cleanedComponent;
+        });
+      
+      console.log(`Extracted ${Object.keys(extractedComponents).length} components`);
+      
+      // Simplify App.js
+      const simplifiedApp = appJs
+        .replace(/import\s+.*?from\s+['"].*?['"]/g, '')
+        .replace(/export\s+default\s+/g, 'const App = ')
+        .trim();
+        
+      // Create a simple React-like rendering function to simulate React
+      const mockReactCode = `
+        // Mock React implementation for preview
+        const React = {
+          createElement: function(type, props, ...children) {
+            if (typeof type === 'function') {
+              try {
+                return type(props || {});
+              } catch(e) {
+                console.error('Error rendering component:', e);
+                return \`<div class="error">Component Error: \${e.message}</div>\`;
+              }
+            }
+            
+            const element = document.createElement(type);
+            
+            if (props) {
+              Object.keys(props).forEach(key => {
+                if (key === 'className') {
+                  element.className = props[key];
+                } else if (key === 'style' && typeof props[key] === 'object') {
+                  Object.assign(element.style, props[key]);
+                } else if (key !== 'children' && !key.startsWith('__') && !key.startsWith('on')) {
+                  element.setAttribute(key, props[key]);
+                }
+              });
+            }
+            
+            children.flat().forEach(child => {
+              if (child === null || child === undefined) return;
+              
+              if (typeof child === 'object') {
+                element.appendChild(child);
+              } else {
+                element.appendChild(document.createTextNode(child));
+              }
+            });
+            
+            return element;
+          },
+          useState: function(initialValue) {
+            const value = initialValue;
+            const setValue = function() { console.log('setState called (mock)'); };
+            return [value, setValue];
+          },
+          useEffect: function(fn, deps) {
+            try { fn(); } catch(e) { console.error('useEffect error:', e); }
+          }
+        };
+        
+        // Mock ReactDOM
+        const ReactDOM = {
+          render: function(element, container) {
+            container.innerHTML = '';
+            container.appendChild(element);
+          },
+          createRoot: function(container) {
+            return {
+              render: function(element) {
+                container.innerHTML = '';
+                container.appendChild(element);
+              }
+            };
+          }
+        };
+        
+        // Define some common component implementations
+        function Fragment(props) {
+          const fragment = document.createDocumentFragment();
+          if (props && props.children) {
+            [].concat(props.children).forEach(child => {
+              if (child) fragment.appendChild(child);
+            });
+          }
+          return fragment;
+        }
+      `;
+      
+      // Combine all component code for the preview
+      const combinedComponentCode = Object.values(extractedComponents).join('\n\n');
+      
+      // Create the preview JS
       const previewJs = `
         <script>
-          // Simplified preview JS
-          try {
-            console.log("Initializing preview");
-            ${appContent}
-            console.log("App component processed");
-          } catch(err) {
-            console.error("Preview error:", err);
-          }
+          document.addEventListener('DOMContentLoaded', function() {
+            try {
+              console.log("Initializing portfolio preview");
+              
+              ${mockReactCode}
+              
+              // Component definitions
+              ${combinedComponentCode}
+              
+              // Main App component
+              ${simplifiedApp}
+              
+              // Initialize app
+              const rootElement = document.getElementById('root');
+              if (rootElement && typeof App === 'function') {
+                try {
+                  console.log("Rendering App component");
+                  const appElement = React.createElement(App, {});
+                  rootElement.innerHTML = '';
+                  rootElement.appendChild(appElement);
+                  console.log("App rendered successfully");
+                } catch (err) {
+                  console.error("Error rendering App:", err);
+                  rootElement.innerHTML = \`
+                    <div style="color: #721c24; background: #f8d7da; padding: 20px; border-radius: 5px;">
+                      <h3>Rendering Error</h3>
+                      <p>\${err.message}</p>
+                    </div>
+                  \`;
+                }
+              } else {
+                console.error("Root element or App component not found");
+                document.body.innerHTML = \`
+                  <div style="color: #721c24; background: #f8d7da; padding: 20px; border-radius: 5px;">
+                    <h3>Preview Error</h3>
+                    <p>Could not render the App component. Check if the App component is properly defined and exported.</p>
+                  </div>
+                \`;
+              }
+            } catch(err) {
+              console.error("Preview initialization error:", err);
+              document.body.innerHTML = \`
+                <div style="color: #721c24; background: #f8d7da; padding: 20px; border-radius: 5px;">
+                  <h3>Preview Error</h3>
+                  <p>\${err.message}</p>
+                </div>
+              \`;
+            }
+          });
         </script>
       `;
       
       processedHtml = processedHtml.replace('</body>', `${previewJs}</body>`);
     } catch(err) {
       console.error("Error processing JS for preview:", err);
+      setPreviewError(`Error generating preview: ${err.message}`);
     }
     
     // Add preview message
     processedHtml = processedHtml.replace('</body>', `
       <div style="position: fixed; bottom: 0; left: 0; right: 0; background: #f8d7da; color: #721c24; padding: 10px; 
-           font-size: 12px; text-align: center; font-family: Arial, sans-serif;">
-        ⚠️ This is a simplified preview. JavaScript functionality is limited. Check the console for any errors.
+           font-size: 12px; text-align: center; font-family: Arial, sans-serif; z-index: 1000;">
+        ⚠️ This is a simplified preview. JavaScript functionality is limited. Check the browser console for errors.
       </div></body>
     `);
     
-    console.log("Preview HTML generated successfully");
+    console.log("Preview HTML generated successfully, length:", processedHtml.length);
     setPreviewHtml(processedHtml);
+    setPreviewError(null);
   }, []);
 
   const handleFileSelect = (filePath) => {
@@ -158,7 +338,12 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       // Regenerate preview HTML when code changes
       if (activeFile.endsWith('.js') || activeFile.endsWith('.css') || activeFile.endsWith('.html')) {
         setTimeout(() => {
-          generatePreviewHtml(updatedComponents);
+          try {
+            generatePreviewHtml(updatedComponents);
+          } catch (err) {
+            console.error("Error regenerating preview after file update:", err);
+            setPreviewError(`Error updating preview: ${err.message}`);
+          }
         }, 1000);
       }
     }
@@ -170,20 +355,26 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     
     // Regenerate the preview HTML
     if (portfolio && portfolio.components) {
-      generatePreviewHtml(portfolio.components);
-      
-      // Refresh the iframe if it exists
-      if (iframeRef.current) {
-        try {
-          const iframe = iframeRef.current;
-          const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-          iframeDoc.open();
-          iframeDoc.write(previewHtml);
-          iframeDoc.close();
-          console.log("Iframe content refreshed");
-        } catch (err) {
-          console.error("Error refreshing iframe:", err);
+      try {
+        generatePreviewHtml(portfolio.components);
+        
+        // Refresh the iframe if it exists
+        if (iframeRef.current) {
+          try {
+            const iframe = iframeRef.current;
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write(previewHtml);
+            iframeDoc.close();
+            console.log("Iframe content refreshed");
+          } catch (err) {
+            console.error("Error refreshing iframe:", err);
+            setPreviewError(`Error refreshing preview: ${err.message}`);
+          }
         }
+      } catch (err) {
+        console.error("Error during manual preview refresh:", err);
+        setPreviewError(`Failed to refresh preview: ${err.message}`);
       }
     }
     
@@ -236,7 +427,12 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       };
       
       // Regenerate preview HTML
-      generatePreviewHtml(updatedComponents);
+      try {
+        generatePreviewHtml(updatedComponents);
+      } catch (err) {
+        console.error("Error regenerating preview after fixing error:", err);
+        setPreviewError(`Error updating preview: ${err.message}`);
+      }
       
       setIsFixingError(false);
       onFixError(false);
@@ -529,18 +725,49 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
               <span>Refresh</span>
             </button>
           </div>
+          
+          {previewError && (
+            <div className="portfolio-preview-error">
+              <FaBug className="preview-error-icon" />
+              <div className="preview-error-message">
+                <h3>Preview Error</h3>
+                <p>{previewError}</p>
+                <div className="preview-error-help">
+                  <p>Check that your code has the following:</p>
+                  <ul>
+                    <li>A valid App.js component with a default export</li>
+                    <li>A proper index.html with a root element</li>
+                    <li>Components that don't rely on browser APIs</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+          
           <div 
             className={`portfolio-preview-frame-container ${previewDevice === 'mobile' ? 'mobile-container' : ''}`}
           >
-            <iframe
-              ref={iframeRef}
-              className="portfolio-preview-frame"
-              title="Portfolio Preview"
-              srcDoc={previewHtml}
-              sandbox="allow-scripts allow-same-origin"
-              width="100%"
-              height="100%"
-            />
+            {isPreviewGenerated ? (
+              <iframe
+                ref={iframeRef}
+                className="portfolio-preview-frame"
+                title="Portfolio Preview"
+                srcDoc={previewHtml}
+                sandbox="allow-scripts allow-same-origin"
+                width="100%"
+                height="100%"
+                onLoad={() => console.log("Preview iframe loaded")}
+                onError={(e) => {
+                  console.error("Preview iframe error:", e);
+                  setPreviewError("Error loading preview. Check the code for errors.");
+                }}
+              />
+            ) : (
+              <div className="preview-loading">
+                <div className="preview-loading-spinner"></div>
+                <p>Generating preview...</p>
+              </div>
+            )}
           </div>
         </div>
       )}
