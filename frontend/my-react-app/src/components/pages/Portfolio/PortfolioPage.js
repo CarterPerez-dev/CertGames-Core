@@ -46,11 +46,19 @@ const PortfolioPage = () => {
       });
       
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Failed to fetch portfolios: ${response.status} - ${errorText}`);
         throw new Error('Failed to fetch portfolios');
       }
       
       const data = await response.json();
-      console.log(`Fetched ${data.portfolios?.length || 0} portfolios`);
+      console.log(`Fetched ${data.portfolios?.length || 0} portfolios:`, data.portfolios);
+      
+      if (!data.portfolios || !Array.isArray(data.portfolios)) {
+        console.error("Invalid portfolios data structure:", data);
+        throw new Error('Invalid portfolio data received');
+      }
+      
       setPortfolios(data.portfolios || []);
       setLoading(false);
       setRefreshing(false);
@@ -69,10 +77,25 @@ const PortfolioPage = () => {
 
   const handlePortfolioGenerated = (portfolioData) => {
     console.log("Portfolio generation completed successfully", portfolioData);
+    
+    // Ensure we have a valid portfolio object
+    if (!portfolioData || !portfolioData._id) {
+      console.error("Invalid portfolio data received:", portfolioData);
+      setError("Generated portfolio data is incomplete");
+      setLoading(false);
+      return;
+    }
+    
     setCurrentPortfolio(portfolioData);
     setGenerationComplete(true);
-    fetchPortfolios(); // Refresh the list
     setActiveTab('preview'); // Switch to preview tab
+    
+    // Add a small delay before fetching portfolios to ensure the backend has updated
+    setTimeout(() => {
+      fetchPortfolios();
+    }, 1000);
+    
+    setLoading(false);
   };
 
   const handlePortfolioError = (errorMessage) => {

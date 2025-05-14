@@ -28,6 +28,13 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         componentKeys: Object.keys(portfolio.components)
       });
       
+      // If no components, log warning and set error
+      if (Object.keys(portfolio.components).length === 0) {
+        console.error("Portfolio has no components");
+        setPreviewError("Portfolio data is incomplete. No components found.");
+        return;
+      }
+      
       // Organize files into a tree structure
       const tree = organizeFilesIntoTree(portfolio.components);
       setFileTree(tree);

@@ -173,7 +173,6 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
       const checkStatusInterval = setInterval(async () => {
         try {
           attemptCount++;
-          // Log the attempt count for debugging
           console.log(`Checking portfolio status: attempt ${attemptCount}`);
           
           // Update loading message based on elapsed time
@@ -182,7 +181,6 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
             onGenerationStart(loadingMessage);
           }
           
-          // Check if generation completed
           const statusResponse = await fetch('/api/portfolio/status/generation', {
             headers: {
               'X-User-Id': userId
@@ -192,68 +190,40 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
           if (statusResponse.ok) {
             const statusData = await statusResponse.json();
             console.log("Status check response:", statusData);
-            lastStatusData = statusData;
             
-            // Portfolio is ready
-            if (statusData.success && statusData.status === 'completed') {
+            // Portfolio is ready - check both success and portfolio_id fields
+            if (statusData.success && statusData.status === 'completed' && statusData.portfolio_id) {
               console.log("Portfolio generation completed! ID:", statusData.portfolio_id);
               clearInterval(checkStatusInterval);
               
-              // Fetch the complete portfolio
-              const portfolioResponse = await fetch(`/api/portfolio/${statusData.portfolio_id}`, {
-                headers: {
-                  'X-User-Id': userId
-                }
-              });
-              
-              if (portfolioResponse.ok) {
-                const portfolioData = await portfolioResponse.json();
-                console.log("Portfolio data received:", portfolioData);
+              // Fetch the complete portfolio - add error handling
+              try {
+                const portfolioResponse = await fetch(`/api/portfolio/${statusData.portfolio_id}`, {
+                  headers: {
+                    'X-User-Id': userId
+                  }
+                });
                 
-                // Check if portfolio data is valid
-                if (!portfolioData.portfolio || Object.keys(portfolioData.portfolio.components || {}).length === 0) {
-                  throw new Error('Received empty portfolio data');
-                }
-                
-                // Log component details
-                const components = portfolioData.portfolio.components || {};
-                const componentCount = Object.keys(components).length;
-                const keyFiles = ['src/App.js', 'src/index.js', 'public/index.html']
-                  .filter(key => components[key])
-                  .map(key => `${key}: ${components[key]?.length || 0} bytes`);
+                if (portfolioResponse.ok) {
+                  const portfolioData = await portfolioResponse.json();
+                  console.log("Portfolio data received:", portfolioData);
                   
-                console.log(`Portfolio components breakdown: 
-                  Total count: ${componentCount}
-                  Key files: ${keyFiles.join(', ')}
-                `);
-                
-                onGenerationComplete(portfolioData.portfolio);
-                setFormSubmitting(false);
-              } else {
-                console.error("Error fetching portfolio:", await portfolioResponse.text());
-                throw new Error('Failed to fetch the generated portfolio');
+                  if (!portfolioData.portfolio || Object.keys(portfolioData.portfolio.components || {}).length === 0) {
+                    throw new Error('Received empty portfolio data');
+                  }
+                  
+                  onGenerationComplete(portfolioData.portfolio);
+                  setFormSubmitting(false);
+                } else {
+                  // Handle portfolio fetch error
+                  console.error("Error fetching portfolio:", await portfolioResponse.text());
+                  throw new Error('Failed to fetch the generated portfolio');
+                }
+              } catch (fetchError) {
+                console.error("Error fetching portfolio details:", fetchError);
+                throw fetchError;
               }
-            } else if (statusData.status === 'failed') {
-              console.error("Generation failed:", statusData.error);
-              clearInterval(checkStatusInterval);
-              throw new Error(`Portfolio generation failed: ${statusData.error || 'Unknown error'}`);
-            } else {
-              console.log("Portfolio generation still in progress:", statusData);
             }
-          } else {
-            console.warn("Error checking portfolio status:", await statusResponse.text());
-          }
-          
-          // Check if we've waited too long
-          if (Date.now() - startTime > maxWaitTime) {
-            clearInterval(checkStatusInterval);
-            
-            // Include last status data if available for better error context
-            const statusInfo = lastStatusData 
-              ? `Last status: ${JSON.stringify(lastStatusData)}` 
-              : 'No status data available';
-              
-            throw new Error(`Portfolio generation is taking longer than expected (${Math.floor((Date.now() - startTime)/1000)}s elapsed). ${statusInfo}`);
           }
         } catch (checkError) {
           clearInterval(checkStatusInterval);
@@ -261,7 +231,7 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
           onError(checkError.message);
           setFormSubmitting(false);
         }
-      }, 5000); // Check every 5 seconds
+      }, 5000); 
       
     } catch (err) {
       console.error('Error generating portfolio:', err);

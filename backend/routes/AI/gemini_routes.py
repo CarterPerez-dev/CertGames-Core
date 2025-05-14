@@ -178,11 +178,15 @@ def get_generation_status():
         
         from mongodb.database import db
         
+        # Debug: Log query parameters
+        logger.debug(f"Searching for recent portfolio with user_id: {user_id}, cutoff_time: {cutoff_time}")
+        
         recent_portfolio = db.portfolios.find_one({
             "user_id": ObjectId(user_id),
             "created_at": {"$gt": cutoff_time}
         }, sort=[("created_at", -1)])
         
+        # Add debug logging to see if portfolio exists
         if recent_portfolio:
             # Convert ObjectIds to strings
             portfolio_id = str(recent_portfolio["_id"])
@@ -193,8 +197,7 @@ def get_generation_status():
             component_count = len(recent_portfolio.get("components", {}))
             logger.debug(f"Portfolio components count: {component_count}")
             
-            # If we found a portfolio but it wasn't in our task tracker, 
-            # add it to avoid future DB lookups
+            # Add this portfolio to the task tracker to avoid future DB lookups
             generation_tasks[user_id] = {
                 "status": "completed",
                 "portfolio_id": portfolio_id,
