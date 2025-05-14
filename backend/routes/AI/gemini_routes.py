@@ -5,6 +5,9 @@ import os
 from flask import Blueprint, request, jsonify, current_app, g
 from bson.objectid import ObjectId
 import time
+from flask import stream_with_context, Response
+import time
+import threading
 
 from helpers.gemini_helper import gemini_helper
 from models.test import get_user_by_id
@@ -15,15 +18,13 @@ from helpers.jwt_auth import jwt_required_wrapper
 portfolio_bp = Blueprint('portfolio', __name__)
 logger = logging.getLogger(__name__)
 
-@portfolio_bp.route('/generate', methods=['POST'])
+@portfolio_bp.route('/generate-stream', methods=['POST'])
 @jwt_required_wrapper
 @rate_limit('general')
-def generate_portfolio():
+def generate_portfolio_stream():
     """
-    Generate a portfolio website based on resume and preferences
+    Generate a portfolio website with streaming updates to client
     """
-    start_time = time.time()
-    
     try:
         data = request.get_json()
         if not data:
@@ -36,40 +37,95 @@ def generate_portfolio():
         if not resume_text:
             return jsonify({"error": "Resume text is required"}), 400
         
-        # Apply AI guardrails to check for harmful content
+        # Apply AI guardrails
         proceed, sanitized_resume, message = apply_ai_guardrails(resume_text, 'portfolio', user_id)
         if not proceed:
             return jsonify({"error": message}), 422
         
-        # Get user info
-        user = get_user_by_id(user_id)
-        if not user:
-            return jsonify({"error": "User not found"}), 404
+        # Initialize portfolio generation in a background thread
+        def generate_portfolio_task():
+            try:
+                # Get user info
+                user = get_user_by_id(user_id)
+                if not user:
+                    return
+                
+                # Generate components with retries
+                portfolio_components = None
+                max_retries = 3
+                for attempt in range(max_retries):
+                    try:
+                        # Try to generate portfolio
+                        portfolio_components = gemini_helper.generate_portfolio(sanitized_resume, preferences)
+                        break
+                    except Exception as e:
+                        logger.error(f"Generation attempt {attempt+1} failed: {str(e)}")
+                        if attempt == max_retries - 1:
+                            logger.error(f"All attempts failed for user {user_id}")
+                            return
+                        # Wait before retrying
+                        time.sleep(2 ** attempt)  # Exponential backoff
+                
+                if portfolio_components:
+                    # Save to database once generation succeeds
+                    portfolio_id = save_portfolio(user_id, portfolio_components, preferences, resume_text)
+                    logger.info(f"Portfolio {portfolio_id} successfully generated and saved")
+                
+            except Exception as e:
+                logger.exception(f"Background task error: {str(e)}")
+
+        # Start background task
+        thread = threading.Thread(target=generate_portfolio_task)
+        thread.daemon = True
+        thread.start()
         
-        # Generate the portfolio
-        portfolio_components = gemini_helper.generate_portfolio(sanitized_resume, preferences)
-        
-        # Save the generated portfolio to the database
-        portfolio_id = save_portfolio(user_id, portfolio_components, preferences)
-        
-        # Calculate generation time
-        generation_time = time.time() - start_time
-        logger.info(f"Portfolio generated in {generation_time:.2f} seconds for user {user_id}")
-        
+        # Send immediate success response to client
         return jsonify({
             "success": True,
-            "portfolio_id": str(portfolio_id),
-            "components": portfolio_components,
-            "generation_time_sec": generation_time
+            "message": "Portfolio generation started",
+            "status": "processing"
         })
         
-    except ValueError as ve:
-        logger.error(f"Value error in portfolio generation: {str(ve)}")
-        return jsonify({"error": str(ve)}), 400
-    
     except Exception as e:
-        logger.exception(f"Error generating portfolio: {str(e)}")
-        return jsonify({"error": "Failed to generate portfolio. Please try again later."}), 500
+        logger.exception(f"Error starting portfolio generation: {str(e)}")
+        return jsonify({"error": "Failed to start portfolio generation. Please try again."}), 500
+
+
+
+@portfolio_bp.route('/status/generation', methods=['GET'])  # <-- Changed path
+@jwt_required_wrapper
+def get_generation_status():
+    """Check if the user has any recently generated portfolios"""
+    user_id = g.user_id
+    
+    try:
+        # Look for portfolios created in the last 10 minutes
+        cutoff_time = time.time() - (10 * 60)  # 10 minutes ago
+        
+        recent_portfolio = db.portfolios.find_one({
+            "user_id": ObjectId(user_id),
+            "created_at": {"$gt": cutoff_time}
+        }, sort=[("created_at", -1)])
+        
+        if recent_portfolio:
+            return jsonify({
+                "success": True,
+                "status": "completed",
+                "portfolio_id": str(recent_portfolio["_id"]),
+                "components_count": len(recent_portfolio.get("components", {}))
+            })
+        else:
+            return jsonify({
+                "success": False,
+                "status": "pending"
+            })
+    except Exception as e:
+        logger.error(f"Error checking generation status: {str(e)}")
+        return jsonify({
+            "success": False,
+            "status": "error",
+            "message": "Failed to check generation status"
+        }), 500
 
 @portfolio_bp.route('/fix-error', methods=['POST'])
 @jwt_required_wrapper
@@ -197,8 +253,15 @@ def get_portfolio_by_id(portfolio_id):
     try:
         user_id = g.user_id
         
+        # Validate the portfolio_id is a valid ObjectId
+        try:
+            portfolio_obj_id = ObjectId(portfolio_id)
+        except Exception as e:
+            logger.error(f"Invalid portfolio ID format: {portfolio_id}")
+            return jsonify({"error": f"Invalid portfolio ID format: {str(e)}"}), 400
+        
         # Get the portfolio from the database
-        portfolio = get_portfolio(user_id, portfolio_id)
+        portfolio = get_portfolio(user_id, portfolio_obj_id)
         if not portfolio:
             return jsonify({"error": "Portfolio not found"}), 404
         
@@ -212,7 +275,7 @@ def get_portfolio_by_id(portfolio_id):
         return jsonify({"error": "Failed to get portfolio"}), 500
 
 # Database helper functions
-def save_portfolio(user_id, components, preferences):
+def save_portfolio(user_id, components, preferences, resume_text=None):
     """Save portfolio to database"""
     from mongodb.database import db
     
@@ -220,6 +283,7 @@ def save_portfolio(user_id, components, preferences):
         "user_id": ObjectId(user_id),
         "components": components,
         "preferences": preferences,
+        "resume_text": resume_text,  
         "created_at": time.time(),
         "status": "generated",
         "deployment": {

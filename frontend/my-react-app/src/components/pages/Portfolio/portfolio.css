@@ -2913,6 +2913,80 @@
   animation: fadeIn 0.3s ease;
 }
 
+
+/* Generation progress UI */
+.portfolio-generation-status {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 40px;
+}
+
+.generation-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.generation-step {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border: 1px solid var(--portfolio-border);
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.generation-step.active {
+  opacity: 1;
+  border-color: var(--portfolio-primary);
+  background: rgba(101, 67, 204, 0.1);
+  transform: translateX(10px);
+}
+
+.step-icon {
+  font-size: 24px;
+}
+
+.step-text {
+  flex: 1;
+  font-size: 16px;
+  color: var(--portfolio-text);
+}
+
+.step-check {
+  font-size: 20px;
+  color: var(--portfolio-success);
+}
+
+.generation-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.tip-icon {
+  font-size: 20px;
+  color: #ffc107;
+}
+
+.tip-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--portfolio-text-secondary);
+}
+
+
+
+
 /* #####################################################
  * RESPONSIVE STYLES
  * #####################################################

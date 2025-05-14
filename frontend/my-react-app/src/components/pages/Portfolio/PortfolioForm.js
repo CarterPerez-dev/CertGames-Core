@@ -117,60 +117,99 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
   };
 
   const handleGeneratePortfolio = async (e) => {
-    e.preventDefault();
-    
-    if (!resumeText.trim()) {
-      onError('Please provide your resume text');
-      return;
-    }
-    
-    if (resumeText.trim().length < 100) {
-      onError('Your resume text is too short. Please provide more details for better results.');
-      return;
-    }
-    
-    try {
-      setFormSubmitting(true);
-      onGenerationStart();
+      e.preventDefault();
       
-      console.log("Submitting portfolio generation request:", {
-        userId,
-        resumeLength: resumeText.length,
-        preferences
-      });
-      
-      const response = await fetch('/api/portfolio/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-User-Id': userId
-        },
-        body: JSON.stringify({
-          resume_text: resumeText,
-          preferences
-        })
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to generate portfolio');
+      if (!resumeText.trim()) {
+        onError('Please provide your resume text');
+        return;
       }
       
-      const data = await response.json();
-      console.log("Portfolio generation successful:", {
-        portfolioId: data.portfolio_id,
-        componentCount: Object.keys(data.components || {}).length
-      });
+      if (resumeText.trim().length < 100) {
+        onError('Your resume text is too short. Please provide more details for better results.');
+        return;
+      }
       
-      onGenerationComplete(data);
-      setFormSubmitting(false);
-      
-    } catch (err) {
-      console.error('Error generating portfolio:', err);
-      onError(err.message || 'Failed to generate portfolio. Please try again.');
-      setFormSubmitting(false);
-    }
-  };
+      try {
+        setFormSubmitting(true);
+        onGenerationStart();
+        
+        console.log("Starting portfolio generation request:", {
+          userId,
+          resumeLength: resumeText.length,
+          preferences
+        });
+        
+        // Step 1: Initiate generation process
+        const response = await fetch('/api/portfolio/generate-stream', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-User-Id': userId
+          },
+          body: JSON.stringify({
+            resume_text: resumeText,
+            preferences
+          })
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to start portfolio generation');
+        }
+        
+        // Step 2: Start polling for completion
+        // Step 2: Start polling for completion
+        const startTime = Date.now();
+        const maxWaitTime = 10 * 60 * 1000; // 10 minutes max wait
+        const checkStatusInterval = setInterval(async () => {
+          try {
+            // Check if generation completed - using the fixed endpoint
+            const statusResponse = await fetch('/api/portfolio/status/generation', {  // <-- Updated URL
+              headers: {
+                'X-User-Id': userId
+              }
+            });
+            
+            if (statusResponse.ok) {
+              const statusData = await statusResponse.json();
+              
+              // Portfolio is ready
+              if (statusData.success && statusData.status === 'completed') {
+                clearInterval(checkStatusInterval);
+                
+                // Fetch the complete portfolio
+                const portfolioResponse = await fetch(`/api/portfolio/${statusData.portfolio_id}`, {
+                  headers: {
+                    'X-User-Id': userId
+                  }
+                });
+                
+                if (portfolioResponse.ok) {
+                  const portfolioData = await portfolioResponse.json();
+                  console.log("Portfolio generation successful:", {
+                    portfolioId: statusData.portfolio_id,
+                    componentCount: statusData.components_count
+                  });
+                  
+                  onGenerationComplete(portfolioData.portfolio);
+                  setFormSubmitting(false);
+                }
+              }
+            }
+            
+            // Check if we've waited too long
+            if (Date.now() - startTime > maxWaitTime) {
+              clearInterval(checkStatusInterval);
+              throw new Error('Portfolio generation is taking longer than expected. Please check "My Portfolios" in a few minutes.');
+            }
+          } catch (checkError) {
+            clearInterval(checkStatusInterval);
+            console.error('Error checking portfolio status:', checkError);
+            onError(checkError.message);
+            setFormSubmitting(false);
+          }
+        }, 5000); // Check every 5 seconds
+            
 
   const nextStep = () => {
     if (step < totalSteps && isStepValid()) {

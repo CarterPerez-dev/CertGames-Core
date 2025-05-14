@@ -229,6 +229,44 @@ const PortfolioPage = () => {
                 <span className="portfolio-loading-progress-text">{loadingProgress}%</span>
               </div>
             )}
+            
+            {/* Add this new section for generation status */}
+            {loadingMessage.includes('Generating') && (
+              <div className="portfolio-generation-status">
+                <div className="generation-steps">
+                  <div className={`generation-step ${loadingProgress > 10 ? 'active' : ''}`}>
+                    <div className="step-icon">📝</div>
+                    <div className="step-text">Analyzing Resume</div>
+                    {loadingProgress > 10 && <div className="step-check">✓</div>}
+                  </div>
+                  
+                  <div className={`generation-step ${loadingProgress > 35 ? 'active' : ''}`}>
+                    <div className="step-icon">💻</div>
+                    <div className="step-text">Creating Components</div>
+                    {loadingProgress > 35 && <div className="step-check">✓</div>}
+                  </div>
+                  
+                  <div className={`generation-step ${loadingProgress > 70 ? 'active' : ''}`}>
+                    <div className="step-icon">🎨</div>
+                    <div className="step-text">Applying Styles</div>
+                    {loadingProgress > 70 && <div className="step-check">✓</div>}
+                  </div>
+                  
+                  <div className={`generation-step ${loadingProgress > 95 ? 'active' : ''}`}>
+                    <div className="step-icon">🚀</div>
+                    <div className="step-text">Finalizing Portfolio</div>
+                    {loadingProgress > 95 && <div className="step-check">✓</div>}
+                  </div>
+                </div>
+                
+                <div className="generation-tip">
+                  <div className="tip-icon">💡</div>
+                  <div className="tip-text">
+                    This process typically takes 3-5 minutes. You'll be automatically redirected when your portfolio is ready.
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <>
