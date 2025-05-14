@@ -158,13 +158,12 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
         }
         
         // Step 2: Start polling for completion
-        // Step 2: Start polling for completion
         const startTime = Date.now();
         const maxWaitTime = 10 * 60 * 1000; // 10 minutes max wait
         const checkStatusInterval = setInterval(async () => {
           try {
-            // Check if generation completed - using the fixed endpoint
-            const statusResponse = await fetch('/api/portfolio/status/generation', {  // <-- Updated URL
+            // Check if generation completed
+            const statusResponse = await fetch('/api/portfolio/ggeneration', {
               headers: {
                 'X-User-Id': userId
               }
@@ -209,6 +208,14 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
             setFormSubmitting(false);
           }
         }, 5000); // Check every 5 seconds
+        
+      } catch (err) {
+        console.error('Error generating portfolio:', err);
+        onError(err.message || 'Failed to generate portfolio. Please try again.');
+        setFormSubmitting(false);
+      }
+  };
+
             
 
   const nextStep = () => {
