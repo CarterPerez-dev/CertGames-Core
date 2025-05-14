@@ -1,154 +1,158 @@
-// Portfolio Deployment Component - Handles deployment process and success
-const PortfolioDeployment = ({ portfolio, onBack, onComplete }) => {
-  const [deploymentStatus, setDeploymentStatus] = useState('processing'); // 'processing', 'success', 'error'
-  const [deploymentProgress, setDeploymentProgress] = useState(0);
-  const [deployedUrl, setDeployedUrl] = useState('');
-  const [activeStage, setActiveStage] = useState(1);
-  const [completedStages, setCompletedStages] = useState([]);
+// Enhanced PortfolioDeployment Component
+import React, { useState, useEffect } from 'react';
+import { FaRocket, FaGithub, FaLink, FaCheckCircle, FaInfoCircle, FaClipboard, FaCode, FaQuestion, FaChevronDown, FaExternalLinkAlt } from 'react-icons/fa';
+import './portfolio.css';
+
+const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymentComplete, onError }) => {
+  const [githubToken, setGithubToken] = useState('');
+  const [vercelToken, setVercelToken] = useState('');
+  const [showTokenFields, setShowTokenFields] = useState(false);
+  const [deploymentInProgress, setDeploymentInProgress] = useState(false);
+  const [deploymentStage, setDeploymentStage] = useState(0);
   const [copied, setCopied] = useState(false);
-  
-  useEffect(() => {
-    const simulateDeployment = async () => {
-      // Stage 1: Preparing files
-      setActiveStage(1);
-      await sleep(2000);
-      setCompletedStages(prev => [...prev, 1]);
-      setDeploymentProgress(25);
-      
-      // Stage 2: Building optimized version
-      setActiveStage(2);
-      await sleep(3000);
-      setCompletedStages(prev => [...prev, 2]);
-      setDeploymentProgress(50);
-      
-      // Stage 3: Uploading to servers
-      setActiveStage(3);
-      await sleep(2500);
-      setCompletedStages(prev => [...prev, 3]);
-      setDeploymentProgress(75);
-      
-      // Stage 4: Configuring domain
-      setActiveStage(4);
-      await sleep(2000);
-      setCompletedStages(prev => [...prev, 4]);
-      setDeploymentProgress(100);
-      
-      // Complete deployment
-      const result = await portfolioService.deployPortfolio(portfolio.id);
-      
-      if (result.success) {
-        setDeployedUrl(result.data.deployedUrl);
-        setDeploymentStatus('success');
-      } else {
-        setDeploymentStatus('error');
-      }
-    };
-    
-    simulateDeployment();
-  }, [portfolio.id]);
-  
-  const deploymentStages = [
+  const [expandedFaq, setExpandedFaq] = useState(null);
+  const [hasInteractedWithForm, setHasInteractedWithForm] = useState(false);
+
+  // Frequently Asked Questions
+  const faqItems = [
     {
-      id: 1,
-      title: 'Preparing Files',
-      description: 'Optimizing your content and assets for deployment'
+      question: "Will I be able to update my portfolio later?",
+      answer: "Yes, any changes you make to your portfolio code will be automatically deployed to your live site. You can edit your portfolio at any time through the Code Editor tab."
     },
     {
-      id: 2,
-      title: 'Building Portfolio',
-      description: 'Generating optimized production version of your portfolio'
+      question: "Is the hosting really free?",
+      answer: "Yes, Vercel provides free hosting for personal projects. You can even connect a custom domain if you wish. The free tier includes SSL certificates, global CDN, and continuous deployment."
     },
     {
-      id: 3,
-      title: 'Uploading to Servers',
-      description: 'Transferring files to our high-performance hosting platform'
+      question: "Are my tokens stored securely?",
+      answer: "Your tokens are used only for the deployment process and are not stored on our servers. For added security, we recommend creating tokens with minimal permissions and revoking them after your portfolio is deployed."
     },
     {
-      id: 4,
-      title: 'Configuring Domain',
-      description: 'Setting up domain and SSL certificates'
+      question: "How do I set up a custom domain?",
+      answer: "After deployment, you can set up a custom domain through the Vercel dashboard. Go to your project settings, navigate to the Domains section, and follow the instructions to add and configure your domain."
+    },
+    {
+      question: "What happens if I make changes to my portfolio?",
+      answer: "Any changes you make to your portfolio in the Code Editor will be automatically committed to your GitHub repository. Vercel will detect these changes and automatically redeploy your portfolio."
     }
   ];
-  
-  const handleCopyUrl = () => {
-    navigator.clipboard.writeText(deployedUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+
+  // Animation for deployment stages
+  useEffect(() => {
+    if (deploymentInProgress) {
+      console.log("Deployment in progress, starting stage animation");
+      const stageInterval = setInterval(() => {
+        setDeploymentStage(prevStage => {
+          if (prevStage >= 3) {
+            clearInterval(stageInterval);
+            return 3;
+          }
+          return prevStage + 1;
+        });
+      }, 4000);
+      
+      return () => clearInterval(stageInterval);
+    }
+  }, [deploymentInProgress]);
+
+  // Validate form fields
+  const validateForm = () => {
+    if (!githubToken || !vercelToken) {
+      return false;
+    }
+    
+    if (githubToken.length < 10 || vercelToken.length < 10) {
+      return false;
+    }
+    
+    return true;
   };
-  
-  if (deploymentStatus === 'processing') {
-    return (
-      <div className="portfolio-deployment-container">
-        <div className="portfolio-deployment-header">
-          <div className="deployment-title-icon">
-            <FaRocket />
-          </div>
-          <h2>Deploying Your Portfolio</h2>
-          <p className="portfolio-deployment-subtitle">
-            We're setting everything up for you
-          </p>
-        </div>
-        
-        <div className="portfolio-deployment-processing">
-          <div className="deployment-processing-animation">
-            <div className="processing-circle"></div>
-          </div>
-          
-          <div className="deployment-processing-text">
-            <h3>Deployment in Progress</h3>
-            <p>
-              We're deploying your portfolio to our high-performance hosting platform.
-              This usually takes about 1-2 minutes to complete.
-            </p>
-          </div>
-          
-          <div className="deployment-stages">
-            {deploymentStages.map(stage => (
-              <div 
-                key={stage.id} 
-                className={`deployment-stage ${activeStage === stage.id ? 'active' : ''} ${completedStages.includes(stage.id) ? 'completed' : ''}`}
-              >
-                <div className="stage-indicator">
-                  {completedStages.includes(stage.id) ? (
-                    <FaCheck className="stage-check-icon" />
-                  ) : (
-                    stage.id
-                  )}
-                </div>
-                <div className="stage-content">
-                  <h4 className="stage-title">{stage.title}</h4>
-                  <p className="stage-description">{stage.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="deployment-time-estimate">
-            <FaClock className="deployment-time-icon" />
-            Estimated time remaining: {Math.max(0, 2 - Math.ceil(deploymentProgress / 50))} minutes
-          </div>
-          
-          <button className="deployment-cancel-button">
-            <FaUndoAlt /> Cancel Deployment
-          </button>
-        </div>
+
+  const handleInputChange = (e, field) => {
+    setHasInteractedWithForm(true);
+    
+    if (field === 'github') {
+      setGithubToken(e.target.value);
+    } else if (field === 'vercel') {
+      setVercelToken(e.target.value);
+    }
+  };
+
+  const handleDeploy = async (e) => {
+    e.preventDefault();
+    
+    // Validate inputs
+    if (showTokenFields && (!githubToken || !vercelToken)) {
+      onError('Please provide both GitHub and Vercel tokens');
+      return;
+    }
+    
+    try {
+      console.log("Starting deployment process");
+      onDeploymentStart();
+      setDeploymentInProgress(true);
+      setDeploymentStage(0);
+      
+      const response = await fetch('/api/portfolio/deploy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-User-Id': userId
+        },
+        body: JSON.stringify({
+          portfolio_id: portfolio._id,
+          github_token: githubToken,
+          vercel_token: vercelToken
+        })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Deployment failed');
+      }
+      
+      const data = await response.json();
+      console.log("Deployment successful:", data);
+      
+      setDeploymentInProgress(false);
+      onDeploymentComplete(data);
+      
+    } catch (err) {
+      console.error('Error deploying portfolio:', err);
+      setDeploymentInProgress(false);
+      onError(err.message || 'Deployment failed. Please try again.');
+    }
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  const toggleFaq = (index) => {
+    if (expandedFaq === index) {
+      setExpandedFaq(null);
+    } else {
+      setExpandedFaq(index);
+    }
+  };
+
+  const isDeployed = portfolio?.deployment?.deployed;
+  const deploymentUrl = portfolio?.deployment?.url;
+
+  return (
+    <div className="portfolio-deployment-container">
+      <div className="portfolio-deployment-header">
+        <h2>
+          <FaRocket className="deployment-title-icon" />
+          Deploy Your Portfolio
+        </h2>
+        <p className="portfolio-deployment-subtitle">Make your portfolio accessible online with just a few clicks</p>
       </div>
-    );
-  }
-  
-  if (deploymentStatus === 'success') {
-    return (
-      <div className="portfolio-deployment-container">
-        <div className="portfolio-deployment-header">
-          <div className="deployment-title-icon">
-            <FaRocket />
-          </div>
-          <h2>Deployment Successful</h2>
-          <p className="portfolio-deployment-subtitle">
-            Your portfolio is now live and ready to share
-          </p>
-        </div>
-        
+      
+      {isDeployed ? (
         <div className="portfolio-deployment-success">
           <div className="deployment-success-header">
             <FaCheckCircle className="deployment-success-icon" />
@@ -156,132 +160,293 @@ const PortfolioDeployment = ({ portfolio, onBack, onComplete }) => {
           </div>
           
           <div className="deployment-success-content">
-            <p>
-              Congratulations! Your portfolio has been successfully deployed and is now accessible worldwide.
-              Your site is optimized for speed and performance, with SSL encryption for security.
-            </p>
+            <p>Your portfolio has been successfully deployed and is now accessible online.</p>
             
             <div className="deployment-url-container">
               <div className="deployment-url-header">
                 <FaLink className="url-icon" />
-                <h4>Your Portfolio URL</h4>
+                <h4>Portfolio URL</h4>
               </div>
               
               <div className="deployment-url-display">
                 <a 
-                  href={deployedUrl} 
+                  href={deploymentUrl} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="portfolio-url-link"
                 >
-                  {deployedUrl}
+                  {deploymentUrl}
                 </a>
                 
                 <button 
-                  className={`copy-url-button ${copied ? 'copied' : ''}`}
-                  onClick={handleCopyUrl}
+                  className="copy-url-button"
+                  onClick={() => copyToClipboard(deploymentUrl)}
+                  title="Copy URL to clipboard"
                 >
-                  {copied ? (
-                    <>
-                      <FaCheck /> Copied!
-                    </>
-                  ) : (
-                    <>
-                      <FaCopy /> Copy URL
-                    </>
-                  )}
+                  <FaClipboard />
+                  <span className="copy-text">{copied ? 'Copied!' : 'Copy'}</span>
                 </button>
               </div>
             </div>
             
-            <div className="deployment-success-actions">
+            <div className="deployment-actions">
               <a 
-                href={deployedUrl} 
+                href={deploymentUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="portfolio-view-live-button"
+                className="view-portfolio-button"
               >
-                <FaExternalLinkAlt /> View Live Site
+                <FaExternalLinkAlt className="view-icon" />
+                <span>View Portfolio</span>
               </a>
               
-              <button className="portfolio-customization-button" onClick={onComplete}>
-                <FaUndoAlt /> Back to Portfolios
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <div className="deployment-share-options">
-          <div className="share-options-header">
-            <h3>Share Your Portfolio</h3>
-            <p>Let the world know about your new professional portfolio</p>
-          </div>
-          
-          <div className="share-options-grid">
-            <div className="share-option-card">
-              <FaTwitter className="share-platform-icon" />
-              <h4>Share on Twitter</h4>
-              <p>
-                Share your portfolio with your professional network on Twitter/X
-              </p>
-              <button className="share-platform-button">
-                <FaTwitter /> Share on Twitter
+              <button className="share-portfolio-button">
+                <FaLink className="share-icon" />
+                <span>Share Portfolio</span>
               </button>
             </div>
             
-            <div className="share-option-card">
-              <FaLinkedin className="share-platform-icon" />
-              <h4>Share on LinkedIn</h4>
+            <div className="deployment-note">
+              <FaInfoCircle className="note-icon" />
               <p>
-                Add your portfolio to your LinkedIn profile for better visibility
+                Your portfolio is automatically updated when you make changes to your code. 
+                If the link doesn't work immediately, please try again in a few minutes as 
+                deployment may take some time to propagate.
               </p>
-              <button className="share-platform-button">
-                <FaLinkedin /> Share on LinkedIn
-              </button>
-            </div>
-            
-            <div className="share-option-card">
-              <FaEnvelope className="share-platform-icon" />
-              <h4>Share via Email</h4>
-              <p>
-                Send your portfolio directly to recruiters or potential clients
-              </p>
-              <button className="share-platform-button">
-                <FaEnvelope /> Compose Email
-              </button>
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
-  
-  // Error state
-  return (
-    <div className="portfolio-deployment-container">
-      <div className="portfolio-deployment-header">
-        <div className="deployment-title-icon">
-          <FaExclamationCircle />
+      ) : (
+        <div className="portfolio-deployment-options">
+          {deploymentInProgress ? (
+            <div className="portfolio-deployment-progress">
+              <div className="deployment-progress-animation">
+                <div className="deployment-rocket-container">
+                  <div className="deployment-rocket">
+                    <FaRocket />
+                  </div>
+                  <div className="deployment-trail"></div>
+                </div>
+              </div>
+              
+              <h3 className="deployment-progress-title">Deployment in Progress</h3>
+              
+              <div className="deployment-stages">
+                <div className={`deployment-stage ${deploymentStage >= 0 ? 'active' : ''} ${deploymentStage > 0 ? 'completed' : ''}`}>
+                  <div className="stage-indicator">
+                    <div className="stage-number">1</div>
+                    <div className="stage-line"></div>
+                  </div>
+                  <div className="stage-content">
+                    <h4>Preparing Files</h4>
+                    <p>Optimizing your portfolio code for deployment</p>
+                  </div>
+                </div>
+                
+                <div className={`deployment-stage ${deploymentStage >= 1 ? 'active' : ''} ${deploymentStage > 1 ? 'completed' : ''}`}>
+                  <div className="stage-indicator">
+                    <div className="stage-number">2</div>
+                    <div className="stage-line"></div>
+                  </div>
+                  <div className="stage-content">
+                    <h4>Creating Repository</h4>
+                    <p>Setting up a GitHub repository with your portfolio</p>
+                  </div>
+                </div>
+                
+                <div className={`deployment-stage ${deploymentStage >= 2 ? 'active' : ''} ${deploymentStage > 2 ? 'completed' : ''}`}>
+                  <div className="stage-indicator">
+                    <div className="stage-number">3</div>
+                    <div className="stage-line"></div>
+                  </div>
+                  <div className="stage-content">
+                    <h4>Configuring Hosting</h4>
+                    <p>Setting up deployment on Vercel</p>
+                  </div>
+                </div>
+                
+                <div className={`deployment-stage ${deploymentStage >= 3 ? 'active' : ''} ${deploymentStage > 3 ? 'completed' : ''}`}>
+                  <div className="stage-indicator">
+                    <div className="stage-number">4</div>
+                  </div>
+                  <div className="stage-content">
+                    <h4>Going Live</h4>
+                    <p>Making your portfolio accessible online</p>
+                  </div>
+                </div>
+              </div>
+              
+              <p className="deployment-wait-message">This process may take a few minutes. Please do not close this window.</p>
+            </div>
+          ) : (
+            <>
+              <div className="portfolio-deployment-section">
+                <div className="deployment-section-header">
+                  <FaCode className="section-icon" />
+                  <h3>Get Your Portfolio Online</h3>
+                </div>
+                
+                <div className="deployment-section-content">
+                  <p>
+                    Deploy your portfolio to make it accessible on the web. Your portfolio will be 
+                    hosted on Vercel, a leading platform for frontend applications, which provides 
+                    free hosting with custom domains, SSL certificates, and global CDN.
+                  </p>
+                  
+                  {!showTokenFields ? (
+                    <div className="deployment-starter">
+                      <div className="deployment-benefits">
+                        <h4>Deployment Benefits:</h4>
+                        <ul className="benefits-list">
+                          <li>Free, reliable hosting with global CDN</li>
+                          <li>Custom domain support with SSL included</li>
+                          <li>Professional URL to share with employers</li>
+                          <li>Automatic updates when you edit your portfolio</li>
+                          <li>Analytics to track visitor engagement</li>
+                        </ul>
+                      </div>
+                      
+                      <button 
+                        className="start-deployment-button"
+                        onClick={() => setShowTokenFields(true)}
+                      >
+                        <FaRocket className="button-icon" />
+                        <span>Start Deployment</span>
+                      </button>
+                    </div>
+                  ) : (
+                    <form className="portfolio-deployment-form" onSubmit={handleDeploy}>
+                      <div className="form-section">
+                        <h4 className="form-section-title">
+                          <FaGithub className="form-section-icon" />
+                          GitHub Configuration
+                        </h4>
+                        
+                        <p className="form-section-description">
+                          Your portfolio code will be stored in a GitHub repository. This allows 
+                          for version control and easy updates.
+                        </p>
+                        
+                        <div className="form-group">
+                          <label htmlFor="github-token">GitHub Access Token</label>
+                          <div className="input-with-icon">
+                            <FaGithub className="input-icon" />
+                            <input 
+                              type="password"
+                              id="github-token"
+                              value={githubToken}
+                              onChange={(e) => handleInputChange(e, 'github')}
+                              placeholder="Enter your GitHub access token"
+                              className={hasInteractedWithForm && !githubToken ? 'input-error' : ''}
+                            />
+                          </div>
+                          {hasInteractedWithForm && !githubToken && 
+                            <div className="input-error-message">GitHub token is required</div>
+                          }
+                          <p className="token-help">
+                            <a 
+                              href="https://github.com/settings/tokens/new" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                            >
+                              Create a GitHub token
+                            </a> with 'repo' and 'workflow' permissions.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="form-section">
+                        <h4 className="form-section-title">
+                          <FaRocket className="form-section-icon" />
+                          Vercel Configuration
+                        </h4>
+                        
+                        <p className="form-section-description">
+                          Vercel will build and host your portfolio, making it accessible online.
+                        </p>
+                        
+                        <div className="form-group">
+                          <label htmlFor="vercel-token">Vercel Access Token</label>
+                          <div className="input-with-icon">
+                            <FaRocket className="input-icon" />
+                            <input 
+                              type="password"
+                              id="vercel-token"
+                              value={vercelToken}
+                              onChange={(e) => handleInputChange(e, 'vercel')}
+                              placeholder="Enter your Vercel access token"
+                              className={hasInteractedWithForm && !vercelToken ? 'input-error' : ''}
+                            />
+                          </div>
+                          {hasInteractedWithForm && !vercelToken && 
+                            <div className="input-error-message">Vercel token is required</div>
+                          }
+                          <p className="token-help">
+                            <a 
+                              href="https://vercel.com/account/tokens" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                            >
+                              Create a Vercel token
+                            </a> from your account settings.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="form-actions">
+                        <button 
+                          type="button"
+                          className="deployment-back-button"
+                          onClick={() => setShowTokenFields(false)}
+                        >
+                          Back
+                        </button>
+                        
+                        <button 
+                          type="submit"
+                          className="deploy-button"
+                          disabled={!validateForm()}
+                        >
+                          <FaRocket className="button-icon" />
+                          <span>Deploy Portfolio</span>
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                </div>
+              </div>
+              
+              <div className="faq-container">
+                <h3>
+                  <FaQuestion className="faq-header-icon" />
+                  Frequently Asked Questions
+                </h3>
+                
+                <div className="faq-questions">
+                  {faqItems.map((item, index) => (
+                    <div key={index} className="faq-item">
+                      <div 
+                        className="faq-question"
+                        onClick={() => toggleFaq(index)}
+                      >
+                        <span>{item.question}</span>
+                        <FaChevronDown className={`faq-toggle ${expandedFaq === index ? 'expanded' : ''}`} />
+                      </div>
+                      {expandedFaq === index && (
+                        <div className="faq-answer">
+                          {item.answer}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </div>
-        <h2>Deployment Failed</h2>
-        <p className="portfolio-deployment-subtitle">
-          We encountered an issue while deploying your portfolio
-        </p>
-      </div>
-      
-      {/* Error content would go here */}
-      
-      <div className="portfolio-form-navigation">
-        <button className="portfolio-back-button" onClick={onBack}>
-          <FaUndoAlt className="button-icon" /> Back to Preview
-        </button>
-        
-        <button className="portfolio-next-button">
-          <FaSyncAlt className="button-icon" /> Try Again
-        </button>
-      </div>
+      )}
     </div>
   );
 };
 
-export default PortfolioPage;
+export default PortfolioDeployment;
