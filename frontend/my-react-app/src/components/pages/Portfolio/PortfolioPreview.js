@@ -1,6 +1,7 @@
-// frontend/my-react-app/src/components/pages/Portfolio/PortfolioPreview.js
-import React, { useState, useEffect, useCallback } from 'react';
+// Enhanced PortfolioPreview Component
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import CodeEditor from './CodeEditor';
+import { FaCode, FaEye, FaDesktop, FaMobile, FaSync, FaCheck, FaTimes, FaFile, FaFolder, FaInfo, FaExclamationTriangle, FaWrench } from 'react-icons/fa';
 import './portfolio.css';
 
 const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
@@ -11,9 +12,15 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
   const [isFixingError, setIsFixingError] = useState(false);
   const [previewHtml, setPreviewHtml] = useState('');
   const [fileTree, setFileTree] = useState({});
+  const [previewDevice, setPreviewDevice] = useState('desktop');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isPreviewRefreshing, setIsPreviewRefreshing] = useState(false);
+  const iframeRef = useRef(null);
 
   // Process portfolio data when it changes
   useEffect(() => {
+    console.log("Portfolio data changed or component mounted");
+    
     if (portfolio && portfolio.components) {
       // Organize files into a tree structure
       const tree = organizeFilesIntoTree(portfolio.components);
@@ -23,9 +30,12 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       const files = Object.keys(portfolio.components);
       if (files.length > 0) {
         if (!activeFile || !portfolio.components[activeFile]) {
-          handleFileSelect(files[0]);
+          const defaultFile = files.find(f => f.endsWith('App.js')) || files[0];
+          console.log(`Setting default active file: ${defaultFile}`);
+          handleFileSelect(defaultFile);
         } else {
           // Update content for currently selected file
+          console.log(`Maintaining current active file: ${activeFile}`);
           setFileContent(portfolio.components[activeFile]);
         }
       }
@@ -33,10 +43,11 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       // Generate preview HTML
       generatePreviewHtml(portfolio.components);
     }
-  }, [portfolio, activeFile]);
+  }, [portfolio]);
 
   // Organize files into directory structure
   const organizeFilesIntoTree = (components) => {
+    console.log("Organizing file tree structure");
     const tree = {};
     
     Object.keys(components).forEach(filePath => {
@@ -62,6 +73,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
 
   // Generate preview HTML from portfolio components
   const generatePreviewHtml = useCallback((components) => {
+    console.log("Generating preview HTML");
     // First check if we have the necessary files
     const htmlFile = components['public/index.html'] || '';
     
@@ -83,18 +95,48 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     const styleTag = `<style>${cssContent}</style>`;
     processedHtml = processedHtml.replace('</head>', `${styleTag}</head>`);
     
-    // For JS, we'll add script tags but with a warning that full execution isn't supported
-    processedHtml = processedHtml.replace(
-      '</body>',
-      `<div style="position: fixed; bottom: 0; left: 0; right: 0; background: #f8d7da; color: #721c24; padding: 10px; font-size: 12px; text-align: center;">
-        ⚠️ This is a simplified preview. JavaScript functionality is limited. Check the console for any errors.
-      </div></body>`
-    );
+    // Inject JS (simplified for preview)
+    try {
+      const appJs = components['src/App.js'] || '';
+      const indexJs = components['src/index.js'] || '';
+      
+      // Extract React components from App.js (very simplified)
+      const appContent = appJs.replace(/import\s+.*?from\s+['"].*?['"]/g, '')
+                            .replace(/export\s+default\s+\w+/g, '');
+      
+      // Create a minimal JS to render something
+      const previewJs = `
+        <script>
+          // Simplified preview JS
+          try {
+            console.log("Initializing preview");
+            ${appContent}
+            console.log("App component processed");
+          } catch(err) {
+            console.error("Preview error:", err);
+          }
+        </script>
+      `;
+      
+      processedHtml = processedHtml.replace('</body>', `${previewJs}</body>`);
+    } catch(err) {
+      console.error("Error processing JS for preview:", err);
+    }
     
+    // Add preview message
+    processedHtml = processedHtml.replace('</body>', `
+      <div style="position: fixed; bottom: 0; left: 0; right: 0; background: #f8d7da; color: #721c24; padding: 10px; 
+           font-size: 12px; text-align: center; font-family: Arial, sans-serif;">
+        ⚠️ This is a simplified preview. JavaScript functionality is limited. Check the console for any errors.
+      </div></body>
+    `);
+    
+    console.log("Preview HTML generated successfully");
     setPreviewHtml(processedHtml);
   }, []);
 
   const handleFileSelect = (filePath) => {
+    console.log(`Selecting file: ${filePath}`);
     setActiveFile(filePath);
     
     if (portfolio && portfolio.components && portfolio.components[filePath]) {
@@ -103,22 +145,69 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       // Clear any previous error when switching files
       setErrorMessage(null);
     } else {
+      console.warn(`File not found in portfolio components: ${filePath}`);
       setFileContent('');
     }
   };
 
   const handleUpdateFileContent = (newContent) => {
+    if (newContent === fileContent) return;
+    
+    console.log(`Updating content for file: ${activeFile}`);
     setFileContent(newContent);
     
-    // Here we would typically update the portfolio object
-    // This would require an API call to save the changes
-    // For now, we'll just update the local state
+    // Update the portfolio object locally
+    if (portfolio && portfolio.components) {
+      const updatedComponents = {
+        ...portfolio.components,
+        [activeFile]: newContent
+      };
+      
+      // Regenerate preview HTML when code changes
+      if (activeFile.endsWith('.js') || activeFile.endsWith('.css') || activeFile.endsWith('.html')) {
+        setTimeout(() => {
+          generatePreviewHtml(updatedComponents);
+        }, 1000);
+      }
+    }
+  };
+
+  const handleRefreshPreview = () => {
+    console.log("Manually refreshing preview");
+    setIsPreviewRefreshing(true);
+    
+    // Regenerate the preview HTML
+    if (portfolio && portfolio.components) {
+      generatePreviewHtml(portfolio.components);
+      
+      // Refresh the iframe if it exists
+      if (iframeRef.current) {
+        try {
+          const iframe = iframeRef.current;
+          const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+          iframeDoc.open();
+          iframeDoc.write(previewHtml);
+          iframeDoc.close();
+          console.log("Iframe content refreshed");
+        } catch (err) {
+          console.error("Error refreshing iframe:", err);
+        }
+      }
+    }
+    
+    setTimeout(() => {
+      setIsPreviewRefreshing(false);
+    }, 500);
   };
 
   const handleFixError = async () => {
-    if (!errorMessage || !activeFile) return;
+    if (!errorMessage || !activeFile) {
+      console.warn("Cannot fix error: No error message or active file");
+      return;
+    }
     
     try {
+      console.log(`Attempting to fix error in ${activeFile}:`, errorMessage);
       setIsFixingError(true);
       onFixError(true);
       
@@ -137,10 +226,12 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to fix error');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fix error');
       }
       
       const data = await response.json();
+      console.log("Error fixed successfully");
       
       // Update the file content with the fixed code
       setFileContent(data.fixed_code);
@@ -167,13 +258,13 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
   };
 
   const getFileIcon = (filePath) => {
-    if (filePath.endsWith('.js') || filePath.endsWith('.jsx')) return '📄';
-    if (filePath.endsWith('.css')) return '🎨';
-    if (filePath.endsWith('.html')) return '🌐';
-    if (filePath.endsWith('.json')) return '📦';
-    if (filePath.endsWith('.svg')) return '🖼️';
-    if (filePath.endsWith('.md')) return '📝';
-    return '📄';
+    if (filePath.endsWith('.js') || filePath.endsWith('.jsx')) return <FaFile className="js-file-icon" />;
+    if (filePath.endsWith('.css')) return <FaFile className="css-file-icon" />;
+    if (filePath.endsWith('.html')) return <FaFile className="html-file-icon" />;
+    if (filePath.endsWith('.json')) return <FaFile className="json-file-icon" />;
+    if (filePath.endsWith('.svg')) return <FaFile className="svg-file-icon" />;
+    if (filePath.endsWith('.md')) return <FaFile className="md-file-icon" />;
+    return <FaFile />;
   };
 
   const getFileLanguage = (filePath) => {
@@ -186,6 +277,58 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     if (filePath.endsWith('.md')) return 'markdown';
     return 'plaintext';
   };
+
+  // Filter files based on search query
+  const filterFiles = (node, path = '', results = {}, parentMatched = false) => {
+    if (!node) return results;
+    
+    if (searchQuery.trim() === '') return node;
+    
+    const searchLower = searchQuery.toLowerCase();
+    let nodeMatched = parentMatched;
+    
+    // Copy non-file/dir properties
+    const filteredNode = {};
+    Object.entries(node).forEach(([key, value]) => {
+      if (key === '__isDir' || key === '__filePath') {
+        filteredNode[key] = value;
+      }
+    });
+    
+    // Process entries
+    Object.entries(node).forEach(([name, value]) => {
+      if (name === '__isDir' || name === '__filePath') return;
+      
+      const fullPath = path ? `${path}/${name}` : name;
+      
+      if (value.__isDir) {
+        // It's a directory
+        const matchesSearch = name.toLowerCase().includes(searchLower);
+        const subResults = filterFiles(value, fullPath, {}, matchesSearch || parentMatched);
+        
+        // Check if there are any entries in the filtered subdirectory
+        const hasMatchingChildren = Object.keys(subResults).some(key => 
+          key !== '__isDir' && key !== '__filePath'
+        );
+        
+        if (matchesSearch || hasMatchingChildren) {
+          filteredNode[name] = subResults;
+          nodeMatched = true;
+        }
+      } else if (value.__filePath) {
+        // It's a file
+        const filePath = value.__filePath;
+        if (name.toLowerCase().includes(searchLower) || parentMatched) {
+          filteredNode[name] = { __filePath: filePath };
+          nodeMatched = true;
+        }
+      }
+    });
+    
+    return nodeMatched ? filteredNode : {};
+  };
+
+  const filteredFileTree = searchQuery.trim() ? filterFiles(fileTree) : fileTree;
 
   // Recursive function to render the file tree
   const renderFileTreeNode = (node, path = '', isRoot = true) => {
@@ -220,7 +363,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
             return (
               <div key={fullPath} className="portfolio-directory-node">
                 <div className="portfolio-directory-name">
-                  <span className="directory-icon">📁</span>
+                  <FaFolder className="directory-icon" />
                   <span className="directory-label">{name}</span>
                 </div>
                 <div className="portfolio-directory-children">
@@ -237,7 +380,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                 className={`portfolio-file-item ${activeFile === filePath ? 'active' : ''}`}
                 onClick={() => handleFileSelect(filePath)}
               >
-                <span className="file-icon">{getFileIcon(filePath)}</span>
+                {getFileIcon(filePath)}
                 <span className="file-name">{name}</span>
               </div>
             );
@@ -250,7 +393,15 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
   };
 
   if (!portfolio) {
-    return <div className="portfolio-no-portfolio">No portfolio selected</div>;
+    return (
+      <div className="portfolio-preview-container portfolio-no-portfolio">
+        <div className="portfolio-empty-message">
+          <FaInfo className="empty-icon" />
+          <h3>No Portfolio Selected</h3>
+          <p>Create or select a portfolio to preview and edit</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -262,14 +413,14 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
             className={`portfolio-preview-tab ${previewMode === 'code' ? 'active' : ''}`}
             onClick={() => setPreviewMode('code')}
           >
-            <span className="tab-icon">💻</span>
+            <FaCode className="tab-icon" />
             Code Editor
           </button>
           <button 
             className={`portfolio-preview-tab ${previewMode === 'preview' ? 'active' : ''}`}
             onClick={() => setPreviewMode('preview')}
           >
-            <span className="tab-icon">👁️</span>
+            <FaEye className="tab-icon" />
             Live Preview
           </button>
         </div>
@@ -285,11 +436,16 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                   type="text" 
                   placeholder="Search files..."
                   className="portfolio-file-search-input"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
             </div>
             <div className="portfolio-file-tree">
-              {renderFileTreeNode(fileTree)}
+              {Object.keys(filteredFileTree).length > 0 ? 
+                renderFileTreeNode(filteredFileTree) : 
+                <div className="no-files-message">No files matching search</div>
+              }
             </div>
           </div>
           
@@ -298,12 +454,16 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
               <>
                 <div className="portfolio-editor-header">
                   <div className="portfolio-active-file">
-                    <span className="file-icon">{getFileIcon(activeFile)}</span>
+                    {getFileIcon(activeFile)}
                     <span className="file-path">{activeFile}</span>
                   </div>
                   <div className="portfolio-editor-actions">
-                    <button className="portfolio-editor-action-btn">
-                      <span>Format</span>
+                    <button 
+                      className="portfolio-editor-action-btn"
+                      onClick={handleRefreshPreview}
+                    >
+                      <FaSync className={isPreviewRefreshing ? 'refreshing' : ''} />
+                      <span>Refresh Preview</span>
                     </button>
                   </div>
                 </div>
@@ -317,7 +477,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                 {errorMessage && (
                   <div className="portfolio-error-container">
                     <div className="portfolio-error-message">
-                      <span className="error-icon">⚠️</span>
+                      <FaExclamationTriangle className="error-icon" />
                       <span className="error-text">{errorMessage}</span>
                     </div>
                     <button 
@@ -332,7 +492,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                         </>
                       ) : (
                         <>
-                          <span className="fix-icon">🔧</span>
+                          <FaWrench className="fix-icon" />
                           <span>Auto-Fix Error</span>
                         </>
                       )}
@@ -342,7 +502,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
               </>
             ) : (
               <div className="portfolio-no-file-selected">
-                <div className="no-file-icon">📁</div>
+                <FaCode className="no-file-icon" />
                 <h3>No file selected</h3>
                 <p>Select a file from the explorer to view and edit</p>
               </div>
@@ -353,22 +513,35 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         <div className="portfolio-live-preview-container">
           <div className="portfolio-preview-toolbar">
             <div className="portfolio-preview-device-selector">
-              <button className="portfolio-device-button active">
-                <span className="device-icon">💻</span>
+              <button 
+                className={`portfolio-device-button ${previewDevice === 'desktop' ? 'active' : ''}`}
+                onClick={() => setPreviewDevice('desktop')}
+              >
+                <FaDesktop className="device-icon" />
                 <span>Desktop</span>
               </button>
-              <button className="portfolio-device-button">
-                <span className="device-icon">📱</span>
+              <button 
+                className={`portfolio-device-button ${previewDevice === 'mobile' ? 'active' : ''}`}
+                onClick={() => setPreviewDevice('mobile')}
+              >
+                <FaMobile className="device-icon" />
                 <span>Mobile</span>
               </button>
             </div>
-            <button className="portfolio-preview-refresh-btn">
-              <span className="refresh-icon">🔄</span>
+            <button 
+              className="portfolio-preview-refresh-btn"
+              onClick={handleRefreshPreview}
+              disabled={isPreviewRefreshing}
+            >
+              <FaSync className={`refresh-icon ${isPreviewRefreshing ? 'refreshing' : ''}`} />
               <span>Refresh</span>
             </button>
           </div>
-          <div className="portfolio-preview-frame-container">
+          <div 
+            className={`portfolio-preview-frame-container ${previewDevice === 'mobile' ? 'mobile-container' : ''}`}
+          >
             <iframe
+              ref={iframeRef}
               className="portfolio-preview-frame"
               title="Portfolio Preview"
               srcDoc={previewHtml}

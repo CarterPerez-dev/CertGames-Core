@@ -1,4 +1,4 @@
-// frontend/my-react-app/src/components/pages/Portfolio/PortfolioForm.js
+// Enhanced PortfolioForm Component
 import React, { useState, useEffect } from 'react';
 import { FaPalette, FaDesktop, FaCode, FaPencilAlt, FaLayerGroup, FaMagic, FaArrowRight, FaArrowLeft, FaRocket, FaCheck, FaTimes, FaInfoCircle } from 'react-icons/fa';
 import './portfolio.css';
@@ -19,6 +19,7 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
     features: false,
     resumeText: false
   });
+  const [formSubmitting, setFormSubmitting] = useState(false);
   
   const totalSteps = 4;
 
@@ -69,6 +70,7 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
   }, [resumeText, touchedFields.resumeText]);
 
   const handleTemplateStyleChange = (style) => {
+    console.log(`Selected template style: ${style}`);
     setPreferences(prev => ({
       ...prev,
       template_style: style
@@ -80,6 +82,7 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
   };
 
   const handleColorSchemeChange = (scheme) => {
+    console.log(`Selected color scheme: ${scheme}`);
     setPreferences(prev => ({
       ...prev,
       color_scheme: scheme
@@ -91,6 +94,7 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
   };
 
   const handleFeatureToggle = (feature) => {
+    console.log(`Toggling feature: ${feature}`);
     setPreferences(prev => {
       const features = [...prev.features];
       
@@ -126,7 +130,14 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
     }
     
     try {
+      setFormSubmitting(true);
       onGenerationStart();
+      
+      console.log("Submitting portfolio generation request:", {
+        userId,
+        resumeLength: resumeText.length,
+        preferences
+      });
       
       const response = await fetch('/api/portfolio/generate', {
         method: 'POST',
@@ -146,16 +157,24 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
       }
       
       const data = await response.json();
+      console.log("Portfolio generation successful:", {
+        portfolioId: data.portfolio_id,
+        componentCount: Object.keys(data.components || {}).length
+      });
+      
       onGenerationComplete(data);
+      setFormSubmitting(false);
       
     } catch (err) {
       console.error('Error generating portfolio:', err);
       onError(err.message || 'Failed to generate portfolio. Please try again.');
+      setFormSubmitting(false);
     }
   };
 
   const nextStep = () => {
     if (step < totalSteps && isStepValid()) {
+      console.log(`Moving from step ${step} to step ${step + 1}`);
       setStep(prev => prev + 1);
       window.scrollTo(0, 0);
     }
@@ -163,6 +182,7 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
 
   const prevStep = () => {
     if (step > 1) {
+      console.log(`Moving from step ${step} to step ${step - 1}`);
       setStep(prev => prev - 1);
       window.scrollTo(0, 0);
     }
@@ -171,6 +191,12 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
   const renderProgressBar = () => {
     return (
       <div className="portfolio-form-progress">
+        <div className="step-connector"></div>
+        <div 
+          className="step-connector-progress" 
+          style={{ width: `${((step - 1) / (totalSteps - 1)) * 100}%` }}
+        ></div>
+        
         {[...Array(totalSteps)].map((_, index) => {
           const stepNumber = index + 1;
           return (
@@ -192,7 +218,6 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
                 {stepNumber === 3 && 'Features'}
                 {stepNumber === 4 && 'Resume'}
               </div>
-              {stepNumber < totalSteps && <div className="step-connector"></div>}
             </div>
           );
         })}
@@ -343,9 +368,9 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
                 <div className="color-overlay">
                   <FaCheck className="color-selected-icon" />
                 </div>
-                <div className="color-swatch"></div>
-                <div className="color-swatch"></div>
-                <div className="color-swatch"></div>
+                <div className="color-swatch professional-1"></div>
+                <div className="color-swatch professional-2"></div>
+                <div className="color-swatch professional-3"></div>
               </div>
               <div className="color-info">
                 <h3>Professional</h3>
@@ -364,9 +389,9 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
                 <div className="color-overlay">
                   <FaCheck className="color-selected-icon" />
                 </div>
-                <div className="color-swatch"></div>
-                <div className="color-swatch"></div>
-                <div className="color-swatch"></div>
+                <div className="color-swatch creative-1"></div>
+                <div className="color-swatch creative-2"></div>
+                <div className="color-swatch creative-3"></div>
               </div>
               <div className="color-info">
                 <h3>Creative</h3>
@@ -385,9 +410,9 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
                 <div className="color-overlay">
                   <FaCheck className="color-selected-icon" />
                 </div>
-                <div className="color-swatch"></div>
-                <div className="color-swatch"></div>
-                <div className="color-swatch"></div>
+                <div className="color-swatch tech-1"></div>
+                <div className="color-swatch tech-2"></div>
+                <div className="color-swatch tech-3"></div>
               </div>
               <div className="color-info">
                 <h3>Tech</h3>
@@ -406,9 +431,9 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
                 <div className="color-overlay">
                   <FaCheck className="color-selected-icon" />
                 </div>
-                <div className="color-swatch"></div>
-                <div className="color-swatch"></div>
-                <div className="color-swatch"></div>
+                <div className="color-swatch minimal-1"></div>
+                <div className="color-swatch minimal-2"></div>
+                <div className="color-swatch minimal-3"></div>
               </div>
               <div className="color-info">
                 <h3>Minimal</h3>
@@ -417,20 +442,6 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
                   <span>Best for: Photography, Architecture, Any Industry</span>
                 </div>
               </div>
-            </div>
-          </div>
-          
-          <div className="portfolio-form-guidance">
-            <FaInfoCircle className="guidance-icon" />
-            <div className="guidance-content">
-              <h4>Color Psychology in Professional Portfolios</h4>
-              <p>Colors evoke emotional responses and set expectations:</p>
-              <ul>
-                <li><strong>Blues</strong>: Convey trustworthiness, stability, and professionalism</li>
-                <li><strong>Purples</strong>: Associated with creativity, luxury, and innovation</li>
-                <li><strong>Greens</strong>: Suggest growth, technology, and environmental awareness</li>
-                <li><strong>Black & White</strong>: Create a sense of sophistication and timelessness</li>
-              </ul>
             </div>
           </div>
           
@@ -634,20 +645,6 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
             </div>
           </div>
           
-          <div className="portfolio-form-guidance">
-            <FaInfoCircle className="guidance-icon" />
-            <div className="guidance-content">
-              <h4>Feature Selection Best Practices</h4>
-              <p>Consider these tips when selecting features:</p>
-              <ul>
-                <li>Include sections that best highlight your strengths and relevant experience</li>
-                <li>Don't overwhelm visitors - focus on quality over quantity</li>
-                <li>Ensure your most important information is prominently featured</li>
-                <li>Select features that are standard in your industry</li>
-              </ul>
-            </div>
-          </div>
-          
           <div className="portfolio-form-navigation">
             <button 
               className="portfolio-back-button"
@@ -792,10 +789,19 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
             <button 
               className="portfolio-generate-button"
               onClick={handleGeneratePortfolio}
-              disabled={!isStepValid()}
+              disabled={!isStepValid() || formSubmitting}
             >
-              <FaMagic className="button-icon" />
-              <span>Generate Portfolio</span>
+              {formSubmitting ? (
+                <>
+                  <div className="button-spinner"></div>
+                  <span>Generating...</span>
+                </>
+              ) : (
+                <>
+                  <FaMagic className="button-icon" />
+                  <span>Generate Portfolio</span>
+                </>
+              )}
             </button>
           </div>
         </div>

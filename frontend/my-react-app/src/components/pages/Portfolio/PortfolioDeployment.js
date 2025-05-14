@@ -1,6 +1,6 @@
-// frontend/my-react-app/src/components/pages/Portfolio/PortfolioDeployment.js
+// Enhanced PortfolioDeployment Component
 import React, { useState, useEffect } from 'react';
-import { FaRocket, FaGithub, FaLink, FaCheckCircle, FaInfoCircle, FaClipboard, FaCode } from 'react-icons/fa';
+import { FaRocket, FaGithub, FaLink, FaCheckCircle, FaInfoCircle, FaClipboard, FaCode, FaQuestion, FaChevronDown, FaExternalLinkAlt } from 'react-icons/fa';
 import './portfolio.css';
 
 const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymentComplete, onError }) => {
@@ -10,10 +10,37 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
   const [deploymentInProgress, setDeploymentInProgress] = useState(false);
   const [deploymentStage, setDeploymentStage] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [expandedFaq, setExpandedFaq] = useState(null);
+  const [hasInteractedWithForm, setHasInteractedWithForm] = useState(false);
+
+  // Frequently Asked Questions
+  const faqItems = [
+    {
+      question: "Will I be able to update my portfolio later?",
+      answer: "Yes, any changes you make to your portfolio code will be automatically deployed to your live site. You can edit your portfolio at any time through the Code Editor tab."
+    },
+    {
+      question: "Is the hosting really free?",
+      answer: "Yes, Vercel provides free hosting for personal projects. You can even connect a custom domain if you wish. The free tier includes SSL certificates, global CDN, and continuous deployment."
+    },
+    {
+      question: "Are my tokens stored securely?",
+      answer: "Your tokens are used only for the deployment process and are not stored on our servers. For added security, we recommend creating tokens with minimal permissions and revoking them after your portfolio is deployed."
+    },
+    {
+      question: "How do I set up a custom domain?",
+      answer: "After deployment, you can set up a custom domain through the Vercel dashboard. Go to your project settings, navigate to the Domains section, and follow the instructions to add and configure your domain."
+    },
+    {
+      question: "What happens if I make changes to my portfolio?",
+      answer: "Any changes you make to your portfolio in the Code Editor will be automatically committed to your GitHub repository. Vercel will detect these changes and automatically redeploy your portfolio."
+    }
+  ];
 
   // Animation for deployment stages
   useEffect(() => {
     if (deploymentInProgress) {
+      console.log("Deployment in progress, starting stage animation");
       const stageInterval = setInterval(() => {
         setDeploymentStage(prevStage => {
           if (prevStage >= 3) {
@@ -28,6 +55,29 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
     }
   }, [deploymentInProgress]);
 
+  // Validate form fields
+  const validateForm = () => {
+    if (!githubToken || !vercelToken) {
+      return false;
+    }
+    
+    if (githubToken.length < 10 || vercelToken.length < 10) {
+      return false;
+    }
+    
+    return true;
+  };
+
+  const handleInputChange = (e, field) => {
+    setHasInteractedWithForm(true);
+    
+    if (field === 'github') {
+      setGithubToken(e.target.value);
+    } else if (field === 'vercel') {
+      setVercelToken(e.target.value);
+    }
+  };
+
   const handleDeploy = async (e) => {
     e.preventDefault();
     
@@ -38,6 +88,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
     }
     
     try {
+      console.log("Starting deployment process");
       onDeploymentStart();
       setDeploymentInProgress(true);
       setDeploymentStage(0);
@@ -61,11 +112,13 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
       }
       
       const data = await response.json();
+      console.log("Deployment successful:", data);
       
       setDeploymentInProgress(false);
       onDeploymentComplete(data);
       
     } catch (err) {
+      console.error('Error deploying portfolio:', err);
       setDeploymentInProgress(false);
       onError(err.message || 'Deployment failed. Please try again.');
     }
@@ -76,6 +129,14 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
+  };
+
+  const toggleFaq = (index) => {
+    if (expandedFaq === index) {
+      setExpandedFaq(null);
+    } else {
+      setExpandedFaq(index);
+    }
   };
 
   const isDeployed = portfolio?.deployment?.deployed;
@@ -135,10 +196,12 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                 rel="noopener noreferrer"
                 className="view-portfolio-button"
               >
+                <FaExternalLinkAlt className="view-icon" />
                 <span>View Portfolio</span>
               </a>
               
               <button className="share-portfolio-button">
+                <FaLink className="share-icon" />
                 <span>Share Portfolio</span>
               </button>
             </div>
@@ -235,11 +298,11 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                       <div className="deployment-benefits">
                         <h4>Deployment Benefits:</h4>
                         <ul className="benefits-list">
-                          <li>Free, reliable hosting</li>
-                          <li>Custom domain support</li>
-                          <li>SSL certificates included</li>
+                          <li>Free, reliable hosting with global CDN</li>
+                          <li>Custom domain support with SSL included</li>
+                          <li>Professional URL to share with employers</li>
                           <li>Automatic updates when you edit your portfolio</li>
-                          <li>Global CDN for fast loading anywhere in the world</li>
+                          <li>Analytics to track visitor engagement</li>
                         </ul>
                       </div>
                       
@@ -272,10 +335,14 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                               type="password"
                               id="github-token"
                               value={githubToken}
-                              onChange={(e) => setGithubToken(e.target.value)}
+                              onChange={(e) => handleInputChange(e, 'github')}
                               placeholder="Enter your GitHub access token"
+                              className={hasInteractedWithForm && !githubToken ? 'input-error' : ''}
                             />
                           </div>
+                          {hasInteractedWithForm && !githubToken && 
+                            <div className="input-error-message">GitHub token is required</div>
+                          }
                           <p className="token-help">
                             <a 
                               href="https://github.com/settings/tokens/new" 
@@ -306,10 +373,14 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                               type="password"
                               id="vercel-token"
                               value={vercelToken}
-                              onChange={(e) => setVercelToken(e.target.value)}
+                              onChange={(e) => handleInputChange(e, 'vercel')}
                               placeholder="Enter your Vercel access token"
+                              className={hasInteractedWithForm && !vercelToken ? 'input-error' : ''}
                             />
                           </div>
+                          {hasInteractedWithForm && !vercelToken && 
+                            <div className="input-error-message">Vercel token is required</div>
+                          }
                           <p className="token-help">
                             <a 
                               href="https://vercel.com/account/tokens" 
@@ -334,7 +405,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                         <button 
                           type="submit"
                           className="deploy-button"
-                          disabled={!githubToken || !vercelToken}
+                          disabled={!validateForm()}
                         >
                           <FaRocket className="button-icon" />
                           <span>Deploy Portfolio</span>
@@ -345,34 +416,29 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                 </div>
               </div>
               
-              <div className="portfolio-deployment-faq">
-                <h3>Frequently Asked Questions</h3>
+              <div className="faq-container">
+                <h3>
+                  <FaQuestion className="faq-header-icon" />
+                  Frequently Asked Questions
+                </h3>
                 
                 <div className="faq-questions">
-                  <div className="faq-item">
-                    <h4>Will I be able to update my portfolio later?</h4>
-                    <p>
-                      Yes, any changes you make to your portfolio code will be automatically 
-                      deployed to your live site.
-                    </p>
-                  </div>
-                  
-                  <div className="faq-item">
-                    <h4>Is the hosting really free?</h4>
-                    <p>
-                      Yes, Vercel provides free hosting for personal projects. You can even connect 
-                      a custom domain if you wish.
-                    </p>
-                  </div>
-                  
-                  <div className="faq-item">
-                    <h4>Are my tokens stored securely?</h4>
-                    <p>
-                      Your tokens are used only for the deployment process and are not stored on 
-                      our servers. For added security, we recommend creating tokens with minimal 
-                      permissions.
-                    </p>
-                  </div>
+                  {faqItems.map((item, index) => (
+                    <div key={index} className="faq-item">
+                      <div 
+                        className="faq-question"
+                        onClick={() => toggleFaq(index)}
+                      >
+                        <span>{item.question}</span>
+                        <FaChevronDown className={`faq-toggle ${expandedFaq === index ? 'expanded' : ''}`} />
+                      </div>
+                      {expandedFaq === index && (
+                        <div className="faq-answer">
+                          {item.answer}
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
             </>

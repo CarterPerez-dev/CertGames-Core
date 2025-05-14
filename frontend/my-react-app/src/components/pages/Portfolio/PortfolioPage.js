@@ -1,4 +1,4 @@
-// frontend/my-react-app/src/components/pages/Portfolio/PortfolioPage.js
+// Enhanced PortfolioPage Component
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import './portfolio.css';
@@ -6,7 +6,9 @@ import PortfolioForm from './PortfolioForm';
 import PortfolioPreview from './PortfolioPreview';
 import PortfolioList from './PortfolioList';
 import PortfolioDeployment from './PortfolioDeployment';
-import { FaCode, FaRocket, FaList, FaPlus, FaStar } from 'react-icons/fa';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorMessage from '../common/ErrorMessage';
+import { FaCode, FaRocket, FaList, FaPlus, FaStar, FaExclamationCircle, FaSync } from 'react-icons/fa';
 
 const PortfolioPage = () => {
   const { userId } = useSelector((state) => state.user);
@@ -18,19 +20,25 @@ const PortfolioPage = () => {
   const [generationComplete, setGenerationComplete] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('Loading...');
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+
+  console.log("Rendering PortfolioPage component");
 
   // Fetch user's portfolios on initial load
   useEffect(() => {
     if (userId) {
+      console.log("User ID detected, fetching portfolios");
       fetchPortfolios();
     }
   }, [userId]);
 
   const fetchPortfolios = async () => {
     try {
+      setRefreshing(true);
       setLoading(true);
       setLoadingMessage('Fetching your portfolios...');
       
+      console.log("Making API request to fetch portfolios");
       const response = await fetch('/api/portfolio/list', {
         headers: {
           'X-User-Id': userId
@@ -42,16 +50,25 @@ const PortfolioPage = () => {
       }
       
       const data = await response.json();
+      console.log(`Fetched ${data.portfolios?.length || 0} portfolios`);
       setPortfolios(data.portfolios || []);
       setLoading(false);
+      setRefreshing(false);
     } catch (err) {
       console.error('Error fetching portfolios:', err);
       setError('Failed to load existing portfolios. Please try again later.');
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
+  const handleRefresh = () => {
+    console.log("Manual refresh triggered");
+    fetchPortfolios();
+  };
+
   const handlePortfolioGenerated = (portfolioData) => {
+    console.log("Portfolio generation completed successfully", portfolioData);
     setCurrentPortfolio(portfolioData);
     setGenerationComplete(true);
     fetchPortfolios(); // Refresh the list
@@ -59,11 +76,18 @@ const PortfolioPage = () => {
   };
 
   const handlePortfolioError = (errorMessage) => {
+    console.error("Portfolio error:", errorMessage);
     setError(errorMessage);
     setLoading(false);
   };
 
+  const handleDismissError = () => {
+    console.log("Dismissing error message");
+    setError(null);
+  };
+
   const handleDeploymentComplete = (deploymentData) => {
+    console.log("Portfolio deployment completed", deploymentData);
     // Update the current portfolio with deployment info
     setCurrentPortfolio(prev => ({
       ...prev,
@@ -79,6 +103,7 @@ const PortfolioPage = () => {
 
   const handleSelectPortfolio = async (portfolioId) => {
     try {
+      console.log(`Selecting portfolio with ID: ${portfolioId}`);
       setLoading(true);
       setLoadingMessage('Loading portfolio...');
       
@@ -104,6 +129,7 @@ const PortfolioPage = () => {
       }
       
       const data = await response.json();
+      console.log("Received portfolio details successfully");
       
       // Complete progress
       setLoadingProgress(100);
@@ -118,6 +144,7 @@ const PortfolioPage = () => {
       setTimeout(() => setLoadingProgress(0), 500);
       
     } catch (err) {
+      console.error("Error selecting portfolio:", err);
       setError('Failed to load portfolio details');
       setLoading(false);
       setLoadingProgress(0);
@@ -134,12 +161,12 @@ const PortfolioPage = () => {
         
         <div className="portfolio-page-actions">
           <button 
-            className="portfolio-refresh-button"
-            onClick={fetchPortfolios}
-            disabled={loading}
+            className={`portfolio-refresh-button ${refreshing ? 'refreshing' : ''}`}
+            onClick={handleRefresh}
+            disabled={loading || refreshing}
           >
-            <span className="refresh-icon">🔄</span>
-            <span>Refresh</span>
+            <FaSync className={`refresh-icon ${refreshing ? 'spin' : ''}`} />
+            <span>{refreshing ? 'Refreshing...' : 'Refresh'}</span>
           </button>
         </div>
       </div>
@@ -184,40 +211,24 @@ const PortfolioPage = () => {
 
       {error && (
         <div className="portfolio-error-banner">
-          <div className="portfolio-error-content">
-            <span className="portfolio-error-icon">⚠️</span>
-            <p className="portfolio-error-message">{error}</p>
-          </div>
-          <button className="portfolio-error-dismiss" onClick={() => setError(null)}>
-            ×
-          </button>
+          <ErrorMessage message={error} onDismiss={handleDismissError} />
         </div>
       )}
 
       <div className="portfolio-page-content">
         {loading ? (
           <div className="portfolio-loading-container">
-            <div className="portfolio-loading-content">
-              <div className="portfolio-loading-animation">
-                <div className="portfolio-loading-spinner">
-                  <div className="spinner-inner"></div>
-                </div>
-                <div className="portfolio-loading-icon">
-                  <FaStar className="loading-star" />
-                </div>
+            <LoadingSpinner message={loadingMessage} />
+            
+            {loadingProgress > 0 && (
+              <div className="portfolio-loading-progress-container">
+                <div 
+                  className="portfolio-loading-progress-bar" 
+                  style={{ width: `${loadingProgress}%` }}
+                ></div>
+                <span className="portfolio-loading-progress-text">{loadingProgress}%</span>
               </div>
-              <h3 className="portfolio-loading-message">{loadingMessage}</h3>
-              
-              {loadingProgress > 0 && (
-                <div className="portfolio-loading-progress-container">
-                  <div 
-                    className="portfolio-loading-progress-bar" 
-                    style={{ width: `${loadingProgress}%` }}
-                  ></div>
-                  <span className="portfolio-loading-progress-text">{loadingProgress}%</span>
-                </div>
-              )}
-            </div>
+            )}
           </div>
         ) : (
           <>
@@ -263,7 +274,7 @@ const PortfolioPage = () => {
               <PortfolioList 
                 portfolios={portfolios}
                 onSelectPortfolio={handleSelectPortfolio}
-                onRefresh={fetchPortfolios}
+                onRefresh={handleRefresh}
               />
             )}
             
