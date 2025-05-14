@@ -134,11 +134,10 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
     try {
       setFormSubmitting(true);
       
-      // Track generation start time
-      const generationStartTime = Date.now();
-      
-      // Initial loading message
-      onGenerationStart();
+      // Call this ONCE to initiate loading sequence in PortfolioPage
+      if (onGenerationStart) {
+        onGenerationStart(); 
+      }
       
       console.log("Starting portfolio generation request:", {
         userId,
@@ -146,7 +145,6 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
         preferences
       });
       
-      // Step 1: Initiate generation process
       const response = await fetch('/api/portfolio/generate-stream', {
         method: 'POST',
         headers: {
@@ -164,44 +162,36 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
         throw new Error(errorData.error || 'Failed to start portfolio generation');
       }
       
-      // Step 2: Start polling for completion
-      const startTime = Date.now();
-      const maxWaitTime = 10 * 60 * 1200; // 12 minutes max wait
+      const pollingStartTime = Date.now(); // For polling timeout, not the visual message start
       let attemptCount = 0;
-      let lastStatusData = null;
       
       const checkStatusInterval = setInterval(async () => {
         try {
           attemptCount++;
           console.log(`Checking portfolio status: attempt ${attemptCount}`);
           
-          // Update loading message based on elapsed time
-          if (onGenerationStart) {
-            const loadingMessage = getPortfolioGenerationMessage(generationStartTime);
-            onGenerationStart(loadingMessage);
+
+          // Check for timeout
+          if (Date.now() - pollingStartTime > 10 * 60 * 1200) { 
+              clearInterval(checkStatusInterval);
+              throw new Error("Portfolio generation timed out. Please try again.");
           }
-          
+
           const statusResponse = await fetch('/api/portfolio/status/generation', {
-            headers: {
-              'X-User-Id': userId
-            }
+            headers: { 'X-User-Id': userId }
           });
           
           if (statusResponse.ok) {
             const statusData = await statusResponse.json();
             console.log("Status check response:", statusData);
             
-            // Portfolio is ready - check both success and portfolio_id fields
             if (statusData.success && statusData.status === 'completed' && statusData.portfolio_id) {
               console.log("Portfolio generation completed! ID:", statusData.portfolio_id);
               clearInterval(checkStatusInterval);
               
-              // Fetch the complete portfolio - add error handling
               try {
                 const portfolioResponse = await fetch(`/api/portfolio/${statusData.portfolio_id}`, {
-                  headers: {
-                    'X-User-Id': userId
-                  }
+                  headers: { 'X-User-Id': userId }
                 });
                 
                 if (portfolioResponse.ok) {
@@ -215,20 +205,26 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
                   onGenerationComplete(portfolioData.portfolio);
                   setFormSubmitting(false);
                 } else {
-                  // Handle portfolio fetch error
                   console.error("Error fetching portfolio:", await portfolioResponse.text());
                   throw new Error('Failed to fetch the generated portfolio');
                 }
               } catch (fetchError) {
                 console.error("Error fetching portfolio details:", fetchError);
-                throw fetchError;
+                throw fetchError; // Propagate to outer catch
               }
+            } else if (statusData.status === 'failed') {
+                clearInterval(checkStatusInterval);
+                throw new Error(statusData.error || "Portfolio generation failed on the server.");
             }
+            // If status is 'pending' or other, just continue polling
+          } else {
+              // Handle non-OK status response if necessary, or let it retry
+              console.warn("Status check returned non-OK:", statusResponse.status);
           }
         } catch (checkError) {
           clearInterval(checkStatusInterval);
           console.error('Error checking portfolio status:', checkError);
-          onError(checkError.message);
+          onError(checkError.message || 'An error occurred while checking generation status.');
           setFormSubmitting(false);
         }
       }, 5000); 

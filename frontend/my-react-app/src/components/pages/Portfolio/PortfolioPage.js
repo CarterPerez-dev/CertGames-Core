@@ -344,6 +344,24 @@ const PortfolioPage = () => {
                 onError={handlePortfolioError}
               />
             )}
+
+            {activeTab === 'list' && (
+              <PortfolioList
+                portfolios={portfolios}
+                onSelectPortfolio={handleSelectPortfolio}
+                onRefresh={handleRefresh}
+              />
+            )}
+
+            {activeTab === 'preview' && currentPortfolio && (
+              <PortfolioPreview
+                portfolio={currentPortfolio}
+                userId={userId}
+                onFixError={(isFixing) => { /* You might want to set a state for this if 'isFixingError' is used in PortfolioPreview */
+                    console.log("Fix error status from preview:", isFixing);
+                 }}
+              />
+            )}
             
             {activeTab === 'deploy' && currentPortfolio && (
               <PortfolioDeployment
@@ -389,5 +407,4 @@ const PortfolioPage = () => {
     </div>
   );
 };
-
 export default PortfolioPage;
