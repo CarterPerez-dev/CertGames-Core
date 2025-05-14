@@ -4,9 +4,10 @@ import json
 import logging
 import time
 import random
-import requests
+import re
 from flask import current_app
 from dotenv import load_dotenv
+import google.generativeai as genai
 
 load_dotenv()
 
@@ -20,14 +21,37 @@ class GeminiHelper:
             logger.error("GEMINI_API_KEY not found in environment variables")
             raise ValueError("GEMINI_API_KEY not found. Please set it in your environment variables.")
         
-        self.base_url = "https://generativelanguage.googleapis.com/v1beta/models"
-        self.model = "gemini-2.5-pro-preview-05-06"
-        self.max_retries = 3
+        # Initialize the Google Generative AI library
+        genai.configure(api_key=self.api_key)
+        
+        self.model_name = "gemini-2.5-pro-preview-05-06"
+        self.model = genai.GenerativeModel(self.model_name)
+        self.max_retries = 2
         self.backoff_factor = 2  # Exponential backoff
         
-        logger.info(f"GeminiHelper initialized with model: {self.model}")
+        # Configure safety settings
+        self.safety_settings = [
+            {
+                "category": "HARM_CATEGORY_HARASSMENT",
+                "threshold": "BLOCK_NONE"
+            },
+            {
+                "category": "HARM_CATEGORY_HATE_SPEECH",
+                "threshold": "BLOCK_NONE"
+            },
+            {
+                "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                "threshold": "BLOCK_NONE"
+            },
+            {
+                "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+                "threshold": "BLOCK_NONE"
+            }
+        ]
+        
+        logger.info(f"GeminiHelper initialized with model: {self.model_name}")
     
-    def generate_portfolio(self, resume_text, preferences, max_tokens=20000, temperature=0.2):
+    def generate_portfolio(self, resume_text, preferences, max_tokens=20000, temperature=0.3):
         """
         Generate a complete portfolio website based on resume text and user preferences.
         
@@ -48,10 +72,25 @@ class GeminiHelper:
         # Call Gemini API with retry logic
         for attempt in range(self.max_retries):
             try:
-                response = self._call_gemini_api(prompt, max_tokens, temperature)
+                generation_config = {
+                    "temperature": temperature,
+                    "max_output_tokens": max_tokens,
+                    "top_p": 0.95,
+                    "top_k": 40
+                }
+                
+                logger.debug(f"Calling Gemini API with prompt length: {len(prompt)}")
+                
+                # Make the API call
+                response = self.model.generate_content(
+                    prompt,
+                    generation_config=generation_config,
+                    safety_settings=self.safety_settings
+                )
                 
                 # Parse the response into portfolio components
-                portfolio = self._parse_portfolio_response(response)
+                generated_text = response.text
+                portfolio = self._extract_components_from_text(generated_text)
                 
                 logger.info("Successfully generated portfolio components")
                 return portfolio
@@ -62,7 +101,7 @@ class GeminiHelper:
                 time.sleep(wait_time)
                 
                 if attempt == self.max_retries - 1:
-                    logger.error(f"Failed to generate portfolio after {self.max_retries} attempts")
+                    logger.error(f"Failed to generate portfolio after {self.max_retries} attempts: {str(e)}")
                     raise
         
         # Should never reach here due to exception in the loop
@@ -84,47 +123,25 @@ class GeminiHelper:
         prompt = self._construct_fix_error_prompt(error_message, component_code, resume_text, preferences)
         
         try:
-            response = self._call_gemini_api(prompt, max_tokens=8000, temperature=0.1)
-            fixed_code = self._extract_code_from_response(response)
+            generation_config = {
+                "temperature": 0.2,
+                "max_output_tokens": 8000,
+                "top_p": 0.95,
+                "top_k": 40
+            }
+            
+            response = self.model.generate_content(
+                prompt,
+                generation_config=generation_config,
+                safety_settings=self.safety_settings
+            )
+            
+            fixed_code = self._extract_code_from_response(response.text)
             return fixed_code
+            
         except Exception as e:
             logger.error(f"Error fixing portfolio code: {str(e)}")
             raise
-    
-    def _call_gemini_api(self, prompt, max_tokens=20000, temperature=0.2):
-        """Call the Gemini API with given parameters"""
-        url = f"{self.base_url}/{self.model}:generateContent?key={self.api_key}"
-        
-        # Configure safety settings to be permissive
-        safety_settings = [
-            {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"}
-        ]
-        
-        payload = {
-            "contents": [{
-                "parts": [{"text": prompt}]
-            }],
-            "generationConfig": {
-                "temperature": temperature,
-                "maxOutputTokens": max_tokens,
-                "topP": 0.95,
-                "topK": 40
-            },
-            "safetySettings": safety_settings
-        }
-        
-        logger.debug(f"Calling Gemini API with prompt length: {len(prompt)}")
-        
-        response = requests.post(url, json=payload)
-        
-        if response.status_code != 200:
-            logger.error(f"Gemini API error: {response.status_code} - {response.text}")
-            raise Exception(f"API Error: {response.status_code} - {response.text}")
-        
-        return response.json()
     
     def _construct_portfolio_prompt(self, resume_text, preferences):
         """Construct a detailed prompt for portfolio generation"""
@@ -238,40 +255,8 @@ class GeminiHelper:
         """
         return prompt
     
-    def _parse_portfolio_response(self, response):
-        """Parse the Gemini API response into portfolio components"""
-        try:
-            # Extract the generated text from the response
-            generated_text = ""
-            candidates = response.get('candidates', [])
-            if candidates and 'content' in candidates[0]:
-                content = candidates[0]['content']
-                if 'parts' in content:
-                    for part in content['parts']:
-                        if 'text' in part:
-                            generated_text += part['text']
-            
-            if not generated_text:
-                logger.error("No generated text found in API response")
-                raise ValueError("Empty response from Gemini API")
-            
-            # Parse the code blocks from the generated text
-            portfolio_components = self._extract_components_from_text(generated_text)
-            
-            if not portfolio_components:
-                logger.error("Failed to extract components from generated text")
-                raise ValueError("Could not parse portfolio components from API response")
-            
-            return portfolio_components
-            
-        except Exception as e:
-            logger.error(f"Error parsing portfolio response: {str(e)}")
-            raise
-    
     def _extract_components_from_text(self, text):
         """Extract code components from the generated text using regex"""
-        import re
-        
         # Define patterns for different code blocks
         patterns = {
             'analysis': r'```analysis\s*([\s\S]*?)```',
@@ -307,24 +292,14 @@ class GeminiHelper:
         
         return components
     
-    def _extract_code_from_response(self, response):
+    def _extract_code_from_response(self, text):
         """Extract fixed code from error-fixing response"""
-        generated_text = ""
-        candidates = response.get('candidates', [])
-        if candidates and 'content' in candidates[0]:
-            content = candidates[0]['content']
-            if 'parts' in content:
-                for part in content['parts']:
-                    if 'text' in part:
-                        generated_text += part['text']
-        
         # Extract code block
-        import re
-        code_match = re.search(r'```(?:javascript|js)?\s*([\s\S]*?)```', generated_text)
+        code_match = re.search(r'```(?:javascript|js)?\s*([\s\S]*?)```', text)
         if code_match:
             return code_match.group(1).strip()
         
-        return generated_text.strip()
+        return text.strip()
 
 # Initialize the helper
 gemini_helper = GeminiHelper()

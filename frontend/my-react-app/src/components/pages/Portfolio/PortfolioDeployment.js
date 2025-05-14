@@ -1,5 +1,6 @@
 // frontend/my-react-app/src/components/pages/Portfolio/PortfolioDeployment.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { FaRocket, FaGithub, FaLink, FaCheckCircle, FaInfoCircle, FaClipboard, FaCode } from 'react-icons/fa';
 import './portfolio.css';
 
 const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymentComplete, onError }) => {
@@ -7,6 +8,25 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
   const [vercelToken, setVercelToken] = useState('');
   const [showTokenFields, setShowTokenFields] = useState(false);
   const [deploymentInProgress, setDeploymentInProgress] = useState(false);
+  const [deploymentStage, setDeploymentStage] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  // Animation for deployment stages
+  useEffect(() => {
+    if (deploymentInProgress) {
+      const stageInterval = setInterval(() => {
+        setDeploymentStage(prevStage => {
+          if (prevStage >= 3) {
+            clearInterval(stageInterval);
+            return 3;
+          }
+          return prevStage + 1;
+        });
+      }, 4000);
+      
+      return () => clearInterval(stageInterval);
+    }
+  }, [deploymentInProgress]);
 
   const handleDeploy = async (e) => {
     e.preventDefault();
@@ -20,6 +40,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
     try {
       onDeploymentStart();
       setDeploymentInProgress(true);
+      setDeploymentStage(0);
       
       const response = await fetch('/api/portfolio/deploy', {
         method: 'POST',
@@ -40,6 +61,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
       }
       
       const data = await response.json();
+      
       setDeploymentInProgress(false);
       onDeploymentComplete(data);
       
@@ -49,130 +71,308 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
     }
   };
 
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   const isDeployed = portfolio?.deployment?.deployed;
   const deploymentUrl = portfolio?.deployment?.url;
 
   return (
-    <div className="deployment-container">
-      <div className="deployment-header">
-        <h2>Deploy Your Portfolio</h2>
-        <p>Deploy your portfolio to Vercel for free hosting</p>
+    <div className="portfolio-deployment-container">
+      <div className="portfolio-deployment-header">
+        <h2>
+          <FaRocket className="deployment-title-icon" />
+          Deploy Your Portfolio
+        </h2>
+        <p className="portfolio-deployment-subtitle">Make your portfolio accessible online with just a few clicks</p>
       </div>
       
       {isDeployed ? (
-        <div className="deployment-success">
-          <div className="success-icon">✅</div>
-          <h3>Your Portfolio is Live!</h3>
-          <p>Your portfolio has been successfully deployed and is now accessible online.</p>
-          
-          <div className="deployment-url">
-            <p>Visit your portfolio at:</p>
-            <a 
-              href={deploymentUrl} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="portfolio-url"
-            >
-              {deploymentUrl}
-            </a>
+        <div className="portfolio-deployment-success">
+          <div className="deployment-success-header">
+            <FaCheckCircle className="deployment-success-icon" />
+            <h3>Your Portfolio is Live!</h3>
           </div>
           
-          <div className="deployment-note">
-            <p>
-              <strong>Note:</strong> It may take a few minutes for your portfolio to become fully available. 
-              If the link doesn't work immediately, please try again in a few minutes.
-            </p>
+          <div className="deployment-success-content">
+            <p>Your portfolio has been successfully deployed and is now accessible online.</p>
+            
+            <div className="deployment-url-container">
+              <div className="deployment-url-header">
+                <FaLink className="url-icon" />
+                <h4>Portfolio URL</h4>
+              </div>
+              
+              <div className="deployment-url-display">
+                <a 
+                  href={deploymentUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="portfolio-url-link"
+                >
+                  {deploymentUrl}
+                </a>
+                
+                <button 
+                  className="copy-url-button"
+                  onClick={() => copyToClipboard(deploymentUrl)}
+                  title="Copy URL to clipboard"
+                >
+                  <FaClipboard />
+                  <span className="copy-text">{copied ? 'Copied!' : 'Copy'}</span>
+                </button>
+              </div>
+            </div>
+            
+            <div className="deployment-actions">
+              <a 
+                href={deploymentUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="view-portfolio-button"
+              >
+                <span>View Portfolio</span>
+              </a>
+              
+              <button className="share-portfolio-button">
+                <span>Share Portfolio</span>
+              </button>
+            </div>
+            
+            <div className="deployment-note">
+              <FaInfoCircle className="note-icon" />
+              <p>
+                Your portfolio is automatically updated when you make changes to your code. 
+                If the link doesn't work immediately, please try again in a few minutes as 
+                deployment may take some time to propagate.
+              </p>
+            </div>
           </div>
         </div>
       ) : (
-        <div className="deployment-options">
+        <div className="portfolio-deployment-options">
           {deploymentInProgress ? (
-            <div className="deployment-in-progress">
-              <div className="loading-spinner"></div>
-              <h3>Deployment in Progress</h3>
-              <p>Your portfolio is being deployed. This may take a few minutes.</p>
-              <p>Please do not close this window.</p>
+            <div className="portfolio-deployment-progress">
+              <div className="deployment-progress-animation">
+                <div className="deployment-rocket-container">
+                  <div className="deployment-rocket">
+                    <FaRocket />
+                  </div>
+                  <div className="deployment-trail"></div>
+                </div>
+              </div>
+              
+              <h3 className="deployment-progress-title">Deployment in Progress</h3>
+              
+              <div className="deployment-stages">
+                <div className={`deployment-stage ${deploymentStage >= 0 ? 'active' : ''} ${deploymentStage > 0 ? 'completed' : ''}`}>
+                  <div className="stage-indicator">
+                    <div className="stage-number">1</div>
+                    <div className="stage-line"></div>
+                  </div>
+                  <div className="stage-content">
+                    <h4>Preparing Files</h4>
+                    <p>Optimizing your portfolio code for deployment</p>
+                  </div>
+                </div>
+                
+                <div className={`deployment-stage ${deploymentStage >= 1 ? 'active' : ''} ${deploymentStage > 1 ? 'completed' : ''}`}>
+                  <div className="stage-indicator">
+                    <div className="stage-number">2</div>
+                    <div className="stage-line"></div>
+                  </div>
+                  <div className="stage-content">
+                    <h4>Creating Repository</h4>
+                    <p>Setting up a GitHub repository with your portfolio</p>
+                  </div>
+                </div>
+                
+                <div className={`deployment-stage ${deploymentStage >= 2 ? 'active' : ''} ${deploymentStage > 2 ? 'completed' : ''}`}>
+                  <div className="stage-indicator">
+                    <div className="stage-number">3</div>
+                    <div className="stage-line"></div>
+                  </div>
+                  <div className="stage-content">
+                    <h4>Configuring Hosting</h4>
+                    <p>Setting up deployment on Vercel</p>
+                  </div>
+                </div>
+                
+                <div className={`deployment-stage ${deploymentStage >= 3 ? 'active' : ''} ${deploymentStage > 3 ? 'completed' : ''}`}>
+                  <div className="stage-indicator">
+                    <div className="stage-number">4</div>
+                  </div>
+                  <div className="stage-content">
+                    <h4>Going Live</h4>
+                    <p>Making your portfolio accessible online</p>
+                  </div>
+                </div>
+              </div>
+              
+              <p className="deployment-wait-message">This process may take a few minutes. Please do not close this window.</p>
             </div>
           ) : (
             <>
-              <div className="deployment-instructions">
-                <h3>Deployment Instructions</h3>
-                <p>
-                  To deploy your portfolio, we'll need to create a GitHub repository and connect it to Vercel.
-                  This process is automated, but requires access tokens for GitHub and Vercel.
-                </p>
+              <div className="portfolio-deployment-section">
+                <div className="deployment-section-header">
+                  <FaCode className="section-icon" />
+                  <h3>Get Your Portfolio Online</h3>
+                </div>
                 
-                {!showTokenFields ? (
-                  <button 
-                    className="show-tokens-button"
-                    onClick={() => setShowTokenFields(true)}
-                  >
-                    Continue to Deployment
-                  </button>
-                ) : (
-                  <form className="deployment-form" onSubmit={handleDeploy}>
-                    <div className="form-group">
-                      <label htmlFor="github-token">GitHub Access Token</label>
-                      <input 
-                        type="password"
-                        id="github-token"
-                        value={githubToken}
-                        onChange={(e) => setGithubToken(e.target.value)}
-                        placeholder="Enter your GitHub access token"
-                      />
-                      <p className="token-help">
-                        <a 
-                          href="https://github.com/settings/tokens/new" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                        >
-                          Create a GitHub token
-                        </a> with 'repo' and 'workflow' permissions.
-                      </p>
+                <div className="deployment-section-content">
+                  <p>
+                    Deploy your portfolio to make it accessible on the web. Your portfolio will be 
+                    hosted on Vercel, a leading platform for frontend applications, which provides 
+                    free hosting with custom domains, SSL certificates, and global CDN.
+                  </p>
+                  
+                  {!showTokenFields ? (
+                    <div className="deployment-starter">
+                      <div className="deployment-benefits">
+                        <h4>Deployment Benefits:</h4>
+                        <ul className="benefits-list">
+                          <li>Free, reliable hosting</li>
+                          <li>Custom domain support</li>
+                          <li>SSL certificates included</li>
+                          <li>Automatic updates when you edit your portfolio</li>
+                          <li>Global CDN for fast loading anywhere in the world</li>
+                        </ul>
+                      </div>
+                      
+                      <button 
+                        className="start-deployment-button"
+                        onClick={() => setShowTokenFields(true)}
+                      >
+                        <FaRocket className="button-icon" />
+                        <span>Start Deployment</span>
+                      </button>
                     </div>
-                    
-                    <div className="form-group">
-                      <label htmlFor="vercel-token">Vercel Access Token</label>
-                      <input 
-                        type="password"
-                        id="vercel-token"
-                        value={vercelToken}
-                        onChange={(e) => setVercelToken(e.target.value)}
-                        placeholder="Enter your Vercel access token"
-                      />
-                      <p className="token-help">
-                        <a 
-                          href="https://vercel.com/account/tokens" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
+                  ) : (
+                    <form className="portfolio-deployment-form" onSubmit={handleDeploy}>
+                      <div className="form-section">
+                        <h4 className="form-section-title">
+                          <FaGithub className="form-section-icon" />
+                          GitHub Configuration
+                        </h4>
+                        
+                        <p className="form-section-description">
+                          Your portfolio code will be stored in a GitHub repository. This allows 
+                          for version control and easy updates.
+                        </p>
+                        
+                        <div className="form-group">
+                          <label htmlFor="github-token">GitHub Access Token</label>
+                          <div className="input-with-icon">
+                            <FaGithub className="input-icon" />
+                            <input 
+                              type="password"
+                              id="github-token"
+                              value={githubToken}
+                              onChange={(e) => setGithubToken(e.target.value)}
+                              placeholder="Enter your GitHub access token"
+                            />
+                          </div>
+                          <p className="token-help">
+                            <a 
+                              href="https://github.com/settings/tokens/new" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                            >
+                              Create a GitHub token
+                            </a> with 'repo' and 'workflow' permissions.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="form-section">
+                        <h4 className="form-section-title">
+                          <FaRocket className="form-section-icon" />
+                          Vercel Configuration
+                        </h4>
+                        
+                        <p className="form-section-description">
+                          Vercel will build and host your portfolio, making it accessible online.
+                        </p>
+                        
+                        <div className="form-group">
+                          <label htmlFor="vercel-token">Vercel Access Token</label>
+                          <div className="input-with-icon">
+                            <FaRocket className="input-icon" />
+                            <input 
+                              type="password"
+                              id="vercel-token"
+                              value={vercelToken}
+                              onChange={(e) => setVercelToken(e.target.value)}
+                              placeholder="Enter your Vercel access token"
+                            />
+                          </div>
+                          <p className="token-help">
+                            <a 
+                              href="https://vercel.com/account/tokens" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                            >
+                              Create a Vercel token
+                            </a> from your account settings.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="form-actions">
+                        <button 
+                          type="button"
+                          className="deployment-back-button"
+                          onClick={() => setShowTokenFields(false)}
                         >
-                          Create a Vercel token
-                        </a> from your account settings.
-                      </p>
-                    </div>
-                    
-                    <button 
-                      type="submit"
-                      className="deploy-button"
-                      disabled={!githubToken || !vercelToken}
-                    >
-                      Deploy Portfolio
-                    </button>
-                  </form>
-                )}
+                          Back
+                        </button>
+                        
+                        <button 
+                          type="submit"
+                          className="deploy-button"
+                          disabled={!githubToken || !vercelToken}
+                        >
+                          <FaRocket className="button-icon" />
+                          <span>Deploy Portfolio</span>
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                </div>
               </div>
               
-              <div className="deployment-info">
-                <h3>What happens during deployment?</h3>
-                <ul>
-                  <li>A new GitHub repository will be created with your portfolio code</li>
-                  <li>The repository will be connected to Vercel for hosting</li>
-                  <li>Your portfolio will be deployed and available online</li>
-                  <li>You'll receive a URL to access your live portfolio</li>
-                </ul>
+              <div className="portfolio-deployment-faq">
+                <h3>Frequently Asked Questions</h3>
                 
-                <div className="deployment-note">
-                  <strong>Note:</strong> Your tokens are used only for deployment and are not stored on our servers.
+                <div className="faq-questions">
+                  <div className="faq-item">
+                    <h4>Will I be able to update my portfolio later?</h4>
+                    <p>
+                      Yes, any changes you make to your portfolio code will be automatically 
+                      deployed to your live site.
+                    </p>
+                  </div>
+                  
+                  <div className="faq-item">
+                    <h4>Is the hosting really free?</h4>
+                    <p>
+                      Yes, Vercel provides free hosting for personal projects. You can even connect 
+                      a custom domain if you wish.
+                    </p>
+                  </div>
+                  
+                  <div className="faq-item">
+                    <h4>Are my tokens stored securely?</h4>
+                    <p>
+                      Your tokens are used only for the deployment process and are not stored on 
+                      our servers. For added security, we recommend creating tokens with minimal 
+                      permissions.
+                    </p>
+                  </div>
                 </div>
               </div>
             </>
