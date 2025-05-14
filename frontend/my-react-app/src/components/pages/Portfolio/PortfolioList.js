@@ -1,6 +1,35 @@
 // Enhanced PortfolioList Component
 import React, { useState, useEffect } from 'react';
-import { FaRocket, FaEdit, FaCalendarAlt, FaPalette, FaSwatchbook, FaExternalLinkAlt, FaSearch, FaPlus, FaInfo, FaFilter, FaSort, FaSortAlphaDown, FaSortAmountUp, FaRegClock } from 'react-icons/fa';
+import { 
+  FaRocket, 
+  FaEdit, 
+  FaCalendarAlt, 
+  FaPalette, 
+  FaSwatchbook, 
+  FaExternalLinkAlt, 
+  FaSearch, 
+  FaPlus, 
+  FaInfo, 
+  FaFilter, 
+  FaSort, 
+  FaSortAlphaDown, 
+  FaSortAmountUp, 
+  FaRegClock, 
+  FaFolderOpen, 
+  FaSyncAlt, 
+  FaEye, 
+  FaPencilAlt,
+  FaExclamationCircle,
+  FaLightbulb,
+  FaChessKnight,
+  FaChessBishop,
+  FaChessQueen,
+  FaChessKing,
+  FaAtom,
+  FaAsterisk,
+  FaBahai,
+  FaBattleNet,
+} from 'react-icons/fa';
 import './portfolio.css';
 
 const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh }) => {
@@ -107,30 +136,30 @@ const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh }) => {
   const getTemplateIcon = (templateStyle) => {
     switch(templateStyle?.toLowerCase()) {
       case 'modern':
-        return '🌟';
+        return <FaBahai className="template-icon modern" />;
       case 'creative':
-        return '🎨';
+        return <FaBattleNet className="template-icon creative" />;
       case 'corporate':
-        return '💼';
+        return <FaAsterisk className="template-icon corporate" />;
       case 'tech':
-        return '💻';
+        return <FaAtom className="template-icon tech" />;
       default:
-        return '📄';
+        return <FaSwatchbook className="template-icon" />;
     }
   };
 
   const getColorIcon = (colorScheme) => {
     switch(colorScheme?.toLowerCase()) {
       case 'professional':
-        return '🔵';
+        return <FaChessKnight className="color-icon professional" />;
       case 'creative':
-        return '🟣';
+        return <FaChessBishop className="color-icon creative" />;
       case 'tech':
-        return '🟢';
+        return <FaChessQueen className="color-icon tech" />;
       case 'minimal':
-        return '⚪';
+        return <FaChessKing className="color-icon minimal" />;
       default:
-        return '🎨';
+        return <FaPalette className="color-icon" />;
     }
   };
 
@@ -159,7 +188,9 @@ const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh }) => {
   if (!portfolios || portfolios.length === 0) {
     return (
       <div className="portfolio-empty-state">
-        <div className="portfolio-empty-icon">📂</div>
+        <div className="portfolio-empty-icon">
+          <FaFolderOpen size={50} />
+        </div>
         <h3>You haven't created any portfolios yet</h3>
         <p>Go to the 'Create Portfolio' tab to generate your first portfolio.</p>
         <div className="portfolio-empty-actions">
@@ -168,7 +199,7 @@ const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh }) => {
             <span>Create Your First Portfolio</span>
           </button>
           <button className="portfolio-refresh-button" onClick={onRefresh}>
-            <span className="refresh-icon">🔄</span>
+            <FaSyncAlt className="refresh-icon" />
             <span>Refresh</span>
           </button>
         </div>
@@ -205,7 +236,7 @@ const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh }) => {
             className="portfolio-refresh-button"
             onClick={onRefresh}
           >
-            <span className="refresh-icon">🔄</span>
+            <FaSyncAlt className="refresh-icon" />
             <span>Refresh</span>
           </button>
         </div>
@@ -291,7 +322,7 @@ const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh }) => {
       
       {filteredPortfolios.length === 0 ? (
         <div className="portfolio-no-results">
-          <FaInfo className="no-results-icon" />
+          <FaExclamationCircle className="no-results-icon" />
           <p>No portfolios match your search criteria.</p>
           <button 
             className="clear-search-button"
@@ -371,7 +402,7 @@ const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh }) => {
                   className="portfolio-select-button"
                   onClick={() => onSelectPortfolio(portfolio._id)}
                 >
-                  <span className="select-icon">📝</span>
+                  <FaPencilAlt className="select-icon" />
                   <span>Edit Portfolio</span>
                 </button>
                 {portfolio.deployment?.deployed && (
@@ -381,7 +412,7 @@ const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh }) => {
                     rel="noopener noreferrer"
                     className="portfolio-view-button"
                   >
-                    <span className="view-icon">👁️</span>
+                    <FaEye className="view-icon" />
                     <span>View Live</span>
                   </a>
                 )}
@@ -397,12 +428,24 @@ const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh }) => {
           Each portfolio you create is saved and can be edited or deployed at any time.
           Select a portfolio to preview, make changes, or deploy it to the web.
         </p>
-        <ul className="portfolio-tips">
-          <li>Click <strong>Edit Portfolio</strong> to view and modify your portfolio code</li>
-          <li>Use the <strong>Deploy</strong> tab to make your portfolio accessible online</li>
-          <li>Your portfolios are stored securely and can be accessed anytime</li>
-          <li>You can create multiple portfolios with different styles and content</li>
-        </ul>
+        <div className="portfolio-tips">
+          <div className="portfolio-tip">
+            <FaPencilAlt className="tip-icon" />
+            <span>Click <strong>Edit Portfolio</strong> to view and modify your portfolio code</span>
+          </div>
+          <div className="portfolio-tip">
+            <FaRocket className="tip-icon" />
+            <span>Use the <strong>Deploy</strong> tab to make your portfolio accessible online</span>
+          </div>
+          <div className="portfolio-tip">
+            <FaFolderOpen className="tip-icon" />
+            <span>Your portfolios are stored securely and can be accessed anytime</span>
+          </div>
+          <div className="portfolio-tip">
+            <FaLightbulb className="tip-icon" />
+            <span>You can create multiple portfolios with different styles and content</span>
+          </div>
+        </div>
       </div>
     </div>
   );

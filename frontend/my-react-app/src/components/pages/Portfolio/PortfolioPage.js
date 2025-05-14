@@ -285,7 +285,7 @@ const PortfolioPage = () => {
                 <div className="generation-tip">
                   <div className="tip-icon">💡</div>
                   <div className="tip-text">
-                    This process typically takes 3-5 minutes. You'll be automatically redirected when your portfolio is ready.
+                    This process typically takes 3-5 minutes. Can you Click off the page? I dont know....I vibe coded this so I really couldnt tell yah ¯\_(ツ)_/¯
                   </div>
                 </div>
               </div>

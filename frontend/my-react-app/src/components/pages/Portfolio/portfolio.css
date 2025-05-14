@@ -371,6 +371,7 @@
   color: var(--portfolio-text-secondary);
   margin-bottom: 10px;
   transition: all 0.3s ease;
+  margin-top: 15px;
 }
 
 .progress-step.active .step-number {
@@ -3117,7 +3118,8 @@
 
 .tip-icon {
   font-size: 20px;
-  color: #ffc107;
+  color: var(--theme-accent-glow);
+  margin-right: 15px;
 }
 
 .tip-text {
