@@ -8,7 +8,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #050510;
+  background-color: #0D1117;
 }
 
 .octocat-section-header {
@@ -34,6 +34,31 @@
   background-clip: text;
   color: transparent;
   text-shadow: none;
+  position: relative;
+}
+
+/* Add a highlight effect to the title */
+.octocat-title-gradient::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: -2%;
+  width: 104%;
+  height: 120%;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  z-index: -1;
+  transform: rotate(-2deg);
+  border-radius: 2px;
+  animation: titleShine 8s infinite linear;
+}
+
+@keyframes titleShine {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 .octocat-section-subtitle {
@@ -59,14 +84,19 @@
   position: relative;
   overflow: hidden;
   border-radius: 20px;
-  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(125, 187, 230, 0.2);
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(23, 21, 21, 0.4);
+  transition: box-shadow 0.5s ease;
+}
+
+.octocat-display-case:hover {
+  box-shadow: 0 20px 100px rgba(0, 0, 0, 0.7), 0 0 60px rgba(23, 21, 21, 0.5);
 }
 
 .octocat-display-frame {
   position: relative;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, rgba(15, 15, 25, 0.7) 0%, rgba(5, 5, 10, 0.9) 80%);
+  background: radial-gradient(circle at center, rgba(25, 25, 40, 0.7) 0%, rgba(13, 17, 23, 0.9) 80%);
   display: flex;
   flex-direction: column;
 }
@@ -79,7 +109,7 @@
 .octocat-display-base {
   height: 80px;
   background: linear-gradient(to bottom, rgba(5, 5, 10, 0.9), rgba(30, 30, 40, 0.9));
-  border-top: 1px solid rgba(125, 187, 230, 0.3);
+  border-top: 1px solid rgba(23, 21, 21, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,6 +129,7 @@
   color: #7DBBE6;
   text-shadow: 0 0 10px rgba(125, 187, 230, 0.5);
   margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .octocat-display-detail {
@@ -116,9 +147,49 @@
   width: 100%;
   height: 100%;
   background-image: 
-    linear-gradient(to right, rgba(125, 187, 230, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(125, 187, 230, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(23, 21, 21, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 21, 21, 0.05) 1px, transparent 1px);
   background-size: 30px 30px;
   pointer-events: none;
   z-index: 1;
+}
+
+/* Add a beam of light effect */
+.octocat-display-content::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: beamPulse 10s infinite ease-in-out;
+}
+
+@keyframes beamPulse {
+  0%, 100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* Add responsive styles */
+@media (max-width: 850px) {
+  .octocat-display-container {
+    height: 500px;
+  }
+}
+
+@media (max-width: 600px) {
+  .octocat-display-container {
+    height: 400px;
+  }
+  
+  .octocat-section-title {
+    font-size: 32px;
+  }
 }

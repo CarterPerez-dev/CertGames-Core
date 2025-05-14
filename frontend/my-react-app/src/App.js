@@ -11,7 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 // Angela
 import AngelaPage from './components/pages/angela/AngelaPage';
 
-
+// Portfolio Page
+import PortfolioPage from './/components/pages/Portfolio/PortfolioPage.js';
 
 // Public pages
 import InfoPage from './components/pages/Info/InfoPage';
@@ -338,6 +339,11 @@ function App() {
               <StatsPage />
             </ProtectedRoute>
           }/>         
+          <Route path="/portfolio" element={
+            <ProtectedRoute requiresPremium={false}>
+              <PortfolioPage />
+            </ProtectedRoute>
+          }/>                 
           <Route path="/practice-tests/a-plus" element={
             <ProtectedRoute requiresPremium={false}>
               <APlusTestPage />

@@ -1,4 +1,3 @@
-// src/components/pages/angela/OctocatDisplay.js
 import React, { useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
@@ -9,11 +8,11 @@ import { generateOctocatPoints } from './ModelLoader';
 import './OctocatDisplay.css';
 
 // Component for the Octocat particle system
-function OctocatParticleSystem({ count = 20000, color = '#7DBBE6', mouseEffect = 1.5 }) {
+function OctocatParticleSystem({ count = 30000, color = '#7DBBE6', mouseEffect = 2.0 }) {
   const mesh = React.useRef();
   const dummy = React.useMemo(() => new THREE.Object3D(), []);
   const particles = React.useMemo(() => {
-    const octocatPoints = generateOctocatPoints(count, 1.2);
+    const octocatPoints = generateOctocatPoints(count, 1.0);
     
     // Add variation to each particle
     return octocatPoints.map(point => ({
@@ -22,8 +21,8 @@ function OctocatParticleSystem({ count = 20000, color = '#7DBBE6', mouseEffect =
       normal: point.normal || [0, 0, 0],
       offset: Math.random() * Math.PI * 2,
       randomDelay: Math.random(),
-      randomSize: Math.random() * 0.4 + 0.1, // Smaller size variation
-      randomSpeed: Math.random() * 0.5 + 0.5
+      randomSize: Math.random() * 0.3 + 0.05, // Smaller size variation for density
+      randomSpeed: Math.random() * 0.3 + 0.2
     }));
   }, [count]);
 
@@ -52,7 +51,7 @@ function OctocatParticleSystem({ count = 20000, color = '#7DBBE6', mouseEffect =
     const elapsedTime = clock.getElapsedTime();
     
     // Convert mouse position to 3D space
-    const mouseVector = new THREE.Vector3(mouse.x * 5, mouse.y * 5, 0);
+    const mouseVector = new THREE.Vector3(mouse.x * 4, mouse.y * 4, 0);
     
     particles.forEach((particle, i) => {
       const { basePosition, normal, offset, randomDelay, randomSize, randomSpeed } = particle;
@@ -66,8 +65,8 @@ function OctocatParticleSystem({ count = 20000, color = '#7DBBE6', mouseEffect =
       let dynamicY = basePosition[1];
       let dynamicZ = basePosition[2];
       
-      // Apply sine wave animation for ambient movement
-      const animationAmplitude = 0.05; // Smaller amplitude for more subtle movement
+      // Apply sine wave animation for ambient movement - more subtle movement
+      const animationAmplitude = 0.03; // Smaller amplitude for more subtle movement
       dynamicX += Math.sin(elapsedTime * randomSpeed + offset) * animationAmplitude * randomDelay * normal[0];
       dynamicY += Math.cos(elapsedTime * randomSpeed + offset) * animationAmplitude * randomDelay * normal[1];
       dynamicZ += Math.sin(elapsedTime * randomSpeed + offset + Math.PI/2) * animationAmplitude * randomDelay * normal[2];
@@ -88,8 +87,8 @@ function OctocatParticleSystem({ count = 20000, color = '#7DBBE6', mouseEffect =
         dynamicZ += blendedDirection.z * repulsionStrength * randomDelay;
       }
       
-      // Apply gentle rotation
-      const rotationY = elapsedTime * 0.2; // Faster rotation
+      // Apply gentle rotation - slower for better solidity
+      const rotationY = elapsedTime * 0.15; 
       const cos = Math.cos(rotationY);
       const sin = Math.sin(rotationY);
       const rotatedX = dynamicX * cos - dynamicZ * sin;
@@ -102,17 +101,17 @@ function OctocatParticleSystem({ count = 20000, color = '#7DBBE6', mouseEffect =
       
       // Scale based on distance to mouse
       const scaleFactor = distanceToMouse < 2 
-        ? 1 + (2 - distanceToMouse) * 0.2 * randomSize 
+        ? 1 + (2 - distanceToMouse) * 0.15 * randomSize 
         : randomSize;
       
       // Smaller particles for higher detail
-      const particleSize = scaleFactor * 0.4;
+      const particleSize = scaleFactor * 0.35;
       
       dummy.scale.set(particleSize, particleSize, particleSize);
       
-      // Apply rotation for more dynamic feel
-      dummy.rotation.x = elapsedTime * randomSpeed * 0.5;
-      dummy.rotation.y = elapsedTime * randomSpeed * 0.3;
+      // Apply minimal rotation for more dynamic feel
+      dummy.rotation.x = elapsedTime * randomSpeed * 0.3;
+      dummy.rotation.y = elapsedTime * randomSpeed * 0.2;
       
       dummy.updateMatrix();
       mesh.current.setMatrixAt(i, dummy.matrix);
@@ -121,8 +120,9 @@ function OctocatParticleSystem({ count = 20000, color = '#7DBBE6', mouseEffect =
     mesh.current.instanceMatrix.needsUpdate = true;
   });
 
-  // Smaller, higher detail particles
+  // Higher detail particles with custom geometry
   const particleGeometry = React.useMemo(() => {
+    // Use higher detail sphere for better visual quality
     return new THREE.SphereGeometry(0.015, 8, 8);
   }, []);
 
@@ -132,10 +132,10 @@ function OctocatParticleSystem({ count = 20000, color = '#7DBBE6', mouseEffect =
       <meshStandardMaterial 
         color={color} 
         emissive={color} 
-        emissiveIntensity={0.7} 
+        emissiveIntensity={1.0} 
         toneMapped={false} 
-        roughness={0.2} 
-        metalness={0.8} 
+        roughness={0.3} 
+        metalness={0.7} 
       />
     </instancedMesh>
   );
@@ -147,14 +147,17 @@ function OctocatScene() {
       dpr={[1, 2]}
       camera={{ position: [0, 0, 4], fov: 50 }}
       gl={{ 
-        antialias: false,
+        antialias: true,
         alpha: true, 
         logarithmicDepthBuffer: true,
-        toneMapping: THREE.NoToneMapping
+        toneMapping: THREE.ACESFilmicToneMapping
       }}
     >
-      <ambientLight intensity={0.5} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
+      <color attach="background" args={['#0D1117']} />
+      <ambientLight intensity={0.8} />
+      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1.5} castShadow />
+      <pointLight position={[-10, -10, -10]} intensity={0.8} />
+      <pointLight position={[0, 0, 5]} intensity={1.0} color="#FFFFFF" />
       
       <Float
         speed={1} 
@@ -162,16 +165,16 @@ function OctocatScene() {
         floatIntensity={0.2} 
         floatingRange={[-0.1, 0.1]} 
       >
-        <OctocatParticleSystem count={20000} color="#7DBBE6" mouseEffect={1.8} />
+        <OctocatParticleSystem count={30000} color="#7DBBE6" mouseEffect={2.0} />
       </Float>
       
       <OrbitControls enablePan={false} enableZoom={true} maxDistance={10} minDistance={2} />
       
-      <EffectComposer multisampling={0}>
+      <EffectComposer multisampling={4}>
         <Bloom 
           blendFunction={BlendFunction.ADD} 
-          intensity={0.3} 
-          luminanceThreshold={0.2} 
+          intensity={0.5} 
+          luminanceThreshold={0.1} 
           luminanceSmoothing={0.9} 
           mipmapBlur 
         />
@@ -187,7 +190,7 @@ export default function OctocatDisplay() {
         <h2 className="octocat-section-title">
           <span className="octocat-title-gradient">GitHub Octocat</span>
         </h2>
-        <p className="octocat-section-subtitle">Interactive 3D particle model</p>
+        <p className="octocat-section-subtitle">Interactive 3D particle model - 30,000 particles</p>
       </div>
       <div className="octocat-display-container">
         <div className="octocat-display-case">
@@ -198,7 +201,7 @@ export default function OctocatDisplay() {
             <div className="octocat-display-base">
               <div className="octocat-display-controls">
                 <div className="octocat-display-label">GitHub Octocat</div>
-                <div className="octocat-display-detail">20,000 particles</div>
+                <div className="octocat-display-detail">30,000 particles</div>
               </div>
             </div>
           </div>

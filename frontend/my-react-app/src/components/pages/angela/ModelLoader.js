@@ -230,104 +230,206 @@ export function morphPoints(sourcePoints, targetPoints, progress) {
 }
 
 // Function to generate points in the shape of a GitHub Octocat
-export function generateOctocatPoints(count = 20000, scale = 1) {
+// Updated function to generate points in the shape of a GitHub Octocat
+// Updated function to generate points in the shape of a GitHub Octocat
+export function generateOctocatPoints(count = 30000, scale = 1) {
   // Create an array to hold all the points
   const points = [];
   
-  // Generate the head (spherical base)
-  const headCount = Math.floor(count * 0.4);
-  const headRadius = 0.8 * scale;
+  // Generate the head (rounded square shape rather than perfectly spherical)
+  const headCount = Math.floor(count * 0.45);
+  const headRadius = 0.85 * scale;
   for (let i = 0; i < headCount; i++) {
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos((Math.random() * 2) - 1);
-    const x = headRadius * Math.sin(phi) * Math.cos(theta);
-    const y = headRadius * Math.sin(phi) * Math.sin(theta) + 0.2 * scale; // Shift up a bit
-    const z = headRadius * Math.cos(phi);
+    // More square-ish distribution for Octocat's head
+    // Use a mix of sphere and cube distributions
+    let x, y, z;
     
-    // Only keep points that are not in the bottom section
-    if (z > -headRadius * 0.5) {
+    
+    if (Math.random() < 0.7) {
+      // Mostly use a rounded square distribution
+      x = (Math.random() * 2 - 1) * headRadius;
+      y = (Math.random() * 2 - 1) * headRadius * 0.9 + 0.2 * scale; // Shift up a bit
+      z = (Math.random() * 2 - 1) * headRadius * 0.85; // Slightly flatter in Z
+      
+      // Round the corners by rejecting points that are too far out
+      const distance = Math.sqrt(x*x + y*y + z*z);
+      if (distance > headRadius * 1.2) {
+        i--; // Try again
+        continue;
+      }
+      
+      // Make it more square-ish by pulling points toward the edges
+      x = Math.sign(x) * (Math.abs(x) ** 0.8) * headRadius;
+      z = Math.sign(z) * (Math.abs(z) ** 0.8) * headRadius;
+    } else {
+      // Some pure spherical points for smoothness
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos((Math.random() * 2) - 1);
+      x = headRadius * Math.sin(phi) * Math.cos(theta);
+      y = headRadius * Math.sin(phi) * Math.sin(theta) * 0.9 + 0.2 * scale; // Shift up a bit
+      z = headRadius * Math.cos(phi) * 0.85; // Slightly flatter in Z
+    }
+    
+    // Only keep points that are not in the bottom-back section
+    if (!(z < -headRadius * 0.3 && y < -headRadius * 0.3)) {
+      // Calculate normal vector (pointing outward from center)
+      const nx = x / Math.sqrt(x*x + y*y + z*z);
+      const ny = y / Math.sqrt(x*x + y*y + z*z);
+      const nz = z / Math.sqrt(x*x + y*y + z*z);
+      
       points.push({
         position: [x, y, z],
-        normal: [Math.sin(phi) * Math.cos(theta), Math.sin(phi) * Math.sin(theta), Math.cos(phi)]
+        normal: [nx, ny, nz]
       });
     }
   }
   
-  // Generate the body
-  const bodyCount = Math.floor(count * 0.3);
-  const bodyWidth = 0.65 * scale;
-  const bodyHeight = 0.8 * scale;
-  for (let i = 0; i < bodyCount; i++) {
-    // Make the body more oval-shaped and tapered at the bottom
-    const u = Math.random() * Math.PI * 2;
-    const v = Math.random();
-    const radius = bodyWidth * (1 - v * 0.3); // Taper at the bottom
+  // Generate the ears (more prominent cat ears)
+  const earCount = Math.floor(count * 0.1);
+  const earSize = 0.3 * scale;
+  const earHeight = 0.4 * scale;
+  const earSpacing = 0.6 * scale;
+  
+  for (let i = 0; i < earCount; i++) {
+    const side = i < earCount / 2 ? -1 : 1; // Left or right ear
     
-    const x = radius * Math.cos(u);
-    const y = -bodyHeight * v - 0.3 * scale; // Position below the head
-    const z = radius * Math.sin(u);
+    // Base position of ear
+    const baseX = side * earSpacing;
+    const baseY = headRadius * 0.8;
+    const baseZ = 0; // Centered front to back
+    
+    // Generate a triangular ear shape
+    let t = Math.random();
+    let s = Math.random();
+    
+    // Create a triangular distribution
+    if (s > t) {
+      const temp = t;
+      t = s;
+      s = temp;
+    }
+    
+    let x = baseX + (s - 0.5) * earSize;
+    let y = baseY + t * earHeight;
+    let z = baseZ + (s - 0.5) * earSize;
+    
+    // Calculate normal (simplified)
+    const nx = 0;
+    const ny = 1;
+    const nz = 0;
     
     points.push({
       position: [x, y, z],
-      normal: [Math.cos(u), 0, Math.sin(u)]
+      normal: [nx, ny, nz]
     });
   }
   
-  // Generate the tentacles
-  const tentacleCount = Math.floor(count * 0.3);
+  // Generate the body (more octopus-like with a smaller, rounded body)
+  const bodyCount = Math.floor(count * 0.2);
+  const bodyWidth = 0.6 * scale;
+  const bodyHeight = 0.5 * scale;
+  for (let i = 0; i < bodyCount; i++) {
+    // Make the body oval-shaped
+    const u = Math.random() * Math.PI * 2;
+    const v = Math.random();
+    const radius = bodyWidth * (1 - v * 0.2); // Slight taper
+    
+    let x = radius * Math.cos(u);
+    let y = -bodyHeight * v - 0.4 * scale; // Position below the head
+    let z = radius * Math.sin(u);
+    
+    // Calculate normal (pointing outward)
+    const nx = Math.cos(u);
+    const ny = -0.1; // Slight downward component
+    const nz = Math.sin(u);
+    
+    points.push({
+      position: [x, y, z],
+      normal: [nx, ny, nz]
+    });
+  }
+  
+  // Generate the tentacles (more realistic octopus tentacles)
+  const tentacleCount = Math.floor(count * 0.25);
   const numTentacles = 5; // Create 5 tentacles
   
   for (let t = 0; t < numTentacles; t++) {
-    const angle = (t / numTentacles) * Math.PI * 2;
-    const baseX = Math.cos(angle) * bodyWidth * 0.9;
-    const baseZ = Math.sin(angle) * bodyWidth * 0.9;
-    const baseY = -0.6 * scale - Math.random() * 0.4 * scale;
+    // Calculate angle for this tentacle (arranged in a semicircle at the bottom)
+    const angle = (t / (numTentacles - 1)) * Math.PI + Math.PI / 2;
+    
+    // Base position where tentacle connects to body
+    const baseX = Math.cos(angle) * bodyWidth * 0.8;
+    const baseZ = Math.sin(angle) * bodyWidth * 0.8;
+    const baseY = -0.7 * scale;
     
     const pointsPerTentacle = Math.floor(tentacleCount / numTentacles);
     
     // Create a curved tentacle
     for (let i = 0; i < pointsPerTentacle; i++) {
       const progress = i / pointsPerTentacle;
-      const tentacleLength = 0.8 * scale + (Math.random() * 0.4 * scale);
+      const tentacleLength = 0.9 * scale + (Math.random() * 0.3 * scale);
       
-      // Create a curve with sine wave
-      const curve = Math.sin(progress * Math.PI * 2) * 0.2 * scale;
+      // Create a curved tentacle with sinusoidal motion
+      const curveFactor = 0.25 * scale;
+      const curve = Math.sin(progress * Math.PI * 2) * curveFactor;
+      const curveDirection = (t % 2 === 0) ? 1 : -1; // Alternate curve direction
       
-      const x = baseX + curve * Math.cos(angle + Math.PI/2);
+      // Apply curve in a direction perpendicular to the tentacle
+      const perpendicularAngle = angle + Math.PI/2;
+      
+      const x = baseX + curve * Math.cos(perpendicularAngle) * curveDirection;
       const y = baseY - progress * tentacleLength;
-      const z = baseZ + curve * Math.sin(angle + Math.PI/2);
+      const z = baseZ + curve * Math.sin(perpendicularAngle) * curveDirection;
       
-      // Calculate normal approximation
-      const tangent = new THREE.Vector3(
-        Math.cos(angle + Math.PI/2) * 0.2 * Math.PI * 2 * Math.cos(progress * Math.PI * 2),
-        -tentacleLength,
-        Math.sin(angle + Math.PI/2) * 0.2 * Math.PI * 2 * Math.cos(progress * Math.PI * 2)
-      ).normalize();
+      // Thickness tapers toward the end
+      const thickness = (1 - progress * 0.8) * 0.15 * scale;
       
-      const normal = new THREE.Vector3(x, 0, z).normalize();
-      normal.cross(tangent).normalize();
+      // Add some point variety in a small radius around the central curve
+      const jitterRadius = thickness * Math.random();
+      const jitterAngle = Math.random() * Math.PI * 2;
+      
+      const jitterX = jitterRadius * Math.cos(jitterAngle);
+      const jitterZ = jitterRadius * Math.sin(jitterAngle);
+      
+      // Calculate normal (simplified)
+      const tangentY = -tentacleLength;
+      const tangentX = curve * Math.cos(perpendicularAngle) * curveDirection * Math.PI * 2 * Math.cos(progress * Math.PI * 2);
+      const tangentZ = curve * Math.sin(perpendicularAngle) * curveDirection * Math.PI * 2 * Math.cos(progress * Math.PI * 2);
+      
+      // Normalize the tangent
+      const tangentMagnitude = Math.sqrt(tangentX*tangentX + tangentY*tangentY + tangentZ*tangentZ);
+      const tX = tangentX / tangentMagnitude;
+      const tY = tangentY / tangentMagnitude;
+      const tZ = tangentZ / tangentMagnitude;
+      
+      // Use tangent to calculate normal (simplified)
+      const nx = -tX;
+      const ny = -tY;
+      const nz = -tZ;
       
       points.push({
-        position: [x, y, z],
-        normal: [normal.x, normal.y, normal.z]
+        position: [x + jitterX, y, z + jitterZ],
+        normal: [nx, ny, nz]
       });
     }
   }
   
-  // Add eyes
+  // Add eyes (two distinct circular eyes)
   const eyeCount = Math.floor(count * 0.05);
-  const eyeSize = 0.15 * scale;
-  const eyeSpacing = 0.3 * scale;
+  const eyeSize = 0.18 * scale;
+  const eyeSpacing = 0.35 * scale;
+  const eyeForward = 0.75 * scale; // Position eyes toward front
   
   for (let i = 0; i < eyeCount; i++) {
     const side = i < eyeCount / 2 ? -1 : 1; // Left or right eye
     
-    const theta = Math.random() * Math.PI * 0.5 - Math.PI * 0.25; // Front-facing
-    const phi = Math.random() * Math.PI * 0.5 + Math.PI * 0.25; // Upper half
+    // Make eyes more circular and distinct
+    const theta = Math.random() * Math.PI * 2;
+    const radius = Math.sqrt(Math.random()) * eyeSize; // Sqrt for uniform disc distribution
     
-    const eyeX = side * eyeSpacing + (Math.random() - 0.5) * eyeSize;
-    const eyeY = 0.2 * scale + (Math.random() - 0.5) * eyeSize;
-    const eyeZ = headRadius * 0.8 + (Math.random() - 0.5) * eyeSize; // Push to front
+    let eyeX = side * eyeSpacing + radius * Math.cos(theta) * 0.5; // Flatten circle to oval
+    let eyeY = 0.2 * scale + radius * Math.sin(theta);
+    let eyeZ = eyeForward; // Push to front
     
     points.push({
       position: [eyeX, eyeY, eyeZ],
@@ -335,9 +437,27 @@ export function generateOctocatPoints(count = 20000, scale = 1) {
     });
   }
   
-  // Add jitter to all points for a more natural look
+  // Generate face feature points (small amount to suggest a mouth or smile)
+  const faceCount = Math.floor(count * 0.03);
+  for (let i = 0; i < faceCount; i++) {
+    // Create a subtle curved line for the mouth
+    const t = Math.random();
+    const mouthWidth = 0.25 * scale;
+    const mouthHeight = 0.05 * scale;
+    
+    let x = (t * 2 - 1) * mouthWidth;
+    let y = -0.05 * scale + Math.sin(t * Math.PI) * mouthHeight;
+    let z = eyeForward * 0.95; // Slightly behind the eyes
+    
+    points.push({
+      position: [x, y, z],
+      normal: [0, 0, 1]
+    });
+  }
+  
+  // Add randomness to all points for a more natural look
   return points.map(point => {
-    const jitter = 0.02 * scale * Math.random();
+    const jitter = 0.015 * scale * Math.random();
     return {
       position: [
         point.position[0] + jitter * (Math.random() - 0.5),

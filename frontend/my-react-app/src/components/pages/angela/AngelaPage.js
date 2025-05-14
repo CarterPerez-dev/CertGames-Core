@@ -468,12 +468,7 @@ const AngelaPage = () => {
           </div>
         </div>
       </section>
-      
-      {/* GitHub Octocat Display */}
-      <div ref={octocatRef}>
-        <OctocatDisplay />
-      </div>
-      
+
       {/* Features Section */}
       <section className="angela-features" ref={featuresRef}>
         <div className="angela-section-header">

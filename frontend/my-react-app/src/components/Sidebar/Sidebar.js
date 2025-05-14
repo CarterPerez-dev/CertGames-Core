@@ -22,7 +22,8 @@ import {
   FaAward,
   FaAmazon,
   FaShieldAlt,
-  FaCrown
+  FaCrown,
+  FaUserSecret
 } from 'react-icons/fa';
 
 const Sidebar = () => {
@@ -98,6 +99,7 @@ const Sidebar = () => {
       case '/leaderboard': return <FaChartBar className="sidebar-icon" />;
       case '/my-support': return <FaQuestion className="sidebar-icon" />;
       case '/dailycyberbrief': return <FaNewspaper className="sidebar-icon" />;
+      case '/portfolio': return <FaUserSecret className="sidebar-icon" />;
       case '/resources': return <FaBook className="sidebar-icon" />;
       case '/performance': return <FaChessKnight className="sidebar-icon" />;
       default: return null;
@@ -428,7 +430,13 @@ const Sidebar = () => {
                   <span className="sidebar-link-text">-CyberBrief</span>
                 </NavLink>
               </li>
-            </ul>
+              <li>
+                <NavLink to="/portfolio" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
+                  {getIcon('/portfolio')}
+                  <span className="sidebar-link-text">-Portfolio Creator</span>
+                </NavLink>
+              </li>
+            </ul>            
           </nav>
 
           <div className="sidebar-logo-container">

@@ -25,6 +25,8 @@ from routes.AI.analogy_routes import analogy_bp
 from routes.AI.grc_routes import grc_bp
 from routes.AI.scenario_routes import scenario_bp
 from routes.AI.xploit_routes import xploit_bp
+from routes.AI.xploit_routes import portfolio_bp
+
 
 # SubscriptionAuth Blueprints
 from routes.SubscriptionAuth.oauth_routes import oauth_bp, oauth
@@ -392,6 +394,10 @@ app.register_blueprint(threat_hunter_bp, url_prefix='/threat-hunter')
 app.register_blueprint(honeypot_bp, url_prefix='/honeypot')
 app.register_blueprint(honeypot_pages_bp)
 app.register_blueprint(c2_bp, url_prefix='/api')
+
+
+# Portfolio
+app.register_blueprint(portfolio_bp, url_prefix='/portfolio')
 
 ###########################################################################################
 ###########################################################################################
