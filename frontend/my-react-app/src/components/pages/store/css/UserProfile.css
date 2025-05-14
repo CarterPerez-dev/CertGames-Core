@@ -1579,12 +1579,10 @@
   --stats-bg-card: var(--theme-bg-card);
   --stats-gradient-primary: var(--theme-gradient-primary);
   --stats-gradient-secondary: var(--theme-gradient-secondary);
+  
+
 }  
   
-  
-
-
-
 
 /* Update the background image patterns to use theme variables */
 .user-profile-container,

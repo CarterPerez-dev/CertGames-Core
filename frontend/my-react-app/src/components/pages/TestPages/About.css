@@ -1,0 +1,27 @@
+/* About Section Styles */
+.about-section {
+  background-color: var(--secondary-bg); /* Alternating background */
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column; /* Stack text and image vertically by default */
+  align-items: center;
+  gap: 30px;
+}
+
+.about-text {
+  max-width: 800px; /* Control text width for readability */
+  text-align: left; /* Or 'justify' if preferred */
+  line-height: 1.8;
+}
+
+.about-text p {
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+/* Optional image styling */
+.about-image img {
+  max-width: 300px;
+}

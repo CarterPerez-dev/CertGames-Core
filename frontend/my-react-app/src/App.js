@@ -12,7 +12,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import AngelaPage from './components/pages/angela/AngelaPage';
 
 // Portfolio Page
-import PortfolioPage from './/components/pages/Portfolio/PortfolioPage.js';
+import PortfolioPage from './components/pages/Portfolio/PortfolioPage.js';
+
+
+
 
 // Public pages
 import InfoPage from './components/pages/Info/InfoPage';

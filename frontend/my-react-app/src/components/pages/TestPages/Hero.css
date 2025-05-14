@@ -1,0 +1,95 @@
+/* Hero Section Styles */
+.hero-section {
+  background: linear-gradient(rgba(52, 152, 219, 0.1), rgba(52, 152, 219, 0.05)), var(--primary-bg); /* Subtle gradient overlay */
+  color: var(--text-color);
+  height: calc(100vh - var(--header-height)); /* Full viewport height minus header */
+  min-height: 500px; /* Minimum height for smaller screens */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: var(--header-height); /* Offset for fixed header */
+  border-bottom: none; /* Hero usually doesn't need a bottom border */
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.hero-name {
+  color: var(--primary-accent);
+}
+
+.hero-subtitle {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+}
+
+.hero-title {
+  font-weight: 500;
+  /* color: var(--primary-accent); */ /* Optional: make title accent color */
+}
+
+.hero-tagline {
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto 2rem auto;
+  line-height: 1.8;
+  color: #555; /* Slightly lighter text for tagline */
+}
+
+.hero-btn {
+  margin: 0 10px;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--primary-accent);
+  border: 2px solid var(--primary-accent);
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-accent);
+  color: #fff;
+}
+
+/* Responsive adjustments for Hero */
+@media (max-width: 768px) {
+  .hero-section {
+    height: auto; /* Adjust height for smaller screens */
+    min-height: calc(100vh - var(--header-height));
+    padding: 60px 0; /* Add more padding */
+  }
+
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .hero-tagline {
+    font-size: 1rem;
+  }
+
+  .hero-btn {
+    display: block;
+    width: 80%;
+    margin: 10px auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+}
