@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/standalone": "^7.27.2",
     "@craco/craco": "^7.1.0",
     "@csstools/normalize.css": "^12.1.1",
     "@emotion/babel-plugin": "^11.13.5",

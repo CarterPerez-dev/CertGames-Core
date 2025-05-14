@@ -1,5 +1,6 @@
 // frontend/my-react-app/src/components/pages/Portfolio/PortfolioPreview.js
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { transform } from '@babel/standalone';
 import CodeEditor from './CodeEditor';
 import { FaCode, FaEye, FaDesktop, FaMobile, FaSync, FaCheck, FaTimes, FaFile, FaFolder, FaInfo, FaExclamationTriangle, FaWrench, FaBug, FaCopy, FaDownload, FaClipboard } from 'react-icons/fa';
 import './portfolio.css';
@@ -87,9 +88,10 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     return tree;
   };
 
-  // Generate preview HTML from portfolio components
+
+  
   const generatePreviewHtml = useCallback((components) => {
-    console.log("Generating preview HTML");
+    console.log("Generating enhanced preview HTML");
     
     // Debug what components we have
     const componentKeys = Object.keys(components);
@@ -104,10 +106,16 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       return;
     }
     
-    // Basic strategy: inject CSS and JS into the HTML template
+    // Basic strategy: inject CSS, Babel, and our React simulation into the HTML template
     let processedHtml = htmlFile;
     
-    // Inject CSS
+    // 1. Add Babel standalone for JSX transpilation
+    const babelScript = `
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.10/babel.min.js"></script>
+    `;
+    processedHtml = processedHtml.replace('</head>', `${babelScript}</head>`);
+    
+    // 2. Inject CSS
     const cssContent = Object.entries(components)
       .filter(([key]) => key.endsWith('.css'))
       .map(([_, content]) => content)
@@ -119,150 +127,220 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     const styleTag = `<style>${cssContent}</style>`;
     processedHtml = processedHtml.replace('</head>', `${styleTag}</head>`);
     
-    // Inject JS (simplified for preview)
     try {
-      const appJs = components['src/App.js'] || '';
-      const indexJs = components['src/index.js'] || '';
+      // 3. Enhanced React Simulation
+      const enhancedReactSimulation = `
+        <script>
+          // Enhanced React Simulation
+          window.React = {
+            createElement: function(type, props, ...children) {
+              // Handle function components
+              if (typeof type === 'function') {
+                try {
+                  return type(props || {});
+                } catch(e) {
+                  console.error('Error rendering component:', e);
+                  return document.createTextNode(\`Error: \${e.message}\`);
+                }
+              }
+              
+              // Handle string types (native DOM elements)
+              if (typeof type === 'string') {
+                const element = document.createElement(type);
+                
+                // Apply props/attributes
+                if (props) {
+                  Object.entries(props).forEach(([key, value]) => {
+                    if (key === 'className') {
+                      element.className = value;
+                    } else if (key === 'style' && typeof value === 'object') {
+                      Object.assign(element.style, value);
+                    } else if (key === 'dangerouslySetInnerHTML' && value.__html) {
+                      element.innerHTML = value.__html;
+                    } else if (key.startsWith('on') && typeof value === 'function') {
+                      // Handle event listeners
+                      const eventName = key.slice(2).toLowerCase();
+                      element.addEventListener(eventName, value);
+                    } else if (!key.startsWith('__') && key !== 'children') {
+                      // Regular attributes
+                      element.setAttribute(key, value);
+                    }
+                  });
+                }
+                
+                // Append children
+                children.flat().forEach(child => {
+                  if (child === null || child === undefined || child === false) return;
+                  
+                  if (typeof child === 'object' && child.nodeType) {
+                    element.appendChild(child);
+                  } else {
+                    element.appendChild(document.createTextNode(String(child)));
+                  }
+                });
+                
+                return element;
+              }
+              
+              // Handle fragments and special types
+              if (type === React.Fragment) {
+                const fragment = document.createDocumentFragment();
+                children.flat().forEach(child => {
+                  if (child !== null && child !== undefined && child !== false) {
+                    fragment.appendChild(
+                      typeof child === 'object' && child.nodeType 
+                        ? child
+                        : document.createTextNode(String(child))
+                    );
+                  }
+                });
+                return fragment;
+              }
+              
+              // Fallback
+              const div = document.createElement('div');
+              div.textContent = \`Unknown type: \${type}\`;
+              return div;
+            },
+            
+            // Hook simulation
+            createRef: () => ({ current: null }),
+            useRef: (initialValue) => ({ current: initialValue }),
+            useState: function(initialValue) {
+              const value = typeof initialValue === 'function' ? initialValue() : initialValue;
+              const setValue = function() { 
+                console.log('setState called with', arguments); 
+                // This is just a mock that doesn't actually update state
+              };
+              return [value, setValue];
+            },
+            useEffect: function(fn, deps) {
+              try { 
+                // Only run effects once in our simulation
+                fn(); 
+              } catch(e) { 
+                console.error('useEffect error:', e); 
+              }
+            },
+            useCallback: (fn) => fn,
+            useMemo: (fn) => fn(),
+            useContext: () => ({}),
+            Fragment: Symbol('Fragment'),
+            
+            // Support for React.memo and other HOCs
+            memo: (Component) => Component,
+            forwardRef: (Component) => Component
+          };
+          
+          // ReactDOM simulation
+          window.ReactDOM = {
+            render: function(element, container) {
+              while (container.firstChild) {
+                container.removeChild(container.firstChild);
+              }
+              container.appendChild(element);
+            },
+            createRoot: function(container) {
+              return {
+                render: function(element) {
+                  while (container.firstChild) {
+                    container.removeChild(container.firstChild);
+                  }
+                  container.appendChild(element);
+                }
+              };
+            },
+            createPortal: function(children, container) {
+              container.innerHTML = '';
+              if (typeof children === 'object' && children.nodeType) {
+                container.appendChild(children);
+              } else {
+                container.textContent = String(children);
+              }
+              return children;
+            }
+          };
+          
+          // JSX Transformation functions (using Babel standalone)
+          const transformJSX = (code) => {
+            try {
+              return Babel.transform(code, {
+                presets: ['react'],
+                filename: 'preview.jsx'
+              }).code;
+            } catch (error) {
+              console.error('Error transforming JSX:', error);
+              return \`/* JSX Transform Error: \${error.message} */\`;
+            }
+          };
+          
+          // Helper function to convert string to function
+          const stringToFunction = (str) => {
+            try {
+              return new Function('React', 'ReactDOM', 'props', \`
+                "use strict";
+                const exports = {};
+                const module = { exports };
+                \${str}
+                return typeof exports.default !== 'undefined' ? exports.default : module.exports;
+              \`)(React, ReactDOM, {});
+            } catch (e) {
+              console.error('Error converting string to function:', e);
+              return () => React.createElement('div', { style: { color: 'red' } }, 
+                \`Component Error: \${e.message}\`
+              );
+            }
+          };
+        </script>
+      `;
       
-      if (!appJs) {
-        console.error("App.js not found in components");
-      }
+      processedHtml = processedHtml.replace('</head>', `${enhancedReactSimulation}</head>`);
       
-      if (!indexJs) {
-        console.error("index.js not found in components");
-      }
+      // 4. Extract and transform component code
+      const componentMap = {};
       
-      // Create a more robust approach: extract component imports and transform them
-      const extractedComponents = {};
-      
-      // Extract all component files
+      // Process component files
       Object.entries(components)
         .filter(([key]) => key.startsWith('src/components/') && key.endsWith('.js'))
         .forEach(([key, content]) => {
           // Extract component name from path
           const componentName = key.split('/').pop().replace('.js', '');
-          
-          // Clean up imports and exports for inline use
-          const cleanedComponent = content
-            .replace(/import\s+.*?from\s+['"].*?['"]/g, '')
-            .replace(/export\s+default\s+/g, 'const ')
-            .trim();
-            
-          extractedComponents[componentName] = cleanedComponent;
+          componentMap[componentName] = content;
         });
       
-      console.log(`Extracted ${Object.keys(extractedComponents).length} components`);
+      // Process App.js and index.js
+      const appJs = components['src/App.js'] || '';
+      const indexJs = components['src/index.js'] || '';
       
-      // Simplify App.js
-      const simplifiedApp = appJs
-        .replace(/import\s+.*?from\s+['"].*?['"]/g, '')
-        .replace(/export\s+default\s+/g, 'const App = ')
-        .trim();
-        
-      // Create a simple React-like rendering function to simulate React
-      const mockReactCode = `
-        // Mock React implementation for preview
-        const React = {
-          createElement: function(type, props, ...children) {
-            if (typeof type === 'function') {
-              try {
-                return type(props || {});
-              } catch(e) {
-                console.error('Error rendering component:', e);
-                return \`<div class="error">Component Error: \${e.message}</div>\`;
-              }
-            }
-            
-            const element = document.createElement(type);
-            
-            if (props) {
-              Object.keys(props).forEach(key => {
-                if (key === 'className') {
-                  element.className = props[key];
-                } else if (key === 'style' && typeof props[key] === 'object') {
-                  Object.assign(element.style, props[key]);
-                } else if (key !== 'children' && !key.startsWith('__') && !key.startsWith('on')) {
-                  element.setAttribute(key, props[key]);
-                }
-              });
-            }
-            
-            children.flat().forEach(child => {
-              if (child === null || child === undefined) return;
-              
-              if (typeof child === 'object') {
-                element.appendChild(child);
-              } else {
-                element.appendChild(document.createTextNode(child));
-              }
-            });
-            
-            return element;
-          },
-          useState: function(initialValue) {
-            const value = initialValue;
-            const setValue = function() { console.log('setState called (mock)'); };
-            return [value, setValue];
-          },
-          useEffect: function(fn, deps) {
-            try { fn(); } catch(e) { console.error('useEffect error:', e); }
-          }
-        };
-        
-        // Mock ReactDOM
-        const ReactDOM = {
-          render: function(element, container) {
-            container.innerHTML = '';
-            container.appendChild(element);
-          },
-          createRoot: function(container) {
-            return {
-              render: function(element) {
-                container.innerHTML = '';
-                container.appendChild(element);
-              }
-            };
-          }
-        };
-        
-        // Define some common component implementations
-        function Fragment(props) {
-          const fragment = document.createDocumentFragment();
-          if (props && props.children) {
-            [].concat(props.children).forEach(child => {
-              if (child) fragment.appendChild(child);
-            });
-          }
-          return fragment;
-        }
-      `;
-      
-      // Combine all component code for the preview
-      const combinedComponentCode = Object.values(extractedComponents).join('\n\n');
-      
-      // Create the preview JS
-      const previewJs = `
-        <script>
+      // Create a script to initialize the application
+      const appInitScript = `
+        <script type="text/babel">
           document.addEventListener('DOMContentLoaded', function() {
             try {
-              console.log("Initializing portfolio preview");
+              console.log("Initializing enhanced portfolio preview");
               
-              ${mockReactCode}
+              // Define Components
+              ${Object.entries(componentMap).map(([name, code]) => `
+                // Component: ${name}
+                const ${name} = (function() {
+                  ${code.replace(/import\s+.*?from\s+['"].*?['"]/g, '// Import removed:')}
+                  return ${name};
+                })();
+              `).join('\n')}
               
-              // Component definitions
-              ${combinedComponentCode}
+              // Define App
+              const App = (function() {
+                ${appJs.replace(/import\s+.*?from\s+['"].*?['"]/g, '// Import removed:')}
+                return App;
+              })();
               
-              // Main App component
-              ${simplifiedApp}
-              
-              // Initialize app
+              // Initialize React app
               const rootElement = document.getElementById('root');
               if (rootElement && typeof App === 'function') {
                 try {
                   console.log("Rendering App component");
                   const appElement = React.createElement(App, {});
-                  rootElement.innerHTML = '';
-                  rootElement.appendChild(appElement);
+                  ReactDOM.createRoot(rootElement).render(appElement);
                   console.log("App rendered successfully");
                 } catch (err) {
                   console.error("Error rendering App:", err);
@@ -270,6 +348,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                     <div style="color: #721c24; background: #f8d7da; padding: 20px; border-radius: 5px;">
                       <h3>Rendering Error</h3>
                       <p>\${err.message}</p>
+                      <pre>\${err.stack}</pre>
                     </div>
                   \`;
                 }
@@ -288,6 +367,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                 <div style="color: #721c24; background: #f8d7da; padding: 20px; border-radius: 5px;">
                   <h3>Preview Error</h3>
                   <p>\${err.message}</p>
+                  <pre>\${err.stack}</pre>
                 </div>
               \`;
             }
@@ -295,7 +375,8 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         </script>
       `;
       
-      processedHtml = processedHtml.replace('</body>', `${previewJs}</body>`);
+      processedHtml = processedHtml.replace('</body>', `${appInitScript}</body>`);
+      
     } catch(err) {
       console.error("Error processing JS for preview:", err);
       setPreviewError(`Error generating preview: ${err.message}`);
@@ -305,11 +386,11 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     processedHtml = processedHtml.replace('</body>', `
       <div style="position: fixed; bottom: 0; left: 0; right: 0; background: #f8d7da; color: #721c24; padding: 10px; 
            font-size: 12px; text-align: center; font-family: Arial, sans-serif; z-index: 1000;">
-        ⚠️ This is a simplified preview. JavaScript functionality is limited. Check the browser console for errors.
+        ⚠️ This is a simplified preview. Some interactive features may not work. Check the browser console for errors.
       </div></body>
     `);
     
-    console.log("Preview HTML generated successfully, length:", processedHtml.length);
+    console.log("Enhanced preview HTML generated successfully, length:", processedHtml.length);
     setPreviewHtml(processedHtml);
     setPreviewError(null);
   }, []);
