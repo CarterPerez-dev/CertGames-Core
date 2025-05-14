@@ -21,7 +21,7 @@ class GeminiHelper:
             raise ValueError("GEMINI_API_KEY not found. Please set it in your environment variables.")
         
         self.base_url = "https://generativelanguage.googleapis.com/v1beta/models"
-        self.model = "gemini-2.5-pro-preview-03-25"
+        self.model = "gemini-2.5-pro-preview-05-06"
         self.max_retries = 3
         self.backoff_factor = 2  # Exponential backoff
         
