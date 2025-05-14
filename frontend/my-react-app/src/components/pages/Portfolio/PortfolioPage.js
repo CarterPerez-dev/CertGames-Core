@@ -1,10 +1,14 @@
-// portfolio.js - Enhanced Portfolio Page
-// Complete rewrite with modern animations, better UX, and improved flow
+// Portfolio Builder - Consolidated File
+// Complete implementation with modern animations, better UX, and improved flow
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Editor } from '@monaco-editor/react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import ReactMarkdown from 'react-markdown';
 import { 
   FaCode, FaDesktop, FaPalette, FaPuzzlePiece, FaRocket, 
   FaCog, FaSyncAlt, FaCheck, FaUserAlt, FaGlobe, FaEye, 
@@ -13,12 +17,12 @@ import {
   FaCopy, FaRegClone, FaBriefcase, FaLightbulb, FaLink,
   FaInfoCircle, FaShare, FaTwitter, FaLinkedin, FaEnvelope,
   FaFilter, FaSort, FaClock, FaCheckCircle, FaFileDownload, 
-  FaUndoAlt, FaCloudUploadAlt, FaExternalLinkAlt, FaSpinner
+  FaUndoAlt, FaCloudUploadAlt, FaExternalLinkAlt, FaSpinner,
+  FaArrowRight
 } from 'react-icons/fa';
-import ReactMarkdown from 'react-markdown'; // For markdown content rendering
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'; // For code preview
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import './portfolio.css';
+
+// Import the CSS if needed (usually done in your main component file)
+// import './portfolio.css';
 
 // Utility Functions
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -364,9 +368,143 @@ MIT License`
   }
 };
 
-// ========================================================================
-// Main Components
-// ========================================================================
+// ########################################################################
+// # CodeEditor Component - From the uploaded CodeEditor.js file
+// ########################################################################
+
+const CodeEditor = ({ value, language, theme, onChange, onError }) => {
+  const editorRef = useRef(null);
+  const [editorHeight, setEditorHeight] = useState('650px');
+  const containerRef = useRef(null);
+
+  // Resize handler to make editor responsive
+  useEffect(() => {
+    let resizeTimeout = null;
+    
+    const handleResize = () => {
+      // Clear previous timeout to debounce frequent resize events
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+      
+      // Set a new timeout to update height after resize events have stopped
+      resizeTimeout = setTimeout(() => {
+        if (containerRef.current) {
+          // Calculate available height (viewport height minus offset for other UI elements)
+          const viewportHeight = window.innerHeight;
+          const newHeight = Math.max(500, viewportHeight * 0.6); // At least 500px, up to 60% of viewport
+          setEditorHeight(`${newHeight}px`);
+        }
+      }, 100); // 100ms debounce
+    };
+  
+    // Initial sizing
+    handleResize();
+    
+    // Add resize event listener
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      // Clean up timeout if component unmounts
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+    };
+  }, []);
+
+  const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
+    
+    // Apply custom editor settings
+    editor.updateOptions({
+      lineHeight: 20,
+      fontFamily: "'Fira Code', 'Consolas', monospace",
+      fontLigatures: true,
+      cursorSmoothCaretAnimation: "on",
+    });
+    
+    // Set up validation for JavaScript files
+    if (language === 'javascript' || language === 'jsx') {
+      // Use Monaco's model markers to check for errors
+      const checkErrors = () => {
+        const markers = monaco.editor.getModelMarkers({ owner: 'javascript' });
+        if (markers.length > 0) {
+          // Get the most critical error
+          const errorMarker = markers.sort((a, b) => b.severity - a.severity)[0];
+          const errorMessage = `${errorMarker.message} (Line ${errorMarker.startLineNumber})`;
+          if (onError) onError(errorMessage);
+        } else {
+          // Clear previous errors
+          if (onError) onError(null);
+        }
+      };
+      
+      // Check for errors after a brief delay when content changes
+      editor.onDidChangeModelContent(() => {
+        setTimeout(checkErrors, 1000);
+      });
+      
+      // Check errors on initial load
+      setTimeout(checkErrors, 1500);
+    }
+  };
+
+  useEffect(() => {
+    // Make sure the editor has been mounted
+    if (!editorRef.current) return;
+    
+    // Set the value when it changes externally
+    if (editorRef.current.getValue() !== value) {
+      editorRef.current.setValue(value);
+    }
+  }, [value]);
+
+  return (
+    <div ref={containerRef} className="portfolio-code-editor-wrapper">
+      <Editor
+        height={editorHeight}
+        width="100%"
+        language={language}
+        theme={theme || "vs-dark"}
+        value={value}
+        onMount={handleEditorDidMount}
+        onChange={(newValue) => onChange(newValue)}
+        options={{
+          minimap: { enabled: true },
+          lineNumbers: 'on',
+          scrollBeyondLastLine: false,
+          fontSize: 14,
+          autoIndent: 'full',
+          formatOnPaste: true,
+          formatOnType: true,
+          wordWrap: 'on',
+          scrollbar: {
+            vertical: 'visible',
+            horizontal: 'visible',
+            useShadows: true,
+            verticalHasArrows: true,
+            horizontalHasArrows: true
+          },
+          suggest: {
+            showIcons: true,
+            showFunctions: true,
+            showConstructors: true,
+            showVariables: true,
+            showClasses: true,
+            showStructs: true,
+            showInterfaces: true,
+            showModules: true
+          }
+        }}
+      />
+    </div>
+  );
+};
+
+// ########################################################################
+// # Main Components
+// ########################################################################
 
 // PortfolioPage Component - Manages the overall page and state
 const PortfolioPage = () => {
@@ -452,9 +590,9 @@ const PortfolioPage = () => {
   );
 };
 
-// ========================================================================
-// Portfolio Creator Component
-// ========================================================================
+// ########################################################################
+// # Portfolio Creator Component
+// ########################################################################
 
 // The Portfolio Creation Wizard
 const PortfolioCreator = ({ onComplete }) => {
@@ -1197,9 +1335,9 @@ const ResumeInput = ({ resumeText, onChange }) => {
   );
 };
 
-// ========================================================================
-// Portfolio List Component
-// ========================================================================
+// ########################################################################
+// # Portfolio List Component
+// ########################################################################
 
 // Portfolio List Component - Displays all portfolios
 const PortfolioList = ({ onSelect, onCreateNew }) => {
@@ -1520,9 +1658,9 @@ const PortfolioList = ({ onSelect, onCreateNew }) => {
   );
 };
 
-// ========================================================================
-// Portfolio Preview Component
-// ========================================================================
+// ########################################################################
+// # Portfolio Preview Component
+// ########################################################################
 
 // Portfolio Preview Component - Shows code preview and live preview
 const PortfolioPreview = ({ portfolio, onBack }) => {
@@ -1772,9 +1910,9 @@ const PortfolioPreview = ({ portfolio, onBack }) => {
   );
 };
 
-// ========================================================================
-// Portfolio Deployment Component
-// ========================================================================
+// ########################################################################
+// # Portfolio Deployment Component
+// ########################################################################
 
 // Portfolio Deployment Component - Handles deployment process and success
 const PortfolioDeployment = ({ portfolio, onBack, onComplete }) => {
@@ -2062,4 +2200,5 @@ const PortfolioDeployment = ({ portfolio, onBack, onComplete }) => {
   );
 };
 
+// Export the main component
 export default PortfolioPage;
