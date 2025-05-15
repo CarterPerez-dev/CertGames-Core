@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { transform } from '@babel/standalone';
 import CodeEditor from './CodeEditor';
+import EnhancedPreview from './EnhancedPreview';
 import { FaCode, FaEye, FaDesktop, FaMobile, FaSync, FaCheck, FaTimes, FaFile, FaFolder, FaInfo, FaExclamationTriangle, FaWrench, FaBug, FaCopy, FaDownload, FaClipboard } from 'react-icons/fa';
 import './portfolio.css';
 
@@ -62,45 +63,43 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     }
   }, [portfolio]);
 
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (iframe) {
+      const contentWin = iframe.contentWindow;
+      if (contentWin) {
+        const logPrefix = "[IFRAME CONSOLE]:";
+        const originalConsole = { ...contentWin.console }; 
 
-    useEffect(() => {
-      const iframe = iframeRef.current;
-      if (iframe) {
-        const contentWin = iframe.contentWindow;
-        if (contentWin) {
-          const logPrefix = "[IFRAME CONSOLE]:";
-          const originalConsole = { ...contentWin.console }; 
-  
-          const makeForwarder = (method) => (...args) => {
-              console[method](logPrefix, ...args); 
-              if (originalConsole[method]) {
-                  originalConsole[method].apply(contentWin.console, args); 
-              }
-          };
-  
-          contentWin.console.log = makeForwarder('log');
-          contentWin.console.error = makeForwarder('error');
-          contentWin.console.warn = makeForwarder('warn');
-          contentWin.console.info = makeForwarder('info');
-          contentWin.console.debug = makeForwarder('debug');
-          
-          console.log("PortfolioPreview: Attached console forwarders to iframe."); // THIS LOG IS NOT APPEARING
-  
-          return () => {
-            if (iframe.contentWindow) { 
-              iframe.contentWindow.console.log = originalConsole.log;
-              iframe.contentWindow.console.error = originalConsole.error;
-              console.log("PortfolioPreview: Detached console forwarders from iframe.");
+        const makeForwarder = (method) => (...args) => {
+            console[method](logPrefix, ...args); 
+            if (originalConsole[method]) {
+                originalConsole[method].apply(contentWin.console, args); 
             }
-          };
-        } else {
-          console.warn("PortfolioPreview: iframe.contentWindow not available for console forwarding."); // THIS LOG IS NOT APPEARING EITHER
-        }
-      } else {
-          console.warn("PortfolioPreview: iframeRef.current is null in console forwarding useEffect."); // OR THIS ONE
-      }
-    }, [previewHtml]); // Re-run when previewHtml changes
+        };
 
+        contentWin.console.log = makeForwarder('log');
+        contentWin.console.error = makeForwarder('error');
+        contentWin.console.warn = makeForwarder('warn');
+        contentWin.console.info = makeForwarder('info');
+        contentWin.console.debug = makeForwarder('debug');
+        
+        console.log("PortfolioPreview: Attached console forwarders to iframe.");
+
+        return () => {
+          if (iframe.contentWindow) { 
+            iframe.contentWindow.console.log = originalConsole.log;
+            iframe.contentWindow.console.error = originalConsole.error;
+            console.log("PortfolioPreview: Detached console forwarders from iframe.");
+          }
+        };
+      } else {
+        console.warn("PortfolioPreview: iframe.contentWindow not available for console forwarding.");
+      }
+    } else {
+        console.warn("PortfolioPreview: iframeRef.current is null in console forwarding useEffect.");
+    }
+  }, [previewHtml]); // Re-run when previewHtml changes
 
   // Organize files into directory structure
   const organizeFilesIntoTree = (components) => {
@@ -128,311 +127,312 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     return tree;
   };
 
-
-  
+  // Generate HTML for preview
   const generatePreviewHtml = useCallback((components) => {
-    console.log("Generating enhanced preview HTML");
-    
-    // Debug what components we have
-    const componentKeys = Object.keys(components);
-    console.log("Available components:", componentKeys);
-    
-    // First check if we have the necessary files
-    const htmlFile = components['public/index.html'] || '';
-    
-    if (!htmlFile) {
-      console.error("No HTML template found in components");
-      setPreviewHtml('<div style="padding: 20px; color: #666;">No HTML template found</div>');
-      return;
-    }
-    
-    // Basic strategy: inject CSS, Babel, and our React simulation into the HTML template
-    let processedHtml = htmlFile;
-    
-    // 1. Add Babel standalone for JSX transpilation
-    const babelScript = `
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.10/babel.min.js"></script>
-    `;
-    processedHtml = processedHtml.replace('</head>', `${babelScript}</head>`);
-    
-    // 2. Inject CSS
-    const cssContent = Object.entries(components)
-      .filter(([key]) => key.endsWith('.css'))
-      .map(([_, content]) => content)
-      .join('\n');
-    
-    console.log(`Found ${cssContent.length} bytes of CSS content to inject`);
-    
-    // Inject inline CSS
-    const styleTag = `<style>${cssContent}</style>`;
-    processedHtml = processedHtml.replace('</head>', `${styleTag}</head>`);
+    console.log("Generating preview HTML");
     
     try {
-      // 3. Enhanced React Simulation
-      const enhancedReactSimulation = `
-        <script>
-          // Enhanced React Simulation
-          window.React = {
-            createElement: function(type, props, ...children) {
-              // Handle function components
-              if (typeof type === 'function') {
-                try {
-                  return type(props || {});
-                } catch(e) {
-                  console.error('Error rendering component:', e);
-                  return document.createTextNode(\`Error: \${e.message}\`);
+      // Get the HTML template
+      const htmlFile = components['public/index.html'] || '';
+      
+      if (!htmlFile) {
+        console.error("No HTML template found in components");
+        setPreviewHtml('<div style="padding: 20px; color: #666;">No HTML template found</div>');
+        return;
+      }
+      
+      // Basic strategy: inject CSS, Babel, and our React simulation into the HTML template
+      let processedHtml = htmlFile;
+      
+      // 1. Add Babel standalone for JSX transpilation
+      const babelScript = `
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.10/babel.min.js"></script>
+      `;
+      processedHtml = processedHtml.replace('</head>', `${babelScript}</head>`);
+      
+      // 2. Inject CSS
+      const cssContent = Object.entries(components)
+        .filter(([key]) => key.endsWith('.css'))
+        .map(([_, content]) => content)
+        .join('\n');
+      
+      console.log(`Found ${cssContent.length} bytes of CSS content to inject`);
+      
+      // Inject inline CSS
+      const styleTag = `<style>${cssContent}</style>`;
+      processedHtml = processedHtml.replace('</head>', `${styleTag}</head>`);
+      
+      try {
+        // 3. Enhanced React Simulation
+        const enhancedReactSimulation = `
+          <script>
+            // Enhanced React Simulation
+            window.React = {
+              createElement: function(type, props, ...children) {
+                // Handle function components
+                if (typeof type === 'function') {
+                  try {
+                    return type(props || {});
+                  } catch(e) {
+                    console.error('Error rendering component:', e);
+                    return document.createTextNode(\`Error: \${e.message}\`);
+                  }
                 }
-              }
-              
-              // Handle string types (native DOM elements)
-              if (typeof type === 'string') {
-                const element = document.createElement(type);
                 
-                // Apply props/attributes
-                if (props) {
-                  Object.entries(props).forEach(([key, value]) => {
-                    if (key === 'className') {
-                      element.className = value;
-                    } else if (key === 'style' && typeof value === 'object') {
-                      Object.assign(element.style, value);
-                    } else if (key === 'dangerouslySetInnerHTML' && value.__html) {
-                      element.innerHTML = value.__html;
-                    } else if (key.startsWith('on') && typeof value === 'function') {
-                      // Handle event listeners
-                      const eventName = key.slice(2).toLowerCase();
-                      element.addEventListener(eventName, value);
-                    } else if (!key.startsWith('__') && key !== 'children') {
-                      // Regular attributes
-                      element.setAttribute(key, value);
+                // Handle string types (native DOM elements)
+                if (typeof type === 'string') {
+                  const element = document.createElement(type);
+                  
+                  // Apply props/attributes
+                  if (props) {
+                    Object.entries(props).forEach(([key, value]) => {
+                      if (key === 'className') {
+                        element.className = value;
+                      } else if (key === 'style' && typeof value === 'object') {
+                        Object.assign(element.style, value);
+                      } else if (key === 'dangerouslySetInnerHTML' && value.__html) {
+                        element.innerHTML = value.__html;
+                      } else if (key.startsWith('on') && typeof value === 'function') {
+                        // Handle event listeners
+                        const eventName = key.slice(2).toLowerCase();
+                        element.addEventListener(eventName, value);
+                      } else if (!key.startsWith('__') && key !== 'children') {
+                        // Regular attributes
+                        element.setAttribute(key, value);
+                      }
+                    });
+                  }
+                  
+                  // Append children
+                  children.flat().forEach(child => {
+                    if (child === null || child === undefined || child === false) return;
+                    
+                    if (typeof child === 'object' && child.nodeType) {
+                      element.appendChild(child);
+                    } else {
+                      element.appendChild(document.createTextNode(String(child)));
                     }
                   });
-                }
-                
-                // Append children
-                children.flat().forEach(child => {
-                  if (child === null || child === undefined || child === false) return;
                   
-                  if (typeof child === 'object' && child.nodeType) {
-                    element.appendChild(child);
-                  } else {
-                    element.appendChild(document.createTextNode(String(child)));
-                  }
-                });
-                
-                return element;
-              }
-              
-              // Handle fragments and special types
-              if (type === React.Fragment) {
-                const fragment = document.createDocumentFragment();
-                children.flat().forEach(child => {
-                  if (child !== null && child !== undefined && child !== false) {
-                    fragment.appendChild(
-                      typeof child === 'object' && child.nodeType 
-                        ? child
-                        : document.createTextNode(String(child))
-                    );
-                  }
-                });
-                return fragment;
-              }
-              
-              // Fallback
-              const div = document.createElement('div');
-              div.textContent = \`Unknown type: \${type}\`;
-              return div;
-            },
-            
-            // Hook simulation
-            createRef: () => ({ current: null }),
-            useRef: (initialValue) => ({ current: initialValue }),
-            useState: function(initialValue) {
-              const value = typeof initialValue === 'function' ? initialValue() : initialValue;
-              const setValue = function() { 
-                console.log('setState called with', arguments); 
-                // This is just a mock that doesn't actually update state
-              };
-              return [value, setValue];
-            },
-            useEffect: function(fn, deps) {
-              try { 
-                // Only run effects once in our simulation
-                fn(); 
-              } catch(e) { 
-                console.error('useEffect error:', e); 
-              }
-            },
-            useCallback: (fn) => fn,
-            useMemo: (fn) => fn(),
-            useContext: () => ({}),
-            Fragment: Symbol('Fragment'),
-            
-            // Support for React.memo and other HOCs
-            memo: (Component) => Component,
-            forwardRef: (Component) => Component
-          };
-          
-          // ReactDOM simulation
-          window.ReactDOM = {
-            render: function(element, container) {
-              while (container.firstChild) {
-                container.removeChild(container.firstChild);
-              }
-              container.appendChild(element);
-            },
-            createRoot: function(container) {
-              return {
-                render: function(element) {
-                  while (container.firstChild) {
-                    container.removeChild(container.firstChild);
-                  }
-                  container.appendChild(element);
+                  return element;
                 }
-              };
-            },
-            createPortal: function(children, container) {
-              container.innerHTML = '';
-              if (typeof children === 'object' && children.nodeType) {
-                container.appendChild(children);
-              } else {
-                container.textContent = String(children);
+                
+                // Handle fragments and special types
+                if (type === React.Fragment) {
+                  const fragment = document.createDocumentFragment();
+                  children.flat().forEach(child => {
+                    if (child !== null && child !== undefined && child !== false) {
+                      fragment.appendChild(
+                        typeof child === 'object' && child.nodeType 
+                          ? child
+                          : document.createTextNode(String(child))
+                      );
+                    }
+                  });
+                  return fragment;
+                }
+                
+                // Fallback
+                const div = document.createElement('div');
+                div.textContent = \`Unknown type: \${type}\`;
+                return div;
+              },
+              
+              // Hook simulation
+              createRef: () => ({ current: null }),
+              useRef: (initialValue) => ({ current: initialValue }),
+              useState: function(initialValue) {
+                const value = typeof initialValue === 'function' ? initialValue() : initialValue;
+                const setValue = function() { 
+                  console.log('setState called with', arguments); 
+                  // This is just a mock that doesn't actually update state
+                };
+                return [value, setValue];
+              },
+              useEffect: function(fn, deps) {
+                try { 
+                  // Only run effects once in our simulation
+                  fn(); 
+                } catch(e) { 
+                  console.error('useEffect error:', e); 
+                }
+              },
+              useCallback: (fn) => fn,
+              useMemo: (fn) => fn(),
+              useContext: () => ({}),
+              Fragment: Symbol('Fragment'),
+              
+              // Support for React.memo and other HOCs
+              memo: (Component) => Component,
+              forwardRef: (Component) => Component
+            };
+            
+            // ReactDOM simulation
+            window.ReactDOM = {
+              render: function(element, container) {
+                while (container.firstChild) {
+                  container.removeChild(container.firstChild);
+                }
+                container.appendChild(element);
+              },
+              createRoot: function(container) {
+                return {
+                  render: function(element) {
+                    while (container.firstChild) {
+                      container.removeChild(container.firstChild);
+                    }
+                    container.appendChild(element);
+                  }
+                };
+              },
+              createPortal: function(children, container) {
+                container.innerHTML = '';
+                if (typeof children === 'object' && children.nodeType) {
+                  container.appendChild(children);
+                } else {
+                  container.textContent = String(children);
+                }
+                return children;
               }
-              return children;
-            }
-          };
-          
-          // JSX Transformation functions (using Babel standalone)
-          const transformJSX = (code) => {
-            try {
-              return Babel.transform(code, {
-                presets: ['react'],
-                filename: 'preview.jsx'
-              }).code;
-            } catch (error) {
-              console.error('Error transforming JSX:', error);
-              return \`/* JSX Transform Error: \${error.message} */\`;
-            }
-          };
-          
-          // Helper function to convert string to function
-          const stringToFunction = (str) => {
-            try {
-              return new Function('React', 'ReactDOM', 'props', \`
-                "use strict";
-                const exports = {};
-                const module = { exports };
-                \${str}
-                return typeof exports.default !== 'undefined' ? exports.default : module.exports;
-              \`)(React, ReactDOM, {});
-            } catch (e) {
-              console.error('Error converting string to function:', e);
-              return () => React.createElement('div', { style: { color: 'red' } }, 
-                \`Component Error: \${e.message}\`
-              );
-            }
-          };
-        </script>
-      `;
-      
-      processedHtml = processedHtml.replace('</head>', `${enhancedReactSimulation}</head>`);
-      
-      // 4. Extract and transform component code
-      const componentMap = {};
-      
-      // Process component files
-      Object.entries(components)
-        .filter(([key]) => key.startsWith('src/components/') && key.endsWith('.js'))
-        .forEach(([key, content]) => {
-          // Extract component name from path
-          const componentName = key.split('/').pop().replace('.js', '');
-          componentMap[componentName] = content;
-        });
-      
-      // Process App.js and index.js
-      const appJs = components['src/App.js'] || '';
-      const indexJs = components['src/index.js'] || '';
-      
-      // Create a script to initialize the application
-      const appInitScript = `
-        <script type="text/babel">
-          document.addEventListener('DOMContentLoaded', function() {
-            try {
-              console.log("Initializing enhanced portfolio preview");
-              
-              // Define Components
-              ${Object.entries(componentMap).map(([name, code]) => `
-                // Component: ${name}
-                const ${name} = (function() {
-                  ${code.replace(/import\s+.*?from\s+['"].*?['"]/g, '// Import removed:')}
-                  return ${name};
+            };
+            
+            // JSX Transformation functions (using Babel standalone)
+            const transformJSX = (code) => {
+              try {
+                return Babel.transform(code, {
+                  presets: ['react'],
+                  filename: 'preview.jsx'
+                }).code;
+              } catch (error) {
+                console.error('Error transforming JSX:', error);
+                return \`/* JSX Transform Error: \${error.message} */\`;
+              }
+            };
+            
+            // Helper function to convert string to function
+            const stringToFunction = (str) => {
+              try {
+                return new Function('React', 'ReactDOM', 'props', \`
+                  "use strict";
+                  const exports = {};
+                  const module = { exports };
+                  \${str}
+                  return typeof exports.default !== 'undefined' ? exports.default : module.exports;
+                \`)(React, ReactDOM, {});
+              } catch (e) {
+                console.error('Error converting string to function:', e);
+                return () => React.createElement('div', { style: { color: 'red' } }, 
+                  \`Component Error: \${e.message}\`
+                );
+              }
+            };
+          </script>
+        `;
+        
+        processedHtml = processedHtml.replace('</head>', `${enhancedReactSimulation}</head>`);
+        
+        // 4. Extract and transform component code
+        const componentMap = {};
+        
+        // Process component files
+        Object.entries(components)
+          .filter(([key]) => key.startsWith('src/components/') && key.endsWith('.js'))
+          .forEach(([key, content]) => {
+            // Extract component name from path
+            const componentName = key.split('/').pop().replace('.js', '');
+            componentMap[componentName] = content;
+          });
+        
+        // Process App.js and index.js
+        const appJs = components['src/App.js'] || '';
+        const indexJs = components['src/index.js'] || '';
+        
+        // Create a script to initialize the application
+        const appInitScript = `
+          <script type="text/babel">
+            document.addEventListener('DOMContentLoaded', function() {
+              try {
+                console.log("Initializing portfolio preview");
+                
+                // Define Components
+                ${Object.entries(componentMap).map(([name, code]) => `
+                  // Component: ${name}
+                  const ${name} = (function() {
+                    ${code.replace(/import\s+.*?from\s+['"].*?['"]/g, '// Import removed:')}
+                    return ${name};
+                  })();
+                `).join('\n')}
+                
+                // Define App
+                const App = (function() {
+                  ${appJs.replace(/import\s+.*?from\s+['"].*?['"]/g, '// Import removed:')}
+                  return App;
                 })();
-              `).join('\n')}
-              
-              // Define App
-              const App = (function() {
-                ${appJs.replace(/import\s+.*?from\s+['"].*?['"]/g, '// Import removed:')}
-                return App;
-              })();
-              
-              // Initialize React app
-              const rootElement = document.getElementById('root');
-              if (rootElement && typeof App === 'function') {
-                try {
-                  console.log("Rendering App component");
-                  const appElement = React.createElement(App, {});
-                  ReactDOM.createRoot(rootElement).render(appElement);
-                  console.log("App rendered successfully");
-                } catch (err) {
-                  console.error("Error rendering App:", err);
-                  rootElement.innerHTML = \`
+                
+                // Initialize React app
+                const rootElement = document.getElementById('root');
+                if (rootElement && typeof App === 'function') {
+                  try {
+                    console.log("Rendering App component");
+                    const appElement = React.createElement(App, {});
+                    ReactDOM.createRoot(rootElement).render(appElement);
+                    console.log("App rendered successfully");
+                  } catch (err) {
+                    console.error("Error rendering App:", err);
+                    rootElement.innerHTML = \`
+                      <div style="color: #721c24; background: #f8d7da; padding: 20px; border-radius: 5px;">
+                        <h3>Rendering Error</h3>
+                        <p>\${err.message}</p>
+                        <pre>\${err.stack}</pre>
+                      </div>
+                    \`;
+                  }
+                } else {
+                  console.error("Root element or App component not found");
+                  document.body.innerHTML = \`
                     <div style="color: #721c24; background: #f8d7da; padding: 20px; border-radius: 5px;">
-                      <h3>Rendering Error</h3>
-                      <p>\${err.message}</p>
-                      <pre>\${err.stack}</pre>
+                      <h3>Preview Error</h3>
+                      <p>Could not render the App component. Check if the App component is properly defined and exported.</p>
                     </div>
                   \`;
                 }
-              } else {
-                console.error("Root element or App component not found");
+              } catch(err) {
+                console.error("Preview initialization error:", err);
                 document.body.innerHTML = \`
                   <div style="color: #721c24; background: #f8d7da; padding: 20px; border-radius: 5px;">
                     <h3>Preview Error</h3>
-                    <p>Could not render the App component. Check if the App component is properly defined and exported.</p>
+                    <p>\${err.message}</p>
+                    <pre>\${err.stack}</pre>
                   </div>
                 \`;
               }
-            } catch(err) {
-              console.error("Preview initialization error:", err);
-              document.body.innerHTML = \`
-                <div style="color: #721c24; background: #f8d7da; padding: 20px; border-radius: 5px;">
-                  <h3>Preview Error</h3>
-                  <p>\${err.message}</p>
-                  <pre>\${err.stack}</pre>
-                </div>
-              \`;
-            }
-          });
-        </script>
-      `;
+            });
+          </script>
+        `;
+        
+        processedHtml = processedHtml.replace('</body>', `${appInitScript}</body>`);
+        
+      } catch(err) {
+        console.error("Error processing JS for preview:", err);
+        setPreviewError(`Error generating preview: ${err.message}`);
+      }
       
-      processedHtml = processedHtml.replace('</body>', `${appInitScript}</body>`);
+      // Add preview message
+      processedHtml = processedHtml.replace('</body>', `
+        <div style="position: fixed; bottom: 0; left: 0; right: 0; background: #f8d7da; color: #721c24; padding: 10px; 
+             font-size: 12px; text-align: center; font-family: Arial, sans-serif; z-index: 1000;">
+          ⚠️ This is a simplified preview. Some interactive features may not work. Check the browser console for errors.
+        </div></body>
+      `);
       
-    } catch(err) {
-      console.error("Error processing JS for preview:", err);
+      console.log("Preview HTML generated successfully, length:", processedHtml.length);
+      setPreviewHtml(processedHtml);
+      setPreviewError(null);
+    } catch (err) {
+      console.error("Error generating preview HTML:", err);
       setPreviewError(`Error generating preview: ${err.message}`);
+      setPreviewHtml('');
     }
-    
-    // Add preview message
-    processedHtml = processedHtml.replace('</body>', `
-      <div style="position: fixed; bottom: 0; left: 0; right: 0; background: #f8d7da; color: #721c24; padding: 10px; 
-           font-size: 12px; text-align: center; font-family: Arial, sans-serif; z-index: 1000;">
-        ⚠️ This is a simplified preview. Some interactive features may not work. Check the browser console for errors.
-      </div></body>
-    `);
-    
-    console.log("Enhanced preview HTML generated successfully, length:", processedHtml.length);
-    setPreviewHtml(processedHtml);
-    setPreviewError(null);
   }, []);
 
   const handleFileSelect = (filePath) => {
@@ -708,6 +708,51 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     );
   };
 
+  const renderPreviewContent = () => {
+    if (previewError) {
+      return (
+        <div className="portfolio-preview-error">
+          <FaBug className="preview-error-icon" />
+          <div className="preview-error-message">
+            <h3>Preview Error</h3>
+            <p>{previewError}</p>
+            <div className="preview-error-help">
+              <p>Check that your code has the following:</p>
+              <ul>
+                <li>A valid App.js component with a default export</li>
+                <li>A proper index.html with a root element</li>
+                <li>Components that don't rely on browser APIs</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (!isPreviewGenerated) {
+      return (
+        <div className="preview-loading">
+          <div className="preview-loading-spinner"></div>
+          <p>Generating preview...</p>
+        </div>
+      );
+    }
+
+    // Use the new EnhancedPreview component
+    return (
+      <EnhancedPreview 
+        portfolioComponents={portfolio.components}
+        onError={(errMsg) => {
+          console.error("Preview error:", errMsg);
+          // Don't overwrite the preview error with component errors
+          if (!previewError) {
+            setErrorMessage(errMsg);
+          }
+        }}
+      />
+    );
+  };
+
   if (!portfolio) {
     return (
       <div className="portfolio-preview-container portfolio-no-portfolio">
@@ -742,6 +787,36 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         </div>
       </div>
       
+      {/* Display error message prominently at the top if present */}
+      {errorMessage && (
+        <div className="portfolio-error-banner">
+          <div className="portfolio-error-message">
+            <FaExclamationTriangle className="error-icon" />
+            <div className="error-content">
+              <h3>Code Error Detected</h3>
+              <p className="error-text">{errorMessage}</p>
+              <button 
+                className="portfolio-fix-error-button"
+                onClick={handleFixError}
+                disabled={isFixingError}
+              >
+                {isFixingError ? (
+                  <>
+                    <span className="fix-spinner"></span>
+                    <span>Fixing...</span>
+                  </>
+                ) : (
+                  <>
+                    <FaWrench className="fix-icon" />
+                    <span>Auto-Fix Error</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {previewMode === 'code' ? (
         <div className="portfolio-code-preview">
           <div className="portfolio-file-explorer">
@@ -764,10 +839,6 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
               }
             </div>
           </div>
-
-
-
-
           
           <div className="portfolio-code-editor-container">
             {activeFile ? (
@@ -777,7 +848,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                     {getFileIcon(activeFile)}
                     <span className="file-path">{activeFile}</span>
                   </div>
-                <div className="portfolio-editor-actions">
+                  <div className="portfolio-editor-actions">
                     <button 
                       className="portfolio-editor-action-btn"
                       onClick={() => {
@@ -786,7 +857,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                         const tempBtn = document.getElementById('copy-button');
                         if (tempBtn) {
                           const originalText = tempBtn.innerHTML;
-                          tempBtn.innerHTML = `<FaCheck className="copied-icon" /> Copied!`;
+                          tempBtn.innerHTML = '<span class="copied-icon">✓</span> Copied!';
                           setTimeout(() => {
                             tempBtn.innerHTML = originalText;
                           }, 2000);
@@ -797,7 +868,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                       <FaCopy className="action-icon" />
                       <span>Copy All</span>
                     </button>
-                  </div>
+                    
                     <button 
                       className="portfolio-editor-action-btn"
                       onClick={handleRefreshPreview}
@@ -806,6 +877,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                       <span>Refresh Preview</span>
                     </button>
                   </div>
+                </div>
                 <CodeEditor
                   value={fileContent}
                   language={getFileLanguage(activeFile)}
@@ -813,31 +885,6 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                   onChange={handleUpdateFileContent}
                   onError={setErrorMessage}
                 />
-                {errorMessage && (
-                  <div className="portfolio-error-container">
-                    <div className="portfolio-error-message">
-                      <FaExclamationTriangle className="error-icon" />
-                      <span className="error-text">{errorMessage}</span>
-                    </div>
-                    <button 
-                      className="portfolio-fix-error-button"
-                      onClick={handleFixError}
-                      disabled={isFixingError}
-                    >
-                      {isFixingError ? (
-                        <>
-                          <span className="fix-spinner"></span>
-                          <span>Fixing...</span>
-                        </>
-                      ) : (
-                        <>
-                          <FaWrench className="fix-icon" />
-                          <span>Auto-Fix Error</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                )}
               </>
             ) : (
               <div className="portfolio-no-file-selected">
@@ -850,76 +897,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         </div>
       ) : (
         <div className="portfolio-live-preview-container">
-          <div className="portfolio-preview-toolbar">
-            <div className="portfolio-preview-device-selector">
-              <button 
-                className={`portfolio-device-button ${previewDevice === 'desktop' ? 'active' : ''}`}
-                onClick={() => setPreviewDevice('desktop')}
-              >
-                <FaDesktop className="device-icon" />
-                <span>Desktop</span>
-              </button>
-              <button 
-                className={`portfolio-device-button ${previewDevice === 'mobile' ? 'active' : ''}`}
-                onClick={() => setPreviewDevice('mobile')}
-              >
-                <FaMobile className="device-icon" />
-                <span>Mobile</span>
-              </button>
-            </div>
-            <button 
-              className="portfolio-preview-refresh-btn"
-              onClick={handleRefreshPreview}
-              disabled={isPreviewRefreshing}
-            >
-              <FaSync className={`refresh-icon ${isPreviewRefreshing ? 'refreshing' : ''}`} />
-              <span>Refresh</span>
-            </button>
-          </div>
-          
-          {previewError && (
-            <div className="portfolio-preview-error">
-              <FaBug className="preview-error-icon" />
-              <div className="preview-error-message">
-                <h3>Preview Error</h3>
-                <p>{previewError}</p>
-                <div className="preview-error-help">
-                  <p>Check that your code has the following:</p>
-                  <ul>
-                    <li>A valid App.js component with a default export</li>
-                    <li>A proper index.html with a root element</li>
-                    <li>Components that don't rely on browser APIs</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          <div 
-            className={`portfolio-preview-frame-container ${previewDevice === 'mobile' ? 'mobile-container' : ''}`}
-          >
-            {isPreviewGenerated ? (
-              <iframe
-                ref={iframeRef}
-                className="portfolio-preview-frame"
-                title="Portfolio Preview"
-                srcDoc={previewHtml}
-                sandbox="allow-scripts allow-same-origin"
-                width="100%"
-                height="100%"
-                onLoad={() => console.log("Preview iframe loaded")}
-                onError={(e) => {
-                  console.error("Preview iframe error:", e);
-                  setPreviewError("Error loading preview. Check the code for errors.");
-                }}
-              />
-            ) : (
-              <div className="preview-loading">
-                <div className="preview-loading-spinner"></div>
-                <p>Generating preview...</p>
-              </div>
-            )}
-          </div>
+          {renderPreviewContent()}
         </div>
       )}
     </div>

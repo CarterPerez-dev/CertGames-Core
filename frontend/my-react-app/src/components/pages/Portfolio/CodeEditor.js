@@ -4,105 +4,101 @@ import { Editor } from '@monaco-editor/react';
 
 const CodeEditor = ({ value, language, theme, onChange, onError }) => {
   const editorRef = useRef(null);
-  const [editorHeight, setEditorHeight] = useState('650px'); // Increased default height
-  const containerRef = useRef(null);
+  const [editorHeight, setEditorHeight] = useState('650px');
+  const containerRef = useRef(null); // Keep containerRef if used for other styling/layout
 
-  // Resize handler to make editor responsive
-  // In frontend/my-react-app/src/components/pages/Portfolio/CodeEditor.js
-  // Find the useEffect hook that handles resize and modify it to:
-  
   useEffect(() => {
     let resizeTimeout = null;
-    
+
     const handleResize = () => {
-      // Clear previous timeout to debounce frequent resize events
       if (resizeTimeout) {
         clearTimeout(resizeTimeout);
       }
-      
-      // Set a new timeout to update height after resize events have stopped
+
       resizeTimeout = setTimeout(() => {
-        if (containerRef.current) {
-          // Calculate available height (viewport height minus offset for other UI elements)
-          const viewportHeight = window.innerHeight;
-          const newHeight = Math.max(500, viewportHeight * 0.6); // At least 500px, up to 60% of viewport
-          setEditorHeight(`${newHeight}px`);
-        }
+        // No need to check containerRef.current here if it's not directly used for height calculation
+        const viewportHeight = window.innerHeight;
+        const newHeight = Math.max(500, viewportHeight * 0.6); // At least 500px, up to 60% of viewport
+        setEditorHeight(`${newHeight}px`);
+
+        // If the editor instance is available, you could also tell it to layout
+        // This can sometimes be beneficial if the component wrapper doesn't always catch all scenarios
+        // But often, the prop change is enough.
+        // if (editorRef.current) {
+        //   editorRef.current.layout();
+        // }
+
       }, 100); // 100ms debounce
     };
-  
-    // Initial sizing
-    handleResize();
-    
-    // Add resize event listener
-    window.addEventListener('resize', handleResize);
-    
+
+    handleResize(); // Initial sizing
+    window.addEventListener('resize', handleResize, { passive: true });
+
     return () => {
       window.removeEventListener('resize', handleResize);
-      // Clean up timeout if component unmounts
       if (resizeTimeout) {
         clearTimeout(resizeTimeout);
       }
     };
-  }, []);
+  }, []); // Removed editorRef from dependency array, as it's stable
+
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
-    
-    // Apply custom editor settings
+
     editor.updateOptions({
       lineHeight: 20,
       fontFamily: "'Fira Code', 'Consolas', monospace",
       fontLigatures: true,
       cursorSmoothCaretAnimation: "on",
     });
-    
-    // Set up validation for JavaScript files
+
     if (language === 'javascript' || language === 'jsx') {
-      // Use Monaco's model markers to check for errors
       const checkErrors = () => {
-        const markers = monaco.editor.getModelMarkers({ owner: 'javascript' });
+        const model = editor.getModel();
+        if (!model) return; // Ensure model exists
+        const markers = monaco.editor.getModelMarkers({ resource: model.uri }); // Better to use resource
         if (markers.length > 0) {
-          // Get the most critical error
           const errorMarker = markers.sort((a, b) => b.severity - a.severity)[0];
           const errorMessage = `${errorMarker.message} (Line ${errorMarker.startLineNumber})`;
           if (onError) onError(errorMessage);
         } else {
-          // Clear previous errors
           if (onError) onError(null);
         }
       };
-      
-      // Check for errors after a brief delay when content changes
+
+      let errorCheckTimeout = null;
       editor.onDidChangeModelContent(() => {
-        setTimeout(checkErrors, 1000);
+        if (errorCheckTimeout) clearTimeout(errorCheckTimeout);
+        errorCheckTimeout = setTimeout(checkErrors, 1000);
       });
       
-      // Check errors on initial load
-      setTimeout(checkErrors, 1500);
+      // Check errors on initial load if there's initial content
+      if (value) {
+         setTimeout(checkErrors, 1500);
+      }
     }
   };
 
+  // This useEffect to set value is fine.
   useEffect(() => {
-    // Make sure the editor has been mounted
-    if (!editorRef.current) return;
-    
-    // Set the value when it changes externally
-    if (editorRef.current.getValue() !== value) {
+    if (editorRef.current && editorRef.current.getValue() !== value) {
       editorRef.current.setValue(value);
     }
   }, [value]);
 
   return (
-    <div ref={containerRef} className="portfolio-code-editor-wrapper">
+    <div ref={containerRef} className="portfolio-code-editor-wrapper" style={{ width: '100%' }}>
       <Editor
+        // The height prop change should trigger the editor to re-layout
         height={editorHeight}
+        // Ensure width is also handled, often "100%" on the Editor itself is good if its container manages width
         width="100%"
         language={language}
         theme={theme || "vs-dark"}
-        value={value}
+        value={value} // Provide initial value here
         onMount={handleEditorDidMount}
-        onChange={(newValue) => onChange(newValue)}
+        onChange={(newValue) => onChange(newValue || '')} // Ensure newValue is not undefined
         options={{
           minimap: { enabled: true },
           lineNumbers: 'on',
@@ -111,7 +107,8 @@ const CodeEditor = ({ value, language, theme, onChange, onError }) => {
           autoIndent: 'full',
           formatOnPaste: true,
           formatOnType: true,
-          wordWrap: 'on',
+          wordWrap: 'on', // 'on', 'off', 'wordWrapColumn', 'bounded'
+          automaticLayout: true, // This option often helps Monaco adjust to container changes.
           scrollbar: {
             vertical: 'visible',
             horizontal: 'visible',
