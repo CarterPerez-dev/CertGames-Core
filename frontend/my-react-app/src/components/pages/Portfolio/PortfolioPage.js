@@ -218,7 +218,7 @@ const PortfolioPage = () => {
               onClick={() => setActiveTab('preview')}
             >
               <FaCode className="tab-icon" />
-              <span>Preview & Edit</span>
+              <span>Edit & Debug</span>
             </button>
             
             <button 

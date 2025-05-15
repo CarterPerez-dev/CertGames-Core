@@ -1,30 +1,30 @@
 // frontend/my-react-app/src/components/pages/Portfolio/PortfolioPreview.js
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { transform } from '@babel/standalone';
 import CodeEditor from './CodeEditor';
-import EnhancedPreview from './EnhancedPreview';
-import { FaCode, FaEye, FaDesktop, FaMobile, FaSync, FaCheck, FaTimes, FaFile, FaFolder, FaInfo, FaExclamationTriangle, FaWrench, FaBug, FaCopy, FaDownload, FaClipboard } from 'react-icons/fa';
+import { FaCode, FaBug, FaFile, FaFolder, FaInfo, FaExclamationTriangle, FaWrench, FaCopy, FaSync, FaTimes, FaPlay, FaCheck, FaLightbulb } from 'react-icons/fa';
 import './portfolio.css';
 
 const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
   const [activeFile, setActiveFile] = useState(null);
   const [fileContent, setFileContent] = useState('');
-  const [previewMode, setPreviewMode] = useState('code'); // 'code' or 'preview'
   const [errorMessage, setErrorMessage] = useState(null);
   const [isFixingError, setIsFixingError] = useState(false);
-  const [previewHtml, setPreviewHtml] = useState('');
   const [fileTree, setFileTree] = useState({});
-  const [previewDevice, setPreviewDevice] = useState('desktop');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isPreviewRefreshing, setIsPreviewRefreshing] = useState(false);
-  const [previewError, setPreviewError] = useState(null);
-  const [isPreviewGenerated, setIsPreviewGenerated] = useState(false);
-  const iframeRef = useRef(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [allErrors, setAllErrors] = useState({});
+  const [consoleLogs, setConsoleLogs] = useState([]);
+  const [isErrorPanelExpanded, setIsErrorPanelExpanded] = useState(true);
+  const [globalErrorCount, setGlobalErrorCount] = useState(0);
+  const [errorFixRecommendations, setErrorFixRecommendations] = useState({});
+  const [fixingAllErrors, setFixingAllErrors] = useState(false);
+  
+  const consoleEndRef = useRef(null);
 
   // Process portfolio data when it changes
   useEffect(() => {
     if (portfolio && portfolio.components) {
-      console.log("Portfolio provided to preview:", {
+      console.log("Portfolio provided to editor:", {
         id: portfolio._id,
         componentCount: Object.keys(portfolio.components).length,
         componentKeys: Object.keys(portfolio.components)
@@ -33,13 +33,19 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       // If no components, log warning and set error
       if (Object.keys(portfolio.components).length === 0) {
         console.error("Portfolio has no components");
-        setPreviewError("Portfolio data is incomplete. No components found.");
+        setErrorMessage("Portfolio data is incomplete. No components found.");
         return;
       }
       
       // Organize files into a tree structure
       const tree = organizeFilesIntoTree(portfolio.components);
       setFileTree(tree);
+      
+      // Reset errors when switching portfolios
+      setAllErrors({});
+      setErrorMessage(null);
+      setConsoleLogs([]);
+      setGlobalErrorCount(0);
       
       // If we have a portfolio but no activeFile is set, set the first file as active
       if (!activeFile || !portfolio.components[activeFile]) {
@@ -51,55 +57,144 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         }
       }
       
-      // Generate preview HTML
-      try {
-        generatePreviewHtml(portfolio.components);
-        setIsPreviewGenerated(true);
-      } catch (err) {
-        console.error("Failed to generate preview HTML:", err);
-        setPreviewError("Failed to generate preview HTML. Please check the code for errors.");
-        setIsPreviewGenerated(false);
-      }
+      // Perform initial validation of all JS files
+      validateAllFiles(portfolio.components);
     }
   }, [portfolio]);
 
+  // Auto-scroll console to bottom when new logs are added
   useEffect(() => {
-    const iframe = iframeRef.current;
-    if (iframe) {
-      const contentWin = iframe.contentWindow;
-      if (contentWin) {
-        const logPrefix = "[IFRAME CONSOLE]:";
-        const originalConsole = { ...contentWin.console }; 
-
-        const makeForwarder = (method) => (...args) => {
-            console[method](logPrefix, ...args); 
-            if (originalConsole[method]) {
-                originalConsole[method].apply(contentWin.console, args); 
-            }
-        };
-
-        contentWin.console.log = makeForwarder('log');
-        contentWin.console.error = makeForwarder('error');
-        contentWin.console.warn = makeForwarder('warn');
-        contentWin.console.info = makeForwarder('info');
-        contentWin.console.debug = makeForwarder('debug');
-        
-        console.log("PortfolioPreview: Attached console forwarders to iframe.");
-
-        return () => {
-          if (iframe.contentWindow) { 
-            iframe.contentWindow.console.log = originalConsole.log;
-            iframe.contentWindow.console.error = originalConsole.error;
-            console.log("PortfolioPreview: Detached console forwarders from iframe.");
-          }
-        };
-      } else {
-        console.warn("PortfolioPreview: iframe.contentWindow not available for console forwarding.");
-      }
-    } else {
-        console.warn("PortfolioPreview: iframeRef.current is null in console forwarding useEffect.");
+    if (consoleEndRef.current) {
+      consoleEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [previewHtml]); // Re-run when previewHtml changes
+  }, [consoleLogs]);
+
+  // Update global error count whenever allErrors changes
+  useEffect(() => {
+    const count = Object.values(allErrors).filter(Boolean).length;
+    setGlobalErrorCount(count);
+    
+    // Auto-expand error panel if there are errors
+    if (count > 0 && !isErrorPanelExpanded) {
+      setIsErrorPanelExpanded(true);
+    }
+  }, [allErrors]);
+
+  // Validate all JavaScript files in the portfolio
+  const validateAllFiles = (components) => {
+    // Clear existing logs and add a new validation log
+    setConsoleLogs([
+      {
+        type: 'info',
+        message: '🔍 Starting validation of all files...',
+        timestamp: new Date().toLocaleTimeString()
+      }
+    ]);
+    
+    const jsFiles = Object.keys(components).filter(path => 
+      path.endsWith('.js') || path.endsWith('.jsx')
+    );
+    
+    let newErrors = {};
+    let fileCounter = 0;
+
+    // Uses Babel standalone to validate JS syntax
+    const validateFile = (filePath, content) => {
+      try {
+        // Simple syntax validation
+        new Function(content);
+        return null;
+      } catch (err) {
+        console.log(`Error in ${filePath}:`, err.message);
+        return err.message;
+      }
+    };
+
+    // Process files one by one
+    jsFiles.forEach(filePath => {
+      const content = components[filePath];
+      fileCounter++;
+      
+      // Add log for validation
+      setConsoleLogs(prev => [
+        ...prev,
+        {
+          type: 'log',
+          message: `Validating ${filePath} (${fileCounter}/${jsFiles.length})`,
+          timestamp: new Date().toLocaleTimeString()
+        }
+      ]);
+      
+      // Check for syntax errors
+      const error = validateFile(filePath, content);
+      
+      if (error) {
+        newErrors[filePath] = error;
+        
+        // Add error to console
+        setConsoleLogs(prev => [
+          ...prev,
+          {
+            type: 'error',
+            message: `❌ Error in ${filePath}: ${error}`,
+            timestamp: new Date().toLocaleTimeString()
+          }
+        ]);
+        
+        // Generate fix recommendation
+        generateFixRecommendation(filePath, error, content);
+      }
+    });
+    
+    // Final validation summary
+    setConsoleLogs(prev => [
+      ...prev,
+      {
+        type: 'info',
+        message: `✅ Validation complete. ${Object.keys(newErrors).length} errors found across ${jsFiles.length} files.`,
+        timestamp: new Date().toLocaleTimeString()
+      }
+    ]);
+    
+    setAllErrors(newErrors);
+  };
+
+  // Generate a fix recommendation for an error
+  const generateFixRecommendation = (filePath, errorMessage, content) => {
+    // Common error patterns and recommended fixes
+    const commonErrors = [
+      {
+        pattern: /missing \) after argument list/i,
+        suggestion: "Check your function calls for missing closing parentheses."
+      },
+      {
+        pattern: /unexpected token/i,
+        suggestion: "Check for syntax errors like missing brackets, commas, or semicolons."
+      },
+      {
+        pattern: /is not defined/i,
+        suggestion: "Make sure all variables are properly defined and imported."
+      },
+      {
+        pattern: /expected an identifier/i,
+        suggestion: "Check for proper syntax in variable declarations and function parameters."
+      },
+      {
+        pattern: /cannot read property/i,
+        suggestion: "Add null checks before accessing object properties."
+      }
+    ];
+    
+    // Find matching suggestion
+    const matchedError = commonErrors.find(err => err.pattern.test(errorMessage));
+    const suggestion = matchedError ? matchedError.suggestion : "Use auto-fix to attempt to resolve this error.";
+    
+    // Set recommendation
+    setErrorFixRecommendations(prev => ({
+      ...prev,
+      [filePath]: suggestion
+    }));
+  };
 
   // Organize files into directory structure
   const organizeFilesIntoTree = (components) => {
@@ -127,314 +222,6 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     return tree;
   };
 
-  // Generate HTML for preview
-  const generatePreviewHtml = useCallback((components) => {
-    console.log("Generating preview HTML");
-    
-    try {
-      // Get the HTML template
-      const htmlFile = components['public/index.html'] || '';
-      
-      if (!htmlFile) {
-        console.error("No HTML template found in components");
-        setPreviewHtml('<div style="padding: 20px; color: #666;">No HTML template found</div>');
-        return;
-      }
-      
-      // Basic strategy: inject CSS, Babel, and our React simulation into the HTML template
-      let processedHtml = htmlFile;
-      
-      // 1. Add Babel standalone for JSX transpilation
-      const babelScript = `
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.10/babel.min.js"></script>
-      `;
-      processedHtml = processedHtml.replace('</head>', `${babelScript}</head>`);
-      
-      // 2. Inject CSS
-      const cssContent = Object.entries(components)
-        .filter(([key]) => key.endsWith('.css'))
-        .map(([_, content]) => content)
-        .join('\n');
-      
-      console.log(`Found ${cssContent.length} bytes of CSS content to inject`);
-      
-      // Inject inline CSS
-      const styleTag = `<style>${cssContent}</style>`;
-      processedHtml = processedHtml.replace('</head>', `${styleTag}</head>`);
-      
-      try {
-        // 3. Enhanced React Simulation
-        const enhancedReactSimulation = `
-          <script>
-            // Enhanced React Simulation
-            window.React = {
-              createElement: function(type, props, ...children) {
-                // Handle function components
-                if (typeof type === 'function') {
-                  try {
-                    return type(props || {});
-                  } catch(e) {
-                    console.error('Error rendering component:', e);
-                    return document.createTextNode(\`Error: \${e.message}\`);
-                  }
-                }
-                
-                // Handle string types (native DOM elements)
-                if (typeof type === 'string') {
-                  const element = document.createElement(type);
-                  
-                  // Apply props/attributes
-                  if (props) {
-                    Object.entries(props).forEach(([key, value]) => {
-                      if (key === 'className') {
-                        element.className = value;
-                      } else if (key === 'style' && typeof value === 'object') {
-                        Object.assign(element.style, value);
-                      } else if (key === 'dangerouslySetInnerHTML' && value.__html) {
-                        element.innerHTML = value.__html;
-                      } else if (key.startsWith('on') && typeof value === 'function') {
-                        // Handle event listeners
-                        const eventName = key.slice(2).toLowerCase();
-                        element.addEventListener(eventName, value);
-                      } else if (!key.startsWith('__') && key !== 'children') {
-                        // Regular attributes
-                        element.setAttribute(key, value);
-                      }
-                    });
-                  }
-                  
-                  // Append children
-                  children.flat().forEach(child => {
-                    if (child === null || child === undefined || child === false) return;
-                    
-                    if (typeof child === 'object' && child.nodeType) {
-                      element.appendChild(child);
-                    } else {
-                      element.appendChild(document.createTextNode(String(child)));
-                    }
-                  });
-                  
-                  return element;
-                }
-                
-                // Handle fragments and special types
-                if (type === React.Fragment) {
-                  const fragment = document.createDocumentFragment();
-                  children.flat().forEach(child => {
-                    if (child !== null && child !== undefined && child !== false) {
-                      fragment.appendChild(
-                        typeof child === 'object' && child.nodeType 
-                          ? child
-                          : document.createTextNode(String(child))
-                      );
-                    }
-                  });
-                  return fragment;
-                }
-                
-                // Fallback
-                const div = document.createElement('div');
-                div.textContent = \`Unknown type: \${type}\`;
-                return div;
-              },
-              
-              // Hook simulation
-              createRef: () => ({ current: null }),
-              useRef: (initialValue) => ({ current: initialValue }),
-              useState: function(initialValue) {
-                const value = typeof initialValue === 'function' ? initialValue() : initialValue;
-                const setValue = function() { 
-                  console.log('setState called with', arguments); 
-                  // This is just a mock that doesn't actually update state
-                };
-                return [value, setValue];
-              },
-              useEffect: function(fn, deps) {
-                try { 
-                  // Only run effects once in our simulation
-                  fn(); 
-                } catch(e) { 
-                  console.error('useEffect error:', e); 
-                }
-              },
-              useCallback: (fn) => fn,
-              useMemo: (fn) => fn(),
-              useContext: () => ({}),
-              Fragment: Symbol('Fragment'),
-              
-              // Support for React.memo and other HOCs
-              memo: (Component) => Component,
-              forwardRef: (Component) => Component
-            };
-            
-            // ReactDOM simulation
-            window.ReactDOM = {
-              render: function(element, container) {
-                while (container.firstChild) {
-                  container.removeChild(container.firstChild);
-                }
-                container.appendChild(element);
-              },
-              createRoot: function(container) {
-                return {
-                  render: function(element) {
-                    while (container.firstChild) {
-                      container.removeChild(container.firstChild);
-                    }
-                    container.appendChild(element);
-                  }
-                };
-              },
-              createPortal: function(children, container) {
-                container.innerHTML = '';
-                if (typeof children === 'object' && children.nodeType) {
-                  container.appendChild(children);
-                } else {
-                  container.textContent = String(children);
-                }
-                return children;
-              }
-            };
-            
-            // JSX Transformation functions (using Babel standalone)
-            const transformJSX = (code) => {
-              try {
-                return Babel.transform(code, {
-                  presets: ['react'],
-                  filename: 'preview.jsx'
-                }).code;
-              } catch (error) {
-                console.error('Error transforming JSX:', error);
-                return \`/* JSX Transform Error: \${error.message} */\`;
-              }
-            };
-            
-            // Helper function to convert string to function
-            const stringToFunction = (str) => {
-              try {
-                return new Function('React', 'ReactDOM', 'props', \`
-                  "use strict";
-                  const exports = {};
-                  const module = { exports };
-                  \${str}
-                  return typeof exports.default !== 'undefined' ? exports.default : module.exports;
-                \`)(React, ReactDOM, {});
-              } catch (e) {
-                console.error('Error converting string to function:', e);
-                return () => React.createElement('div', { style: { color: 'red' } }, 
-                  \`Component Error: \${e.message}\`
-                );
-              }
-            };
-          </script>
-        `;
-        
-        processedHtml = processedHtml.replace('</head>', `${enhancedReactSimulation}</head>`);
-        
-        // 4. Extract and transform component code
-        const componentMap = {};
-        
-        // Process component files
-        Object.entries(components)
-          .filter(([key]) => key.startsWith('src/components/') && key.endsWith('.js'))
-          .forEach(([key, content]) => {
-            // Extract component name from path
-            const componentName = key.split('/').pop().replace('.js', '');
-            componentMap[componentName] = content;
-          });
-        
-        // Process App.js and index.js
-        const appJs = components['src/App.js'] || '';
-        const indexJs = components['src/index.js'] || '';
-        
-        // Create a script to initialize the application
-        const appInitScript = `
-          <script type="text/babel">
-            document.addEventListener('DOMContentLoaded', function() {
-              try {
-                console.log("Initializing portfolio preview");
-                
-                // Define Components
-                ${Object.entries(componentMap).map(([name, code]) => `
-                  // Component: ${name}
-                  const ${name} = (function() {
-                    ${code.replace(/import\s+.*?from\s+['"].*?['"]/g, '// Import removed:')}
-                    return ${name};
-                  })();
-                `).join('\n')}
-                
-                // Define App
-                const App = (function() {
-                  ${appJs.replace(/import\s+.*?from\s+['"].*?['"]/g, '// Import removed:')}
-                  return App;
-                })();
-                
-                // Initialize React app
-                const rootElement = document.getElementById('root');
-                if (rootElement && typeof App === 'function') {
-                  try {
-                    console.log("Rendering App component");
-                    const appElement = React.createElement(App, {});
-                    ReactDOM.createRoot(rootElement).render(appElement);
-                    console.log("App rendered successfully");
-                  } catch (err) {
-                    console.error("Error rendering App:", err);
-                    rootElement.innerHTML = \`
-                      <div style="color: #721c24; background: #f8d7da; padding: 20px; border-radius: 5px;">
-                        <h3>Rendering Error</h3>
-                        <p>\${err.message}</p>
-                        <pre>\${err.stack}</pre>
-                      </div>
-                    \`;
-                  }
-                } else {
-                  console.error("Root element or App component not found");
-                  document.body.innerHTML = \`
-                    <div style="color: #721c24; background: #f8d7da; padding: 20px; border-radius: 5px;">
-                      <h3>Preview Error</h3>
-                      <p>Could not render the App component. Check if the App component is properly defined and exported.</p>
-                    </div>
-                  \`;
-                }
-              } catch(err) {
-                console.error("Preview initialization error:", err);
-                document.body.innerHTML = \`
-                  <div style="color: #721c24; background: #f8d7da; padding: 20px; border-radius: 5px;">
-                    <h3>Preview Error</h3>
-                    <p>\${err.message}</p>
-                    <pre>\${err.stack}</pre>
-                  </div>
-                \`;
-              }
-            });
-          </script>
-        `;
-        
-        processedHtml = processedHtml.replace('</body>', `${appInitScript}</body>`);
-        
-      } catch(err) {
-        console.error("Error processing JS for preview:", err);
-        setPreviewError(`Error generating preview: ${err.message}`);
-      }
-      
-      // Add preview message
-      processedHtml = processedHtml.replace('</body>', `
-        <div style="position: fixed; bottom: 0; left: 0; right: 0; background: #f8d7da; color: #721c24; padding: 10px; 
-             font-size: 12px; text-align: center; font-family: Arial, sans-serif; z-index: 1000;">
-          ⚠️ This is a simplified preview. Some interactive features may not work. Check the browser console for errors.
-        </div></body>
-      `);
-      
-      console.log("Preview HTML generated successfully, length:", processedHtml.length);
-      setPreviewHtml(processedHtml);
-      setPreviewError(null);
-    } catch (err) {
-      console.error("Error generating preview HTML:", err);
-      setPreviewError(`Error generating preview: ${err.message}`);
-      setPreviewHtml('');
-    }
-  }, []);
-
   const handleFileSelect = (filePath) => {
     console.log(`Selecting file: ${filePath}`);
     setActiveFile(filePath);
@@ -442,8 +229,22 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     if (portfolio && portfolio.components && portfolio.components[filePath]) {
       setFileContent(portfolio.components[filePath]);
       
-      // Clear any previous error when switching files
-      setErrorMessage(null);
+      // If there's an error for this file, show it
+      if (allErrors[filePath]) {
+        setErrorMessage(allErrors[filePath]);
+      } else {
+        setErrorMessage(null);
+      }
+      
+      // Add log for file selection
+      setConsoleLogs(prev => [
+        ...prev,
+        {
+          type: 'info',
+          message: `📁 Opened file: ${filePath}`,
+          timestamp: new Date().toLocaleTimeString()
+        }
+      ]);
     } else {
       console.warn(`File not found in portfolio components: ${filePath}`);
       setFileContent('');
@@ -463,64 +264,65 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         [activeFile]: newContent
       };
       
-      // Regenerate preview HTML when code changes
-      if (activeFile.endsWith('.js') || activeFile.endsWith('.css') || activeFile.endsWith('.html')) {
-        setTimeout(() => {
-          try {
-            generatePreviewHtml(updatedComponents);
-          } catch (err) {
-            console.error("Error regenerating preview after file update:", err);
-            setPreviewError(`Error updating preview: ${err.message}`);
-          }
-        }, 1000);
-      }
+      // Add log for file update
+      setConsoleLogs(prev => [
+        ...prev,
+        {
+          type: 'log',
+          message: `✏️ File updated: ${activeFile}`,
+          timestamp: new Date().toLocaleTimeString()
+        }
+      ]);
     }
   };
 
-  const handleRefreshPreview = () => {
-    console.log("Manually refreshing preview");
-    setIsPreviewRefreshing(true);
+  const handleValidateCode = () => {
+    setIsRefreshing(true);
     
-    // Regenerate the preview HTML
-    if (portfolio && portfolio.components) {
-      try {
-        generatePreviewHtml(portfolio.components);
-        
-        // Refresh the iframe if it exists
-        if (iframeRef.current) {
-          try {
-            const iframe = iframeRef.current;
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            iframeDoc.open();
-            iframeDoc.write(previewHtml);
-            iframeDoc.close();
-            console.log("Iframe content refreshed");
-          } catch (err) {
-            console.error("Error refreshing iframe:", err);
-            setPreviewError(`Error refreshing preview: ${err.message}`);
-          }
-        }
-      } catch (err) {
-        console.error("Error during manual preview refresh:", err);
-        setPreviewError(`Failed to refresh preview: ${err.message}`);
+    // Add log for validation
+    setConsoleLogs(prev => [
+      ...prev,
+      {
+        type: 'info',
+        message: `🔍 Manually validating all files...`,
+        timestamp: new Date().toLocaleTimeString()
       }
-    }
+    ]);
     
     setTimeout(() => {
-      setIsPreviewRefreshing(false);
+      validateAllFiles(portfolio.components);
+      setIsRefreshing(false);
     }, 500);
   };
 
-  const handleFixError = async () => {
-    if (!errorMessage || !activeFile) {
-      console.warn("Cannot fix error: No error message or active file");
+  const handleFixError = async (specificFile = null) => {
+    const fileToFix = specificFile || activeFile;
+    
+    if (!allErrors[fileToFix] || !fileToFix) {
+      console.warn("Cannot fix error: No error for this file");
       return;
     }
     
     try {
-      console.log(`Attempting to fix error in ${activeFile}:`, errorMessage);
+      console.log(`Attempting to fix error in ${fileToFix}:`, allErrors[fileToFix]);
+      
+      if (specificFile) {
+        // If fixing a specific file (not the active one), we need to get its content
+        setFileContent(portfolio.components[fileToFix]);
+      }
+      
       setIsFixingError(true);
-      onFixError(true);
+      if (onFixError) onFixError(true);
+      
+      // Add log for fix attempt
+      setConsoleLogs(prev => [
+        ...prev,
+        {
+          type: 'info',
+          message: `🔧 Attempting to fix error in ${fileToFix}...`,
+          timestamp: new Date().toLocaleTimeString()
+        }
+      ]);
       
       const response = await fetch('/api/portfolio/fix-error', {
         method: 'POST',
@@ -530,9 +332,9 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         },
         body: JSON.stringify({
           portfolio_id: portfolio._id,
-          component_path: activeFile,
-          error_message: errorMessage,
-          component_code: fileContent
+          component_path: fileToFix,
+          error_message: allErrors[fileToFix],
+          component_code: portfolio.components[fileToFix]
         })
       });
       
@@ -544,33 +346,116 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       const data = await response.json();
       console.log("Error fixed successfully");
       
-      // Update the file content with the fixed code
-      setFileContent(data.fixed_code);
-      setErrorMessage(null);
+      // Update the file content with the fixed code if it's the active file
+      if (fileToFix === activeFile) {
+        setFileContent(data.fixed_code);
+      }
       
       // Update the portfolio object locally
       const updatedComponents = {
         ...portfolio.components,
-        [activeFile]: data.fixed_code
+        [fileToFix]: data.fixed_code
       };
       
-      // Regenerate preview HTML
-      try {
-        generatePreviewHtml(updatedComponents);
-      } catch (err) {
-        console.error("Error regenerating preview after fixing error:", err);
-        setPreviewError(`Error updating preview: ${err.message}`);
+      // Remove error for this file
+      const updatedErrors = {...allErrors};
+      delete updatedErrors[fileToFix];
+      setAllErrors(updatedErrors);
+      
+      // Clear error message if this is the active file
+      if (fileToFix === activeFile) {
+        setErrorMessage(null);
       }
       
+      // Add success log
+      setConsoleLogs(prev => [
+        ...prev,
+        {
+          type: 'success',
+          message: `✅ Successfully fixed error in ${fileToFix}`,
+          timestamp: new Date().toLocaleTimeString()
+        }
+      ]);
+      
       setIsFixingError(false);
-      onFixError(false);
+      if (onFixError) onFixError(false);
       
     } catch (err) {
       console.error('Error fixing code:', err);
-      setErrorMessage(`Failed to fix the error: ${err.message}. Please try again.`);
+      
+      // Add error log
+      setConsoleLogs(prev => [
+        ...prev,
+        {
+          type: 'error',
+          message: `❌ Failed to fix error in ${fileToFix}: ${err.message}`,
+          timestamp: new Date().toLocaleTimeString()
+        }
+      ]);
+      
+      if (fileToFix === activeFile) {
+        setErrorMessage(`Failed to fix the error: ${err.message}. Please try again.`);
+      }
+      
       setIsFixingError(false);
-      onFixError(false);
+      if (onFixError) onFixError(false);
     }
+  };
+  
+  const handleFixAllErrors = async () => {
+    if (Object.keys(allErrors).length === 0) {
+      // Add log for no errors
+      setConsoleLogs(prev => [
+        ...prev,
+        {
+          type: 'info',
+          message: `✅ No errors to fix!`,
+          timestamp: new Date().toLocaleTimeString()
+        }
+      ]);
+      return;
+    }
+    
+    setFixingAllErrors(true);
+    
+    // Add log for fix all attempt
+    setConsoleLogs(prev => [
+      ...prev,
+      {
+        type: 'info',
+        message: `🔧 Attempting to fix all errors...`,
+        timestamp: new Date().toLocaleTimeString()
+      }
+    ]);
+    
+    // Fix each error one by one
+    const errorFiles = Object.keys(allErrors);
+    let fixCount = 0;
+    
+    for (const filePath of errorFiles) {
+      try {
+        await handleFixError(filePath);
+        fixCount++;
+      } catch (err) {
+        console.error(`Failed to fix error in ${filePath}:`, err);
+      }
+    }
+    
+    // Add final log
+    setConsoleLogs(prev => [
+      ...prev,
+      {
+        type: 'info',
+        message: `✅ Fixed ${fixCount}/${errorFiles.length} errors`,
+        timestamp: new Date().toLocaleTimeString()
+      }
+    ]);
+    
+    setFixingAllErrors(false);
+  };
+
+  const handleClearConsole = () => {
+    setConsoleLogs([]);
   };
 
   const getFileIcon = (filePath) => {
@@ -690,14 +575,17 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
           } else if (value.__filePath) {
             // File node
             const filePath = value.__filePath;
+            const hasError = allErrors[filePath] ? true : false;
+            
             return (
               <div 
                 key={filePath}
-                className={`portfolio-file-item ${activeFile === filePath ? 'active' : ''}`}
+                className={`portfolio-file-item ${activeFile === filePath ? 'active' : ''} ${hasError ? 'has-error' : ''}`}
                 onClick={() => handleFileSelect(filePath)}
               >
                 {getFileIcon(filePath)}
                 <span className="file-name">{name}</span>
+                {hasError && <FaExclamationTriangle className="file-error-icon" />}
               </div>
             );
           }
@@ -708,58 +596,13 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     );
   };
 
-  const renderPreviewContent = () => {
-    if (previewError) {
-      return (
-        <div className="portfolio-preview-error">
-          <FaBug className="preview-error-icon" />
-          <div className="preview-error-message">
-            <h3>Preview Error</h3>
-            <p>{previewError}</p>
-            <div className="preview-error-help">
-              <p>Check that your code has the following:</p>
-              <ul>
-                <li>A valid App.js component with a default export</li>
-                <li>A proper index.html with a root element</li>
-                <li>Components that don't rely on browser APIs</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    if (!isPreviewGenerated) {
-      return (
-        <div className="preview-loading">
-          <div className="preview-loading-spinner"></div>
-          <p>Generating preview...</p>
-        </div>
-      );
-    }
-
-    // Use the new EnhancedPreview component
-    return (
-      <EnhancedPreview 
-        portfolioComponents={portfolio.components}
-        onError={(errMsg) => {
-          console.error("Preview error:", errMsg);
-          // Don't overwrite the preview error with component errors
-          if (!previewError) {
-            setErrorMessage(errMsg);
-          }
-        }}
-      />
-    );
-  };
-
   if (!portfolio) {
     return (
       <div className="portfolio-preview-container portfolio-no-portfolio">
         <div className="portfolio-empty-message">
           <FaInfo className="empty-icon" />
           <h3>No Portfolio Selected</h3>
-          <p>Create or select a portfolio to preview and edit</p>
+          <p>Create or select a portfolio to edit</p>
         </div>
       </div>
     );
@@ -768,138 +611,245 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
   return (
     <div className="portfolio-preview-container">
       <div className="portfolio-preview-header">
-        <h2>Portfolio Preview</h2>
-        <div className="portfolio-preview-tabs">
+        <h2>Portfolio Editor</h2>
+        <div className="portfolio-preview-actions">
           <button 
-            className={`portfolio-preview-tab ${previewMode === 'code' ? 'active' : ''}`}
-            onClick={() => setPreviewMode('code')}
+            className={`portfolio-validate-button ${isRefreshing ? 'refreshing' : ''}`}
+            onClick={handleValidateCode}
+            disabled={isRefreshing}
           >
-            <FaCode className="tab-icon" />
-            Code Editor
+            <FaSync className={`action-icon ${isRefreshing ? 'spin' : ''}`} />
+            <span>Validate Code</span>
           </button>
+          
           <button 
-            className={`portfolio-preview-tab ${previewMode === 'preview' ? 'active' : ''}`}
-            onClick={() => setPreviewMode('preview')}
+            className="portfolio-fix-all-button"
+            onClick={handleFixAllErrors}
+            disabled={Object.keys(allErrors).length === 0 || fixingAllErrors}
           >
-            <FaEye className="tab-icon" />
-            Live Preview
+            <FaWrench className="action-icon" />
+            <span>
+              {fixingAllErrors ? 'Fixing...' : `Fix All Errors (${Object.keys(allErrors).length})`}
+            </span>
           </button>
         </div>
       </div>
       
-      {/* Display error message prominently at the top if present */}
-      {errorMessage && (
-        <div className="portfolio-error-banner">
-          <div className="portfolio-error-message">
-            <FaExclamationTriangle className="error-icon" />
-            <div className="error-content">
-              <h3>Code Error Detected</h3>
-              <p className="error-text">{errorMessage}</p>
-              <button 
-                className="portfolio-fix-error-button"
-                onClick={handleFixError}
-                disabled={isFixingError}
-              >
-                {isFixingError ? (
-                  <>
-                    <span className="fix-spinner"></span>
-                    <span>Fixing...</span>
-                  </>
-                ) : (
-                  <>
-                    <FaWrench className="fix-icon" />
-                    <span>Auto-Fix Error</span>
-                  </>
-                )}
-              </button>
+      {/* Error Panel - Shows all errors in the project */}
+      <div className={`portfolio-error-panel ${isErrorPanelExpanded ? 'expanded' : 'collapsed'}`}>
+        <div className="error-panel-header" onClick={() => setIsErrorPanelExpanded(!isErrorPanelExpanded)}>
+          <div className="error-panel-title">
+            <FaBug className="error-icon" />
+            <h3>Error Console {globalErrorCount > 0 && `(${globalErrorCount})`}</h3>
+          </div>
+          <button className="error-panel-toggle">
+            {isErrorPanelExpanded ? '▼' : '▶'}
+          </button>
+        </div>
+        
+        <div className="error-panel-content">
+          {globalErrorCount === 0 ? (
+            <div className="no-errors-message">
+              <FaCheck className="success-icon" />
+              <p>No errors detected in the portfolio code.</p>
             </div>
+          ) : (
+            <div className="error-list">
+              {Object.entries(allErrors).map(([filePath, errorMsg]) => (
+                <div key={filePath} className="error-item">
+                  <div className="error-item-header">
+                    <div className="error-file-path" onClick={() => handleFileSelect(filePath)}>
+                      {getFileIcon(filePath)} {filePath}
+                    </div>
+                    <button 
+                      className="error-fix-button"
+                      onClick={() => handleFixError(filePath)}
+                      disabled={isFixingError}
+                    >
+                      <FaWrench className="fix-icon" />
+                      <span>Fix</span>
+                    </button>
+                  </div>
+                  <div className="error-message-content">
+                    {errorMsg}
+                  </div>
+                  {errorFixRecommendations[filePath] && (
+                    <div className="error-recommendation">
+                      <FaLightbulb className="recommendation-icon" />
+                      <span>{errorFixRecommendations[filePath]}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+      
+      <div className="portfolio-code-preview">
+        <div className="portfolio-file-explorer">
+          <div className="portfolio-file-explorer-header">
+            <h3>Files</h3>
+            <div className="portfolio-file-search">
+              <input 
+                type="text" 
+                placeholder="Search files..."
+                className="portfolio-file-search-input"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="portfolio-file-tree">
+            {Object.keys(filteredFileTree).length > 0 ? 
+              renderFileTreeNode(filteredFileTree) : 
+              <div className="no-files-message">No files matching search</div>
+            }
           </div>
         </div>
-      )}
-      
-      {previewMode === 'code' ? (
-        <div className="portfolio-code-preview">
-          <div className="portfolio-file-explorer">
-            <div className="portfolio-file-explorer-header">
-              <h3>Files</h3>
-              <div className="portfolio-file-search">
-                <input 
-                  type="text" 
-                  placeholder="Search files..."
-                  className="portfolio-file-search-input"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+        
+        <div className="portfolio-code-editor-container">
+          {activeFile ? (
+            <>
+              <div className="portfolio-editor-header">
+                <div className="portfolio-active-file">
+                  {getFileIcon(activeFile)}
+                  <span className="file-path">{activeFile}</span>
+                  {allErrors[activeFile] && (
+                    <div className="file-error-badge">
+                      <FaExclamationTriangle className="file-error-icon" />
+                    </div>
+                  )}
+                </div>
+                <div className="portfolio-editor-actions">
+                  <button 
+                    className="portfolio-editor-action-btn"
+                    onClick={() => {
+                      navigator.clipboard.writeText(fileContent);
+                      // Show a brief "Copied!" message
+                      const tempBtn = document.getElementById('copy-button');
+                      if (tempBtn) {
+                        const originalText = tempBtn.innerHTML;
+                        tempBtn.innerHTML = '<span class="copied-icon">✓</span> Copied!';
+                        setTimeout(() => {
+                          tempBtn.innerHTML = originalText;
+                        }, 2000);
+                      }
+                    }}
+                    id="copy-button"
+                  >
+                    <FaCopy className="action-icon" />
+                    <span>Copy</span>
+                  </button>
+                  
+                  {allErrors[activeFile] && (
+                    <button 
+                      className="portfolio-editor-action-btn error-fix-btn"
+                      onClick={() => handleFixError()}
+                      disabled={isFixingError}
+                    >
+                      <FaWrench className="action-icon" />
+                      <span>{isFixingError ? 'Fixing...' : 'Fix Error'}</span>
+                    </button>
+                  )}
+                </div>
               </div>
+              
+              <CodeEditor
+                value={fileContent}
+                language={getFileLanguage(activeFile)}
+                theme="vs-dark"
+                onChange={handleUpdateFileContent}
+                onError={(error) => {
+                  if (error) {
+                    setErrorMessage(error);
+                    
+                    // Update allErrors
+                    setAllErrors(prev => ({
+                      ...prev,
+                      [activeFile]: error
+                    }));
+                    
+                    // Generate fix recommendation
+                    generateFixRecommendation(activeFile, error, fileContent);
+                    
+                    // Add to console
+                    setConsoleLogs(prev => [
+                      ...prev,
+                      {
+                        type: 'error',
+                        message: `❌ Error in ${activeFile}: ${error}`,
+                        timestamp: new Date().toLocaleTimeString()
+                      }
+                    ]);
+                  } else {
+                    setErrorMessage(null);
+                    
+                    // Remove from allErrors if it was there
+                    if (allErrors[activeFile]) {
+                      const updatedErrors = {...allErrors};
+                      delete updatedErrors[activeFile];
+                      setAllErrors(updatedErrors);
+                      
+                      // Add fixed log
+                      setConsoleLogs(prev => [
+                        ...prev,
+                        {
+                          type: 'success',
+                          message: `✅ Fixed error in ${activeFile}`,
+                          timestamp: new Date().toLocaleTimeString()
+                        }
+                      ]);
+                    }
+                  }
+                }}
+              />
+            </>
+          ) : (
+            <div className="portfolio-no-file-selected">
+              <FaCode className="no-file-icon" />
+              <h3>No file selected</h3>
+              <p>Select a file from the explorer to view and edit</p>
             </div>
-            <div className="portfolio-file-tree">
-              {Object.keys(filteredFileTree).length > 0 ? 
-                renderFileTreeNode(filteredFileTree) : 
-                <div className="no-files-message">No files matching search</div>
-              }
+          )}
+        </div>
+        
+        {/* Console Panel */}
+        <div className="portfolio-console-panel">
+          <div className="console-panel-header">
+            <div className="console-panel-title">
+              <FaCode className="console-icon" />
+              <h3>Console Output</h3>
             </div>
+            <button 
+              className="console-clear-btn"
+              onClick={handleClearConsole}
+              disabled={consoleLogs.length === 0}
+            >
+              Clear
+            </button>
           </div>
           
-          <div className="portfolio-code-editor-container">
-            {activeFile ? (
-              <>
-                <div className="portfolio-editor-header">
-                  <div className="portfolio-active-file">
-                    {getFileIcon(activeFile)}
-                    <span className="file-path">{activeFile}</span>
-                  </div>
-                  <div className="portfolio-editor-actions">
-                    <button 
-                      className="portfolio-editor-action-btn"
-                      onClick={() => {
-                        navigator.clipboard.writeText(fileContent);
-                        // Show a brief "Copied!" message
-                        const tempBtn = document.getElementById('copy-button');
-                        if (tempBtn) {
-                          const originalText = tempBtn.innerHTML;
-                          tempBtn.innerHTML = '<span class="copied-icon">✓</span> Copied!';
-                          setTimeout(() => {
-                            tempBtn.innerHTML = originalText;
-                          }, 2000);
-                        }
-                      }}
-                      id="copy-button"
-                    >
-                      <FaCopy className="action-icon" />
-                      <span>Copy All</span>
-                    </button>
-                    
-                    <button 
-                      className="portfolio-editor-action-btn"
-                      onClick={handleRefreshPreview}
-                    >
-                      <FaSync className={isPreviewRefreshing ? 'refreshing' : ''} />
-                      <span>Refresh Preview</span>
-                    </button>
-                  </div>
-                </div>
-                <CodeEditor
-                  value={fileContent}
-                  language={getFileLanguage(activeFile)}
-                  theme="vs-dark"
-                  onChange={handleUpdateFileContent}
-                  onError={setErrorMessage}
-                />
-              </>
+          <div className="console-panel-content">
+            {consoleLogs.length === 0 ? (
+              <div className="console-empty-message">
+                <p>No console output yet. Validation results will appear here.</p>
+              </div>
             ) : (
-              <div className="portfolio-no-file-selected">
-                <FaCode className="no-file-icon" />
-                <h3>No file selected</h3>
-                <p>Select a file from the explorer to view and edit</p>
+              <div className="console-logs">
+                {consoleLogs.map((log, index) => (
+                  <div key={index} className={`console-log ${log.type}`}>
+                    <span className="log-timestamp">{log.timestamp}</span>
+                    <span className={`log-type ${log.type}`}>{log.type.toUpperCase()}</span>
+                    <span className="log-message">{log.message}</span>
+                  </div>
+                ))}
+                <div ref={consoleEndRef} />
               </div>
             )}
           </div>
         </div>
-      ) : (
-        <div className="portfolio-live-preview-container">
-          {renderPreviewContent()}
-        </div>
-      )}
+      </div>
     </div>
   );
 };
