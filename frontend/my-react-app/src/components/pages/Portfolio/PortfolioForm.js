@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaPalette, FaDesktop, FaCode, FaPencilAlt, FaLayerGroup, FaMagic, FaArrowRight, FaArrowLeft, FaRocket, FaCheck, FaTimes, FaInfoCircle } from 'react-icons/fa';
 import './portfolio.css';
-import SubscriptionErrorHandler from '../../SubscriptionErrorHandler';
 
 const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onError }) => {
   const [resumeText, setResumeText] = useState('');
@@ -158,17 +157,10 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
         })
       });
       
-   if (!response.ok) {
-      const errorData = await response.json();
-      
-      // Add subscription error handling
-      if (subscriptionErrorHandler.handleApiError(errorData, 'portfolio')) {
-        setFormSubmitting(false);
-        return;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to start portfolio generation');
       }
-      
-      throw new Error(errorData.error || 'Failed to start portfolio generation');
-    }
       
       const pollingStartTime = Date.now(); // For polling timeout, not the visual message start
       let attemptCount = 0;
@@ -231,7 +223,6 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
           }
         } catch (checkError) {
           clearInterval(checkStatusInterval);
-          if (subscriptionErrorHandler.handleApiError(err, 'portfolio')) {
           console.error('Error checking portfolio status:', checkError);
           onError(checkError.message || 'An error occurred while checking generation status.');
           setFormSubmitting(false);

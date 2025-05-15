@@ -1,0 +1,1441 @@
+```analysis
+# Resume Analysis
+The provided resume for Carter Perez is minimal, primarily listing educational achievements:
+-   **Name:** Carter Perez
+-   **Education:**
+    -   University of Maryland Global Campus: Masters in Cybersecurity
+    -   "Anne Arunde": This is interpreted as Anne Arundel Community College, likely for an undergraduate degree or foundational studies relevant to Cybersecurity.
+
+Given the sparse information, the portfolio will need significant content generation to showcase a compelling profile for a job seeker in Cybersecurity. The focus will be on creating plausible and impressive skills, project experiences, and potentially entry-level or internship work experience that aligns with a Master's degree in Cybersecurity. The "tech" style and "minimal" color scheme will guide the visual design.
+
+# Portfolio Structure
+The portfolio will be a single-page application (SPA) built with React. It will feature a clean, modern, and responsive design.
+
+**Key Components:**
+
+1.  **`Header`**: Contains the name "Carter Perez" prominently and navigation links to different sections of the page (About, Experience, Skills, Projects, Education, Contact).
+2.  **`Hero`**: A brief, impactful introduction with a professional tagline.
+3.  **`About`**: A more detailed section about Carter Perez, his passion for cybersecurity, and career aspirations.
+4.  **`Experience`**: Details fictional but relevant work experience (e.g., internships, entry-level roles) showcasing practical application of cybersecurity skills.
+5.  **`Skills`**: Lists technical and soft skills relevant to cybersecurity, categorized for clarity.
+6.  **`Projects`**: Showcases 2-3 significant academic or personal projects related to cybersecurity, detailing the technologies used and outcomes.
+7.  **`Education`**: Lists the educational qualifications mentioned in the resume, expanded with plausible details like graduation dates and relevant coursework.
+8.  **`Contact`**: Provides means for potential employers to get in touch (e.g., email, LinkedIn, GitHub links).
+9.  **`Footer`**: Contains copyright information and potentially repeated social links.
+
+**Styling Approach:**
+-   **Minimal Color Scheme**: Primarily dark grays for backgrounds, light grays/whites for text, and a single accent color (e.g., a cool blue) for highlights and calls to action, fitting the "tech" theme.
+-   **Typography**: Clean, modern sans-serif fonts.
+-   **Layout**: Responsive design using CSS Flexbox and/or Grid to ensure compatibility across devices.
+-   **CSS**: Custom CSS will be written for each component, imported directly into the component file. No external CSS frameworks will be used.
+
+**Content Generation Strategy:**
+All content for sections like About, Experience, Skills, and Projects will be creatively invented to build a strong cybersecurity professional profile for Carter Perez, based on his Master's degree. This will include specific project names, job titles, responsibilities, and skill sets commonly associated with the field.
+```
+
+```package.json
+{
+  "name": "carter-perez-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+```
+
+```html:public/index.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Carter Perez - Cybersecurity Professional Portfolio"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Carter Perez | Cybersecurity Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
+```
+
+```javascript:src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css'; // Global styles
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+// Entry point for the React application
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+```
+
+```css:src/index.css
+/* Global styles for the application */
+:root {
+  --primary-bg-color: #121212; /* Dark background */
+  --secondary-bg-color: #1e1e1e; /* Slightly lighter background for cards/sections */
+  --primary-text-color: #e0e0e0; /* Light gray text */
+  --secondary-text-color: #b0b0b0; /* Medium gray text for less emphasis */
+  --accent-color: #007bff; /* Bright blue for accents and links */
+  --accent-hover-color: #0056b3; /* Darker blue for hover */
+  --border-color: #333333; /* Dark border color */
+  --container-width: 1100px; /* Max width for content */
+  --header-height: 70px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: var(--primary-bg-color);
+  color: var(--primary-text-color);
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--primary-text-color);
+  margin-bottom: 0.75rem;
+}
+
+h1 { font-size: 2.8rem; }
+h2 { font-size: 2.2rem; margin-bottom: 1.5rem; text-align: center; padding-top: 2rem; }
+h3 { font-size: 1.5rem; color: var(--accent-color); }
+h4 { font-size: 1.2rem; }
+
+p {
+  margin-bottom: 1rem;
+  color: var(--secondary-text-color);
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-hover-color);
+  text-decoration: underline;
+}
+
+ul {
+  list-style: none;
+}
+
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+section {
+  padding: 60px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+section:last-of-type {
+  border-bottom: none;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 2.5rem;
+  color: var(--primary-text-color);
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background-color: var(--accent-color);
+  border-radius: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.8rem; }
+  .section-title { font-size: 2rem; }
+  body { font-size: 15px; }
+  section { padding: 40px 0; }
+}
+```
+
+```javascript:src/App.js
+import React from 'react';
+import Header from './components/Header/Header';
+import Hero from './components/Hero/Hero';
+import About from './components/About/About';
+import Experience from './components/Experience/Experience';
+import Skills from './components/Skills/Skills';
+import Projects from './components/Projects/Projects';
+import Education from './components/Education/Education';
+import Contact from './components/Contact/Contact';
+import Footer from './components/Footer/Footer';
+
+// Main application component that orchestrates all other components
+function App() {
+  return (
+    <>
+      <Header />
+      <main>
+        <Hero />
+        <About />
+        <Experience />
+        <Skills />
+        <Projects />
+        <Education />
+        <Contact />
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+export default App;
+```
+
+```javascript:src/components/Header/Header.js
+import React, { useState, useEffect } from 'react';
+import './Header.css';
+
+// Header component with navigation
+const Header = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Handle scroll event to change header background
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  return (
+    <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
+      <div className="container header-container">
+        <a href="#hero" className="logo" onClick={closeMobileMenu}>Carter Perez</a>
+        <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`}>
+          <ul className="nav-list">
+            <li className="nav-item"><a href="#about" className="nav-link" onClick={closeMobileMenu}>About</a></li>
+            <li className="nav-item"><a href="#experience" className="nav-link" onClick={closeMobileMenu}>Experience</a></li>
+            <li className="nav-item"><a href="#skills" className="nav-link" onClick={closeMobileMenu}>Skills</a></li>
+            <li className="nav-item"><a href="#projects" className="nav-link" onClick={closeMobileMenu}>Projects</a></li>
+            <li className="nav-item"><a href="#education" className="nav-link" onClick={closeMobileMenu}>Education</a></li>
+            <li className="nav-item"><a href="#contact" className="nav-link" onClick={closeMobileMenu}>Contact</a></li>
+          </ul>
+        </nav>
+        <button className="mobile-menu-toggle" onClick={toggleMobileMenu} aria-label="Toggle menu">
+          <span className="hamburger-icon"></span>
+        </button>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
+```
+
+```css:src/components/Header/Header.css
+/* Styles for the Header component */
+.header {
+  background-color: var(--primary-bg-color);
+  color: var(--primary-text-color);
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  height: var(--header-height);
+}
+
+.header.scrolled {
+  background-color: var(--secondary-bg-color);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--primary-text-color);
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.logo:hover {
+  color: var(--accent-color);
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+}
+
+.nav-item {
+  margin-left: 25px;
+}
+
+.nav-link {
+  color: var(--primary-text-color);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 5px 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--accent-color);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.mobile-menu-toggle {
+  display: none; /* Hidden by default, shown on mobile */
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.hamburger-icon {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: var(--primary-text-color);
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.hamburger-icon::before,
+.hamburger-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 25px;
+  height: 3px;
+  background-color: var(--primary-text-color);
+  transition: transform 0.3s ease, top 0.3s ease, bottom 0.3s ease;
+}
+
+.hamburger-icon::before {
+  top: -8px;
+}
+
+.hamburger-icon::after {
+  bottom: -8px;
+}
+
+/* Mobile menu styles */
+@media (max-width: 768px) {
+  .nav {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    background-color: var(--secondary-bg-color);
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    transform: translateY(-150%); /* Start off-screen */
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    opacity: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
+  .nav.open {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-item {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-link {
+    display: block;
+    padding: 15px 0;
+    font-size: 1.2rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .nav-item:last-child .nav-link {
+    border-bottom: none;
+  }
+
+  .nav-link::after {
+    display: none; /* Remove underline effect on mobile for cleaner look */
+  }
+
+  .mobile-menu-toggle {
+    display: block; /* Show hamburger icon */
+  }
+
+  .nav.open + .mobile-menu-toggle .hamburger-icon {
+    background-color: transparent; /* Hide middle bar when open */
+  }
+
+  .nav.open + .mobile-menu-toggle .hamburger-icon::before {
+    transform: rotate(45deg);
+    top: 0;
+  }
+
+  .nav.open + .mobile-menu-toggle .hamburger-icon::after {
+    transform: rotate(-45deg);
+    bottom: 0;
+  }
+}
+```
+
+```javascript:src/components/Hero/Hero.js
+import React from 'react';
+import './Hero.css';
+
+// Hero section component
+const Hero = () => {
+  return (
+    <section id="hero" className="hero-section">
+      <div className="container hero-content">
+        <h1 className="hero-title">Carter Perez</h1>
+        <p className="hero-subtitle">Dedicated Cybersecurity Professional | Securing Digital Landscapes</p>
+        <a href="#projects" className="hero-cta-button">View My Work</a>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;
+```
+
+```css:src/components/Hero/Hero.css
+/* Styles for the Hero component */
+.hero-section {
+  background: linear-gradient(rgba(18, 18, 18, 0.85), rgba(18, 18, 18, 0.85)), url('https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y29kZXJ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=1000&q=60') no-repeat center center/cover;
+  /* A generic tech background image. Replace with a more specific cybersecurity-themed one if available or desired. */
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--primary-text-color);
+  padding-top: var(--header-height); /* Account for fixed header */
+  border-bottom: none; /* Hero section usually doesn't need a bottom border */
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero-title {
+  font-size: 3.5rem; /* Larger for hero */
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #fff; /* Brighter for hero title */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 2rem;
+  color: var(--primary-text-color);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.hero-cta-button {
+  display: inline-block;
+  background-color: var(--accent-color);
+  color: #fff;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+}
+
+.hero-cta-button:hover {
+  background-color: var(--accent-hover-color);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: #fff;
+}
+
+/* Responsive adjustments for Hero section */
+@media (max-width: 768px) {
+  .hero-section {
+    height: auto; /* Adjust height for smaller screens */
+    min-height: calc(100vh - var(--header-height));
+    padding: 80px 0; /* More padding for content */
+  }
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+  .hero-cta-button {
+    padding: 10px 25px;
+    font-size: 1rem;
+  }
+}
+```
+
+```javascript:src/components/About/About.js
+import React from 'react';
+import './About.css';
+
+// About section component
+const About = () => {
+  return (
+    <section id="about" className="about-section">
+      <div className="container">
+        <h2 className="section-title">About Me</h2>
+        <div className="about-content">
+          <p>
+            Hello! I'm Carter Perez, a highly motivated and analytical cybersecurity professional. 
+            With a Master's degree in Cybersecurity from the University of Maryland Global Campus, 
+            I've developed a strong foundation in protecting information systems, identifying vulnerabilities, 
+            and developing robust security solutions.
+          </p>
+          <p>
+            My passion lies in the ever-evolving landscape of cyber threats and the challenge of staying one step ahead. 
+            I am eager to apply my academic knowledge and practical skills to tackle real-world security challenges 
+            and contribute to fostering a security-conscious organizational culture. I thrive in collaborative environments 
+            and am committed to continuous learning to keep pace with emerging technologies and threat vectors.
+          </p>
+          <p>
+            Beyond technical expertise, I believe effective communication and a proactive mindset are key to successful 
+            cybersecurity strategies. I'm looking for an opportunity to leverage my skills in a dynamic role where I can 
+            make a tangible impact on an organization's security posture.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default About;
+```
+
+```css:src/components/About/About.css
+/* Styles for the About component */
+.about-section {
+  background-color: var(--secondary-bg-color); /* Slightly different background for contrast */
+}
+
+.about-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left; /* Or center, depending on preference */
+  line-height: 1.8;
+}
+
+.about-content p {
+  font-size: 1.1rem;
+  color: var(--primary-text-color);
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .about-content p {
+    font-size: 1rem;
+  }
+}
+```
+
+```javascript:src/components/Experience/Experience.js
+import React from 'react';
+import './Experience.css';
+
+// Fictional experience data
+const experiences = [
+  {
+    id: 1,
+    title: 'Cybersecurity Analyst Intern',
+    company: 'SecureTech Solutions, Annapolis, MD',
+    date: 'May 2022 – Aug 2022',
+    description: [
+      'Assisted senior analysts in monitoring security alerts and investigating potential incidents using SIEM tools (Splunk).',
+      'Participated in vulnerability scanning using Nessus and contributed to patch management processes.',
+      'Contributed to the development of security awareness training materials for employees, focusing on phishing and password security.',
+      'Gained hands-on experience with network traffic analysis using Wireshark and endpoint security solutions.',
+    ],
+  },
+  {
+    id: 2,
+    title: 'IT Support Specialist (Part-Time)',
+    company: 'AACC Tech Services, Arnold, MD',
+    date: 'Aug 2019 – May 2020',
+    description: [
+      'Provided technical support to students and faculty, troubleshooting hardware, software, and network connectivity issues.',
+      'Assisted with user account management in Active Directory and basic network administration tasks.',
+      'Developed foundational understanding of IT infrastructure, security best practices, and customer service.',
+      'Maintained documentation for common IT issues and solutions.',
+    ],
+  },
+];
+
+// Experience section component
+const Experience = () => {
+  return (
+    <section id="experience" className="experience-section">
+      <div className="container">
+        <h2 className="section-title">Professional Experience</h2>
+        <div className="experience-timeline">
+          {experiences.map((exp) => (
+            <div key={exp.id} className="experience-item">
+              <div className="experience-item-header">
+                <h3>{exp.title}</h3>
+                <h4>{exp.company}</h4>
+                <p className="experience-date">{exp.date}</p>
+              </div>
+              <ul className="experience-description">
+                {exp.description.map((point, index) => (
+                  <li key={index}>{point}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Experience;
+```
+
+```css:src/components/Experience/Experience.css
+/* Styles for the Experience component */
+.experience-section {
+  background-color: var(--primary-bg-color);
+}
+
+.experience-timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* The vertical line for the timeline */
+.experience-timeline::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  background-color: var(--accent-color);
+  top: 0;
+  bottom: 0;
+  left: 20px; /* Adjust based on icon/dot size */
+  margin-left: -2px; /* Center the line */
+}
+
+.experience-item {
+  padding: 20px 40px 20px 60px; /* Left padding to make space for the line and dot */
+  position: relative;
+  background-color: transparent; /* Items are on the main bg */
+  margin-bottom: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--secondary-bg-color); /* Card background */
+}
+
+/* The dot on the timeline */
+.experience-item::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--primary-bg-color);
+  border: 3px solid var(--accent-color);
+  top: 28px; /* Align with title or content start */
+  left: 20px;
+  margin-left: -8px; /* Center the dot on the line */
+  z-index: 1;
+}
+
+.experience-item-header h3 {
+  margin-bottom: 0.25rem;
+  color: var(--primary-text-color); /* Brighter for title */
+}
+
+.experience-item-header h4 {
+  font-size: 1.1rem;
+  font-weight: normal;
+  color: var(--secondary-text-color);
+  margin-bottom: 0.25rem;
+}
+
+.experience-date {
+  font-size: 0.9rem;
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.experience-description {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.experience-description li {
+  margin-bottom: 0.5rem;
+  color: var(--secondary-text-color);
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .experience-timeline::after {
+    left: 15px; /* Adjust line position */
+  }
+  .experience-item {
+    padding: 15px 20px 15px 45px; /* Adjust padding */
+  }
+  .experience-item::before {
+    left: 15px; /* Adjust dot position */
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .experience-timeline::after {
+    left: 10px;
+  }
+  .experience-item {
+    padding: 10px 15px 10px 35px;
+  }
+  .experience-item::before {
+    left: 10px;
+  }
+}
+```
+
+```javascript:src/components/Skills/Skills.js
+import React from 'react';
+import './Skills.css';
+
+// Skills data
+const skillsData = {
+  securityDomains: [
+    'Network Security', 'Application Security (AppSec)', 'Cloud Security (AWS/Azure basics)', 
+    'Threat Modeling', 'Vulnerability Assessment', 'Penetration Testing (Ethical Hacking)', 
+    'Incident Response', 'SIEM (Splunk, ELK Stack basics)', 'Cryptography', 'Identity & Access Management (IAM)'
+  ],
+  toolsAndTechnologies: [
+    'Wireshark', 'Nmap', 'Metasploit Framework', 'Burp Suite', 'Kali Linux', 
+    'Python (for scripting & automation)', 'Bash Scripting', 'Active Directory Security', 
+    'Firewalls (Palo Alto, Cisco ASA concepts)', 'IDS/IPS (Snort basics)'
+  ],
+  frameworksAndCompliance: [
+    'NIST Cybersecurity Framework (CSF)', 'ISO 27001/27002 (Awareness)', 
+    'GDPR & CCPA (Basic Understanding)', 'OWASP Top 10'
+  ],
+  softSkills: [
+    'Analytical Thinking', 'Problem-Solving', 'Attention to Detail', 
+    'Technical Communication', 'Team Collaboration', 'Continuous Learning'
+  ]
+};
+
+// Skills section component
+const Skills = () => {
+  return (
+    <section id="skills" className="skills-section">
+      <div className="container">
+        <h2 className="section-title">Core Competencies</h2>
+        <div className="skills-grid">
+          <div className="skill-category">
+            <h3>Security Domains</h3>
+            <ul>
+              {skillsData.securityDomains.map(skill => <li key={skill}>{skill}</li>)}
+            </ul>
+          </div>
+          <div className="skill-category">
+            <h3>Tools & Technologies</h3>
+            <ul>
+              {skillsData.toolsAndTechnologies.map(skill => <li key={skill}>{skill}</li>)}
+            </ul>
+          </div>
+          <div className="skill-category">
+            <h3>Frameworks & Compliance</h3>
+            <ul>
+              {skillsData.frameworksAndCompliance.map(skill => <li key={skill}>{skill}</li>)}
+            </ul>
+          </div>
+          <div className="skill-category">
+            <h3>Professional Attributes</h3>
+            <ul>
+              {skillsData.softSkills.map(skill => <li key={skill}>{skill}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Skills;
+```
+
+```css:src/components/Skills/Skills.css
+/* Styles for the Skills component */
+.skills-section {
+  background-color: var(--secondary-bg-color);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 2rem;
+}
+
+.skill-category {
+  background-color: var(--primary-bg-color); /* Darker cards for skills */
+  padding: 25px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.skill-category:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.skill-category h3 {
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+  color: var(--accent-color);
+  border-bottom: 2px solid var(--accent-color);
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.skill-category ul {
+  list-style: none;
+  padding: 0;
+}
+
+.skill-category ul li {
+  background-color: var(--secondary-bg-color); /* Background for individual skill items */
+  color: var(--primary-text-color);
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  border-left: 3px solid var(--accent-color);
+  transition: background-color 0.2s ease;
+}
+
+.skill-category ul li:hover {
+    background-color: #2a2a2a; /* Slightly lighter on hover */
+}
+
+@media (max-width: 768px) {
+  .skills-grid {
+    grid-template-columns: 1fr; /* Stack categories on smaller screens */
+  }
+  .skill-category h3 {
+    font-size: 1.3rem;
+  }
+}
+```
+
+```javascript:src/components/Projects/Projects.js
+import React from 'react';
+import './Projects.css';
+
+// Fictional project data
+const projectData = [
+  {
+    id: 1,
+    title: 'Project Sentinel: Advanced Phishing Email Detector',
+    description: 'Developed a machine learning model using Python and NLP techniques to classify emails as phishing or legitimate with high accuracy. Implemented features for URL analysis and sender reputation checking. This was a key component of my Master\'s coursework, showcasing practical application of AI in cybersecurity.',
+    technologies: ['Python', 'Scikit-learn', 'NLTK', 'Pandas', 'Flask (for demo API)'],
+    link: 'https://github.com/carterperezsec/project-sentinel' // Fictional GitHub link
+  },
+  {
+    id: 2,
+    title: 'Secure IoT Network Architecture for Smart Homes',
+    description: 'Designed a comprehensive security architecture for a typical smart home environment. Focused on network segmentation, secure device onboarding, encryption protocols (TLS/DTLS), and regular vulnerability assessments. Presented findings and recommendations as part of the "Advanced Network Security" course.',
+    technologies: ['IoT Security Principles', 'Network Diagrams (Lucidchart)', 'VPN', 'Firewall Configuration Concepts', 'Risk Assessment'],
+    link: '#' // Placeholder if no direct link
+  },
+  {
+    id: 3,
+    title: 'Capture The Flag (CTF) Challenge Series Participation',
+    description: 'Actively participated in multiple university and online CTF competitions (e.g., PicoCTF, HackTheBox Academy). Specialized in web application security (XSS, SQLi), basic reverse engineering, and cryptography challenges. This honed practical offensive security skills and problem-solving abilities in a competitive environment.',
+    technologies: ['Web Exploitation', 'Reverse Engineering (Ghidra basics)', 'Cryptography', 'Forensics Tools', 'Linux CLI'],
+    link: '#' // Placeholder if no direct link
+  }
+];
+
+// Projects section component
+const Projects = () => {
+  return (
+    <section id="projects" className="projects-section">
+      <div className="container">
+        <h2 className="section-title">Signature Projects</h2>
+        <div className="projects-grid">
+          {projectData.map(project => (
+            <div key={project.id} className="project-card">
+              <h3>{project.title}</h3>
+              <p className="project-description">{project.description}</p>
+              <div className="project-technologies">
+                <strong>Technologies:</strong>
+                <ul>
+                  {project.technologies.map(tech => <li key={tech}>{tech}</li>)}
+                </ul>
+              </div>
+              {project.link && project.link !== '#' && (
+                 <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link">
+                   View on GitHub
+                 </a>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Projects;
+```
+
+```css:src/components/Projects/Projects.css
+/* Styles for the Projects component */
+.projects-section {
+  background-color: var(--primary-bg-color);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  margin-top: 2rem;
+}
+
+.project-card {
+  background-color: var(--secondary-bg-color);
+  padding: 25px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+.project-card h3 {
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+  color: var(--accent-color);
+}
+
+.project-description {
+  font-size: 1rem;
+  color: var(--secondary-text-color);
+  margin-bottom: 15px;
+  flex-grow: 1; /* Allows description to take available space */
+}
+
+.project-technologies strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--primary-text-color);
+  font-size: 1rem;
+}
+
+.project-technologies ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.project-technologies ul li {
+  background-color: var(--primary-bg-color);
+  color: var(--accent-color);
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  border: 1px solid var(--accent-color);
+}
+
+.project-link {
+  display: inline-block;
+  margin-top: auto; /* Pushes link to the bottom if card heights vary */
+  padding: 8px 15px;
+  background-color: var(--accent-color);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.project-link:hover {
+  background-color: var(--accent-hover-color);
+  color: #fff;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr; /* Stack cards on smaller screens */
+  }
+  .project-card h3 {
+    font-size: 1.3rem;
+  }
+}
+```
+
+```javascript:src/components/Education/Education.js
+import React from 'react';
+import './Education.css';
+
+// Education data
+const educationData = [
+  {
+    id: 1,
+    degree: 'Master of Science in Cybersecurity',
+    institution: 'University of Maryland Global Campus (UMGC)',
+    location: 'Adelphi, MD (Online)',
+    year: 'Expected Graduation: December 2023', // Or a recent past year like 'Graduated: May 2023'
+    details: [
+      'Concentration: Cyber Operations (or choose a relevant one)',
+      'Key Coursework: Advanced Network Security, Ethical Hacking & Countermeasures, Cyber Threat Intelligence, Secure Software Development, Digital Forensics & Investigations.',
+      'Capstone Project: "Enterprise Security Risk Assessment and Mitigation Plan for a Fictional FinTech Company".'
+    ]
+  },
+  {
+    id: 2,
+    degree: 'Associate of Applied Science in Cybersecurity',
+    institution: 'Anne Arundel Community College (AACC)',
+    location: 'Arnold, MD',
+    year: 'Graduated: May 2020',
+    details: [
+      'Focus: Network Security and Information Assurance.',
+      'Relevant Coursework: Introduction to Networking (CCNA Prep), Operating Systems Security, Principles of Information Security, Introduction to Digital Forensics.',
+      'Dean\'s List: Fall 2019, Spring 2020.'
+    ]
+  }
+];
+
+// Education section component
+const Education = () => {
+  return (
+    <section id="education" className="education-section">
+      <div className="container">
+        <h2 className="section-title">Educational Background</h2>
+        <div className="education-list">
+          {educationData.map(edu => (
+            <div key={edu.id} className="education-item">
+              <h3>{edu.degree}</h3>
+              <h4>{edu.institution} - <span>{edu.location}</span></h4>
+              <p className="education-year">{edu.year}</p>
+              <ul className="education-details">
+                {edu.details.map((detail, index) => (
+                  <li key={index}>{detail}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Education;
+```
+
+```css:src/components/Education/Education.css
+/* Styles for the Education component */
+.education-section {
+  background-color: var(--secondary-bg-color);
+}
+
+.education-list {
+  max-width: 850px;
+  margin: 2rem auto 0;
+}
+
+.education-item {
+  background-color: var(--primary-bg-color);
+  padding: 25px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  border-left: 5px solid var(--accent-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.education-item h3 {
+  margin-bottom: 0.5rem;
+  color: var(--primary-text-color); /* Brighter for degree */
+  font-size: 1.6rem;
+}
+
+.education-item h4 {
+  font-size: 1.1rem;
+  font-weight: normal;
+  color: var(--secondary-text-color);
+  margin-bottom: 0.25rem;
+}
+
+.education-item h4 span {
+  font-style: italic;
+  color: var(--secondary-text-color);
+}
+
+.education-year {
+  font-size: 1rem;
+  color: var(--accent-color);
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.education-details {
+  list-style: disc;
+  padding-left: 20px;
+  color: var(--secondary-text-color);
+}
+
+.education-details li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .education-item h3 {
+    font-size: 1.4rem;
+  }
+  .education-item h4 {
+    font-size: 1rem;
+  }
+}
+```
+
+```javascript:src/components/Contact/Contact.js
+import React from 'react';
+import './Contact.css';
+
+// Contact section component
+const Contact = () => {
+  return (
+    <section id="contact" className="contact-section">
+      <div className="container">
+        <h2 className="section-title">Get In Touch</h2>
+        <div className="contact-content">
+          <p>
+            I'm currently seeking new opportunities in cybersecurity and am excited to connect with professionals in the field. 
+            Whether you have a question, a potential role, or just want to discuss cybersecurity trends, feel free to reach out!
+          </p>
+          <div className="contact-methods">
+            <div className="contact-method">
+              <h4>Email</h4>
+              <a href="mailto:carter.perez.sec@email.com">carter.perez.sec@email.com</a>
+            </div>
+            <div className="contact-method">
+              <h4>LinkedIn</h4>
+              <a href="https://linkedin.com/in/carterperezcyber" target="_blank" rel="noopener noreferrer">linkedin.com/in/carterperezcyber</a>
+            </div>
+            <div className="contact-method">
+              <h4>GitHub</h4>
+              <a href="https://github.com/carterperezsec" target="_blank" rel="noopener noreferrer">github.com/carterperezsec</a>
+            </div>
+          </div>
+          {/* 
+            A simple contact form could be added here if desired.
+            For now, direct links are provided.
+            Example:
+            <form className="contact-form">
+              <input type="text" placeholder="Your Name" required />
+              <input type="email" placeholder="Your Email" required />
+              <textarea placeholder="Your Message" rows="5" required></textarea>
+              <button type="submit" className="submit-button">Send Message</button>
+            </form> 
+          */}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Contact;
+```
+
+```css:src/components/Contact/Contact.css
+/* Styles for the Contact component */
+.contact-section {
+  background-color: var(--primary-bg-color);
+  padding-bottom: 80px; /* Extra padding if footer is directly below */
+}
+
+.contact-content {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-content p {
+  font-size: 1.1rem;
+  color: var(--primary-text-color);
+  margin-bottom: 2.5rem;
+}
+
+.contact-methods {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.contact-method {
+  background-color: var(--secondary-bg-color);
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 200px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.contact-method h4 {
+  font-size: 1.2rem;
+  color: var(--accent-color);
+  margin-bottom: 10px;
+}
+
+.contact-method a {
+  font-size: 1rem;
+  color: var(--primary-text-color);
+  word-break: break-all; /* Prevents long links from breaking layout */
+}
+
+.contact-method a:hover {
+  color: var(--accent-hover-color);
+}
+
+/* Basic styling for an optional contact form */
+.contact-form {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  background-color: var(--secondary-bg-color);
+  color: var(--primary-text-color);
+  font-size: 1rem;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: var(--secondary-text-color);
+}
+
+.contact-form textarea {
+  resize: vertical;
+}
+
+.submit-button {
+  padding: 12px 20px;
+  background-color: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: var(--accent-hover-color);
+}
+
+@media (max-width: 768px) {
+  .contact-methods {
+    flex-direction: column;
+    align-items: center;
+  }
+  .contact-method {
+    width: 100%;
+    max-width: 350px; /* Limit width on mobile for better readability */
+  }
+}
+```
+
+```javascript:src/components/Footer/Footer.js
+import React from 'react';
+import './Footer.css';
+
+// Footer component
+const Footer = () => {
+  const currentYear = new Date().getFullYear();
+  return (
+    <footer className="footer">
+      <div className="container footer-content">
+        <p>&copy; {currentYear} Carter Perez. All rights reserved.</p>
+        <p>Dedicated to advancing cybersecurity practices.</p>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
+```
+
+```css:src/components/Footer/Footer.css
+/* Styles for the Footer component */
+.footer {
+  background-color: var(--secondary-bg-color); /* Or primary-bg-color for a darker footer */
+  color: var(--secondary-text-color);
+  text-align: center;
+  padding: 30px 20px;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-content p {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.footer-content p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .footer-content p {
+    font-size: 0.85rem;
+  }
+}
+```

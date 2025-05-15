@@ -283,7 +283,7 @@ def fix_portfolio_error():
 
 @portfolio_bp.route('/deploy', methods=['POST'])
 @jwt_required_wrapper
-async def deploy_portfolio():
+def deploy_portfolio():  # Remove the async keyword
     """
     Deploy a portfolio to Vercel
     """
@@ -315,9 +315,9 @@ async def deploy_portfolio():
             return jsonify({"error": "Portfolio not found"}), 404
         
         # Deploy to Vercel
-        from services.deployment_service import deployment_service
+        from utils.deployment_service import deployment_service
         
-        deployment_result = await deployment_service.deploy_to_vercel(
+        deployment_result = deployment_service.deploy_to_vercel_sync(
             user_id, 
             portfolio_id, 
             github_token, 
@@ -552,5 +552,23 @@ def list_user_portfolios(user_id):
         logger.error(f"Error listing portfolios: {str(e)}")
         return []
         
-             
+def deploy_to_vercel_sync(user_id, portfolio_id, github_token, vercel_token, components):
+    """
+    Synchronous wrapper for the async deploy_to_vercel function
+    """
+    import asyncio
+    
+    # Create a new event loop
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
+    try:
+        # Run the async function in the event loop
+        result = loop.run_until_complete(
+            deploy_to_vercel(user_id, portfolio_id, github_token, vercel_token, components)
+        )
+        return result
+    finally:
+        # Clean up
+        loop.close()             
         

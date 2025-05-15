@@ -114,26 +114,20 @@ class GeminiHelper:
             raise ValueError("Generated portfolio has no component files")
     
     def fix_portfolio_error(self, error_message, component_code, resume_text, preferences):
-        """
-        Fix errors in generated portfolio code
-        
-        Args:
-            error_message (str): Error message from compilation/execution
-            component_code (str): The component code that has errors
-            resume_text (str): Original resume text
-            preferences (dict): Original user preferences
-            
-        Returns:
-            str: Fixed component code
-        """
-        prompt = self._construct_fix_error_prompt(error_message, component_code, resume_text, preferences)
-        
+        """Fix errors in generated portfolio code"""
         try:
+            prompt = self._construct_fix_error_prompt(error_message, component_code, resume_text, preferences)
+            
             response = self._call_gemini_api(prompt, max_tokens=8000, temperature=0.1)
             fixed_code = self._extract_code_from_response(response)
+            
+            # Verify the response is not empty
+            if not fixed_code or len(fixed_code) < 10:
+                raise ValueError("Received empty or very short code from API")
+                
             return fixed_code
         except Exception as e:
-            logger.error(f"Error fixing portfolio code: {str(e)}")
+            logger.error(f"Error fixing code: {str(e)}")
             raise
     
     def _call_gemini_api(self, prompt, max_tokens=30000, temperature=0.1):
@@ -425,9 +419,14 @@ class GeminiHelper:
                     if 'text' in part:
                         generated_text += part['text']
         
+        # Check if response contains HTML instead of code
+        if generated_text.strip().lower().startswith("<!doctype html") or "<html" in generated_text.lower():
+            logger.error("Received HTML response instead of code")
+            raise ValueError("API returned HTML instead of fixed code. Check API quota or permissions.")
+        
         # Extract code block
         import re
-        code_match = re.search(r'```(?:javascript|js)?\s*([\s\S]*?)```', generated_text)
+        code_match = re.search(r'```(?:javascript|js|css)?\s*([\s\S]*?)```', generated_text)
         if code_match:
             return code_match.group(1).strip()
         

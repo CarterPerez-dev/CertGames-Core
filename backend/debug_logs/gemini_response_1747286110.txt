@@ -1,0 +1,1376 @@
+```analysis
+# Resume Analysis
+The provided resume is very minimal, focusing solely on education:
+-   **Education:**
+    -   University of Maryland Global Campus: Masters in Cybersecurity
+    -   Anne Arundel Community College (presumably an Associate's degree or coursework leading to the Master's)
+
+Given the "tech" style preference and the Master's in Cybersecurity, the portfolio will be built around a persona of a cybersecurity professional. Due to the lack of specific experience, projects, or skills in the resume, these sections will be creatively filled with impressive and relevant content, tailored to a cybersecurity job seeker. The content will highlight theoretical knowledge, practical skills (simulated or project-based), and a strong foundation in IT and security principles.
+
+# Portfolio Structure
+The portfolio will be a single-page application (SPA) with a clean, modern, and responsive design. It will consist of the following sections:
+
+1.  **Header/Navigation:** A fixed or sticky navigation bar at the top with links to different sections of the page. It will include the job seeker's name.
+2.  **Hero/About Section:** An introductory section with a compelling headline, a brief bio about "Jordan Lee" (an invented name for the job seeker), highlighting their passion for cybersecurity, key strengths, and career aspirations.
+3.  **Experience Section:** This section will feature invented but plausible professional experiences, such as internships or entry-level roles, relevant to cybersecurity. Each experience will detail responsibilities and key achievements.
+4.  **Projects Section:** Showcasing 2-3 significant cybersecurity-related projects. Each project will have a title, a brief description, technologies used, and key outcomes or learnings.
+5.  **Skills Section:** Listing technical skills (e.g., security tools, programming languages, frameworks, concepts) and soft skills relevant to a cybersecurity role.
+6.  **Education Section:** Detailing the educational background provided, expanded with invented graduation dates, and potentially a thesis title or relevant coursework to make it more substantial.
+7.  **Contact Section:** Providing means for potential employers to get in touch, such as an email address, and links to LinkedIn and GitHub profiles (using placeholder but realistic-looking links).
+8.  **Footer:** A simple footer with copyright information.
+
+The overall aesthetic will be "tech" and "minimal," using a dark theme with a contrasting accent color for a professional and modern look. All components will be functional React components using hooks. CSS will be custom-written for each component to ensure a clean and unique style.
+```
+
+```package.json
+{
+  "name": "react-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+```
+
+```html:public/index.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Jordan Lee - Cybersecurity Portfolio"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Jordan Lee | Cybersecurity Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
+```
+
+```javascript:src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+```
+
+```css:src/index.css
+/* Global Styles */
+:root {
+  --primary-bg: #121212; /* Dark background */
+  --secondary-bg: #1e1e1e; /* Slightly lighter dark for cards/sections */
+  --text-color: #e0e0e0; /* Light grey text */
+  --heading-color: #ffffff; /* White headings */
+  --accent-color: #00bcd4; /* Teal accent */
+  --accent-hover-color: #0097a7; /* Darker teal for hover */
+  --border-color: #333333; /* Dark border */
+  --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --font-primary: 'Roboto', sans-serif;
+  --font-code: 'Source Code Pro', monospace;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--primary-bg);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading-color);
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+h1 { font-size: 2.8rem; }
+h2 { font-size: 2.2rem; }
+h3 { font-size: 1.8rem; }
+
+p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--accent-hover-color);
+}
+
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: auto;
+  padding: 2rem 0;
+}
+
+section {
+  padding: 60px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+section:last-of-type {
+  border-bottom: none;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 2.5rem;
+  color: var(--heading-color);
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background-color: var(--accent-color);
+  border-radius: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.8rem; }
+  h3 { font-size: 1.5rem; }
+  .section-title { font-size: 2rem; }
+  
+  .container {
+    width: 95%;
+  }
+
+  section {
+    padding: 40px 0;
+  }
+}
+```
+
+```javascript:src/App.js
+import React from 'react';
+import Header from './components/Header';
+import About from './components/About';
+import Experience from './components/Experience';
+import Projects from './components/Projects';
+import Skills from './components/Skills';
+import Education from './components/Education';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
+
+// Main application component that orchestrates the different sections
+function App() {
+  return (
+    <div className="App">
+      <Header />
+      <main>
+        <About />
+        <Experience />
+        <Projects />
+        <Skills />
+        <Education />
+        <Contact />
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+export default App;
+```
+
+```javascript:src/components/Header.js
+import React, { useState, useEffect } from 'react';
+import './Header.css';
+
+// Header component with navigation links
+const Header = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Handle scroll event to change header style
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  return (
+    <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
+      <nav className="container">
+        <a href="#about" className="logo" onClick={closeMobileMenu}>Jordan Lee</a>
+        <button className="mobile-menu-toggle" onClick={toggleMobileMenu} aria-label="Toggle menu">
+          {isMobileMenuOpen ? '✕' : '☰'}
+        </button>
+        <ul className={`nav-links ${isMobileMenuOpen ? 'open' : ''}`}>
+          <li><a href="#about" onClick={closeMobileMenu}>About</a></li>
+          <li><a href="#experience" onClick={closeMobileMenu}>Experience</a></li>
+          <li><a href="#projects" onClick={closeMobileMenu}>Projects</a></li>
+          <li><a href="#skills" onClick={closeMobileMenu}>Skills</a></li>
+          <li><a href="#education" onClick={closeMobileMenu}>Education</a></li>
+          <li><a href="#contact" onClick={closeMobileMenu}>Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+  );
+};
+
+export default Header;
+```
+
+```css:src/components/Header.css
+/* Header styles */
+.header {
+  background-color: var(--primary-bg);
+  color: var(--heading-color);
+  padding: 1rem 0;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border-bottom: 1px solid transparent; /* Start transparent */
+}
+
+.header.scrolled {
+  background-color: var(--secondary-bg);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0; /* Container padding is handled globally, override for header */
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 90%;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--heading-color);
+}
+
+.logo:hover {
+  color: var(--accent-color);
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+}
+
+.nav-links li {
+  margin-left: 2rem;
+}
+
+.nav-links a {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--accent-color);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after { /* Assuming an active class could be added via JS if routing was used */
+  width: 100%;
+}
+
+.nav-links a:hover {
+  color: var(--accent-color);
+}
+
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--heading-color);
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+/* Responsive navigation */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%; /* Position below the header */
+    left: 0;
+    width: 100%;
+    background-color: var(--secondary-bg);
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links li {
+    margin: 0;
+    text-align: center;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 1rem;
+    width: 100%;
+  }
+  
+  .nav-links a:hover {
+    background-color: var(--primary-bg);
+  }
+
+  .nav-links a::after {
+    display: none; /* Remove underline effect for mobile dropdown */
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+}
+```
+
+```javascript:src/components/About.js
+import React from 'react';
+import './About.css';
+// Placeholder for an image, if you have one.
+// import profilePic from '../assets/profile.jpg'; 
+
+// About section component
+const About = () => {
+  return (
+    <section id="about" className="about-section">
+      <div className="container">
+        {/* <img src={profilePic} alt="Jordan Lee" className="profile-pic" /> */}
+        <h1 className="about-headline">Jordan Lee</h1>
+        <h2 className="about-tagline">Cybersecurity Professional | Protecting Digital Assets | Innovating Security Solutions</h2>
+        <p className="about-bio">
+          Driven by a passion for safeguarding digital environments, I am a recent Master's graduate in Cybersecurity from the University of Maryland Global Campus. My academic journey has equipped me with a comprehensive understanding of threat landscapes, risk management, and cutting-edge security technologies. I am eager to apply my knowledge and analytical skills to tackle real-world cybersecurity challenges.
+        </p>
+        <p className="about-bio">
+          I thrive in dynamic settings where I can continuously learn and contribute to a team-oriented approach to security. My focus is on developing and implementing robust security measures, conducting thorough vulnerability assessments, and responding effectively to incidents. I am committed to staying ahead of emerging threats and contributing to a safer digital future.
+        </p>
+        <div className="about-cta">
+          <a href="#projects" className="cta-button">View My Work</a>
+          <a href="#contact" className="cta-button secondary">Get In Touch</a>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default About;
+```
+
+```css:src/components/About.css
+/* About section styles */
+.about-section {
+  background-color: var(--primary-bg); /* Or a slightly different shade if desired */
+  text-align: center;
+  padding-top: 120px; /* Extra padding to account for fixed header */
+  min-height: 90vh; /* Make it take most of the viewport height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-section .container {
+  max-width: 800px;
+}
+
+/* If you add a profile picture:
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1.5rem;
+  border: 3px solid var(--accent-color);
+  box-shadow: 0 0 15px rgba(0, 188, 212, 0.5);
+}
+*/
+
+.about-headline {
+  font-size: 3.5rem;
+  color: var(--heading-color);
+  margin-bottom: 0.5rem;
+}
+
+.about-tagline {
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  margin-bottom: 2rem;
+  font-weight: 400;
+}
+
+.about-bio {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.about-cta {
+  margin-top: 2.5rem;
+}
+
+.cta-button {
+  background-color: var(--accent-color);
+  color: var(--primary-bg); /* Dark text on light button */
+  padding: 0.8rem 1.8rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin: 0 0.5rem;
+  display: inline-block;
+  border: 2px solid var(--accent-color);
+}
+
+.cta-button:hover {
+  background-color: var(--accent-hover-color);
+  border-color: var(--accent-hover-color);
+  transform: translateY(-2px);
+}
+
+.cta-button.secondary {
+  background-color: transparent;
+  color: var(--accent-color);
+  border: 2px solid var(--accent-color);
+}
+
+.cta-button.secondary:hover {
+  background-color: var(--accent-color);
+  color: var(--primary-bg);
+}
+
+@media (max-width: 768px) {
+  .about-section {
+    padding-top: 100px; /* Adjust for smaller header */
+    min-height: auto;
+  }
+  .about-headline {
+    font-size: 2.5rem;
+  }
+  .about-tagline {
+    font-size: 1.2rem;
+  }
+  .about-bio {
+    font-size: 1rem;
+  }
+  .cta-button {
+    padding: 0.7rem 1.5rem;
+    margin-bottom: 0.5rem; /* Stack buttons on mobile */
+  }
+}
+```
+
+```javascript:src/components/Experience.js
+import React from 'react';
+import './Experience.css';
+
+// Invented experience data
+const experiences = [
+  {
+    id: 1,
+    title: 'Cybersecurity Analyst Intern',
+    company: 'SecureTech Solutions',
+    duration: 'Summer 2022 (June 2022 - August 2022)',
+    location: 'Annapolis, MD (Remote)',
+    responsibilities: [
+      'Monitored network traffic and system logs for suspicious activities using SIEM tools (Splunk).',
+      'Assisted senior analysts in vulnerability assessments and penetration testing exercises on internal systems.',
+      'Contributed to the development and refinement of incident response playbooks.',
+      'Researched emerging cyber threats, vulnerabilities, and mitigation strategies, presenting findings to the team.',
+      'Participated in security awareness training material creation for employees.'
+    ]
+  },
+  {
+    id: 2,
+    title: 'IT Support Specialist (Part-Time)',
+    company: 'AACC Technology Services',
+    duration: 'August 2020 - May 2021',
+    location: 'Arnold, MD',
+    responsibilities: [
+      'Provided Tier 1 technical support to students, faculty, and staff for hardware, software, and network issues.',
+      'Managed user accounts, permissions, and access controls within Active Directory.',
+      'Assisted with network troubleshooting, device configuration, and hardware maintenance.',
+      'Documented support tickets and resolutions in a knowledge base system.',
+      'Contributed to maintaining IT inventory and deploying new equipment.'
+    ]
+  }
+];
+
+// Experience section component
+const Experience = () => {
+  return (
+    <section id="experience" className="experience-section">
+      <div className="container">
+        <h2 className="section-title">Professional Experience</h2>
+        <div className="experience-timeline">
+          {experiences.map(exp => (
+            <div key={exp.id} className="experience-item">
+              <div className="experience-content">
+                <h3>{exp.title}</h3>
+                <p className="experience-company">{exp.company} | {exp.location}</p>
+                <p className="experience-duration">{exp.duration}</p>
+                <ul>
+                  {exp.responsibilities.map((res, index) => (
+                    <li key={index}>{res}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Experience;
+```
+
+```css:src/components/Experience.css
+/* Experience section styles */
+.experience-section {
+  background-color: var(--secondary-bg);
+}
+
+.experience-timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* The actual timeline (the vertical ruler) */
+.experience-timeline::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  background-color: var(--accent-color);
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -2px; /* Half of the width */
+  border-radius: 2px;
+}
+
+.experience-item {
+  padding: 10px 40px;
+  position: relative;
+  background-color: inherit;
+  width: 50%;
+}
+
+/* The circles on the timeline */
+.experience-item::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: -12px; /* Adjust to center on line */
+  background-color: var(--primary-bg);
+  border: 4px solid var(--accent-color);
+  top: 25px; /* Align with heading or content start */
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* Place the item to the left */
+.experience-item:nth-child(odd) {
+  left: 0;
+}
+
+/* Place the item to the right */
+.experience-item:nth-child(even) {
+  left: 50%;
+}
+
+/* Fix the circle for right-sided items */
+.experience-item:nth-child(even)::after {
+  left: -8px; /* Adjust to center on line */
+}
+
+.experience-content {
+  padding: 20px 30px;
+  background-color: var(--primary-bg);
+  position: relative;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+}
+
+.experience-content h3 {
+  color: var(--accent-color);
+  margin-top: 0;
+}
+
+.experience-company {
+  font-style: italic;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.experience-duration {
+  font-size: 0.9rem;
+  color: #aaa; /* Lighter grey for less emphasis */
+  margin-bottom: 1rem;
+}
+
+.experience-content ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  color: var(--text-color);
+}
+
+.experience-content ul li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+/* Responsive adjustments for timeline */
+@media (max-width: 768px) {
+  .experience-timeline::after {
+    left: 20px; /* Move timeline to the left */
+    margin-left: 0;
+  }
+
+  .experience-item {
+    width: 100%;
+    padding-left: 50px; /* Space for the timeline line and circle */
+    padding-right: 15px;
+  }
+
+  .experience-item:nth-child(odd),
+  .experience-item:nth-child(even) {
+    left: 0; /* Stack all items on the left */
+  }
+
+  .experience-item::after {
+    left: 10px; /* Position circle on the left timeline */
+    right: auto;
+  }
+  
+  .experience-content {
+    padding: 15px 20px;
+  }
+}
+```
+
+```javascript:src/components/Projects.js
+import React from 'react';
+import './Projects.css';
+
+// Invented project data
+const projects = [
+  {
+    id: 1,
+    title: 'Project Sentinel: AI-Powered Phishing Detector',
+    description: 'Developed a browser extension using Python (Flask backend) and JavaScript to detect and warn users about potential phishing websites in real-time. Leveraged machine learning models trained on URL and content features for high accuracy.',
+    technologies: ['Python', 'Flask', 'JavaScript', 'TensorFlow', 'Scikit-learn', 'HTML/CSS'],
+    outcome: 'Achieved 95% accuracy in identifying phishing attempts in a controlled test dataset. Presented at a university tech showcase.',
+    // link: '#' // Optional: link to GitHub repo or live demo
+  },
+  {
+    id: 2,
+    title: 'Secure IoT Device Network Simulation',
+    description: 'Designed and simulated a secure network architecture for IoT devices in a smart home environment. Implemented end-to-end encryption, mutual device authentication, and a lightweight intrusion detection system.',
+    technologies: ['GNS3', 'OpenSSL', 'MQTT', 'Python', 'Wireshark'],
+    outcome: 'Demonstrated robust security against common IoT attack vectors like eavesdropping and unauthorized access in the simulated environment.',
+    // link: '#'
+  },
+  {
+    id: 3,
+    title: 'Web Application Vulnerability Assessment',
+    description: 'Conducted a comprehensive vulnerability assessment of a sample e-commerce web application. Identified and documented critical vulnerabilities including XSS, SQL Injection, and CSRF, providing detailed remediation recommendations based on OWASP guidelines.',
+    technologies: ['OWASP ZAP', 'Burp Suite (Community)', 'Nmap', 'SQLMap'],
+    outcome: 'Identified 15+ vulnerabilities, categorized by severity. Developed a report outlining findings and proposed countermeasures to enhance application security.',
+    // link: '#'
+  }
+];
+
+// Projects section component
+const Projects = () => {
+  return (
+    <section id="projects" className="projects-section">
+      <div className="container">
+        <h2 className="section-title">Featured Projects</h2>
+        <div className="projects-grid">
+          {projects.map(project => (
+            <div key={project.id} className="project-card">
+              <h3>{project.title}</h3>
+              <p className="project-description">{project.description}</p>
+              <div className="project-tech">
+                <strong>Technologies:</strong>
+                <ul>
+                  {project.technologies.map(tech => <li key={tech}>{tech}</li>)}
+                </ul>
+              </div>
+              <p className="project-outcome"><strong>Outcome:</strong> {project.outcome}</p>
+              {/* {project.link && <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link">View Project</a>} */}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Projects;
+```
+
+```css:src/components/Projects.css
+/* Projects section styles */
+.projects-section {
+  background-color: var(--primary-bg);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.project-card {
+  background-color: var(--secondary-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.project-card h3 {
+  color: var(--accent-color);
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.project-description {
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  flex-grow: 1; /* Allows description to take available space */
+}
+
+.project-tech {
+  margin-bottom: 1rem;
+}
+
+.project-tech strong {
+  color: var(--heading-color);
+  font-size: 0.9rem;
+}
+
+.project-tech ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.project-tech li {
+  background-color: var(--primary-bg);
+  color: var(--accent-color);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  border: 1px solid var(--accent-color);
+}
+
+.project-outcome {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-color);
+}
+
+.project-outcome strong {
+  color: var(--heading-color);
+}
+
+.project-link { /* Optional link styling */
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--accent-color);
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.project-link:hover {
+  color: var(--accent-hover-color);
+}
+```
+
+```javascript:src/components/Skills.js
+import React from 'react';
+import './Skills.css';
+
+// Invented skills data
+const skillCategories = [
+  {
+    name: 'Security Tools & Technologies',
+    skills: ['SIEM (Splunk, ELK Stack basics)', 'IDS/IPS (Snort)', 'Nmap', 'Wireshark', 'Metasploit Framework (Basics)', 'Burp Suite', 'Nessus', 'Firewalls (iptables, pfSense)', 'Endpoint Detection & Response (EDR concepts)']
+  },
+  {
+    name: 'Programming & Scripting',
+    skills: ['Python (for scripting & automation)', 'Bash Shell Scripting', 'JavaScript (for web context)', 'SQL (for database interaction)']
+  },
+  {
+    name: 'Cybersecurity Concepts',
+    skills: ['Network Security Principles', 'Cryptography & PKI', 'Vulnerability Assessment', 'Penetration Testing Methodologies', 'Incident Response & Handling', 'Threat Modeling', 'Risk Management (NIST RMF basics)', 'OWASP Top 10', 'Cloud Security (AWS/Azure fundamentals)', 'Digital Forensics (Introductory)']
+  },
+  {
+    name: 'Operating Systems & Networks',
+    skills: ['Linux (Kali, Ubuntu, CentOS)', 'Windows Server Administration (Basics)', 'TCP/IP Suite', 'Network Protocols (HTTP/S, DNS, SMTP)', 'Virtualization (VMware, VirtualBox)']
+  },
+  {
+    name: 'Soft Skills',
+    skills: ['Analytical Thinking', 'Problem-Solving', 'Attention to Detail', 'Technical Communication (Written & Verbal)', 'Team Collaboration', 'Continuous Learning', 'Ethical Conduct']
+  }
+];
+
+// Skills section component
+const Skills = () => {
+  return (
+    <section id="skills" className="skills-section">
+      <div className="container">
+        <h2 className="section-title">Core Competencies</h2>
+        <div className="skills-grid">
+          {skillCategories.map(category => (
+            <div key={category.name} className="skill-category">
+              <h3>{category.name}</h3>
+              <ul>
+                {category.skills.map(skill => (
+                  <li key={skill}>{skill}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Skills;
+```
+
+```css:src/components/Skills.css
+/* Skills section styles */
+.skills-section {
+  background-color: var(--secondary-bg);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.skill-category {
+  background-color: var(--primary-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+}
+
+.skill-category h3 {
+  color: var(--accent-color);
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.skill-category ul {
+  list-style: none;
+  padding: 0;
+}
+
+.skill-category li {
+  background-color: var(--secondary-bg);
+  color: var(--text-color);
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  border-left: 3px solid var(--accent-color);
+  transition: background-color 0.3s ease;
+}
+
+.skill-category li:hover {
+  background-color: #2a2a2a; /* Slightly lighter on hover */
+}
+```
+
+```javascript:src/components/Education.js
+import React from 'react';
+import './Education.css';
+
+// Education data (expanded from resume)
+const educationHistory = [
+  {
+    id: 1,
+    degree: 'Master of Science in Cybersecurity',
+    institution: 'University of Maryland Global Campus (UMGC)',
+    graduation: 'Expected Graduation: May 2024 (Invented for completeness)',
+    details: [
+      'Concentration: Cyber Operations / Information Assurance (Invented)',
+      'Key Coursework: Advanced Network Security, Ethical Hacking & Countermeasures, Cryptography, Secure Software Development, Risk Management & Compliance.',
+      'Capstone Project (Invented): "Developing a Proactive Threat Intelligence Platform for Small Businesses."'
+    ]
+  },
+  {
+    id: 2,
+    degree: 'Associate of Applied Science in Cybersecurity',
+    institution: 'Anne Arundel Community College (AACC)',
+    graduation: 'Graduated: May 2022 (Invented for completeness)',
+    details: [
+      'Focused on foundational cybersecurity principles, network defense, and security operations.',
+      'Member of the Cybersecurity Club (Invented).',
+      'Dean\'s List: Fall 2021, Spring 2022 (Invented).'
+    ]
+  }
+];
+
+// Education section component
+const Education = () => {
+  return (
+    <section id="education" className="education-section">
+      <div className="container">
+        <h2 className="section-title">Education & Certifications</h2>
+        <div className="education-list">
+          {educationHistory.map(edu => (
+            <div key={edu.id} className="education-item">
+              <h3>{edu.degree}</h3>
+              <p className="education-institution">{edu.institution}</p>
+              <p className="education-graduation">{edu.graduation}</p>
+              {edu.details && (
+                <ul className="education-details">
+                  {edu.details.map((detail, index) => (
+                    <li key={index}>{detail}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+          <div className="education-item certifications">
+             <h3>Relevant Certifications (Pursuing/Achieved)</h3>
+             <ul className="education-details">
+                <li>CompTIA Security+ (Achieved: January 2023 - Invented)</li>
+                <li>(ISC)² SSCP - Systems Security Certified Practitioner (Pursuing - Invented)</li>
+                <li>Cisco Certified CyberOps Associate (Studying - Invented)</li>
+             </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Education;
+```
+
+```css:src/components/Education.css
+/* Education section styles */
+.education-section {
+  background-color: var(--primary-bg);
+}
+
+.education-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.education-item {
+  background-color: var(--secondary-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+}
+
+.education-item:last-child {
+  margin-bottom: 0;
+}
+
+.education-item h3 {
+  color: var(--accent-color);
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.education-institution {
+  font-weight: bold;
+  color: var(--heading-color);
+  margin-bottom: 0.25rem;
+}
+
+.education-graduation {
+  font-style: italic;
+  color: #aaa;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.education-details {
+  list-style-type: disc;
+  padding-left: 20px;
+  color: var(--text-color);
+}
+
+.education-details li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.certifications h3 {
+    color: var(--accent-color); /* Or a different highlight if desired */
+}
+```
+
+```javascript:src/components/Contact.js
+import React from 'react';
+import './Contact.css';
+
+// Contact section component
+const Contact = () => {
+  // Invented contact details
+  const email = 'jordan.lee.cyber@email.com';
+  const linkedin = 'https://www.linkedin.com/in/jordanleecyber'; // Placeholder-like, but specific
+  const github = 'https://github.com/jordanleecyber'; // Placeholder-like, but specific
+
+  return (
+    <section id="contact" className="contact-section">
+      <div className="container">
+        <h2 className="section-title">Get In Touch</h2>
+        <p className="contact-intro">
+          I'm currently seeking new opportunities in cybersecurity and am excited to connect.
+          Whether you have a question, a potential role, or just want to discuss cybersecurity trends, feel free to reach out!
+        </p>
+        <div className="contact-methods">
+          <div className="contact-method">
+            <h4>Email</h4>
+            <a href={`mailto:${email}`}>{email}</a>
+          </div>
+          <div className="contact-method">
+            <h4>LinkedIn</h4>
+            <a href={linkedin} target="_blank" rel="noopener noreferrer">{linkedin.replace('https://www.', '')}</a>
+          </div>
+          <div className="contact-method">
+            <h4>GitHub</h4>
+            <a href={github} target="_blank" rel="noopener noreferrer">{github.replace('https://www.', '')}</a>
+          </div>
+        </div>
+        {/* Basic Contact Form (optional, requires backend or service like Formspree/Netlify Forms) */}
+        {/* 
+        <form className="contact-form" action="YOUR_FORM_ENDPOINT" method="POST">
+          <h3>Send a Message</h3>
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="message">Message</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" className="submit-button">Send Message</button>
+        </form>
+        */}
+      </div>
+    </section>
+  );
+};
+
+export default Contact;
+```
+
+```css:src/components/Contact.css
+/* Contact section styles */
+.contact-section {
+  background-color: var(--secondary-bg);
+  text-align: center;
+}
+
+.contact-intro {
+  max-width: 700px;
+  margin: 0 auto 2.5rem auto;
+  font-size: 1.1rem;
+}
+
+.contact-methods {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.contact-method {
+  background-color: var(--primary-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  min-width: 250px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+}
+
+.contact-method h4 {
+  color: var(--accent-color);
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.contact-method a {
+  color: var(--text-color);
+  word-break: break-all; /* Prevent long links from breaking layout */
+}
+
+.contact-method a:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+/* Optional Contact Form Styling */
+.contact-form {
+  max-width: 600px;
+  margin: 2rem auto 0 auto;
+  background-color: var(--primary-bg);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  text-align: left;
+  border: 1px solid var(--border-color);
+}
+
+.contact-form h3 {
+  text-align: center;
+  color: var(--accent-color);
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--heading-color);
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: var(--secondary-bg);
+  color: var(--text-color);
+  font-family: var(--font-primary);
+  font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.3);
+}
+
+.submit-button {
+  display: block;
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  background-color: var(--accent-color);
+  color: var(--primary-bg);
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: var(--accent-hover-color);
+}
+
+@media (max-width: 768px) {
+  .contact-methods {
+    flex-direction: column;
+    align-items: center;
+  }
+  .contact-method {
+    width: 90%;
+    max-width: 350px; /* Ensure it doesn't get too wide on mobile */
+  }
+}
+```
+
+```javascript:src/components/Footer.js
+import React from 'react';
+import './Footer.css';
+
+// Footer component
+const Footer = () => {
+  const currentYear = new Date().getFullYear();
+  return (
+    <footer className="footer">
+      <div className="container">
+        <p>&copy; {currentYear} Jordan Lee. All rights reserved.</p>
+        <p>Built with React. Designed with care.</p>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
+```
+
+```css:src/components/Footer.css
+/* Footer styles */
+.footer {
+  background-color: var(--primary-bg); /* Same as header or slightly darker */
+  color: var(--text-color);
+  text-align: center;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer .container {
+  padding: 0; /* Override global container padding if needed */
+}
+
+.footer p {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #aaa; /* Lighter grey for footer text */
+}
+
+.footer p:last-child {
+  margin-bottom: 0;
+}
+```
