@@ -343,10 +343,11 @@ class GeminiHelper:
         }
         
         # More flexible patterns for component files
-        component_pattern = r'```(?:javascript|js):src/components/([a-zA-Z0-9_-]+)\.js\s*([\s\S]*?)```'
+        component_pattern = r'```(?:javascript|js)(?::)?src/components/([a-zA-Z0-9_-]+)\.js\s*([\s\S]*?)```'
+
         # Fallback pattern if the more specific one doesn't find matches
         component_fallback_pattern = r'```(?:javascript|js)\s*(?:\/\/|#)\s*src\/components\/([a-zA-Z0-9_-]+)\.js\s*([\s\S]*?)```'
-        
+        nested_component_pattern = r'```(?:javascript|js)(?::)?src/components/([a-zA-Z0-9_-]+)/\1\.js\s*([\s\S]*?)```'
         component_css_pattern = r'```(?:css):src/components/([a-zA-Z0-9_-]+)\.css\s*([\s\S]*?)```'
         # Fallback pattern for CSS
         component_css_fallback_pattern = r'```(?:css)\s*(?:\/\/|#)\s*src\/components\/([a-zA-Z0-9_-]+)\.css\s*([\s\S]*?)```'
@@ -366,9 +367,12 @@ class GeminiHelper:
         # Extract component files
         component_matches = re.findall(component_pattern, text)
         if not component_matches:
-            # Try fallback pattern
-            logger.info("No component matches with primary pattern, trying fallback pattern")
-            component_matches = re.findall(component_fallback_pattern, text)
+            # Try nested component pattern
+            logger.info("Trying nested component pattern")
+            nested_matches = re.findall(nested_component_pattern, text)
+            for name, code in nested_matches:
+                components[f'src/components/{name}/{name}.js'] = code.strip()
+                logger.debug(f"Extracted nested component src/components/{name}/{name}.js")
         
         for name, code in component_matches:
             components[f'src/components/{name}.js'] = code.strip()

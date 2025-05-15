@@ -62,6 +62,27 @@ class DeploymentService:
             logger.exception(f"Deployment failed: {str(e)}")
             raise Exception(f"Deployment failed: {str(e)}")
     
+    def deploy_to_vercel_sync(self, user_id, portfolio_id, github_token, vercel_token, portfolio_components):
+        """
+        Synchronous wrapper for the async deploy_to_vercel function
+        """
+        import asyncio
+        
+        # Create a new event loop
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
+        try:
+            # Run the async function in the event loop
+            result = loop.run_until_complete(
+                self.deploy_to_vercel(user_id, portfolio_id, github_token, vercel_token, portfolio_components)
+            )
+            return result
+        finally:
+            # Clean up
+            loop.close()    
+    
+    
     async def _create_github_repo(self, github_token, repo_name):
         """Create a new GitHub repository"""
         logger.info(f"Creating GitHub repository: {repo_name}")

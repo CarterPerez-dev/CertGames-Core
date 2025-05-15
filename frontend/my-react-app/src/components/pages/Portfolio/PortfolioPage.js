@@ -95,17 +95,30 @@ const PortfolioPage = () => {
   const handlePortfolioGenerated = (portfolioData) => {
     console.log("Portfolio generation completed successfully", portfolioData);
     
-    // Ensure we have a valid portfolio object
-    if (!portfolioData || !portfolioData._id) {
+    // Add better validation here
+    if (!portfolioData || !portfolioData._id || 
+        !portfolioData.components || Object.keys(portfolioData.components).length === 0) {
       console.error("Invalid portfolio data received:", portfolioData);
       setError("Generated portfolio data is incomplete");
       setLoading(false);
       return;
     }
     
+    // Check if components are properly formatted
+    const hasValidComponents = Object.keys(portfolioData.components).some(key => 
+      key.includes('App.js') || key.includes('index.js')
+    );
+    
+    if (!hasValidComponents) {
+      console.error("Portfolio components are malformed");
+      setError("Portfolio generation produced invalid components. Please try again.");
+      setLoading(false);
+      return;
+    }
+    
     setCurrentPortfolio(portfolioData);
     setGenerationComplete(true);
-    setActiveTab('preview'); // Switch to preview tab
+    setActiveTab('preview');
     
     // Add a small delay before fetching portfolios to ensure the backend has updated
     setTimeout(() => {

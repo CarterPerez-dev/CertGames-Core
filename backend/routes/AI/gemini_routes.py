@@ -552,23 +552,4 @@ def list_user_portfolios(user_id):
         logger.error(f"Error listing portfolios: {str(e)}")
         return []
         
-def deploy_to_vercel_sync(user_id, portfolio_id, github_token, vercel_token, components):
-    """
-    Synchronous wrapper for the async deploy_to_vercel function
-    """
-    import asyncio
-    
-    # Create a new event loop
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    
-    try:
-        # Run the async function in the event loop
-        result = loop.run_until_complete(
-            deploy_to_vercel(user_id, portfolio_id, github_token, vercel_token, components)
-        )
-        return result
-    finally:
-        # Clean up
-        loop.close()             
-        
+
