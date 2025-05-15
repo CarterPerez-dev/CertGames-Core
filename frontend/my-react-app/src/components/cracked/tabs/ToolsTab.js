@@ -6,9 +6,9 @@ import {
   FaFacebook, FaReddit, FaLinkedin, FaTwitter, FaInstagram, FaTiktok,
   FaLink, FaShieldAlt, FaExternalLinkAlt, FaBrain, FaPalette, FaCode, FaGlobe
 } from "react-icons/fa";
-import { SiMongodb, SiSendgrid, SiCloudflare, SiGooglecloud, SiGoogleadsense, 
+import { SiMongodb, SiAlteryx, SiCloudflare, SiGooglecloud, SiGoogleadsense, 
   SiAppstore, SiOpenai, SiStripe, SiOracle, SiExpo, SiCanva, SiChatbot, 
-  SiGnometerminal, SiX, SiClaude, SiChainguard, SiGmail } from "react-icons/si";
+  SiGnometerminal, SiX, SiAffinity, SiChainguard, SiGmail } from "react-icons/si";
 import { adminFetch } from '../csrfHelper';
 
 const ToolsTab = () => {
@@ -43,7 +43,7 @@ const ToolsTab = () => {
       name: "Marketing & Design",
       icon: <FaPaintBrush color="#cc0000" />,
       tools: [
-        { name: "SendGrid", url: "https://login.sendgrid.com/login/identifier", icon: <SiSendgrid />, color: "#1A82E2" },
+        { name: "SendGrid", url: "https://login.sendgrid.com/login/identifier", icon: <SiAlteryx />, color: "#1A82E2" },
         { name: "Google Admin Console", url: "https://admin.google.com/u/7/ac/home?rapt=AEjHL4PtrsNfMeR5U6Q9z9HG0VEX7RznDWYVZUF-Cy5egPZoXPXPMvUaTBERXS_oAsfNPj3Dcyxi7DrNKta4WzXDSGU1DzADdcDeuB7XPAHj2hjFfyapCTo", icon: <FaGoogle />, color: "#4C8BF5" },
         { name: "Google Search Console", url: "https://search.google.com/u/1/search-console?resource_id=sc-domain%3Acertgames.com", icon: <SiGoogleadsense />, color: "#034694" },
         { name: "Canva", url: "https://www.canva.com/", icon: <SiCanva />, color: "#99FFFF" },
@@ -56,7 +56,7 @@ const ToolsTab = () => {
       name: "AI Tools",
       icon: <FaBrain color="#cc0000" />,
       tools: [
-        { name: "Claude", url: "https://claude.ai/chat/", icon: <SiClaude />, color: "#E3963E" },
+        { name: "Claude", url: "https://claude.ai/chat/", icon: <SiAffinity />, color: "#E3963E" },
         { name: "ChatGPT", url: "https://chatgpt.com/", icon: <SiOpenai />, color: "#FFFFFF" },
         { name: "OpenAI Admin", url: "https://platform.openai.com/logs", icon: <SiOpenai />, color: "#00BFFF" },
         { name: "Gemini AI Studio", url: "https://aistudio.google.com/", icon: <SiGnometerminal />, color: "#1877F2" },
