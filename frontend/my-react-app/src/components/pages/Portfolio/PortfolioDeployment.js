@@ -93,6 +93,19 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
       setDeploymentInProgress(true);
       setDeploymentStage(0);
       
+      // Add validation for token formats
+      if (githubToken.length < 36 || !githubToken.match(/^gh[ps]_[A-Za-z0-9_]{36,}$/)) {
+        throw new Error('Invalid GitHub token format. Please ensure you are using a valid Personal Access Token.');
+      }
+      
+      if (vercelToken.length < 24) {
+        throw new Error('Invalid Vercel token format. Please ensure you are using a valid API token.');
+      }
+      
+      // Show stage 1: Preparing files
+      setDeploymentStage(1);
+      
+      // Make the deployment request
       const response = await fetch('/api/portfolio/deploy', {
         method: 'POST',
         headers: {
@@ -111,8 +124,23 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
         throw new Error(errorData.error || 'Deployment failed');
       }
       
+      // Show stage 2: Creating Repository
+      setDeploymentStage(2);
+      
+      // Add a delay to simulate the process steps
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      // Show stage 3: Configuring Hosting
+      setDeploymentStage(3);
+      
+      // Add another delay
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
       const data = await response.json();
       console.log("Deployment successful:", data);
+      
+      // Wait a moment to show the final stage
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       setDeploymentInProgress(false);
       onDeploymentComplete(data);
@@ -373,7 +401,28 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                               className="token-help-link"
                             >
                               Create a GitHub token
-                            </a> with 'repo' and 'workflow' permissions.
+                            </a> with these permissions:
+                            <ul className="token-permissions">
+                              <li><strong>repo</strong> - Full control of private repositories</li>
+                              <li><strong>workflow</strong> - Update GitHub Action workflows</li>
+                            </ul>
+                            <span className="token-tip">Important: Make sure to copy your token immediately after creation, as GitHub won't show it again!</span>
+                          </p>
+                          
+                          // For Vercel token:
+                          <p className="token-help">
+                            <a 
+                              href="https://vercel.com/account/tokens" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="token-help-link"
+                            >
+                              Create a Vercel token
+                            </a> from your account settings with these settings:
+                            <ul className="token-permissions">
+                              <li>Description: Portfolio Generator</li>
+                              <li>Scope: Full Account</li>
+                            </ul>
                           </p>
                         </div>
                       </div>

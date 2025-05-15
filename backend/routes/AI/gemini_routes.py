@@ -282,7 +282,7 @@ def fix_portfolio_error():
 
 @portfolio_bp.route('/deploy', methods=['POST'])
 @jwt_required_wrapper
-def deploy_portfolio():
+async def deploy_portfolio():
     """
     Deploy a portfolio to Vercel
     """
@@ -304,20 +304,29 @@ def deploy_portfolio():
         if not portfolio:
             return jsonify({"error": "Portfolio not found"}), 404
         
-        # In a real implementation, this would:
-        # 1. Create a GitHub repository
-        # 2. Commit the portfolio files
-        # 3. Set up Vercel deployment
-        # For now, we'll just simulate this
+        # Deploy to Vercel
+        from services.deployment_service import deployment_service
         
-        deployment_url = f"https://{user_id}-portfolio.vercel.app"
+        deployment_result = await deployment_service.deploy_to_vercel(
+            user_id, 
+            portfolio_id, 
+            github_token, 
+            vercel_token,
+            portfolio.get('components', {})
+        )
         
         # Update the portfolio with deployment info
-        update_portfolio_deployment(user_id, portfolio_id, deployment_url)
+        update_portfolio_deployment(
+            user_id, 
+            portfolio_id, 
+            deployment_result['deployment_url'],
+            deployment_result['github_repo']
+        )
         
         return jsonify({
             "success": True,
-            "deployment_url": deployment_url,
+            "deployment_url": deployment_result['deployment_url'],
+            "github_repo": deployment_result['github_repo'],
             "status": "deployed"
         })
         
@@ -504,3 +513,30 @@ def list_user_portfolios(user_id):
     except Exception as e:
         logger.error(f"Error listing portfolios: {str(e)}")
         return []
+        
+        
+@portfolio_bp.route('/deployment-status/<deployment_id>', methods=['GET'])
+@jwt_required_wrapper
+def get_deployment_status(deployment_id):
+    """
+    Check the status of a deployment
+    """
+    try:
+        from mongodb.database import db
+        
+        deployment = db.deployment_statuses.find_one({"_id": ObjectId(deployment_id)})
+        if not deployment:
+            return jsonify({"error": "Deployment not found"}), 404
+        
+        return jsonify({
+            "status": deployment.get("status"),
+            "progress": deployment.get("progress"),
+            "url": deployment.get("url"),
+            "github_repo": deployment.get("github_repo"),
+            "error": deployment.get("error")
+        })
+        
+    except Exception as e:
+        logger.exception(f"Error checking deployment status: {str(e)}")
+        return jsonify({"error": "Failed to check deployment status"}), 500        
+        

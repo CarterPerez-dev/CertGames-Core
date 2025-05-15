@@ -759,3 +759,91 @@ def admin_google_auth():
         current_app.logger.error(f"Error in admin Google auth: {str(e)}")
         frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
         return redirect(f"{frontend_url}/cracked?error=authentication_failed")
+
+
+
+
+################################################################
+###########        GITHUB AND VERCEL          ##################
+################################################################
+
+
+
+@oauth_bp.route('/github', methods=['GET'])
+def github_oauth():
+    """Redirect to GitHub OAuth"""
+    github_client_id = os.getenv('GITHUB_APP_ID')
+    redirect_uri = url_for('oauth.github_callback', _external=True)
+    
+    params = {
+        'client_id': github_client_id,
+        'redirect_uri': redirect_uri,
+        'scope': 'repo workflow',
+        'state': session.get('csrf_token')
+    }
+    
+    authorize_url = f"https://github.com/login/oauth/authorize?{urlencode(params)}"
+    return redirect(authorize_url)
+
+@oauth_bp.route('/github/callback', methods=['GET'])
+def github_callback():
+    """Handle GitHub OAuth callback"""
+    code = request.args.get('code')
+    state = request.args.get('state')
+    
+    if not code:
+        return jsonify({"error": "No code provided"}), 400
+    
+    if state != session.get('csrf_token'):
+        return jsonify({"error": "Invalid state parameter"}), 400
+    
+    github_client_id = os.getenv('GITHUB_APP_ID')
+    github_client_secret = os.getenv('GITHUB_APP_SECRET')
+    
+    response = requests.post(
+        'https://github.com/login/oauth/access_token',
+        headers={'Accept': 'application/json'},
+        data={
+            'client_id': github_client_id,
+            'client_secret': github_client_secret,
+            'code': code
+        }
+    )
+    
+    if response.status_code != 200:
+        return jsonify({"error": "Failed to get access token"}), 400
+    
+    data = response.json()
+    access_token = data.get('access_token')
+    
+    if not access_token:
+        return jsonify({"error": "No access token provided"}), 400
+    
+    # Store token in session
+    session['github_token'] = access_token
+    
+    # Redirect back to portfolio page
+    return redirect('/portfolio?github_auth=success')
+
+# Similarly for Vercel
+@oauth_bp.route('/vercel', methods=['GET'])
+def vercel_oauth():
+    """Redirect to Vercel OAuth"""
+    vercel_client_id = os.getenv('VERCEL_CLIENT_ID')
+    redirect_uri = url_for('oauth.vercel_callback', _external=True)
+    
+    params = {
+        'client_id': vercel_client_id,
+        'redirect_uri': redirect_uri,
+        'scope': 'deployments:read deployments:write projects:read projects:write',
+        'state': session.get('csrf_token')
+    }
+    
+    authorize_url = f"https://vercel.com/oauth/authorize?{urlencode(params)}"
+    return redirect(authorize_url)
+
+
+
+
+
+

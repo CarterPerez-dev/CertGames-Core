@@ -1,4 +1,4 @@
-/* src/components/pages/angela/OctocatDisplay.css */
+/* src/components/pages/angela/OctocatDisplay.css - Updated for Claytronic display */
 .octocat-section {
   padding: 100px 20px;
   position: relative;
@@ -8,7 +8,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #0D1117;
 }
 
 .octocat-section-header {
@@ -20,7 +19,7 @@
   font-size: 38px;
   font-weight: bold;
   margin-bottom: 15px;
-  text-shadow: 0 0 10px rgba(0, 255, 150, 0.3);
+  text-shadow: 0 0 15px rgba(0, 229, 255, 0.5); /* Cyan glow */
   position: relative;
   display: inline-block;
   padding: 0 40px;
@@ -29,7 +28,7 @@
 }
 
 .octocat-title-gradient {
-  background: linear-gradient(to right, #7DBBE6, #2EA44F);
+  background: linear-gradient(to right, #00e5ff, #0091ea); /* Cyan to blue gradient */
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -45,7 +44,6 @@
   left: -2%;
   width: 104%;
   height: 120%;
-  background: linear-gradient(45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
   z-index: -1;
   transform: rotate(-2deg);
   border-radius: 2px;
@@ -70,11 +68,12 @@
   font-family: 'VT323', 'Press Start 2P', monospace;
 }
 
-.octocat-display-container {
+.octocat-display-container,
+.claytronic-display-container {
   position: relative;
   width: 100%;
   max-width: 800px;
-  height: 600px;
+  height: 900px;
   margin: 0 auto;
 }
 
@@ -84,19 +83,19 @@
   position: relative;
   overflow: hidden;
   border-radius: 20px;
-  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(23, 21, 21, 0.4);
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.1), 0 0 60px rgba(0, 229, 255, 0.1); /* Added cyan glow */
   transition: box-shadow 0.5s ease;
 }
 
 .octocat-display-case:hover {
-  box-shadow: 0 20px 100px rgba(0, 0, 0, 0.7), 0 0 60px rgba(23, 21, 21, 0.5);
+  box-shadow: 0 20px 100px rgba(0, 0, 0, 0.7), 0 0 80px rgba(0, 229, 255, 0.1); /* Enhanced glow on hover */
 }
 
 .octocat-display-frame {
   position: relative;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, rgba(25, 25, 40, 0.7) 0%, rgba(13, 17, 23, 0.9) 80%);
+  background: radial-gradient(circle at center, rgba(15, 25, 40, 0.7) 0%, rgba(10, 10, 26, 0.9) 80%); /* More blue tint */
   display: flex;
   flex-direction: column;
 }
@@ -108,8 +107,8 @@
 
 .octocat-display-base {
   height: 80px;
-  background: linear-gradient(to bottom, rgba(5, 5, 10, 0.9), rgba(30, 30, 40, 0.9));
-  border-top: 1px solid rgba(23, 21, 21, 0.3);
+  background: linear-gradient(to bottom, rgba(5, 5, 15, 0.1), rgba(20, 30, 45, 0.1)); /* Adjusted for blue theme */
+  border-top: 1px solid rgba(0, 229, 255, 0.2); /* Cyan border */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,10 +125,11 @@
 .octocat-display-label {
   font-family: 'VT323', 'Press Start 2P', monospace;
   font-size: 20px;
-  color: #7DBBE6;
-  text-shadow: 0 0 10px rgba(125, 187, 230, 0.5);
+  color: #00e5ff; /* Cyan text */
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.1); /* Enhanced cyan glow */
   margin-bottom: 5px;
   font-weight: bold;
+  letter-spacing: 1px;
 }
 
 .octocat-display-detail {
@@ -138,7 +138,7 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* Grid lines to match the aesthetic in the images */
+/* Grid lines to enhance holographic effect */
 .octocat-display-content::before {
   content: '';
   position: absolute;
@@ -147,11 +147,21 @@
   width: 100%;
   height: 100%;
   background-image: 
-    linear-gradient(to right, rgba(23, 21, 21, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(23, 21, 21, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 229, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 229, 255, 0.05) 1px, transparent 1px);
   background-size: 30px 30px;
   pointer-events: none;
   z-index: 1;
+  animation: gridMove 120s linear infinite; /* Slow movement of grid for subtle effect */
+}
+
+@keyframes gridMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-30px, -30px);
+  }
 }
 
 /* Add a beam of light effect */
@@ -162,7 +172,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 50%, rgba(0, 229, 255, 0.1) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
   animation: beamPulse 10s infinite ease-in-out;
@@ -173,19 +183,50 @@
     opacity: 0.1;
   }
   50% {
-    opacity: 0.4;
+    opacity: 0.3;
+  }
+}
+
+/* Scan line effect */
+.octocat-display-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 229, 255, 0.03) 50.5%,
+    transparent 51%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 2;
+  animation: scanLine 8s linear infinite;
+}
+
+@keyframes scanLine {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
   }
 }
 
 /* Add responsive styles */
 @media (max-width: 850px) {
-  .octocat-display-container {
+  .octocat-display-container,
+  .claytronic-display-container {
     height: 500px;
   }
 }
 
 @media (max-width: 600px) {
-  .octocat-display-container {
+  .octocat-display-container,
+  .claytronic-display-container {
     height: 400px;
   }
   
