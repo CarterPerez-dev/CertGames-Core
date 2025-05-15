@@ -8,6 +8,7 @@ import PortfolioList from './PortfolioList';
 import PortfolioDeployment from './PortfolioDeployment';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../common/ErrorMessage';
+import SubscriptionErrorHandler from '../../SubscriptionErrorHandler';
 import { FaCode, FaRocket, FaList, FaPlus, FaStar, FaExclamationCircle, FaSync, FaGithub} from 'react-icons/fa';
 
 const PortfolioPage = () => {
@@ -21,9 +22,9 @@ const PortfolioPage = () => {
   const [loadingMessage, setLoadingMessage] = useState('Loading...');
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
-
-  console.log("Rendering PortfolioPage component");
-
+   
+  const subscriptionErrorHandler = SubscriptionErrorHandler();
+  
   // Fetch user's portfolios on initial load
   useEffect(() => {
     if (userId) {
@@ -46,10 +47,20 @@ const PortfolioPage = () => {
       });
       
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`Failed to fetch portfolios: ${response.status} - ${errorText}`);
+        const errorData = await response.json();
+        console.error(`Failed to fetch portfolios: ${response.status} - ${errorData}`);
+        
+        // Add subscription error handling
+        if (subscriptionErrorHandler.handleApiError(errorData, 'portfolio')) {
+          // Error was handled, clean up UI state
+          setLoading(false);
+          setRefreshing(false);
+          return;
+        }
+        
         throw new Error('Failed to fetch portfolios');
-      }
+      } 
+
       
       const data = await response.json();
       console.log(`Fetched ${data.portfolios?.length || 0} portfolios:`, data.portfolios);
@@ -63,6 +74,12 @@ const PortfolioPage = () => {
       setLoading(false);
       setRefreshing(false);
     } catch (err) {
+      if (subscriptionErrorHandler.handleApiError(err, 'portfolio')) {
+        setLoading(false);
+        setRefreshing(false);
+        return;
+      }
+      
       console.error('Error fetching portfolios:', err);
       setError('Failed to load existing portfolios. Please try again later.');
       setLoading(false);
@@ -176,6 +193,7 @@ const PortfolioPage = () => {
 
   return (
     <div className="portfolio-page-container">
+      {subscriptionErrorHandler.render()}
       <div className="portfolio-page-header">
         <div className="portfolio-page-title-section">
           <h1 className="portfolio-page-title">Portfolio Creator</h1>

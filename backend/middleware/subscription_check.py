@@ -79,7 +79,8 @@ def check_subscription_middleware():
             '/grc',      # GRC Wizard
             '/test/daily-question/answer',  # Answering daily questions
             '/cipher',
-            '/threat-hunter'
+            '/threat-hunter',
+            '/portfolio',  
         ]
         
         # Routes for limited access (free users with usage tracking)
@@ -97,7 +98,8 @@ def check_subscription_middleware():
             '/password-reset',
             '/oauth',
             '/.well-known',
-            '/test/token/refresh',  # Add token refresh endpoint
+            '/test/token/refresh'
+            '/potfolio/generate',  
         ]
         
         # Check if current path requires premium

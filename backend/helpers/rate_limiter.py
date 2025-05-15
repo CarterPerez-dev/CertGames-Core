@@ -13,11 +13,13 @@ class RateLimiter:
     Tracks usage in MongoDB and enforces limits per user per endpoint.
     """
     
-    # Default limits for different generator types. OH MY GOD YOU BYPASSED MY API PROTECTION...... Doesnt matter....oh this too somehow?.....well dont worry I have my ai_guard....oh that too?.....you honestly deserve it at that point...
+
     DEFAULT_LIMITS = {
         'analogy': {'calls': 25, 'period': 3600},  # 15 calls per hour
         'scenario': {'calls': 18, 'period': 3600},  # 10 calls per hour
         'grc': {'calls': 30, 'period': 3600},      # 20 calls per hour
+        'portfolio': {'calls': 5, 'period': 3600}, # 15 calls per hour
+        'fix-error': {'calls': 15, 'period': 3600}, # 15 calls per hour
     }
     
     def __init__(self, limiter_type=None):

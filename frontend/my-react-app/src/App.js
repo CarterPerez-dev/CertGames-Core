@@ -343,7 +343,7 @@ function App() {
             </ProtectedRoute>
           }/>         
           <Route path="/portfolio" element={
-            <ProtectedRoute requiresPremium={false}>
+            <ProtectedRoute requiresPremium={true}>
               <PortfolioPage />
             </ProtectedRoute>
           }/>                 

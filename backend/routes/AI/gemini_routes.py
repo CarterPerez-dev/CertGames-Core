@@ -9,6 +9,7 @@ from flask import stream_with_context, Response
 import time
 import threading
 
+from middleware.subscription_check import subscription_required
 from helpers.gemini_helper import gemini_helper
 from models.test import get_user_by_id
 from helpers.ai_guard import apply_ai_guardrails
@@ -18,13 +19,12 @@ from helpers.jwt_auth import jwt_required_wrapper
 portfolio_bp = Blueprint('portfolio', __name__)
 logger = logging.getLogger(__name__)
 
-# Create a state dictionary to track generation tasks
-# Keys: user_id, Values: {"status": "pending|completed|failed", "error": "error message", "portfolio_id": "id if completed"}
+
 generation_tasks = {}
 
 @portfolio_bp.route('/generate-stream', methods=['POST'])
 @jwt_required_wrapper
-@rate_limit('general')
+@rate_limit('portfolio') 
 def generate_portfolio_stream():
     """
     Generate a portfolio website with streaming updates to client
@@ -133,6 +133,7 @@ def generate_portfolio_stream():
 
 @portfolio_bp.route('/status/generation', methods=['GET'])
 @jwt_required_wrapper
+@rate_limit('portfolio')
 def get_generation_status():
     """Check if the user has any recently generated portfolios"""
     user_id = g.user_id
@@ -227,7 +228,7 @@ def get_generation_status():
 
 @portfolio_bp.route('/fix-error', methods=['POST'])
 @jwt_required_wrapper
-@rate_limit('general')
+@rate_limit('fix-error')
 def fix_portfolio_error():
     """
     Fix errors in generated portfolio code
