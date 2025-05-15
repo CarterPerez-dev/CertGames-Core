@@ -285,7 +285,7 @@ const PortfolioPage = () => {
                 <div className="generation-tip">
                   <div className="tip-icon">💡</div>
                   <div className="tip-text">
-                    This process typically takes 3-5 minutes. Can you Click off the page? I dont know....I vibe coded this so I really cant tell yah ¯\_(ツ)_/¯
+                    This process typically takes 3-5 minutes. Can you click off the page you ask? I dont know....I vibe coded this in 6 hours, so I really couldnt tell you ¯\_(ツ)_/¯
                   </div>
                 </div>
               </div>

@@ -218,7 +218,7 @@ class DeploymentService:
         return json.dumps({
             "name": "portfolio",
             "version": "0.1.0",
-            "private": true,
+            "private": True,
             "dependencies": {
                 "react": "^18.2.0",
                 "react-dom": "^18.2.0",

@@ -293,8 +293,17 @@ async def deploy_portfolio():
         
         user_id = g.user_id
         portfolio_id = data.get('portfolio_id')
-        github_token = data.get('github_token')
         vercel_token = data.get('vercel_token')
+        use_oauth = data.get('use_oauth', False)
+        
+        # If using OAuth, get GitHub token from session
+        if use_oauth:
+            github_token = session.get('github_token')
+            if not github_token:
+                return jsonify({"error": "No GitHub token found in session. Please authorize with GitHub first."}), 400
+        else:
+            # Otherwise use manually provided token
+            github_token = data.get('github_token')
         
         if not all([portfolio_id, github_token, vercel_token]):
             return jsonify({"error": "Missing required fields"}), 400
@@ -392,6 +401,34 @@ def get_portfolio_by_id(portfolio_id):
     except Exception as e:
         logger.exception(f"Error getting portfolio: {str(e)}")
         return jsonify({"error": "Failed to get portfolio"}), 500
+
+
+@portfolio_bp.route('/deployment-status/<deployment_id>', methods=['GET'])
+@jwt_required_wrapper
+def get_deployment_status(deployment_id):
+    """
+    Check the status of a deployment
+    """
+    try:
+        from mongodb.database import db
+        
+        deployment = db.deployment_statuses.find_one({"_id": ObjectId(deployment_id)})
+        if not deployment:
+            return jsonify({"error": "Deployment not found"}), 404
+        
+        return jsonify({
+            "status": deployment.get("status"),
+            "progress": deployment.get("progress"),
+            "url": deployment.get("url"),
+            "github_repo": deployment.get("github_repo"),
+            "error": deployment.get("error")
+        })
+        
+    except Exception as e:
+        logger.exception(f"Error checking deployment status: {str(e)}")
+        return jsonify({"error": "Failed to check deployment status"}), 500  
+
+
 
 # Database helper functions
 def save_portfolio(user_id, components, preferences, resume_text=None):
@@ -514,29 +551,5 @@ def list_user_portfolios(user_id):
         logger.error(f"Error listing portfolios: {str(e)}")
         return []
         
-        
-@portfolio_bp.route('/deployment-status/<deployment_id>', methods=['GET'])
-@jwt_required_wrapper
-def get_deployment_status(deployment_id):
-    """
-    Check the status of a deployment
-    """
-    try:
-        from mongodb.database import db
-        
-        deployment = db.deployment_statuses.find_one({"_id": ObjectId(deployment_id)})
-        if not deployment:
-            return jsonify({"error": "Deployment not found"}), 404
-        
-        return jsonify({
-            "status": deployment.get("status"),
-            "progress": deployment.get("progress"),
-            "url": deployment.get("url"),
-            "github_repo": deployment.get("github_repo"),
-            "error": deployment.get("error")
-        })
-        
-    except Exception as e:
-        logger.exception(f"Error checking deployment status: {str(e)}")
-        return jsonify({"error": "Failed to check deployment status"}), 500        
+             
         

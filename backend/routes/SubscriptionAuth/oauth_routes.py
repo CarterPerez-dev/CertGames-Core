@@ -825,24 +825,27 @@ def github_callback():
     # Redirect back to portfolio page
     return redirect('/portfolio?github_auth=success')
 
-# Similarly for Vercel
-@oauth_bp.route('/vercel', methods=['GET'])
-def vercel_oauth():
-    """Redirect to Vercel OAuth"""
-    vercel_client_id = os.getenv('VERCEL_CLIENT_ID')
-    redirect_uri = url_for('oauth.vercel_callback', _external=True)
-    
-    params = {
-        'client_id': vercel_client_id,
-        'redirect_uri': redirect_uri,
-        'scope': 'deployments:read deployments:write projects:read projects:write',
-        'state': session.get('csrf_token')
-    }
-    
-    authorize_url = f"https://vercel.com/oauth/authorize?{urlencode(params)}"
-    return redirect(authorize_url)
 
 
+@oauth_bp.route('/github/token', methods=['GET'])
+@jwt_required_wrapper
+def get_github_token():
+    """Return GitHub token from session if available"""
+    user_id = g.user_id
+    
+    # Check if GitHub token is in session
+    github_token = session.get('github_token')
+    
+    if github_token:
+        return jsonify({
+            "success": True,
+            "github_token": github_token
+        })
+    else:
+        return jsonify({
+            "success": False,
+            "message": "No GitHub token in session"
+        }), 404
 
 
 

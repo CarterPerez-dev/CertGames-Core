@@ -1,6 +1,6 @@
-// Enhanced PortfolioDeployment Component
+// Enhanced PortfolioDeployment Component with GitHub OAuth
 import React, { useState, useEffect } from 'react';
-import { FaFighterJet, FaGithub, FaLink, FaCheckCircle, FaInfoCircle, FaClipboard, FaCode, FaQuestion, FaChevronDown, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaFighterJet, FaGithub, FaLink, FaCheckCircle, FaInfoCircle, FaClipboard, FaCode, FaQuestion, FaChevronDown, FaExternalLinkAlt, FaLock, FaUnlock } from 'react-icons/fa';
 import './portfolio.css';
 
 const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymentComplete, onError }) => {
@@ -12,6 +12,8 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
   const [copied, setCopied] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState(null);
   const [hasInteractedWithForm, setHasInteractedWithForm] = useState(false);
+  const [isUsingOAuth, setIsUsingOAuth] = useState(false);
+  const [githubTokenSource, setGithubTokenSource] = useState('manual'); // 'manual' or 'oauth'
 
   // Frequently Asked Questions
   const faqItems = [
@@ -37,6 +39,39 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
     }
   ];
 
+  // Check for GitHub OAuth success on component mount
+  useEffect(() => {
+    const checkGitHubAuth = async () => {
+      try {
+        const response = await fetch('/api/oauth/github/token', {
+          headers: {
+            'X-User-Id': userId
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.github_token) {
+            setGithubToken(data.github_token);
+            setGithubTokenSource('oauth');
+            setIsUsingOAuth(true);
+            console.log("Successfully retrieved GitHub token from OAuth");
+          }
+        }
+      } catch (err) {
+        console.error("Error checking GitHub OAuth token:", err);
+      }
+    };
+    
+    // Check URL parameters for OAuth callbacks
+    const queryParams = new URLSearchParams(window.location.search);
+    if (queryParams.get('github_auth') === 'success') {
+      checkGitHubAuth();
+      // Remove the query parameter to avoid rechecking on refresh
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [userId]);
+
   // Animation for deployment stages
   useEffect(() => {
     if (deploymentInProgress) {
@@ -57,6 +92,12 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
 
   // Validate form fields
   const validateForm = () => {
+    // If using OAuth for GitHub token, we only need to validate Vercel token
+    if (githubTokenSource === 'oauth') {
+      return vercelToken && vercelToken.length >= 10;
+    }
+    
+    // Otherwise validate both tokens
     if (!githubToken || !vercelToken) {
       return false;
     }
@@ -73,18 +114,32 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
     
     if (field === 'github') {
       setGithubToken(e.target.value);
+      setGithubTokenSource('manual');
     } else if (field === 'vercel') {
       setVercelToken(e.target.value);
     }
+  };
+
+  const handleGitHubOAuth = (e) => {
+    e.preventDefault();
+    // Redirect to the GitHub OAuth endpoint
+    window.location.href = '/api/oauth/github';
   };
 
   const handleDeploy = async (e) => {
     e.preventDefault();
     
     // Validate inputs
-    if (showTokenFields && (!githubToken || !vercelToken)) {
-      onError('Please provide both GitHub and Vercel tokens');
-      return;
+    if (showTokenFields) {
+      if (githubTokenSource === 'manual' && !githubToken) {
+        onError('Please provide a GitHub token or use GitHub OAuth');
+        return;
+      }
+      
+      if (!vercelToken) {
+        onError('Please provide a Vercel token');
+        return;
+      }
     }
     
     try {
@@ -94,8 +149,10 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
       setDeploymentStage(0);
       
       // Add validation for token formats
-      if (githubToken.length < 36 || !githubToken.match(/^gh[ps]_[A-Za-z0-9_]{36,}$/)) {
-        throw new Error('Invalid GitHub token format. Please ensure you are using a valid Personal Access Token.');
+      if (githubTokenSource === 'manual') {
+        if (githubToken.length < 36 || !githubToken.match(/^gh[ps]_[A-Za-z0-9_]{36,}$/)) {
+          throw new Error('Invalid GitHub token format. Please ensure you are using a valid Personal Access Token.');
+        }
       }
       
       if (vercelToken.length < 24) {
@@ -105,6 +162,22 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
       // Show stage 1: Preparing files
       setDeploymentStage(1);
       
+      // Prepare request payload based on token source
+      const requestBody = {
+        portfolio_id: portfolio._id,
+        vercel_token: vercelToken
+      };
+      
+      // If using manual GitHub token, add it to the request
+      if (githubTokenSource === 'manual') {
+        requestBody.github_token = githubToken;
+      }
+      
+      // If using OAuth, we'll set use_oauth to true
+      if (githubTokenSource === 'oauth') {
+        requestBody.use_oauth = true;
+      }
+      
       // Make the deployment request
       const response = await fetch('/api/portfolio/deploy', {
         method: 'POST',
@@ -112,11 +185,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
           'Content-Type': 'application/json',
           'X-User-Id': userId
         },
-        body: JSON.stringify({
-          portfolio_id: portfolio._id,
-          github_token: githubToken,
-          vercel_token: vercelToken
-        })
+        body: JSON.stringify(requestBody)
       });
       
       if (!response.ok) {
@@ -171,6 +240,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
   const deploymentUrl = portfolio?.deployment?.url;
 
   return (
+    <div className="portfolio-deployment-container">
       <div className="portfolio-deployment-header">
         <div className="deployment-header-content">
           <FaFighterJet className="deployment-title-icon" />
@@ -190,8 +260,8 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
             </div>
           </div>
         </div>
+      </div>
 
-      
       {isDeployed ? (
         <div className="portfolio-deployment-success">
           <div className="deployment-success-header">
@@ -240,7 +310,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                 <span>View Portfolio</span>
               </a>
               
-              <button className="share-portfolio-button">
+              <button className="share-portfolio-button" onClick={() => copyToClipboard(deploymentUrl)}>
                 <FaLink className="share-icon" />
                 <span>Share Portfolio</span>
               </button>
@@ -350,12 +420,12 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                         className="start-deployment-button"
                         onClick={() => setShowTokenFields(true)}
                       >
-                        <FaGithub className="button-icon" />
+                        <FaFighterJet className="button-icon" />
                         <span>Start Deployment</span>
                       </button>
                     </div>
                   ) : (
-<form className="portfolio-deployment-form" onSubmit={handleDeploy}>
+                    <form className="portfolio-deployment-form" onSubmit={handleDeploy}>
                       <div className="form-section">
                         <div className="form-section-header">
                           <FaGithub className="form-section-icon" />
@@ -367,63 +437,68 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                           for version control and easy updates.
                         </p>
                         
-                        <div className="deployment-visual-container">
-                          <div className="deployment-visual">
-                            <div className="deployment-github-icon">
-                            </div>
-                            <div className="deployment-visual-arrow"></div>
-                            <div className="deployment-code-icon">
-                            </div>
+                        {/* GitHub Authorization Options */}
+                        <div className="github-auth-options">
+                          <div className="auth-option-header">
+                            <h5>Choose how to authorize GitHub:</h5>
                           </div>
-                        </div>
-                        
-                        <div className="form-group">
-                          <label htmlFor="github-token">GitHub Access Token</label>
-                          <div className="">
-                            <FaGithub className="input-icon" />
-                            <input 
-                              type="password"
-                              id="github-token"
-                              value={githubToken}
-                              onChange={(e) => handleInputChange(e, 'github')}
-                              placeholder="Enter your GitHub access token"
-                              className={hasInteractedWithForm && !githubToken ? 'input-error' : ''}
-                            />
-                          </div>
-                          {hasInteractedWithForm && !githubToken && 
-                            <div className="input-error-message">GitHub token is required</div>
-                          }
-                          <p className="token-help">
-                            <a 
-                              href="https://github.com/settings/tokens/new" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="token-help-link"
-                            >
-                              Create a GitHub token
-                            </a> with these permissions:
-                            <ul className="token-permissions">
-                              <li><strong>repo</strong> - Full control of private repositories</li>
-                              <li><strong>workflow</strong> - Update GitHub Action workflows</li>
-                            </ul>
-                            <span className="token-tip">Important: Make sure to copy your token immediately after creation, as GitHub won't show it again!</span>
-                          </p>
                           
-                          // For Vercel token:
-                          <p className="token-help">
-                            <a 
-                              href="https://vercel.com/account/tokens" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="token-help-link"
+                          <div className="auth-options">
+                            <button 
+                              type="button"
+                              className={`github-oauth-button ${githubTokenSource === 'oauth' ? 'active' : ''}`}
+                              onClick={handleGitHubOAuth}
                             >
-                              Create a Vercel token
-                            </a> from your account settings with these settings:
-                            <ul className="token-permissions">
-                              <li>Description: Portfolio Generator</li>
-                              <li>Scope: Full Account</li>
-                            </ul>
-                          </p>
+                              <FaGithub className="oauth-icon" />
+                              <span>Connect with GitHub</span>
+                            </button>
+                            
+                            <div className="auth-divider">
+                              <span>OR</span>
+                            </div>
+                            
+                            <div className="manual-token-option">
+                              <div className="form-group">
+                                <label htmlFor="github-token">GitHub Access Token {githubTokenSource === 'oauth' && '(Optional - using OAuth)'}</label>
+                                <div className="input-with-icon">
+                                  <FaGithub className="input-icon" />
+                                  <input 
+                                    type="password"
+                                    id="github-token"
+                                    value={githubToken}
+                                    onChange={(e) => handleInputChange(e, 'github')}
+                                    placeholder={githubTokenSource === 'oauth' ? 'Using GitHub OAuth connection' : 'Enter your GitHub access token'}
+                                    className={hasInteractedWithForm && githubTokenSource === 'manual' && !githubToken ? 'input-error' : ''}
+                                    disabled={githubTokenSource === 'oauth'}
+                                  />
+                                  {githubTokenSource === 'oauth' && (
+                                    <div className="oauth-status">
+                                      <FaUnlock className="auth-icon" />
+                                      <span>Authorized</span>
+                                    </div>
+                                  )}
+                                </div>
+                                {hasInteractedWithForm && githubTokenSource === 'manual' && !githubToken && 
+                                  <div className="input-error-message">GitHub token is required for manual authentication</div>
+                                }
+                                <p className="token-help">
+                                  <a 
+                                    href="https://github.com/settings/tokens/new" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="token-help-link"
+                                  >
+                                    Create a GitHub token
+                                  </a> with these permissions:
+                                  <ul className="token-permissions">
+                                    <li><strong>repo</strong> - Full control of private repositories</li>
+                                    <li><strong>workflow</strong> - Update GitHub Action workflows</li>
+                                  </ul>
+                                  <span className="token-tip">Important: Make sure to copy your token immediately after creation, as GitHub won't show it again!</span>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       
@@ -437,23 +512,10 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                           Vercel will build and host your portfolio, making it accessible online with a custom URL.
                         </p>
                         
-                        <div className="deployment-visual-container">
-                          <div className="deployment-visual">
-                            <div className="deployment-code-icon">
-                            </div>
-                            <div className="deployment-visual-arrow"></div>
-                            <div className="deployment-vercel-icon">
-                            </div>
-                            <div className="deployment-visual-arrow"></div>
-                            <div className="deployment-globe-icon">
-                            </div>
-                          </div>
-                        </div>
-                        
                         <div className="form-group">
                           <label htmlFor="vercel-token">Vercel Access Token</label>
                           <div className="input-with-icon">
-                            <span className="input-icon vercel-icon"></span>
+                            <FaLock className="input-icon" />
                             <input 
                               type="password"
                               id="vercel-token"
@@ -474,9 +536,36 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                               className="token-help-link"
                             >
                               Create a Vercel token
-                            </a> from your account settings.
+                            </a> from your account settings with these settings:
+                            <ul className="token-permissions">
+                              <li>Description: Portfolio Generator</li>
+                              <li>Scope: Full Account</li>
+                            </ul>
                           </p>
                         </div>
+                      </div>
+
+                      {/* Deployment Help Section */}
+                      <div className="deployment-help-section">
+                        <h3>How to Deploy Your Portfolio</h3>
+                        <ol className="deployment-steps">
+                          <li>
+                            <strong>Step 1: Create a GitHub Token</strong>
+                            <p>Visit <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener noreferrer">GitHub Token Settings</a> to create a new token with 'repo' and 'workflow' permissions.</p>
+                          </li>
+                          <li>
+                            <strong>Step 2: Create a Vercel Token</strong>
+                            <p>Visit <a href="https://vercel.com/account/tokens" target="_blank" rel="noopener noreferrer">Vercel Token Settings</a> to create a new token with full account permissions.</p>
+                          </li>
+                          <li>
+                            <strong>Step 3: Enter Your Tokens</strong>
+                            <p>Enter both tokens in the form above and click "Deploy Portfolio".</p>
+                          </li>
+                          <li>
+                            <strong>Step 4: Wait for Deployment</strong>
+                            <p>The deployment process takes approximately 2-5 minutes. Do not close this window during deployment.</p>
+                          </li>
+                        </ol>
                       </div>
                       
                       <div className="form-actions">
@@ -493,7 +582,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                           className="deploy-button"
                           disabled={!validateForm()}
                         >
-                          <FaGithub className="button-icon" />
+                          <FaFighterJet className="button-icon" />
                           <span>Deploy Portfolio</span>
                         </button>
                       </div>
@@ -525,6 +614,23 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
                       )}
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Troubleshooting section */}
+              <div className="deployment-troubleshooting">
+                <h3>Troubleshooting</h3>
+                <div className="troubleshooting-item">
+                  <h4>Invalid Token Error</h4>
+                  <p>Make sure your tokens have the correct permissions and have not expired.</p>
+                </div>
+                <div className="troubleshooting-item">
+                  <h4>Deployment Failed</h4>
+                  <p>Check your portfolio code for errors. Common issues include invalid imports or syntax errors.</p>
+                </div>
+                <div className="troubleshooting-item">
+                  <h4>GitHub Rate Limit Exceeded</h4>
+                  <p>GitHub has rate limits for API calls. If you receive this error, wait an hour before trying again.</p>
                 </div>
               </div>
             </>

@@ -3339,6 +3339,434 @@
   border-radius: 20px;
 }
 
+
+/* GitHub OAuth Button */
+.github-auth-options {
+  margin-bottom: 25px;
+  background: rgba(13, 17, 23, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid var(--portfolio-border);
+}
+
+.auth-option-header {
+  margin-bottom: 15px;
+}
+
+.auth-option-header h5 {
+  font-size: 16px;
+  color: var(--portfolio-text);
+  margin: 0;
+}
+
+.auth-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.github-oauth-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  background: #24292e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.github-oauth-button:hover {
+  background: #2c3440;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.github-oauth-button.active {
+  background: #388E3C;
+}
+
+.oauth-icon {
+  font-size: 20px;
+}
+
+.oauth-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4CAF50;
+  font-size: 14px;
+  background: rgba(76, 175, 80, 0.1);
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.auth-icon {
+  font-size: 14px;
+}
+
+.auth-divider {
+  position: relative;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.auth-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--portfolio-border);
+  z-index: 1;
+}
+
+.auth-divider span {
+  position: relative;
+  z-index: 2;
+  background: var(--portfolio-bg-card);
+  padding: 0 15px;
+  color: var(--portfolio-text-secondary);
+  font-size: 14px;
+}
+
+.manual-token-option {
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.manual-token-option:hover {
+  opacity: 1;
+}
+
+.token-permissions {
+  margin: 10px 0 10px 20px;
+  padding: 0;
+}
+
+.token-permissions li {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--portfolio-text-secondary);
+}
+
+.token-tip {
+  display: block;
+  margin-top: 10px;
+  font-style: italic;
+  color: var(--portfolio-warning);
+  font-size: 13px;
+}
+
+/* Deployment Help and Troubleshooting */
+.deployment-help-section {
+  background: rgba(101, 67, 204, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 25px 0;
+  border: 1px solid rgba(101, 67, 204, 0.2);
+}
+
+.deployment-help-section h3 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: var(--portfolio-text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.deployment-help-section h3::before {
+  content: '📋';
+  font-size: 20px;
+}
+
+.deployment-steps {
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+
+.deployment-steps li {
+  margin-bottom: 15px;
+  color: var(--portfolio-text-secondary);
+  font-size: 15px;
+}
+
+.deployment-steps li strong {
+  color: var(--portfolio-text);
+  font-size: 16px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.deployment-steps li p {
+  margin: 5px 0 0;
+}
+
+.deployment-steps li a {
+  color: var(--portfolio-primary);
+  text-decoration: none;
+}
+
+.deployment-steps li a:hover {
+  text-decoration: underline;
+  color: var(--portfolio-primary-glow);
+}
+
+.deployment-troubleshooting {
+  background: rgba(255, 193, 7, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 25px 0;
+  border: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.deployment-troubleshooting h3 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: var(--portfolio-text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.deployment-troubleshooting h3::before {
+  content: '⭐';
+  font-size: 20px;
+}
+
+.troubleshooting-item {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.troubleshooting-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.troubleshooting-item h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: var(--portfolio-text);
+}
+
+.troubleshooting-item p {
+  margin: 0;
+  color: var(--portfolio-text-secondary);
+  font-size: 15px;
+}
+
+
+.portfolio-help-content {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.help-section {
+  margin-bottom: 40px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid var(--portfolio-border);
+  transition: all 0.3s ease;
+}
+
+.help-section:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.help-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  margin: 0 0 15px;
+  color: var(--portfolio-text);
+  border-bottom: 1px solid var(--portfolio-border);
+  padding-bottom: 10px;
+}
+
+.help-section > p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--portfolio-text-secondary);
+  margin-bottom: 20px;
+}
+
+.help-question {
+  margin-bottom: 25px;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.help-question h4 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: var(--portfolio-primary);
+}
+
+.help-question p {
+  margin: 0 0 15px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--portfolio-text-secondary);
+}
+
+.help-question ul, 
+.help-section ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.help-question li, 
+.help-section li {
+  margin-bottom: 8px;
+  color: var(--portfolio-text-secondary);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.help-question strong, 
+.help-section strong {
+  color: var(--portfolio-text);
+  font-weight: 600;
+}
+
+.common-tasks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.task-item {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid var(--portfolio-border);
+}
+
+.task-item h4 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  color: var(--portfolio-text);
+}
+
+.task-item p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--portfolio-text-secondary);
+  line-height: 1.5;
+}
+
+/* The deployment-docs section gets a special gradient background */
+.deployment-docs {
+  background: linear-gradient(to bottom right, rgba(0, 0, 0, 0.1), rgba(101, 67, 204, 0.05));
+  border: 1px solid rgba(101, 67, 204, 0.15);
+}
+
+/* Make help sections more visually interesting with icon backgrounds */
+.help-section h3 svg {
+  font-size: 1.2em;
+  color: var(--portfolio-primary);
+}
+
+/* Make help content more colorful and engaging */
+.help-section:nth-child(1) {
+  border-left: 4px solid #3f51b5;
+}
+
+.help-section:nth-child(2) {
+  border-left: 4px solid #9c27b0;
+}
+
+.help-section:nth-child(3) {
+  border-left: 4px solid #e91e63;
+}
+
+.help-section:nth-child(4) {
+  border-left: 4px solid #2196f3;
+}
+
+.help-section:nth-child(5) {
+  border-left: 4px solid #4caf50;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .help-section {
+    padding: 15px;
+  }
+  
+  .help-section h3 {
+    font-size: 18px;
+  }
+  
+  .help-question h4 {
+    font-size: 16px;
+  }
+  
+  .help-question p, 
+  .help-section p, 
+  .help-question li, 
+  .help-section li {
+    font-size: 14px;
+  }
+  
+  .common-tasks {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+/* Responsive adjustments for mobile */
+@media (max-width: 767px) {
+  .github-auth-options {
+    padding: 15px;
+  }
+  
+  .github-oauth-button {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .deployment-steps li {
+    font-size: 14px;
+  }
+  
+  .deployment-steps li strong {
+    font-size: 15px;
+  }
+  
+  .troubleshooting-item h4 {
+    font-size: 15px;
+  }
+  
+  .troubleshooting-item p {
+    font-size: 14px;
+  }
+}
+
+
+
 /* #####################################################
  * RESPONSIVE STYLES
  * #####################################################
