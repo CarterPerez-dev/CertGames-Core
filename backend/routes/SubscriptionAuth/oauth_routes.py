@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 from authlib.integrations.flask_client import OAuth
 from models.test import create_user, get_user_by_id, update_user_fields
 from mongodb.database import db, mainusers_collection
+from helpers.jwt_auth import jwt_required_wrapper
 
 oauth_bp = Blueprint('oauth', __name__)
 
