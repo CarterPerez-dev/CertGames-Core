@@ -62,6 +62,46 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     }
   }, [portfolio]);
 
+
+    useEffect(() => {
+      const iframe = iframeRef.current;
+      if (iframe) {
+        const contentWin = iframe.contentWindow;
+        if (contentWin) {
+          const logPrefix = "[IFRAME CONSOLE]:";
+          const originalConsole = { ...contentWin.console }; 
+  
+          const makeForwarder = (method) => (...args) => {
+              console[method](logPrefix, ...args); 
+              if (originalConsole[method]) {
+                  originalConsole[method].apply(contentWin.console, args); 
+              }
+          };
+  
+          contentWin.console.log = makeForwarder('log');
+          contentWin.console.error = makeForwarder('error');
+          contentWin.console.warn = makeForwarder('warn');
+          contentWin.console.info = makeForwarder('info');
+          contentWin.console.debug = makeForwarder('debug');
+          
+          console.log("PortfolioPreview: Attached console forwarders to iframe."); // THIS LOG IS NOT APPEARING
+  
+          return () => {
+            if (iframe.contentWindow) { 
+              iframe.contentWindow.console.log = originalConsole.log;
+              iframe.contentWindow.console.error = originalConsole.error;
+              console.log("PortfolioPreview: Detached console forwarders from iframe.");
+            }
+          };
+        } else {
+          console.warn("PortfolioPreview: iframe.contentWindow not available for console forwarding."); // THIS LOG IS NOT APPEARING EITHER
+        }
+      } else {
+          console.warn("PortfolioPreview: iframeRef.current is null in console forwarding useEffect."); // OR THIS ONE
+      }
+    }, [previewHtml]); // Re-run when previewHtml changes
+
+
   // Organize files into directory structure
   const organizeFilesIntoTree = (components) => {
     console.log("Organizing file tree structure");
