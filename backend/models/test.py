@@ -669,3 +669,35 @@ def update_user_subscription(user_id, subscription_data):
     if result.modified_count > 0:
         return get_user_by_id(user_id)
     return None
+
+
+def get_github_token_for_user(user_id_str):
+    """
+    Retrieves the stored GitHub OAuth token for a given user ID.
+    Assumes the token is stored in the user's document.
+    """
+    from mongodb.database import db # Ensure db is accessible
+    try:
+        if not user_id_str or not ObjectId.is_valid(user_id_str):
+            logger.warning(f"Invalid user_id_str for fetching GitHub token: {user_id_str}")
+            return None
+
+        user_obj_id = ObjectId(user_id_str)
+        # Assuming your users collection is named 'mainusers' based on your app.py
+        # and the token is stored under a field like 'github_oauth_token'
+        user_document = db.mainusers_collection.find_one({"_id": user_obj_id}) 
+
+        if user_document and 'github_oauth_token' in user_document:
+            token = user_document['github_oauth_token']
+            # TODO: Implement decryption here if you store tokens encrypted
+            # For example:
+            # from your_encryption_module import decrypt_token
+            # return decrypt_token(token)
+            logger.info(f"Found GitHub token for user {user_id_str}")
+            return token # Return the raw token for now
+        else:
+            logger.info(f"GitHub token not found in DB for user {user_id_str}")
+            return None
+    except Exception as e:
+        logger.error(f"Database error fetching GitHub token for user {user_id_str}: {e}")
+        return None
