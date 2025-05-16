@@ -1,0 +1,1338 @@
+```analysis
+# Resume Analysis
+The provided resume for Carter Perez is minimal, primarily listing educational achievements:
+- **Education:**
+    - Masters in Cybersecurity from the University of Maryland Global Campus.
+    - "Anne Arunde" - This is interpreted as Anne Arundel Community College, a common institution in Maryland.
+
+Key information gaps that need to be filled creatively include:
+- **Skills:** No specific technical or soft skills are listed. These will be invented based on a typical Masters in Cybersecurity graduate profile.
+- **Experience:** No work experience is provided. Relevant internships or research assistant roles will be invented.
+- **Projects:** No projects are listed. Cybersecurity-focused projects will be invented to showcase practical application of skills.
+- **Personal Summary/About:** A compelling narrative needs to be created.
+- **Contact Information:** Generic contact details will be provided.
+
+The goal is to create a rich, professional portfolio by inventing plausible and impressive content relevant to a cybersecurity professional with Carter's educational background. The content will be tailored to highlight potential strengths and make Carter a competitive job seeker.
+
+# Portfolio Structure
+The portfolio will be a single-page application (SPA) built with React. It will feature a modern and minimal design.
+
+**Overall Layout:**
+1.  **Header/Navigation Bar:**
+    *   Carter Perez's name (Logo/Brand).
+    *   Navigation links: About, Experience, Skills, Projects, Education, Contact.
+    *   Smooth scrolling to respective sections.
+2.  **Hero Section:**
+    *   A brief, impactful introduction or tagline.
+    *   Possibly a call-to-action or a visual element.
+3.  **About Section:**
+    *   Detailed professional summary of Carter Perez.
+4.  **Experience Section:**
+    *   Chronological list of invented relevant job experiences (e.g., internships, research positions).
+5.  **Skills Section:**
+    *   Categorized list of technical and soft skills relevant to cybersecurity.
+6.  **Projects Section:**
+    *   Showcase of 2-3 significant invented projects with descriptions, technologies used, and outcomes.
+7.  **Education Section:**
+    *   Details of the Master's degree and the assumed Associate's degree.
+8.  **Contact Section:**
+    *   Links to email, LinkedIn, and GitHub.
+9.  **Footer:**
+    *   Copyright information.
+
+**React Component Structure:**
+-   `App.js`: Main application component, manages layout and renders different sections.
+-   `Header.js`: Navigation bar.
+-   `Hero.js`: Top introductory section.
+-   `About.js`: "About Me" section.
+-   `Experience.js`: Displays work experience.
+-   `Skills.js`: Lists skills.
+-   `Projects.js`: Showcases projects.
+-   `Education.js`: Details educational background.
+-   `Contact.js`: Contact information and links.
+-   `Footer.js`: Site footer.
+
+Each section component will have its own CSS file for styling, promoting modularity. Global styles, including font imports and resets, will be in `src/index.css`.
+```
+
+```package.json
+{
+  "name": "carter-perez-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+```
+
+```html:public/index.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" /> <!-- You can create a simple favicon -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Carter Perez - Cybersecurity Professional Portfolio"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" /> <!-- Default CRA icon -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <title>Carter Perez | Cybersecurity Professional</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
+```
+
+```javascript:src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css'; // Global styles
+import App from './App';
+
+// Create a root for the React application
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// Render the main App component
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
+
+```css:src/index.css
+/* src/index.css */
+
+/* Global Resets and Base Styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+  font-size: 16px; /* Base font size */
+}
+
+body {
+  font-family: 'Open Sans', sans-serif; /* Default body font */
+  line-height: 1.6;
+  color: #333333; /* Dark gray for text */
+  background-color: #f4f7f6; /* Very light gray background */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif; /* Heading font */
+  color: #2c3e50; /* Dark slate/blue for headings */
+  margin-bottom: 0.75em;
+  line-height: 1.2;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+
+p {
+  margin-bottom: 1em;
+}
+
+a {
+  color: #3498db; /* Standard blue for links */
+  text-decoration: none;
+}
+
+a:hover {
+  color: #2980b9; /* Darker blue on hover */
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul {
+  list-style-type: none;
+}
+
+/* Utility Classes */
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.section {
+  padding: 4rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.section:last-of-type {
+  border-bottom: none;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 2.25rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background-color: #3498db; /* Accent color for underline */
+}
+
+/* Basic Card Styling */
+.card {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  .section-title { font-size: 1.8rem; }
+  .container { padding: 1rem 0; }
+  .section { padding: 2.5rem 0; }
+}
+```
+
+```javascript:src/App.js
+// src/App.js
+import React from 'react';
+import Header from './components/Header/Header';
+import Hero from './components/Hero/Hero';
+import About from './components/About/About';
+import Experience from './components/Experience/Experience';
+import Skills from './components/Skills/Skills';
+import Projects from './components/Projects/Projects';
+import Education from './components/Education/Education';
+import Contact from './components/Contact/Contact';
+import Footer from './components/Footer/Footer';
+
+function App() {
+  return (
+    <>
+      {/* Header component for navigation */}
+      <Header />
+      
+      {/* Main content area */}
+      <main>
+        {/* Hero section for initial impact */}
+        <Hero />
+        
+        {/* About section with personal details */}
+        <div id="about" className="section">
+          <div className="container">
+            <h2 className="section-title">About Me</h2>
+            <About />
+          </div>
+        </div>
+        
+        {/* Experience section detailing professional background */}
+        <div id="experience" className="section">
+          <div className="container">
+            <h2 className="section-title">Experience</h2>
+            <Experience />
+          </div>
+        </div>
+        
+        {/* Skills section listing technical and soft skills */}
+        <div id="skills" className="section">
+          <div className="container">
+            <h2 className="section-title">Skills</h2>
+            <Skills />
+          </div>
+        </div>
+        
+        {/* Projects section showcasing key projects */}
+        <div id="projects" className="section">
+          <div className="container">
+            <h2 className="section-title">Projects</h2>
+            <Projects />
+          </div>
+        </div>
+        
+        {/* Education section detailing academic qualifications */}
+        <div id="education" className="section">
+          <div className="container">
+            <h2 className="section-title">Education</h2>
+            <Education />
+          </div>
+        </div>
+        
+        {/* Contact section for getting in touch */}
+        <div id="contact" className="section">
+          <div className="container">
+            <h2 className="section-title">Contact</h2>
+            <Contact />
+          </div>
+        </div>
+      </main>
+      
+      {/* Footer component for copyright and other info */}
+      <Footer />
+    </>
+  );
+}
+
+export default App;
+```
+
+```javascript:src/components/Header/Header.js
+// src/components/Header/Header.js
+import React, { useState, useEffect } from 'react';
+import './Header.css';
+
+const Header = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Handle scroll event to change header style
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Toggle mobile menu
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // Close mobile menu when a link is clicked
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  return (
+    <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
+      <div className="header-container">
+        <a href="#hero" className="logo" onClick={closeMobileMenu}>Carter Perez</a>
+        
+        {/* Mobile menu toggle button */}
+        <button className="mobile-menu-toggle" onClick={toggleMobileMenu} aria-label="Toggle menu">
+          {isMobileMenuOpen ? '✕' : '☰'} {/* Simple icons for open/close */}
+        </button>
+
+        {/* Navigation links */}
+        <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`}>
+          <ul>
+            <li><a href="#about" onClick={closeMobileMenu}>About</a></li>
+            <li><a href="#experience" onClick={closeMobileMenu}>Experience</a></li>
+            <li><a href="#skills" onClick={closeMobileMenu}>Skills</a></li>
+            <li><a href="#projects" onClick={closeMobileMenu}>Projects</a></li>
+            <li><a href="#education" onClick={closeMobileMenu}>Education</a></li>
+            <li><a href="#contact" onClick={closeMobileMenu}>Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
+```
+
+```css:src/components/Header/Header.css
+/* src/components/Header/Header.css */
+.header {
+  background-color: #ffffff;
+  padding: 1rem 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header.scrolled {
+  background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+  padding: 0.75rem 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50; /* Dark slate/blue */
+  text-decoration: none;
+}
+
+.logo:hover {
+  color: #3498db; /* Accent blue */
+}
+
+.nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem; /* Spacing between nav items */
+}
+
+.nav a {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  color: #555555; /* Slightly lighter than main text */
+  text-decoration: none;
+  padding: 0.5rem 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #3498db; /* Accent blue */
+  transition: width 0.3s ease;
+}
+
+.nav a:hover {
+  color: #3498db; /* Accent blue */
+}
+
+.nav a:hover::after {
+  width: 100%;
+}
+
+/* Mobile Menu Styles */
+.mobile-menu-toggle {
+  display: none; /* Hidden by default */
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    display: none; /* Hide nav by default on mobile */
+    position: absolute;
+    top: 100%; /* Position below the header */
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    padding: 1rem 0;
+  }
+
+  .nav.open {
+    display: flex; /* Show when open */
+  }
+
+  .nav ul {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 0;
+  }
+
+  .nav li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav a {
+    display: block;
+    padding: 1rem;
+    width: 100%;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .nav li:last-child a {
+    border-bottom: none;
+  }
+
+  .nav a::after {
+    display: none; /* No underline animation on mobile links */
+  }
+
+  .mobile-menu-toggle {
+    display: block; /* Show toggle button on mobile */
+  }
+}
+```
+
+```javascript:src/components/Hero/Hero.js
+// src/components/Hero/Hero.js
+import React from 'react';
+import './Hero.css';
+
+const Hero = () => {
+  return (
+    <section id="hero" className="hero-section">
+      <div className="hero-content">
+        <h1 className="hero-title">Carter Perez</h1>
+        <p className="hero-subtitle">
+          Dedicated Cybersecurity Professional | Master of Science in Cybersecurity
+        </p>
+        <p className="hero-tagline">
+          Passionate about safeguarding digital environments and mitigating cyber threats through innovative solutions and analytical expertise.
+        </p>
+        <a href="#projects" className="hero-cta-button">View My Work</a>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;
+```
+
+```css:src/components/Hero/Hero.css
+/* src/components/Hero/Hero.css */
+.hero-section {
+  background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.7)), url('https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y3liZXJzZWN1cml0eXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=1000&q=60'); /* Placeholder background - user can replace */
+  background-size: cover;
+  background-position: center;
+  color: #ffffff;
+  text-align: center;
+  padding: 8rem 1rem; /* Increased padding for impact */
+  min-height: 80vh; /* Make hero section take up significant viewport height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px; /* Adjust based on header height if fixed */
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+  color: #ecf0f1; /* Lighter text for subtitle */
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.hero-tagline {
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+  color: #bdc3c7; /* Even lighter for tagline */
+}
+
+.hero-cta-button {
+  background-color: #3498db; /* Accent blue */
+  color: #ffffff;
+  padding: 0.8rem 2rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.hero-cta-button:hover {
+  background-color: #2980b9; /* Darker blue on hover */
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+/* Responsive adjustments for Hero section */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 6rem 1rem;
+    min-height: 70vh;
+  }
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  .hero-subtitle {
+    font-size: 1.25rem;
+  }
+  .hero-tagline {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section {
+    padding: 4rem 1rem;
+    min-height: 60vh;
+  }
+  .hero-title {
+    font-size: 2rem;
+  }
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+}
+```
+
+```javascript:src/components/About/About.js
+// src/components/About/About.js
+import React from 'react';
+import './About.css';
+
+const About = () => {
+  return (
+    <div className="about-content">
+      <p>
+        Carter Perez is a highly motivated and results-oriented Cybersecurity specialist, 
+        recently graduating with a Master of Science in Cybersecurity from the 
+        University of Maryland Global Campus. With a strong foundation in network security, 
+        threat intelligence, and ethical hacking, Carter is adept at identifying vulnerabilities, 
+        implementing robust security measures, and responding to cyber incidents.
+      </p>
+      <p>
+        He is passionate about continuous learning in the ever-evolving landscape of 
+        cybersecurity and is eager to contribute his skills to an organization committed 
+        to digital safety and innovation. Carter thrives in collaborative environments and 
+        possesses excellent analytical and problem-solving abilities, crucial for 
+        dissecting complex threats and devising effective countermeasures.
+      </p>
+      <p>
+        His academic journey, coupled with hands-on project experience and internships, has equipped him
+        with practical skills in areas like SIEM, vulnerability assessment, incident response, and secure network design.
+        Carter is now seeking a challenging role where he can apply his expertise to protect critical assets and contribute
+        to a strong security posture.
+      </p>
+    </div>
+  );
+};
+
+export default About;
+```
+
+```css:src/components/About/About.css
+/* src/components/About/About.css */
+.about-content {
+  max-width: 800px;
+  margin: 0 auto; /* Center the content if it's narrower than the container */
+  text-align: left; /* Default, but can be center if preferred */
+  line-height: 1.8; /* Increased line height for readability */
+}
+
+.about-content p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+.about-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Optional: if you want to add a profile picture */
+/*
+.about-profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 2rem auto;
+  display: block;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+*/
+
+@media (max-width: 768px) {
+  .about-content p {
+    font-size: 1rem;
+  }
+}
+```
+
+```javascript:src/components/Experience/Experience.js
+// src/components/Experience/Experience.js
+import React from 'react';
+import './Experience.css';
+
+const experiences = [
+  {
+    id: 1,
+    role: 'Cybersecurity Analyst Intern',
+    company: 'CyberSec Solutions Inc. (Fictional)',
+    location: 'Annapolis, MD',
+    duration: 'May 2023 – Aug 2023',
+    responsibilities: [
+      'Assisted senior analysts in monitoring network traffic and security alerts using SIEM tools (Splunk).',
+      'Conducted vulnerability assessments on internal systems using Nessus and Nmap, reporting findings to the security team.',
+      'Participated in incident response drills and contributed to the documentation of IR procedures.',
+      'Helped update and maintain the company\'s knowledge base on emerging threats and security best practices.',
+    ],
+    achievement: 'Key Achievement: Identified and documented 15+ medium-severity vulnerabilities, leading to timely patching and system hardening.'
+  },
+  {
+    id: 2,
+    role: 'Graduate Research Assistant - Cybersecurity Lab',
+    company: 'University of Maryland Global Campus',
+    location: 'Adelphi, MD',
+    duration: 'Sep 2022 – May 2024',
+    responsibilities: [
+      'Conducted research on advanced persistent threats (APTs) and their detection methodologies.',
+      'Developed Python scripts for automating log analysis and anomaly detection in network datasets.',
+      'Assisted faculty in preparing materials for cybersecurity courses and workshops.',
+      'Contributed to a research paper (Fictional: "Proactive Defense Strategies Against Zero-Day Exploits in IoT Environments").',
+    ],
+    achievement: 'Key Achievement: Developed a proof-of-concept tool that improved the detection rate of simulated phishing attacks by 20% in a controlled environment.'
+  },
+];
+
+const Experience = () => {
+  return (
+    <div className="experience-list">
+      {experiences.map(exp => (
+        <div key={exp.id} className="experience-item card">
+          <h3>{exp.role}</h3>
+          <p className="experience-company-location">
+            <strong>{exp.company}</strong> | {exp.location}
+          </p>
+          <p className="experience-duration">{exp.duration}</p>
+          <ul className="experience-responsibilities">
+            {exp.responsibilities.map((res, index) => (
+              <li key={index}>{res}</li>
+            ))}
+          </ul>
+          {exp.achievement && <p className="experience-achievement"><em>{exp.achievement}</em></p>}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Experience;
+```
+
+```css:src/components/Experience/Experience.css
+/* src/components/Experience/Experience.css */
+.experience-list {
+  display: grid;
+  gap: 2rem;
+}
+
+.experience-item {
+  /* Uses .card styles from index.css */
+  border-left: 5px solid #3498db; /* Accent border */
+}
+
+.experience-item h3 {
+  color: #2c3e50; /* Dark slate/blue */
+  margin-bottom: 0.25rem;
+}
+
+.experience-company-location {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.25rem;
+}
+
+.experience-duration {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.experience-responsibilities {
+  list-style-type: disc;
+  margin-left: 1.5rem; /* Indent list items */
+  padding-left: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.experience-responsibilities li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+.experience-achievement {
+  font-size: 0.95rem;
+  color: #2c3e50; /* Darker color for emphasis */
+  background-color: #f0f8ff; /* Light blue background */
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border-left: 3px solid #2980b9;
+}
+
+/* Responsive adjustments for experience items */
+@media (min-width: 769px) {
+  /* For larger screens, you might want a two-column layout if there are many items */
+  /* .experience-list {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  } */
+}
+```
+
+```javascript:src/components/Skills/Skills.js
+// src/components/Skills/Skills.js
+import React from 'react';
+import './Skills.css';
+
+const skillsData = {
+  securityTechnologies: [
+    'SIEM (Splunk, ELK Stack)', 'IDS/IPS (Snort, Suricata)', 'Firewalls (Palo Alto, Cisco ASA)',
+    'EDR Solutions', 'Wireshark', 'Nmap', 'Metasploit', 'Burp Suite', 'Nessus'
+  ],
+  cybersecurityDomains: [
+    'Threat Intelligence', 'Vulnerability Management', 'Incident Response', 'Network Security',
+    'Application Security (OWASP Top 10)', 'Cryptography', 'Risk Assessment', 
+    'Security Auditing & Compliance (NIST, ISO 27001 awareness)'
+  ],
+  programmingScripting: ['Python', 'Bash', 'PowerShell'],
+  operatingSystems: ['Linux (Kali, Ubuntu, CentOS)', 'Windows (Client & Server)'],
+  cloudPlatforms: ['AWS (IAM, S3 Security, VPC Security - Foundational)', 'Azure (Security Center, Sentinel - Foundational)'],
+  analyticalTools: ['Data Analysis libraries in Python (Pandas, NumPy)'],
+  softSkills: [
+    'Critical Thinking', 'Problem Solving', 'Attention to Detail', 
+    'Communication (Written & Verbal)', 'Team Collaboration', 'Adaptability'
+  ]
+};
+
+const SkillCategory = ({ title, skills }) => (
+  <div className="skill-category card">
+    <h4>{title}</h4>
+    <ul className="skills-list">
+      {skills.map(skill => <li key={skill}>{skill}</li>)}
+    </ul>
+  </div>
+);
+
+const Skills = () => {
+  return (
+    <div className="skills-container">
+      <SkillCategory title="Security Technologies" skills={skillsData.securityTechnologies} />
+      <SkillCategory title="Cybersecurity Domains" skills={skillsData.cybersecurityDomains} />
+      <SkillCategory title="Programming & Scripting" skills={skillsData.programmingScripting} />
+      <SkillCategory title="Operating Systems" skills={skillsData.operatingSystems} />
+      <SkillCategory title="Cloud Platforms (Foundational)" skills={skillsData.cloudPlatforms} />
+      <SkillCategory title="Analytical Tools" skills={skillsData.analyticalTools} />
+      <SkillCategory title="Soft Skills" skills={skillsData.softSkills} />
+    </div>
+  );
+};
+
+export default Skills;
+```
+
+```css:src/components/Skills/Skills.css
+/* src/components/Skills/Skills.css */
+.skills-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+  gap: 1.5rem;
+}
+
+.skill-category {
+  /* Uses .card styles from index.css */
+  padding: 1.5rem;
+}
+
+.skill-category h4 {
+  color: #2c3e50; /* Dark slate/blue */
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #3498db; /* Accent underline */
+  padding-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.skills-list {
+  list-style: none;
+  padding: 0;
+}
+
+.skills-list li {
+  background-color: #eaf2f8; /* Very light blue background for skill items */
+  color: #333;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.skills-list li:hover {
+  background-color: #3498db; /* Accent blue on hover */
+  color: #ffffff;
+}
+
+/* Adjustments for smaller screens if needed */
+@media (max-width: 480px) {
+  .skills-container {
+    grid-template-columns: 1fr; /* Single column on very small screens */
+  }
+}
+```
+
+```javascript:src/components/Projects/Projects.js
+// src/components/Projects/Projects.js
+import React from 'react';
+import './Projects.css';
+
+const projectsData = [
+  {
+    id: 1,
+    title: 'SecureNet Sentinel: Small Business Network Defense Framework',
+    description: 'Designed and implemented a comprehensive, secure network architecture for a hypothetical small e-commerce business. This involved segmenting the network, configuring firewalls, setting up an IDS/IPS, and establishing secure remote access via VPN. The project emphasized a defense-in-depth strategy.',
+    technologies: ['GNS3', 'pfSense', 'Snort', 'OpenVPN', 'Linux Servers'],
+    outcome: 'A fully simulated and tested secure network model capable of defending against common cyber threats, complete with detailed documentation and configuration guides.',
+    // link: '#' // Optional: link to GitHub repo or live demo
+  },
+  {
+    id: 2,
+    title: 'ThreatHunterPy: Automated IOC Extractor & Analyzer',
+    description: 'Developed a Python-based tool to automatically extract Indicators of Compromise (IOCs) such as IP addresses, domain names, and file hashes from unstructured threat intelligence reports (e.g., blog posts, security bulletins). The tool then queries threat intelligence feeds (e.g., VirusTotal API) for reputation data.',
+    technologies: ['Python', 'Regular Expressions', 'Requests library', 'VirusTotal API'],
+    outcome: 'Streamlined the initial stages of threat intelligence gathering, enabling faster identification of malicious entities. The tool successfully processed sample reports with over 95% accuracy in IOC extraction.',
+    // link: '#'
+  },
+  {
+    id: 3,
+    title: 'Ethical Hacking & Penetration Test on a Vulnerable Web Application',
+    description: 'Conducted a comprehensive penetration test against a deliberately vulnerable web application (e.g., OWASP Juice Shop). The process included reconnaissance, vulnerability scanning, exploitation of common web vulnerabilities (SQLi, XSS, CSRF), and post-exploitation analysis.',
+    technologies: ['Kali Linux', 'Burp Suite', 'Nmap', 'SQLMap', 'OWASP ZAP'],
+    outcome: 'Produced a detailed penetration testing report outlining identified vulnerabilities, their potential impact, and recommended remediation steps, demonstrating practical ethical hacking skills.',
+    // link: '#'
+  }
+];
+
+const Projects = () => {
+  return (
+    <div className="projects-grid">
+      {projectsData.map(project => (
+        <div key={project.id} className="project-card card">
+          <h3>{project.title}</h3>
+          <p className="project-description">{project.description}</p>
+          <div className="project-details">
+            <p><strong>Technologies Used:</strong> {project.technologies.join(', ')}</p>
+            <p><strong>Outcome:</strong> {project.outcome}</p>
+          </div>
+          {/* {project.link && project.link !== '#' && (
+            <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link">
+              View Project
+            </a>
+          )} */}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Projects;
+```
+
+```css:src/components/Projects/Projects.css
+/* src/components/Projects/Projects.css */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Responsive grid */
+  gap: 2rem;
+}
+
+.project-card {
+  /* Uses .card styles from index.css */
+  display: flex;
+  flex-direction: column;
+}
+
+.project-card h3 {
+  color: #2c3e50; /* Dark slate/blue */
+  margin-bottom: 0.75rem;
+  font-size: 1.4rem;
+}
+
+.project-description {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1rem;
+  flex-grow: 1; /* Allows description to take available space */
+  line-height: 1.6;
+}
+
+.project-details p {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 0.5rem;
+}
+
+.project-details strong {
+  color: #2c3e50;
+}
+
+.project-link {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #3498db; /* Accent blue */
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.project-link:hover {
+  background-color: #2980b9; /* Darker blue on hover */
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* Ensure cards in a row have similar height if content varies significantly */
+@media (min-width: 768px) {
+  .projects-grid {
+    /* align-items: stretch; /* This can help if cards have varying content heights */
+  }
+}
+```
+
+```javascript:src/components/Education/Education.js
+// src/components/Education/Education.js
+import React from 'react';
+import './Education.css';
+
+const educationData = [
+  {
+    id: 1,
+    institution: 'University of Maryland Global Campus',
+    location: 'Adelphi, MD',
+    degree: 'Master of Science in Cybersecurity',
+    graduation: 'May 2024',
+    details: [
+      'Relevant Coursework: Advanced Network Security, Ethical Hacking & Countermeasures, Cryptography, Digital Forensics, Cyber Law & Ethics, Information Assurance, Risk Management in Cybersecurity.',
+      'GPA: 3.9/4.0 (Invented for impressiveness)'
+    ]
+  },
+  {
+    id: 2,
+    institution: 'Anne Arundel Community College', // Using proper name
+    location: 'Arnold, MD',
+    degree: 'Associate of Applied Science in Cybersecurity',
+    graduation: 'May 2022',
+    details: [
+      'Relevant Coursework: Introduction to Networking (CCNA Prep), Operating Systems Concepts, Programming Fundamentals (Python), Introduction to Information Security.',
+      'Honors: Dean\'s List (Invented)'
+    ]
+  }
+];
+
+const Education = () => {
+  return (
+    <div className="education-list">
+      {educationData.map(edu => (
+        <div key={edu.id} className="education-item card">
+          <h3>{edu.degree}</h3>
+          <p className="education-institution">
+            <strong>{edu.institution}</strong> | {edu.location}
+          </p>
+          <p className="education-graduation">Graduated: {edu.graduation}</p>
+          {edu.details && (
+            <ul className="education-details">
+              {edu.details.map((detail, index) => (
+                <li key={index}>{detail}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Education;
+```
+
+```css:src/components/Education/Education.css
+/* src/components/Education/Education.css */
+.education-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.education-item {
+  /* Uses .card styles from index.css */
+  border-left: 5px solid #16a085; /* A different accent color for education, e.g., teal */
+}
+
+.education-item h3 {
+  color: #2c3e50; /* Dark slate/blue */
+  margin-bottom: 0.25rem;
+  font-size: 1.5rem;
+}
+
+.education-institution {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 0.25rem;
+}
+
+.education-graduation {
+  font-size: 0.95rem;
+  color: #777;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.education-details {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  padding-left: 0.5rem;
+}
+
+.education-details li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* Responsive adjustments for education items */
+@media (min-width: 769px) {
+  /* For larger screens, you might want a two-column layout if there are many items */
+  /* .education-list {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  } */
+}
+```
+
+```javascript:src/components/Contact/Contact.js
+// src/components/Contact/Contact.js
+import React from 'react';
+import './Contact.css';
+
+const Contact = () => {
+  return (
+    <div className="contact-content">
+      <p className="contact-intro">
+        I'm always excited to discuss new opportunities, projects, or collaborations in the field of cybersecurity. 
+        Feel free to reach out!
+      </p>
+      <div className="contact-methods">
+        <div className="contact-method">
+          <h4>Email</h4>
+          <a href="mailto:carter.perez.dev@email.com">carter.perez.dev@email.com</a>
+        </div>
+        <div className="contact-method">
+          <h4>LinkedIn</h4>
+          <a href="https://linkedin.com/in/carterperezcyber" target="_blank" rel="noopener noreferrer">
+            linkedin.com/in/carterperezcyber
+          </a>
+        </div>
+        <div className="contact-method">
+          <h4>GitHub</h4>
+          <a href="https://github.com/carterperezsec" target="_blank" rel="noopener noreferrer">
+            github.com/carterperezsec
+          </a>
+        </div>
+      </div>
+      {/* 
+        A simple contact form could be added here if desired.
+        For now, direct links are provided.
+      */}
+    </div>
+  );
+};
+
+export default Contact;
+```
+
+```css:src/components/Contact/Contact.css
+/* src/components/Contact/Contact.css */
+.contact-content {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-intro {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+}
+
+.contact-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.contact-method {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-method:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.contact-method h4 {
+  color: #2c3e50; /* Dark slate/blue */
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.contact-method a {
+  font-size: 1rem;
+  color: #3498db; /* Accent blue */
+  word-break: break-all; /* Prevent long links from breaking layout */
+}
+
+.contact-method a:hover {
+  color: #2980b9; /* Darker blue on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+  .contact-methods {
+    grid-template-columns: 1fr; /* Stack methods on very small screens */
+  }
+}
+```
+
+```javascript:src/components/Footer/Footer.js
+// src/components/Footer/Footer.js
+import React from 'react';
+import './Footer.css';
+
+const Footer = () => {
+  const currentYear = new Date().getFullYear();
+  return (
+    <footer className="footer">
+      <div className="footer-container">
+        <p>&copy; {currentYear} Carter Perez. All rights reserved.</p>
+        <p>
+          Built with React. Designed with a passion for clean code and cybersecurity.
+        </p>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
+```
+
+```css:src/components/Footer/Footer.css
+/* src/components/Footer/Footer.css */
+.footer {
+  background-color: #2c3e50; /* Dark slate/blue */
+  color: #bdc3c7; /* Light gray text */
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.footer-container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.footer p {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.footer p:last-child {
+  margin-bottom: 0;
+}
+
+.footer a {
+  color: #ecf0f1; /* Even lighter gray for links in footer */
+  text-decoration: underline;
+}
+
+.footer a:hover {
+  color: #ffffff;
+}
+```
