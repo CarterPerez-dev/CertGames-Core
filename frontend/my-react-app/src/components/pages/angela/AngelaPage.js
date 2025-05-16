@@ -2,7 +2,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { FaGithub, FaTerminal, FaDownload, FaArrowRight, FaPlayCircle, FaStar, FaCode, FaLaptopCode, FaUserSecret, FaTools, FaRocket, FaBrain, FaNetworkWired, FaUserPlus, FaRegLightbulb } from 'react-icons/fa';
+import { 
+  FaGithub, FaTerminal, FaDownload, FaArrowRight, FaPlayCircle, 
+  FaStar, FaCode, FaLaptopCode, FaUserSecret, FaTools, 
+  FaRocket, FaBrain, FaNetworkWired, FaUserPlus, FaRegLightbulb,
+  FaExclamationTriangle, FaCodeBranch, FaBook, FaHistory,
+  FaBug, FaFileAlt, FaShieldAlt, FaBullseye
+} from 'react-icons/fa';
 import './AngelaCLI.css';
 import './ParticleEffect.css'; // Keep the CSS for grid styling
 import OctocatDisplay from './OctocatDisplay'; // Import the new OctocatDisplay component
@@ -118,46 +124,67 @@ const AngelaPage = () => {
   ];
   
   // Features data
+  // Features data
   const features = [
     {
       icon: <FaTerminal />,
       title: "Natural Language Commands",
-      description: "Ask your terminal to perform tasks in plain English - no need to remember complex syntax."
+      description: "Ask your terminal to perform tasks in plain English - no need to remember complex syntax or arcane flags."
     },
     {
       icon: <FaLaptopCode />,
       title: "Project Awareness",
-      description: "Angela understands your project context, frameworks, and dependencies to provide relevant assistance."
+      description: "Angela understands your project context, frameworks, and dependencies to provide relevant assistance tailored to your specific environment."
     },
     {
       icon: <FaUserSecret />,
       title: "Advanced Safety",
-      description: "Risk assessment, command previews, and comprehensive rollback capabilities keep your system safe."
+      description: "Risk assessment, command previews, and comprehensive rollback capabilities keep your system safe from accidental destructive operations."
     },
     {
       icon: <FaTools />,
       title: "Developer Tool Integration",
-      description: "Seamless integration with Git, Docker, package managers, and cloud CLIs."
+      description: "Seamless integration with Git, Docker, package managers, and cloud CLIs - all accessible through natural language."
     },
     {
       icon: <FaRocket />,
       title: "Multi-Step Operations",
-      description: "Decompose complex goals into actionable steps with smart planning and execution."
+      description: "Decompose complex goals into actionable steps with smart planning, execution, and error recovery capabilities."
     },
     {
       icon: <FaCode />,
       title: "Code Generation",
-      description: "Generate functions, components, or entire projects with natural language descriptions."
+      description: "Generate functions, components, or entire projects with natural language descriptions, maintaining semantic consistency across files."
     },
     {
       icon: <FaBrain />,
       title: "Semantic Code Understanding",
-      description: "Angela can analyze and understand your codebase for context-aware assistance."
+      description: "Angela analyzes and understands your codebase structure, functions, and relationships for context-aware assistance."
     },
     {
       icon: <FaNetworkWired />,
       title: "Workflow Automation",
-      description: "Create, save, and execute complex workflows with a single command."
+      description: "Create, save, and execute complex workflows with a single command, including parameterization and conditional logic."
+    },
+    {
+      icon: <FaHistory />,
+      title: "Adaptive Learning",
+      description: "Angela learns from your command history, preferred tools, and feedback to provide increasingly relevant suggestions over time."
+    },
+    {
+      icon: <FaBug />,
+      title: "Intelligent Error Handling",
+      description: "When commands fail, Angela analyzes the error, suggests fixes, and offers guided recovery options to keep you moving forward."
+    },
+    {
+      icon: <FaFileAlt />,
+      title: "Content Analysis",
+      description: "Understand and manipulate file content with language-aware operations that respect code structure and semantics."
+    },
+    {
+      icon: <FaShieldAlt />,
+      title: "Transaction-Based Operations",
+      description: "All actions are tracked as transactions, allowing for complete rollback of multi-step operations if something goes wrong."
     }
   ];
   
@@ -198,6 +225,7 @@ const AngelaPage = () => {
   ];
   
   // FAQ data
+  // FAQ data
   const faqs = [
     {
       question: "How is Angela different from regular CLIs or chatbots?",
@@ -218,9 +246,28 @@ const AngelaPage = () => {
     {
       question: "What languages and frameworks does Angela understand?",
       answer: "Angela can detect and understand most popular languages and frameworks including Python, JavaScript/Node.js, React, Ruby, Java, Go, Rust, C#, PHP, and many more."
+    },
+    {
+      question: "How does Angela's context awareness work?",
+      answer: "Angela analyzes your project structure, detects frameworks and dependencies, tracks your command history, and monitors file activities to build a comprehensive understanding of your development environment. This allows for more relevant and accurate assistance tailored to your specific project."
+    },
+    {
+      question: "Can I customize Angela's behavior?",
+      answer: "Yes, Angela offers extensive customization through configuration files (.angela.toml), environment variables, and command-line flags. You can adjust confirmation requirements, trusted commands, UI preferences, and default behaviors to match your workflow."
+    },
+    {
+      question: "What happens if a command fails?",
+      answer: "Angela includes intelligent error recovery. It analyzes error messages, suggests potential fixes, and offers options to retry, modify, or roll back operations. For multi-step workflows, it can recover from failures at specific steps while preserving progress."
+    },
+    {
+      question: "Is Angela ready for production use?",
+      answer: "Angela is currently under active development and should be considered in beta. While core functionality is working, some advanced features are still being refined. We welcome contributors to help build out the full vision of Angela CLI."
+    },
+    {
+      question: "How does Angela handle sensitive data?",
+      answer: "Angela prioritizes data privacy. Your API keys and configuration are stored locally, and only the minimum necessary context is sent to the AI API. Angela never stores or transmits your code to third parties beyond what's needed for processing your requests."
     }
   ];
-  
   // Typing animation effect for hero section
   useEffect(() => {
     const currentText = heroTexts[currentTextIndex];
@@ -427,6 +474,13 @@ const AngelaPage = () => {
               <span className="angela-stat-value">100%</span>
               <span className="angela-stat-label">Open Source</span>
             </div>
+            <div className="angela-warning-banner">
+              <span className="angela-warning-icon"><FaExclamationTriangle /></span>
+              <span className="angela-warning-text">Project Under Active Development</span>
+              <a href="#roadmap" className="angela-warning-link" onClick={(e) => { e.preventDefault(); scrollToSection(aboutRef); }}>
+                View Progress & Roadmap
+              </a>
+            </div>            
           </div>
         </div>
         <div className="angela-hero-terminal">
@@ -703,8 +757,9 @@ const AngelaPage = () => {
         <div className="angela-about-content">
           <div className="angela-about-text">
             <p>Angela CLI represents a paradigm shift in command-line interaction. It's an AI-powered command-line assistant deeply integrated into your terminal shell that blurs the boundary between traditional command-line tools and intelligent assistants.</p>
-            <p>Unlike conventional CLI tools that require exact syntax or chatbots that operate in isolation, Angela understands natural language within your development context and can perform complex multi-step operations spanning multiple tools and systems.</p>
-            <p>Angela doesn't just execute commands – it acts as an intelligent copilot for your terminal operations, enhancing productivity, reducing errors, and lowering the barrier to entry for complex tasks.</p>
+            <p>Unlike conventional CLI tools that require exact syntax or chatbots that operate in isolation, Angela understands natural language within your development context and can perform complex multi-step operations spanning multiple tools and systems. It leverages the powerful Gemini API to understand your intent and translate it into precise actions.</p>
+            <p>Angela doesn't just execute commands – it acts as an intelligent copilot for your terminal operations, enhancing productivity, reducing errors, and lowering the barrier to entry for complex tasks. With capabilities spanning from simple file operations to complex project scaffolding, Angela adapts to your workflow and grows more helpful over time.</p>
+            <p>The project is being actively developed with a focus on robust architecture, deep context awareness, and comprehensive safety features. We're building Angela to be the command-line assistant we've always wanted – one that truly understands developers and their needs.</p>
             <div className="angela-about-buttons">
               <a href="https://github.com/CarterPerez-dev/angela-cli" target="_blank" rel="noopener noreferrer" className="angela-github-button">
                 <FaGithub className="angela-btn-icon" /> Star on GitHub
@@ -714,30 +769,27 @@ const AngelaPage = () => {
               </button>
             </div>
           </div>
-          <div className="angela-about-stats">
-            <div className="angela-about-stat">
-              <div className="angela-about-stat-icon">
-                <FaStar />
-              </div>
-              <div className="angela-about-stat-value">4.9/5</div>
-              <div className="angela-about-stat-label">User Rating</div>
+           <div className="angela-about-status">
+            <div className="angela-about-status-header">
+              <span className="angela-about-status-icon"><FaCodeBranch /></span>
+              <h3 className="angela-about-status-title" id="roadmap">Development Status</h3>
             </div>
-            <div className="angela-about-stat">
-              <div className="angela-about-stat-icon">
-                <FaUserPlus />
+            <div className="angela-about-status-content">
+              <p>Angela CLI is currently <strong>under active development</strong> and seeking contributors! The core architecture is in place, but we're working to fully implement and refine all planned features. Check out our GitHub repositories for the latest progress, roadmap, and opportunities to contribute.</p>
+              <div className="angela-about-status-links">
+                <a href="https://github.com/CarterPerez-dev/angela-cli/edit/main/README.MD" target="_blank" rel="noopener noreferrer" className="angela-status-button">
+                  <FaBullseye className="angela-btn-icon" /> Project Roadmap
+                </a>
+                <a href="https://github.com/CarterPerez-dev/angela-cli/blob/main/docs/source/contributing.rst" target="_blank" rel="noopener noreferrer" className="angela-status-button">
+                  <FaUserPlus className="angela-btn-icon" /> Contributing Guide
+                </a>
+                <a href="https://github.com/CarterPerez-dev/angela-cli/blob/main/Angela-CLI.md" target="_blank" rel="noopener noreferrer" className="angela-status-button">
+                  <FaBook className="angela-btn-icon" /> Comprehensive Documentation
+                </a>
               </div>
-              <div className="angela-about-stat-value">5k+</div>
-              <div className="angela-about-stat-label">Active Users</div>
             </div>
-            <div className="angela-about-stat">
-              <div className="angela-about-stat-icon">
-                <FaRegLightbulb />
-              </div>
-              <div className="angela-about-stat-value">1.2M+</div>
-              <div className="angela-about-stat-label">Commands Generated</div>
-            </div>
-          </div>
-        </div>
+          </div>  
+        </div>                   
       </section>
       
       {/* Footer */}

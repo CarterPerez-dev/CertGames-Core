@@ -1039,6 +1039,121 @@
   opacity: 0.7;
 }
 
+.angela-warning-banner {
+  background-color: rgba(255, 204, 0, 0.1);
+  border: 1px solid rgba(255, 204, 0, 0.3);
+  border-radius: 8px;
+  padding: 12px 20px;
+  margin: 0 auto 30px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-width: 700px;
+}
+
+.angela-warning-icon {
+  color: #ffcc00;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.angela-warning-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: bold;
+}
+
+.angela-warning-link {
+  color: #00ff96;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.angela-warning-link:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.angela-about-status {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 255, 150, 0.2);
+  border-radius: 8px;
+  padding: 25px;
+  transition: all 0.3s ease;
+  margin-top: 30px;
+}
+
+.angela-about-status:hover {
+  border-color: rgba(0, 255, 150, 0.4);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 255, 150, 0.1);
+}
+
+.angela-about-status-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.angela-about-status-icon {
+  font-size: 24px;
+  color: #00ff96;
+  margin-right: 12px;
+}
+
+.angela-about-status-title {
+  font-size: 24px;
+  color: #00ff96;
+  margin: 0;
+}
+
+.angela-about-status-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.angela-about-status-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.angela-status-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  background-color: rgba(0, 255, 150, 0.1);
+  border: 1px solid rgba(0, 255, 150, 0.3);
+  border-radius: 5px;
+  color: #00ff96;
+  font-size: 15px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.angela-status-button:hover {
+  background-color: rgba(0, 255, 150, 0.2);
+  transform: translateY(-2px);
+}
+
+.angela-status-button .angela-btn-icon {
+  margin-right: 8px;
+}
+
+@media (max-width: 768px) {
+  .angela-about-status-links {
+    flex-direction: column;
+  }
+  
+  .angela-status-button {
+    width: 100%;
+  }
+}
 /* Responsive styles */
 @media (max-width: 768px) {
   .angela-nav {
