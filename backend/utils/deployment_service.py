@@ -32,19 +32,20 @@ class DeploymentService:
             dict: Deployment information including URL
         """
         try:
-            logger.info(f"Starting deployment process for portfolio {portfolio_id}")
-            
             # 1. Create GitHub repository
             repo_name = f"portfolio-{user_id}-{portfolio_id[:6]}"
             repo_info = await self._create_github_repo(github_token, repo_name)
             repo_url = repo_info['html_url']
             
+            # Get the actual repo name that was created (might include timestamp)
+            actual_repo_name = repo_info['name']  # Add this line
+            
             # 2. Upload files to GitHub
             await self._upload_files_to_github(github_token, repo_info['full_name'], portfolio_components)
             
-            # 3. Create Vercel project
-            vercel_project = await self._create_vercel_project(vercel_token, repo_url, repo_name)
-            
+            # 3. Create Vercel project - use actual_repo_name instead of repo_name
+            vercel_project = await self._create_vercel_project(vercel_token, repo_url, actual_repo_name)
+                       
             # 4. Deploy to Vercel
             deployment = await self._trigger_vercel_deployment(vercel_token, vercel_project['id'])
             
