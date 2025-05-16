@@ -230,13 +230,17 @@ class DeploymentService:
             "Authorization": f"Bearer {vercel_token}",
             "Content-Type": "application/json"
         }
-        
-
+    
         deployment_name = f"deployment-{int(time.time())}"
         
         payload = {
             "name": deployment_name,  
-            "target": "production"
+            "target": "production",
+            "files": [],  
+            "gitSource": {
+                "type": "github",
+                "ref": "main"  
+            }
         }
         
         response = requests.post(
@@ -244,6 +248,7 @@ class DeploymentService:
             headers=headers, 
             json=payload
         )
+        
         
         if response.status_code != 200:
             logger.error(f"Vercel deployment triggering failed: {response.status_code} - {response.text}")
