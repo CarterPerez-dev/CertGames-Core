@@ -217,7 +217,7 @@ class GeminiHelper:
         DEPLOYMENT REQUIREMENTS:
         The code will be deployed to Vercel, so ensure it's compatible with their platform.
         
-        FORMAT YOUR RESPONSE AS FOLLOWS:
+        FORMAT YOUR RESPONSE VERY CAREFULLY FOLLOWING THESE EXACT GUIDELINES:
         
         ```analysis
         # Resume Analysis 
@@ -247,17 +247,24 @@ class GeminiHelper:
         [Complete App.js file]
         ```
         
-        FOR EACH COMPONENT FILE:
+        FOR EACH COMPONENT FILE, USE THIS EXACT FORMAT:
         
         ```javascript:src/components/ComponentName.js
-        [Component code]
+        // Component code goes here
         ```
         
         ```css:src/components/ComponentName.css
-        [Component styling]
+        // Component styling goes here
         ```
         
-        DO NOT OMIT ANY IMPORTANT FILES. Include all necessary files to create a complete, functioning portfolio website.
+        IMPORTANT FORMATTING RULES:
+        1. DO NOT use prefixes like "javascript:" or "// src/components/ComponentName.js" inside the code blocks
+        2. DO NOT create generic Component1.js, Component2.js files - use meaningful component names
+        3. ALL component files should have clear, semantic names (e.g., About.js, Skills.js, etc.)
+        4. DO NOT OMIT ANY IMPORTANT FILES
+        5. Use the EXACT format for code blocks: ```language:filepath
+        
+        Include all necessary files to create a complete, functioning portfolio website.
         """
         
         return prompt
@@ -344,7 +351,7 @@ class GeminiHelper:
         
         # More flexible patterns for component files
         component_pattern = r'```(?:javascript|js)(?::)?src/components/([a-zA-Z0-9_-]+)\.js\s*([\s\S]*?)```'
-
+    
         # Fallback pattern if the more specific one doesn't find matches
         component_fallback_pattern = r'```(?:javascript|js)\s*(?:\/\/|#)\s*src\/components\/([a-zA-Z0-9_-]+)\.js\s*([\s\S]*?)```'
         nested_component_pattern = r'```(?:javascript|js)(?::)?src/components/([a-zA-Z0-9_-]+)/\1\.js\s*([\s\S]*?)```'
@@ -384,7 +391,7 @@ class GeminiHelper:
             # Try fallback pattern
             logger.info("No CSS component matches with primary pattern, trying fallback pattern")
             component_css_matches = re.findall(component_css_fallback_pattern, text)
-            
+                
         for name, code in component_css_matches:
             components[f'src/components/{name}.css'] = code.strip()
             logger.debug(f"Extracted CSS src/components/{name}.css")
@@ -408,6 +415,18 @@ class GeminiHelper:
                         # Use a generic name
                         components[f'src/components/Component{i+1}.js'] = block.strip()
                         logger.info(f"Deep extraction: Created generic component Component{i+1}")
+        
+        # NEW CODE: Filter out generic components if proper named components exist
+        component_files = [k for k in components.keys() if k.startswith('src/components/')]
+        named_components = [k for k in component_files if not re.match(r'src/components/Component\d+\.js', k)]
+        
+        # If we have proper named components, remove generic ones
+        if named_components:
+            logger.info(f"Found {len(named_components)} named components, removing generic components")
+            for key in list(components.keys()):
+                if re.match(r'src/components/Component\d+\.js', key):
+                    logger.info(f"Removing generic component {key} as named components exist")
+                    del components[key]
         
         logger.info(f"Extracted {len(components)} total components")
         return components

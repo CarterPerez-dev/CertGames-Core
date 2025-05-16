@@ -60,7 +60,17 @@ class DeploymentService:
             
         except Exception as e:
             logger.exception(f"Deployment failed: {str(e)}")
-            raise Exception(f"Deployment failed: {str(e)}")
+            
+            # Check for common errors and provide better messages
+            error_str = str(e)
+            if "name already exists" in error_str:
+                error_msg = "Repository already exists. This may be from a previous deployment attempt."
+            elif "rate limit" in error_str.lower():
+                error_msg = "GitHub API rate limit exceeded. Please try again in a few minutes."
+            else:
+                error_msg = f"Deployment failed: {str(e)}"
+            
+            raise Exception(error_msg)
     
     def deploy_to_vercel_sync(self, user_id, portfolio_id, github_token, vercel_token, portfolio_components):
         """
@@ -84,14 +94,31 @@ class DeploymentService:
     
     
     async def _create_github_repo(self, github_token, repo_name):
-        """Create a new GitHub repository"""
-        logger.info(f"Creating GitHub repository: {repo_name}")
+        """Create a new GitHub repository or use existing one"""
+        logger.info(f"Checking for existing GitHub repository: {repo_name}")
         
         headers = {
             "Authorization": f"token {github_token}",
             "Accept": "application/vnd.github.v3+json"
         }
         
+        # First check if the repo exists
+        existing_repo_response = requests.get(
+            f"{self.github_api_url}/repos/{repo_name}", 
+            headers=headers
+        )
+        
+        # If it exists, use it
+        if existing_repo_response.status_code == 200:
+            logger.info(f"Repository {repo_name} already exists, using it")
+            repo_data = existing_repo_response.json()
+            return {
+                "name": repo_data["name"],
+                "full_name": repo_data["full_name"],
+                "html_url": repo_data["html_url"]
+            }
+        
+        # If it doesn't exist, create it
         payload = {
             "name": repo_name,
             "description": "Portfolio website created with Portfolio Generator",
@@ -99,11 +126,29 @@ class DeploymentService:
             "auto_init": True
         }
         
+        # Try to create repo
         response = requests.post(
             f"{self.github_api_url}/user/repos", 
             headers=headers, 
             json=payload
         )
+        
+        # Handle "name already exists" error (status 422)
+        if response.status_code == 422 and "name already exists" in response.text:
+            # Add a timestamp to make the name unique
+            timestamp = int(time.time())
+            new_repo_name = f"{repo_name}-{timestamp}"
+            logger.info(f"Repository name already exists, trying with new name: {new_repo_name}")
+            
+            # Update payload with new name
+            payload["name"] = new_repo_name
+            
+            # Try again with the new name
+            response = requests.post(
+                f"{self.github_api_url}/user/repos", 
+                headers=headers, 
+                json=payload
+            )
         
         if response.status_code != 201:
             logger.error(f"GitHub repo creation failed: {response.status_code} - {response.text}")
