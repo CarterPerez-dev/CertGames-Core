@@ -214,7 +214,8 @@ class DeploymentService:
             json=payload
         )
         
-        if response.status_code != 201:
+        # Modified condition to accept both 200 and 201
+        if response.status_code not in [200, 201]:
             logger.error(f"Vercel project creation failed: {response.status_code} - {response.text}")
             raise Exception(f"Failed to create Vercel project: {response.text}")
         
