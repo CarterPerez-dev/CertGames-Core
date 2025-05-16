@@ -140,8 +140,12 @@ const PortfolioPage = () => {
   };
 
   const handleDeploymentComplete = (deploymentData) => {
-    console.log("Portfolio deployment completed", deploymentData);
-    // Update the current portfolio with deployment info
+    // Only consider it successful if we have a URL
+    if (!deploymentData.deployment_url) {
+      handlePortfolioError("Deployment failed: No URL returned");
+      return;
+    }
+    
     setCurrentPortfolio(prev => ({
       ...prev,
       deployment: {
@@ -150,8 +154,8 @@ const PortfolioPage = () => {
       }
     }));
     
-    fetchPortfolios(); // Refresh the list
-    setActiveTab('deploy'); // Switch to deploy tab
+    fetchPortfolios();
+    setActiveTab('deploy');
   };
 
   const handleSelectPortfolio = async (portfolioId) => {

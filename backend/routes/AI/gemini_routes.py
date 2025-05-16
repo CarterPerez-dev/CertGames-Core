@@ -526,6 +526,73 @@ def get_deployment_status_route(task_id):
         "portfolio_id": task_info.get("portfolio_id")
     })
 
+
+# In backend/routes/AI/gemini_routes.py
+
+@portfolio_bp.route('/update-file', methods=['POST'])
+@jwt_required_wrapper
+def update_portfolio_file():
+    try:
+        data = request.get_json()
+        user_id = g.user_id
+        portfolio_id = data.get('portfolio_id')
+        file_path = data.get('file_path')
+        content = data.get('content')
+        
+        if not all([portfolio_id, file_path, content]):
+            return jsonify({"error": "Missing required fields"}), 400
+        
+        # Update component file
+        result = update_portfolio_component(user_id, portfolio_id, file_path, content)
+        
+        if result:
+            return jsonify({"success": True, "message": "File updated successfully"})
+        else:
+            return jsonify({"error": "Failed to update file"}), 500
+    
+    except Exception as e:
+        logger.exception(f"Error updating file: {str(e)}")
+        return jsonify({"error": f"Error updating file: {str(e)}"}), 500
+
+@portfolio_bp.route('/create-file', methods=['POST'])
+@jwt_required_wrapper
+def create_portfolio_file():
+    try:
+        data = request.get_json()
+        user_id = g.user_id
+        portfolio_id = data.get('portfolio_id')
+        file_path = data.get('file_path')
+        content = data.get('content')
+        
+        if not all([portfolio_id, file_path, content]):
+            return jsonify({"error": "Missing required fields"}), 400
+        
+        # Get portfolio
+        portfolio = get_portfolio(user_id, portfolio_id)
+        if not portfolio:
+            return jsonify({"error": "Portfolio not found"}), 404
+        
+        # Check if file already exists
+        components = portfolio.get('components', {})
+        if file_path in components:
+            return jsonify({"error": "File already exists"}), 400
+        
+        # Add new component file
+        result = update_portfolio_component(user_id, portfolio_id, file_path, content)
+        
+        if result:
+            return jsonify({
+                "success": True, 
+                "message": "File created successfully",
+                "file_path": file_path
+            })
+        else:
+            return jsonify({"error": "Failed to create file"}), 500
+    
+    except Exception as e:
+        logger.exception(f"Error creating file: {str(e)}")
+        return jsonify({"error": f"Error creating file: {str(e)}"}), 500
+
 # Database helper functions
 def save_portfolio(user_id, components, preferences, resume_text=None):
     """Save portfolio to database"""

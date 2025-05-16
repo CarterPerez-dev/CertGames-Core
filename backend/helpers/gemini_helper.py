@@ -99,7 +99,8 @@ class GeminiHelper:
             'public/index.html',
             'src/index.js', 
             'src/App.js', 
-            'src/index.css'
+            'src/index.css',
+            'src/reportWebVitals.js',
         ]
         
         missing = [comp for comp in required_components if comp not in components]
@@ -204,6 +205,7 @@ class GeminiHelper:
            - src/App.js - Main application component
            - src/index.js - Entry point
            - src/index.css - Global styles
+           - src/reportWebVitals.js - defualt reportWebVitals
            - public/index.html - HTML template
            - package.json - Dependencies
            - Component files for each section (About, Projects, Skills, Contact, etc.)
@@ -242,6 +244,10 @@ class GeminiHelper:
         ```css:src/index.css
         [Complete index.css file with global styles]
         ```
+        
+        ```javascript:src/reportWebVitals.js
+        [Complete reportWebVitals.js file]
+        ```        
         
         ```javascript:src/App.js
         [Complete App.js file]
@@ -347,6 +353,7 @@ class GeminiHelper:
             'src/index.js': r'```(?:javascript:src/index\.js|src/index\.js|js:src/index\.js|javascript)\s*([\s\S]*?)```',
             'src/index.css': r'```(?:css:src/index\.css|src/index\.css|css)\s*([\s\S]*?)```',
             'src/App.js': r'```(?:javascript:src/App\.js|src/App\.js|js:src/App\.js)\s*([\s\S]*?)```',
+            'src/reportWebVitals.js': r'```(?:javascript:src/reportWebVitals\.js|src/reportWebVitals\.js|js:src/reportWebVitals\.js)\s*([\s\S]*?)```',
         }
         
         # More flexible patterns for component files

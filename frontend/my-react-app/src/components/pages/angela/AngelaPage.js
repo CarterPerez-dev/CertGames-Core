@@ -653,7 +653,7 @@ const AngelaPage = () => {
             </div>
             <div className="angela-terminal-overlay" onClick={() => setIsTerminalActive(true)}>
               <button className="angela-primary-button">
-                <FaPlayCircle className="angela-btn-icon" /> Start Demo
+                <FaPlayCircle className="angela-btn-icon" /> Coming Soon
               </button>
             </div>
           </div>
@@ -711,6 +711,24 @@ const AngelaPage = () => {
                 <li><a href="https://github.com/CarterPerez-dev/angela-cli#-workflows" target="_blank" rel="noopener noreferrer">Workflow Management</a></li>
                 <li><a href="https://github.com/CarterPerez-dev/angela-cli#-code-generation" target="_blank" rel="noopener noreferrer">Code Generation</a></li>
                 <li><a href="https://github.com/CarterPerez-dev/angela-cli#-toolchain-integration" target="_blank" rel="noopener noreferrer">Toolchain Integration</a></li>
+              </ul>
+            </div>
+            <div className="angela-doc-card">
+              <h3 className="angela-doc-title">Roadmap</h3>
+              <ul className="angela-doc-links">
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli#-roadmap" target="_blank" rel="noopener noreferrer">Development Roadmap</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli/blob/main/FUTURE_README.md" target="_blank" rel="noopener noreferrer">Future Vision</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli/milestones" target="_blank" rel="noopener noreferrer">Milestones & Progress</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement" target="_blank" rel="noopener noreferrer">Planned Features</a></li>
+              </ul>
+            </div>
+            <div className="angela-doc-card">
+              <h3 className="angela-doc-title">Contributing</h3>
+              <ul className="angela-doc-links">
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli/blob/main/docs/source/contributing.rst" target="_blank" rel="noopener noreferrer">Contributor Guide</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli/blob/main/README.MD#want-to-help-build-angela-awesome-" target="_blank" rel="noopener noreferrer">Getting Started</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22" target="_blank" rel="noopener noreferrer">Good First Issues</a></li>
+                <li><a href="https://github.com/CarterPerez-dev/angela-cli/blob/main/MD/MDHelpers/Files.md" target="_blank" rel="noopener noreferrer">Project Structure</a></li>
               </ul>
             </div>
             <div className="angela-doc-card">

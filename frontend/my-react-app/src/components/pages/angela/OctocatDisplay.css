@@ -1,6 +1,6 @@
 /* src/components/pages/angela/OctocatDisplay.css - Updated for Claytronic display */
 .octocat-section {
-  padding: 100px 20px;
+  padding: 50px 20px;
   position: relative;
   z-index: 1;
   min-height: 100vh;
@@ -85,6 +85,7 @@
   border-radius: 20px;
   box-shadow: 0 20px 80px rgba(0, 0, 0, 0.1), 0 0 60px rgba(0, 229, 255, 0.1); /* Added cyan glow */
   transition: box-shadow 0.5s ease;
+  border: 1px solid rgba(0, 229, 255, 0.1); /* Cyan border */  
 }
 
 .octocat-display-case:hover {
@@ -108,7 +109,7 @@
 .octocat-display-base {
   height: 80px;
   background: linear-gradient(to bottom, rgba(5, 5, 15, 0.1), rgba(20, 30, 45, 0.1)); /* Adjusted for blue theme */
-  border-top: 1px solid rgba(0, 229, 255, 0.2); /* Cyan border */
+  border-top: 1px solid rgba(0, 229, 255, 0.02); /* Cyan border */
   display: flex;
   align-items: center;
   justify-content: center;

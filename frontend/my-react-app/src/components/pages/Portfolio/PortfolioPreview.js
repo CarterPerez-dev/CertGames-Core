@@ -153,6 +153,97 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     }
   };
 
+
+  
+  const handleSaveFile = async (filePath, content) => {
+    try {
+      setIsSaving(true);
+      
+      const response = await fetch('/api/portfolio/update-file', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-User-Id': userId
+        },
+        body: JSON.stringify({
+          portfolio_id: portfolio._id,
+          file_path: filePath,
+          content: content
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to save file');
+      }
+      
+      // Show success message
+      setSuccessMessage('File saved successfully');
+      setTimeout(() => setSuccessMessage(null), 3000);
+      
+    } catch (err) {
+      setErrorMessage('Error saving file: ' + err.message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+  
+  const handleCreateFile = async (filePath) => {
+    try {
+      if (!filePath) {
+        setErrorMessage('File path is required');
+        return;
+      }
+      
+      const response = await fetch('/api/portfolio/create-file', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-User-Id': userId
+        },
+        body: JSON.stringify({
+          portfolio_id: portfolio._id,
+          file_path: filePath,
+          content: '// New file created'
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create file');
+      }
+      
+      // Update the file tree and select the new file
+      const data = await response.json();
+      
+      // Update the local file tree
+      setFileTree(prevTree => {
+        const newTree = {...prevTree};
+        // Add the new file to the tree (simplified - would need more logic for nested paths)
+        const fileName = filePath.split('/').pop();
+        const dirPath = filePath.substring(0, filePath.lastIndexOf('/'));
+        
+        // Create directory structure if needed
+        let currentLevel = newTree;
+        dirPath.split('/').forEach(part => {
+          if (!currentLevel[part]) {
+            currentLevel[part] = { __isDir: true };
+          }
+          currentLevel = currentLevel[part];
+        });
+        
+        // Add the file
+        currentLevel[fileName] = { __filePath: filePath };
+        
+        return newTree;
+      });
+      
+      // Select the new file
+      handleFileSelect(filePath);
+      
+    } catch (err) {
+      setErrorMessage('Error creating file: ' + err.message);
+    }
+  };
+
   const getFileIcon = (filePath) => {
     if (filePath.endsWith('.js') || filePath.endsWith('.jsx')) return <FaFile className="js-file-icon" />;
     if (filePath.endsWith('.css')) return <FaFile className="css-file-icon" />;
@@ -504,9 +595,54 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                       <FaCopy className="action-icon" />
                       <span>Copy</span>
                     </button>
+                  </div>      
+                  <div className="portfolio-editor-actions">
+                    <button 
+                      className="portfolio-editor-action-btn"
+                      onClick={() => {
+                        // Save the current file
+                        handleSaveFile(activeFile, fileContent);
+                      }}
+                    >
+                      <FaSave className="action-icon" />
+                      <span>Save</span>
+                    </button>
+                    
+                    <button 
+                      className="portfolio-editor-action-btn"
+                      onClick={() => setShowNewFileModal(true)}
+                    >
+                      <FaPlus className="action-icon" />
+                      <span>New File</span>
+                    </button>
                   </div>
-                </div>
-                
+                  
+                  {/* New File Modal */}
+                  {showNewFileModal && (
+                    <div className="portfolio-modal">
+                      <div className="portfolio-modal-content">
+                        <h3>Create New File</h3>
+                        <input 
+                          type="text" 
+                          placeholder="File path (e.g., src/components/NewComponent.js)"
+                          value={newFilePath}
+                          onChange={(e) => setNewFilePath(e.target.value)}
+                        />
+                        <div className="portfolio-modal-buttons">
+                          <button onClick={() => setShowNewFileModal(false)}>Cancel</button>
+                          <button 
+                            onClick={() => {
+                              handleCreateFile(newFilePath);
+                              setShowNewFileModal(false);
+                            }}
+                          >
+                            Create
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}         
+            
                 <CodeEditor
                   value={fileContent}
                   language={getFileLanguage(activeFile)}

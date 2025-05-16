@@ -207,9 +207,13 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
       
       const data = await response.json();
       console.log("Deployment successful:", data);
-      
-      // Wait a moment to show the final stage
-      await new Promise(resolve => setTimeout(resolve, 2000));
+                     
+      // Validate the deployment URL exists
+      if (!data || !data.deployment_url) {
+        onError("Deployment didn't return a valid URL. Please try again.");
+        setDeploymentInProgress(false);
+        return;
+      }
       
       setDeploymentInProgress(false);
       onDeploymentComplete(data);
@@ -220,6 +224,8 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
       onError(err.message || 'Deployment failed. Please try again.');
     }
   };
+
+
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(() => {
