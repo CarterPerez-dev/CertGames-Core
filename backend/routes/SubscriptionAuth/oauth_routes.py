@@ -768,19 +768,22 @@ def admin_google_auth():
 ###########        GITHUB AND VERCEL          ##################
 ################################################################
 
-
-
 @oauth_bp.route('/github', methods=['GET'])
+@jwt_required_wrapper
 def github_oauth():
     """Redirect to GitHub OAuth"""
     github_client_id = os.getenv('GITHUB_APP_ID')
     redirect_uri = url_for('oauth.github_callback', _external=True)
     
+    # Include user ID in state or as a parameter
+    user_id = g.user_id
+    
     params = {
         'client_id': github_client_id,
         'redirect_uri': redirect_uri,
         'scope': 'repo workflow',
-        'state': session.get('csrf_token')
+        'state': session.get('csrf_token'),
+        'userId': user_id  # Add userId as a parameter
     }
     
     authorize_url = f"https://github.com/login/oauth/authorize?{urlencode(params)}"
@@ -823,6 +826,21 @@ def github_callback():
     # Store token in session
     session['github_token'] = access_token
     
+    # ADDED: Get user ID from session or request parameters
+    user_id = session.get('userId') or request.args.get('userId')
+    
+    # ADDED: Store token in database if user ID is available
+    if user_id:
+        try:
+            # Update user document with GitHub token
+            mainusers_collection.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$set": {"github_oauth_token": access_token}}
+            )
+            logger.info(f"GitHub token stored in database for user {user_id}")
+        except Exception as e:
+            logger.error(f"Error storing GitHub token in database: {str(e)}")
+    
     # Redirect back to portfolio page
     return redirect('/portfolio?github_auth=success')
 
@@ -831,13 +849,22 @@ def github_callback():
 @oauth_bp.route('/github/token', methods=['GET'])
 @jwt_required_wrapper
 def get_github_token():
-    """Return GitHub token from session if available"""
+    """Return GitHub token from session or database if available"""
     user_id = g.user_id
     
     # Check if GitHub token is in session
     github_token = session.get('github_token')
     
+    # If not in session, try to get from database
+    if not github_token:
+        from models.test import get_github_token_for_user
+        github_token = get_github_token_for_user(user_id)
+    
     if github_token:
+        # If token was found in database but not session, update session
+        if not session.get('github_token'):
+            session['github_token'] = github_token
+            
         return jsonify({
             "success": True,
             "github_token": github_token
@@ -845,9 +872,8 @@ def get_github_token():
     else:
         return jsonify({
             "success": False,
-            "message": "No GitHub token in session"
+            "message": "No GitHub token found for user"
         }), 404
-
 
 
 
