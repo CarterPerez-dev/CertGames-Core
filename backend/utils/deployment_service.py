@@ -231,7 +231,11 @@ class DeploymentService:
             "Content-Type": "application/json"
         }
         
+
+        deployment_name = f"deployment-{int(time.time())}"
+        
         payload = {
+            "name": deployment_name,  
             "target": "production"
         }
         
