@@ -16,6 +16,7 @@ input, textarea, select {
   }
 }
 
+
 .main-content {
   transition: all 0.1s ease; /* for a little smoothness */
   background-color: var(--profile-bg-dark);
@@ -45,3 +46,63 @@ body {
   overflow-y: auto;    /* Enable vertical scrolling when necessary */
   overflow-x: hidden;  /* Prevent horizontal scrolling */
 }
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--profile-bg-dark);
+  transition: none;
+  padding: 0;
+  z-index: 9999;
+}
+
+.loading-spinner {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-bottom: 30px;
+  background: conic-gradient(
+    from 0deg,
+    #FF6B6B,
+    #FFD700,
+    #50E3C2,
+    #FF6B6B
+  );
+  animation: spinConic 1s linear infinite;
+  position: relative;
+}
+
+.loading-spinner::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 50px;
+  height: 50px;
+  background-color: var(--profile-bg-dark);
+  border-radius: 50%;
+}
+
+@keyframes spinConic {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-container p {
+  color: #EAEAEA;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 1.25em;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  opacity: 0;
+  animation: textFocusIn 0.8s cubic-bezier(0.550, 0.085, 0.680, 0.530) 0.2s forwards;
+}
+

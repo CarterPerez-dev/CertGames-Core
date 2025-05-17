@@ -30,7 +30,6 @@
   background-image: 
     radial-gradient(circle at 10% 20%, rgba(26, 20, 64, 0.4) 0%, transparent 45%),
     radial-gradient(circle at 85% 60%, rgba(42, 26, 89, 0.3) 0%, transparent 40%);
-  padding: 20px;
   min-height: 100vh;
   box-sizing: border-box;
 }

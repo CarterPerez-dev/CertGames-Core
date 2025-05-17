@@ -16,6 +16,7 @@ import PortfolioPage from './components/pages/Portfolio/PortfolioPage.js';
 
 
 // Public pages
+import DevChronicle from './components/pages/DevChronicle/DevChronicle';
 import InfoPage from './components/pages/Info/InfoPage';
 import DemosPage from './components/pages/Info/DemosPage';
 import ExamsPage from './components/pages/Info/ExamsPage';
@@ -236,6 +237,7 @@ function App() {
 
 
           <Route path="/angela" element={<InfoPage />} />
+          <Route path="/commits" element={<DevChronicle />} />
           
           {/* Authentication routes */}
           <Route path="/login" element={<Login />} />

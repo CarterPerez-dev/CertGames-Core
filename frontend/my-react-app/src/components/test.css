@@ -1682,6 +1682,82 @@
 }
 
 
+/* Container for the test loading elements */
+.test-loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 20px; /* Adjust as needed */
+  /* Assuming parent .aplus-test-container handles any background or overall page centering */
+  width: 100%; /* Takes width of its parent */
+}
+
+/* Wrapper for the spinner icon, mainly for spacing or if you wanted to add
+   a background element behind the spinner itself */
+.test-loading-spinner {
+  margin-bottom: 25px; /* Space between spinner and text */
+  position: relative; /* Useful if you add ::before/::after effects */
+}
+
+/* Styles for your FaSpinner React icon with className="spinner-icon" */
+.spinner-icon {
+  font-size: 64px; /* Adjust size of the spinner icon */
+  color: #00E5FF; /* Bright, energetic cyan */
+  animation:
+    testSpinnerSpin 1.2s linear infinite,
+    testSpinnerGlow 2.2s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 3px #00E5FF) drop-shadow(0 0 8px #00E5FF); /* Initial soft glow */
+}
+
+/* Custom spin animation. FaSpinner might have its own,
+   but this gives you explicit control over speed and timing. */
+@keyframes testSpinnerSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pulsating glow effect for the spinner icon */
+@keyframes testSpinnerGlow {
+  from {
+    color: #00E5FF;
+    filter: drop-shadow(0 0 3px #00E5FF) drop-shadow(0 0 8px #00B8D4) drop-shadow(0 0 12px #2962FF);
+    opacity: 0.8;
+  }
+  to {
+    color: #82FFFF; /* Slightly lighter cyan for the 'to' state */
+    filter: drop-shadow(0 0 5px #82FFFF) drop-shadow(0 0 15px #00E5FF) drop-shadow(0 0 25px #2979FF);
+    opacity: 1;
+  }
+}
+
+/* Styling for the "Loading test data..." paragraph */
+.test-loading-container p {
+  font-family: 'Exo 2', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Modern, slightly techy font */
+  font-size: 1.15em; /* Adjust size as needed */
+  color: #B0CADC;   /* Cool, light grayish-blue */
+  font-weight: 300;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: testTextFadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+}
+
+@keyframes testTextFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Exam Tip Section */
 .exam-tip {
   background: rgba(255, 193, 7, 0.1);
