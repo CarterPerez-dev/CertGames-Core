@@ -300,7 +300,6 @@ const SavedFlashcards = () => {
         </div>
         
         <div className="cybercards-search-group">
-          <FaSearch className="cybercards-search-icon" />
           <input
             type="text"
             className="cybercards-search-input"

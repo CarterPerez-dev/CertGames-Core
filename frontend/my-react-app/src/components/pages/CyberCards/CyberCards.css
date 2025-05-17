@@ -73,6 +73,7 @@
   -webkit-text-fill-color: transparent;
   display: inline-flex;
   align-items: center;
+  font-family: 'Orbitron', 'Roboto', sans-serif;  
 }
 
 .cybercards-title-icon {
@@ -90,7 +91,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 15px;
+  gap: 40px;
   margin-top: 20px;
   flex-wrap: wrap;
 }
@@ -99,14 +100,15 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: rgba(var(--theme-accent-rgb, 101, 67, 204), 0.1);
+  background-color: rgba(var(--theme-accent-rgb, 101, 67, 204), 0.9);
   color: var(--theme-accent, #6543cc);
-  border: 1px solid rgba(var(--theme-accent-rgb, 101, 67, 204), 0.3);
+  border: 1px solid rgba(var(--theme-accent-rgb, 101, 67, 204), 0.9);
   border-radius: 8px;
-  padding: 8px 16px;
+  padding: 8px 55px;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  padding-right: 65px;
 }
 
 .cybercards-action-button:hover {
@@ -127,7 +129,7 @@
 
 .cybercards-search-icon {
   position: absolute;
-  left: 12px;
+  left: 8px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-secondary, #9da8b9);
@@ -135,7 +137,7 @@
 
 .cybercards-search-input {
   width: 100%;
-  padding: 10px 15px 10px 35px;
+  padding: 10px 15px 10px 60px;
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -557,7 +559,7 @@
   border-radius: 8px;
   background-color: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-primary, #e2e2e2);
+  color: var(--theme-accent);
   appearance: none;
   cursor: pointer;
   font-size: 0.9rem;
@@ -1074,11 +1076,9 @@
 
 .cybercards-action-button {
   background-color: rgba(255, 255, 255, 0.05);
-  color: var(--text-secondary, #9da8b9);
+  color: var(--theme-accent);
   border: none;
   border-radius: 8px;
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1208,6 +1208,7 @@
   margin-bottom: 30px;
   flex-wrap: wrap;
   gap: 15px;
+  margin-top: 40px;
 }
 
 .cybercards-saved-title {
@@ -1253,7 +1254,7 @@
 
 .cybercards-search-input {
   flex-grow: 1;
-  padding: 8px 15px;
+  padding: 8px 30px;
   border-radius: 8px;
   background-color: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
