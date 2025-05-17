@@ -210,7 +210,7 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
             onError(timeoutError.message || 'Error checking portfolio status');
             setFormSubmitting(false);
           }
-        }, 3 * 60 * 1000); // 4 minutes in milliseconds
+        }, 5 * 60 * 1000); // 4 minutes in milliseconds
         
       } catch (err) {
         console.error('Error generating portfolio:', err);

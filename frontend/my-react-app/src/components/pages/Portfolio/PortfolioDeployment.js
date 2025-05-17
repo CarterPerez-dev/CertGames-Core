@@ -14,6 +14,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
   const [hasInteractedWithForm, setHasInteractedWithForm] = useState(false);
   const [isUsingOAuth, setIsUsingOAuth] = useState(false);
   const [githubTokenSource, setGithubTokenSource] = useState('manual'); // 'manual' or 'oauth'
+  const [progress, setProgress] = useState(0); // Added missing state variable
 
   // Frequently Asked Questions
   const faqItems = [
@@ -127,37 +128,36 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
   };
 
   const handleDeploy = async (e) => {
-      e.preventDefault();
-      
-      // Validate inputs
-      if (showTokenFields) {
-        if (githubTokenSource === 'manual' && !githubToken) {
-          onError('Please provide a GitHub token or use GitHub OAuth');
-          return;
-        }
-        
-        if (!vercelToken) {
-          onError('Please provide a Vercel token');
-          return;
-        }
+    e.preventDefault();
+    
+    // Validate inputs
+    if (showTokenFields) {
+      if (githubTokenSource === 'manual' && !githubToken) {
+        onError('Please provide a GitHub token or use GitHub OAuth');
+        return;
       }
       
-      try {
-        console.log("Starting deployment process");
-        onDeploymentStart();
-        setDeploymentInProgress(true);
-        setDeploymentStage(0);
-        
-
-        const startTimeMs = Date.now() / 1000;
-        window.failureCount = 0; 
-        
-        // Add validation for token formats
-        if (githubTokenSource === 'manual') {
-          if (githubToken.length < 36 || !githubToken.match(/^gh[ps]_[A-Za-z0-9_]{36,}$/)) {
-            throw new Error('Invalid GitHub token format. Please ensure you are using a valid Personal Access Token.');
-          }
+      if (!vercelToken) {
+        onError('Please provide a Vercel token');
+        return;
+      }
+    }
+    
+    try {
+      console.log("Starting deployment process");
+      onDeploymentStart();
+      setDeploymentInProgress(true);
+      setDeploymentStage(0);
+      
+      const startTimeMs = Date.now() / 1000;
+      window.failureCount = 0; 
+      
+      // Add validation for token formats
+      if (githubTokenSource === 'manual') {
+        if (githubToken.length < 36 || !githubToken.match(/^gh[ps]_[A-Za-z0-9_]{36,}$/)) {
+          throw new Error('Invalid GitHub token format. Please ensure you are using a valid Personal Access Token.');
         }
+      }
       
       if (vercelToken.length < 24) {
         throw new Error('Invalid Vercel token format. Please ensure you are using a valid API token.');
@@ -313,52 +313,62 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
           setTimeout(pollDeploymentStatus, 5000);
         }
       };
-      
-  const checkForDeployedPortfolio = async () => {
-    try {
-      console.log("Checking portfolios list for deployment completion...");
-      const listResponse = await fetch('/api/portfolio/list', {
-        headers: { 'X-User-Id': userId }
-      });
-      
-      if (listResponse.ok) {
-        const data = await listResponse.json();
-        
-        if (data.portfolios && Array.isArray(data.portfolios)) {
-          // Find the current portfolio in the list
-          const currentPortfolio = data.portfolios.find(p => p._id === portfolio._id);
+  
+      // Helper function to fallback to checking portfolio list
+      const checkForDeployedPortfolio = async () => {
+        try {
+          console.log("Checking portfolios list for deployment completion...");
+          const listResponse = await fetch('/api/portfolio/list', {
+            headers: { 'X-User-Id': userId }
+          });
           
-          if (currentPortfolio && currentPortfolio.deployment && currentPortfolio.deployment.deployed) {
-            console.log("Found deployed portfolio in portfolio list!");
+          if (listResponse.ok) {
+            const data = await listResponse.json();
             
-            // Portfolio is deployed!
-            setDeploymentStage(4);
-            setProgress(100);
-            
-            setTimeout(() => {
-              setDeploymentInProgress(false);
-              onDeploymentComplete({
-                deployment_url: currentPortfolio.deployment.url,
-                github_repo: currentPortfolio.deployment.github_repo
-              });
-            }, 1000);
-            
-            return;
+            if (data.portfolios && Array.isArray(data.portfolios)) {
+              // Find the current portfolio in the list
+              const currentPortfolio = data.portfolios.find(p => p._id === portfolio._id);
+              
+              if (currentPortfolio && currentPortfolio.deployment && currentPortfolio.deployment.deployed) {
+                console.log("Found deployed portfolio in portfolio list!");
+                
+                // Portfolio is deployed!
+                setDeploymentStage(4);
+                setProgress(100);
+                
+                setTimeout(() => {
+                  setDeploymentInProgress(false);
+                  onDeploymentComplete({
+                    deployment_url: currentPortfolio.deployment.url,
+                    github_repo: currentPortfolio.deployment.github_repo
+                  });
+                }, 1000);
+                
+                return;
+              }
+            }
           }
+          
+          // If we didn't find a deployed portfolio, keep waiting
+          console.log("Portfolio not yet deployed. Will check again in 10 seconds...");
+          setTimeout(checkForDeployedPortfolio, 10000);
+          
+        } catch (error) {
+          console.error("Error checking portfolio list:", error);
+          // Try again later
+          setTimeout(checkForDeployedPortfolio, 10000);
         }
-      }
+      };
+  
+      // Start polling
+      pollDeploymentStatus();
       
-      // If we didn't find a deployed portfolio, keep waiting
-      console.log("Portfolio not yet deployed. Will check again in 10 seconds...");
-      setTimeout(checkForDeployedPortfolio, 10000);
-      
-    } catch (error) {
-      console.error("Error checking portfolio list:", error);
-      // Try again later
-      setTimeout(checkForDeployedPortfolio, 10000);
+    } catch (err) {
+      console.error('Error deploying portfolio:', err);
+      setDeploymentInProgress(false);
+      onError(err.message || 'Deployment failed. Please try again.');
     }
   };
-
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(() => {
