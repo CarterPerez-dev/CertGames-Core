@@ -1,0 +1,1395 @@
+```analysis
+# Resume Analysis
+The provided resume text "uiygyhjkhnlnnnnnnnnlhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh" is unconventional. To fulfill the request of maximizing its utilization and creating a professional portfolio, this string has been creatively interpreted as the basis for the job seeker's identity: Uiygy H. Jkhnln, a distinguished Full-Stack Developer. The portfolio content has been meticulously crafted to showcase a compelling narrative of a highly skilled professional. This includes a portfolio of diverse and impactful projects, an extensive list of modern technical skills, significant and progressive professional experience at reputable companies, and a strong educational background from prestigious institutions. The overarching goal is to present Uiygy H. Jkhnln as an innovative and accomplished developer, aligning with the "corporate" style and "tech" color scheme preferences, and demonstrating expertise in technologies such as React, Node.js, and cloud solutions. All information presented is invented to be impressive and relevant, strictly avoiding any placeholder text.
+
+# Portfolio Structure
+The portfolio is designed as a responsive Single Page Application (SPA) using React, ensuring a seamless and modern user experience.
+
+- **`App.js`**: This is the core component that orchestrates the layout of the entire application. It imports and renders all the major sections of the portfolio in a structured sequence.
+- **`Navbar.js`**: A fixed navigation bar at the top of the page, providing easy navigation to various sections of the portfolio (Home, About, Skills, Experience, Projects, Education, Contact) using anchor links.
+- **`Header.js`**: The main hero section, prominently displaying Uiygy H. Jkhnln's name, professional title ("Innovative Full-Stack Developer"), and a concise, impactful tagline to immediately capture attention.
+- **Section Components**: Each of the following is a dedicated React component with its own styling:
+    - **`About.js`**: Presents a detailed professional summary, highlighting Uiygy's passion, expertise, and career aspirations.
+    - **`Skills.js`**: Showcases a comprehensive and categorized list of technical proficiencies, including programming languages, frontend/backend technologies, databases, tools, and methodologies.
+    - **`Experience.js`**: Details Uiygy's professional journey in reverse chronological order. Each role includes the company name, job title, duration, and key responsibilities and achievements.
+    - **`Projects.js`**: Features a selection of significant projects Uiygy has developed. Each project entry includes a title, a detailed description, key technologies used, and a link to a (invented) GitHub repository or live demo.
+    - **`Education.js`**: Outlines Uiygy's academic qualifications, including degrees, institutions, and graduation years.
+    - **`Contact.js`**: Provides various channels for prospective employers or collaborators to get in touch, such as email, LinkedIn, and GitHub profiles.
+- **`Footer.js`**: A simple footer at the bottom of the page, typically containing copyright information and potentially a reiteration of social links or a thank you note.
+- **Styling**:
+    - **`src/index.css`**: Contains global styles, including CSS custom properties for the "tech" color scheme (dark blues, grays, accent blues), base font settings (using a professional sans-serif stack), and basic resets for consistency across browsers.
+    - **Component-Specific CSS Files (e.g., `Header.css`, `About.css`)**: Each component has an associated CSS file to encapsulate its styles, promoting modularity and maintainability.
+    - **`src/App.css`**: This file is intentionally left completely empty, as per the explicit requirement.
+- **Responsiveness**: The entire website is designed to be fully responsive, ensuring optimal viewing and interaction across a wide range of devices, from desktops to mobile phones, achieved through fluid layouts (Flexbox/Grid) and CSS media queries.
+
+The overall architecture emphasizes clarity, professionalism, and ease of navigation, reflecting the "corporate" aesthetic while leveraging the "tech" color palette to create a visually appealing and engaging portfolio for Uiygy H. Jkhnln.
+```
+
+```package.json
+{
+  "name": "react-portfolio-uiygyhjkhnln",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+```
+
+```html:public/index.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Professional portfolio of Uiygy H. Jkhnln, Full-Stack Developer"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Uiygy H. Jkhnln | Full-Stack Developer</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
+```
+
+```javascript:src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+reportWebVitals();
+```
+
+```css:src/index.css
+:root {
+  --primary-bg: #121820;
+  --secondary-bg: #1A202C;
+  --card-bg: #2D3748;
+  --text-primary: #E2E8F0;
+  --text-secondary: #A0AEC0;
+  --accent-primary: #3182CE;
+  --accent-secondary: #00A0B0;
+  --border-color: #4A5568;
+  --header-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --body-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--body-font);
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--header-font);
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+h1 { font-size: 2.8rem; }
+h2 { font-size: 2.2rem; }
+h3 { font-size: 1.8rem; }
+h4 { font-size: 1.4rem; }
+
+p {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-secondary);
+  text-decoration: underline;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: auto;
+  padding: 2rem 0;
+}
+
+section {
+  padding: 4rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+section:last-of-type {
+  border-bottom: none;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.card {
+  background-color: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.button {
+  display: inline-block;
+  background-color: var(--accent-primary);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--accent-secondary);
+  color: #fff;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.8rem; }
+  .section-title { font-size: 2rem; }
+  .container { width: 95%; }
+  section { padding: 3rem 0; }
+}
+```
+```css:src/App.css
+
+```        
+
+```javascript:src/reportWebVitals.js
+const reportWebVitals = onPerfEntry => {
+  if (onPerfEntry && onPerfEntry instanceof Function) {
+    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+      getCLS(onPerfEntry);
+      getFID(onPerfEntry);
+      getFCP(onPerfEntry);
+      getLCP(onPerfEntry);
+      getTTFB(onPerfEntry);
+    });
+  }
+};
+
+export default reportWebVitals;
+```        
+
+```javascript:src/App.js
+import React from 'react';
+import Navbar from './components/Navbar';
+import Header from './components/Header';
+import About from './components/About';
+import Skills from './components/Skills';
+import Experience from './components/Experience';
+import Projects from './components/Projects';
+import Education from './components/Education';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
+
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Header />
+      <main>
+        <About />
+        <Skills />
+        <Experience />
+        <Projects />
+        <Education />
+        <Contact />
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+export default App;
+```
+
+```javascript:src/components/Navbar.js
+import React, { useState, useEffect } from 'react';
+import './Navbar.css';
+
+const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  return (
+    <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
+      <div className="navbar-container">
+        <a href="#home" className="navbar-logo" onClick={closeMobileMenu}>
+          Uiygy H. Jkhnln
+        </a>
+        <div className="menu-icon" onClick={toggleMobileMenu}>
+          <div className={`bar ${isMobileMenuOpen ? 'open' : ''}`}></div>
+          <div className={`bar ${isMobileMenuOpen ? 'open' : ''}`}></div>
+          <div className={`bar ${isMobileMenuOpen ? 'open' : ''}`}></div>
+        </div>
+        <ul className={`nav-menu ${isMobileMenuOpen ? 'active' : ''}`}>
+          <li className="nav-item">
+            <a href="#about" className="nav-links" onClick={closeMobileMenu}>About</a>
+          </li>
+          <li className="nav-item">
+            <a href="#skills" className="nav-links" onClick={closeMobileMenu}>Skills</a>
+          </li>
+          <li className="nav-item">
+            <a href="#experience" className="nav-links" onClick={closeMobileMenu}>Experience</a>
+          </li>
+          <li className="nav-item">
+            <a href="#projects" className="nav-links" onClick={closeMobileMenu}>Projects</a>
+          </li>
+          <li className="nav-item">
+            <a href="#education" className="nav-links" onClick={closeMobileMenu}>Education</a>
+          </li>
+          <li className="nav-item">
+            <a href="#contact" className="nav-links" onClick={closeMobileMenu}>Contact</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
+```
+
+```css:src/components/Navbar.css
+.navbar {
+  background: var(--secondary-bg);
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  transition: background-color 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar.scrolled {
+  background: var(--primary-bg);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  height: 80px;
+  z-index: 1;
+  width: 100%;
+  max-width: 1100px;
+  padding: 0 24px;
+}
+
+.navbar-logo {
+  color: var(--text-primary);
+  justify-self: flex-start;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.navbar-logo:hover {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  text-align: center;
+}
+
+.nav-item {
+  height: 80px;
+}
+
+.nav-links {
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-links:hover {
+  color: var(--accent-primary);
+  border-bottom: 3px solid var(--accent-primary);
+  text-decoration: none;
+}
+
+.menu-icon {
+  display: none;
+  cursor: pointer;
+}
+
+.menu-icon .bar {
+  width: 25px;
+  height: 3px;
+  background-color: var(--text-primary);
+  margin: 5px 0;
+  transition: all 0.3s ease-in-out;
+}
+
+@media screen and (max-width: 960px) {
+  .nav-menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100vh - 80px);
+    position: absolute;
+    top: 80px;
+    left: -100%;
+    opacity: 1;
+    transition: all 0.5s ease;
+    background: var(--secondary-bg);
+  }
+
+  .nav-menu.active {
+    left: 0;
+    opacity: 1;
+    transition: all 0.5s ease;
+    z-index: 1;
+  }
+
+  .nav-links {
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+    display: table;
+  }
+
+  .nav-links:hover {
+    color: var(--accent-primary);
+    border-bottom: none;
+    background-color: var(--card-bg);
+  }
+
+  .navbar-logo {
+    font-size: 1.5rem;
+  }
+
+  .menu-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .menu-icon .bar.open:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  .menu-icon .bar.open:nth-child(2) {
+    opacity: 0;
+  }
+  .menu-icon .bar.open:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+}
+```
+
+```javascript:src/components/Header.js
+import React from 'react';
+import './Header.css';
+
+const Header = () => {
+  return (
+    <header id="home" className="header-section">
+      <div className="header-content container">
+        <h1>Uiygy H. Jkhnln</h1>
+        <p className="tagline">Innovative Full-Stack Developer Crafting Seamless Digital Experiences</p>
+        <a href="#projects" className="button header-button">View My Work</a>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
+```
+
+```css:src/components/Header.css
+.header-section {
+  background: linear-gradient(rgba(26, 32, 44, 0.85), rgba(26, 32, 44, 0.95)), url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y29tcHV0ZXJ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=1000&q=60') no-repeat center center/cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--text-primary);
+  position: relative;
+}
+
+.header-content {
+  max-width: 800px;
+}
+
+.header-content h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.header-content .tagline {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+.header-button {
+  font-size: 1.1rem;
+  padding: 0.8rem 2rem;
+}
+
+@media (max-width: 768px) {
+  .header-section {
+    height: 80vh;
+  }
+  .header-content h1 {
+    font-size: 2.8rem;
+  }
+  .header-content .tagline {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content h1 {
+    font-size: 2.2rem;
+  }
+  .header-content .tagline {
+    font-size: 1rem;
+  }
+  .header-button {
+    font-size: 1rem;
+    padding: 0.7rem 1.5rem;
+  }
+}
+```
+
+```javascript:src/components/About.js
+import React from 'react';
+import './About.css';
+
+const About = () => {
+  return (
+    <section id="about" className="about-section">
+      <div className="container">
+        <h2 className="section-title">About Me</h2>
+        <div className="about-content">
+          <div className="about-text">
+            <h3>Uiygy H. Jkhnln</h3>
+            <h4>Innovative Full-Stack Developer</h4>
+            <p>
+              Hello! I'm Uiygy H. Jkhnln, a dedicated and results-oriented Full-Stack Developer with a profound passion for building elegant, efficient, and scalable web applications. My journey in technology has been driven by a relentless curiosity and a commitment to leveraging cutting-edge solutions to solve real-world problems.
+            </p>
+            <p>
+              With a strong foundation in both front-end and back-end development, I specialize in creating seamless user experiences and robust server-side logic. I thrive in dynamic environments where I can collaborate with cross-functional teams to transform complex requirements into high-performance digital products. My expertise spans across modern JavaScript frameworks, cloud platforms, and agile development methodologies.
+            </p>
+            <p>
+              I am always eager to embrace new challenges, learn emerging technologies, and contribute meaningfully to projects that push the boundaries of innovation. My goal is to not only meet expectations but to exceed them, delivering solutions that are not just functional but also intuitive and impactful.
+            </p>
+          </div>
+          <div className="about-image-container">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c7da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cHJvZmVzc2lvbmFsJTIwbWFufGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60" alt="Uiygy H. Jkhnln" className="about-image" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default About;
+```
+
+```css:src/components/About.css
+.about-section {
+  background-color: var(--secondary-bg);
+}
+
+.about-content {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.about-text {
+  flex: 2;
+}
+
+.about-text h3 {
+  color: var(--accent-primary);
+  font-size: 2rem;
+}
+
+.about-text h4 {
+  color: var(--text-secondary);
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+}
+
+.about-image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-image {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid var(--accent-primary);
+  box-shadow: 0 0 20px rgba(49, 130, 206, 0.5);
+}
+
+@media (max-width: 960px) {
+  .about-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .about-image-container {
+    margin-top: 2rem;
+  }
+  .about-image {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-text h3 {
+    font-size: 1.8rem;
+  }
+  .about-text h4 {
+    font-size: 1.1rem;
+  }
+  .about-image {
+    width: 200px;
+    height: 200px;
+  }
+}
+```
+
+```javascript:src/components/Skills.js
+import React from 'react';
+import './Skills.css';
+
+const skillsData = {
+  programmingLanguages: ["JavaScript (ES6+)", "Python", "Java", "HTML5", "CSS3", "TypeScript"],
+  frontend: ["React", "Redux", "Next.js", "Vue.js", "Angular", "SASS/LESS", "Webpack", "Babel"],
+  backend: ["Node.js", "Express.js", "Django", "Spring Boot", "RESTful APIs", "GraphQL"],
+  databases: ["MongoDB", "PostgreSQL", "MySQL", "Firebase", "Redis"],
+  toolsPlatforms: ["Git", "Docker", "Kubernetes", "AWS", "Azure", "Jenkins", "Jira", "Terraform"],
+  methodologies: ["Agile", "Scrum", "TDD", "CI/CD", "DevOps Practices"]
+};
+
+const Skills = () => {
+  return (
+    <section id="skills" className="skills-section">
+      <div className="container">
+        <h2 className="section-title">Technical Skills</h2>
+        <div className="skills-grid">
+          <div className="skill-category card">
+            <h4>Programming Languages</h4>
+            <ul>
+              {skillsData.programmingLanguages.map(skill => <li key={skill}>{skill}</li>)}
+            </ul>
+          </div>
+          <div className="skill-category card">
+            <h4>Frontend Development</h4>
+            <ul>
+              {skillsData.frontend.map(skill => <li key={skill}>{skill}</li>)}
+            </ul>
+          </div>
+          <div className="skill-category card">
+            <h4>Backend Development</h4>
+            <ul>
+              {skillsData.backend.map(skill => <li key={skill}>{skill}</li>)}
+            </ul>
+          </div>
+          <div className="skill-category card">
+            <h4>Databases</h4>
+            <ul>
+              {skillsData.databases.map(skill => <li key={skill}>{skill}</li>)}
+            </ul>
+          </div>
+          <div className="skill-category card">
+            <h4>Tools & Platforms</h4>
+            <ul>
+              {skillsData.toolsPlatforms.map(skill => <li key={skill}>{skill}</li>)}
+            </ul>
+          </div>
+          <div className="skill-category card">
+            <h4>Methodologies & Practices</h4>
+            <ul>
+              {skillsData.methodologies.map(skill => <li key={skill}>{skill}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Skills;
+```
+
+```css:src/components/Skills.css
+.skills-section {
+  background-color: var(--primary-bg);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.skill-category {
+  background-color: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.skill-category h4 {
+  color: var(--accent-primary);
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  border-bottom: 2px solid var(--accent-secondary);
+  padding-bottom: 0.5rem;
+}
+
+.skill-category ul {
+  list-style: none;
+  padding: 0;
+}
+
+.skill-category ul li {
+  background-color: var(--secondary-bg);
+  color: var(--text-secondary);
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.skill-category ul li:hover {
+  background-color: var(--accent-primary);
+  color: #fff;
+}
+```
+
+```javascript:src/components/Experience.js
+import React from 'react';
+import './Experience.css';
+
+const experienceData = [
+  {
+    id: 1,
+    title: "Senior Full-Stack Developer",
+    company: "Innovatech Solutions",
+    duration: "2020 – Present",
+    responsibilities: [
+      "Led the architecture and development of a high-traffic e-commerce platform, resulting in a 25% increase in conversion rates and a 30% improvement in page load times.",
+      "Designed and implemented a scalable microservices architecture using Node.js, Docker, and Kubernetes, enhancing system resilience and deployment efficiency.",
+      "Mentored a team of 5 junior developers, fostering a culture of continuous learning and conducting rigorous code reviews to maintain high-quality standards.",
+      "Collaborated closely with UX/UI designers and product managers to translate complex business requirements into intuitive and responsive user interfaces using React and Next.js."
+    ]
+  },
+  {
+    id: 2,
+    title: "Software Engineer",
+    company: "TechForward Inc.",
+    duration: "2017 – 2020",
+    responsibilities: [
+      "Developed and maintained robust client-facing web applications utilizing React, Redux, and TypeScript, serving over 1 million active users.",
+      "Integrated various third-party APIs for payment processing (Stripe), data analytics (Segment), and communication services (Twilio).",
+      "Played a key role in migrating a monolithic legacy system to a modern microservices stack, significantly improving application performance by 40% and reducing operational costs.",
+      "Authored comprehensive technical documentation and participated actively in Agile sprint planning, daily stand-ups, and retrospectives."
+    ]
+  },
+  {
+    id: 3,
+    title: "Junior Web Developer",
+    company: "CodeCrafters Ltd.",
+    duration: "2015 – 2017",
+    responsibilities: [
+      "Assisted senior developers in the design, development, and deployment of responsive websites for diverse clients across various industries.",
+      "Gained hands-on proficiency in core web technologies including HTML5, CSS3, JavaScript (ES5/ES6), and jQuery.",
+      "Contributed to front-end development tasks, ensuring cross-browser compatibility and adherence to web accessibility standards (WCAG).",
+      "Utilized Git for version control and collaborated effectively within a team-oriented development environment."
+    ]
+  }
+];
+
+const Experience = () => {
+  return (
+    <section id="experience" className="experience-section">
+      <div className="container">
+        <h2 className="section-title">Professional Experience</h2>
+        <div className="experience-timeline">
+          {experienceData.map(job => (
+            <div key={job.id} className="experience-item card">
+              <h3>{job.title}</h3>
+              <p className="company-duration"><strong>{job.company}</strong> | {job.duration}</p>
+              <ul>
+                {job.responsibilities.map((resp, index) => (
+                  <li key={index}>{resp}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Experience;
+```
+
+```css:src/components/Experience.css
+.experience-section {
+  background-color: var(--secondary-bg);
+}
+
+.experience-timeline {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.experience-timeline::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  background-color: var(--accent-primary);
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -2px;
+  z-index: 0;
+}
+
+.experience-item {
+  padding: 1.5rem 2rem;
+  position: relative;
+  background-color: var(--card-bg);
+  width: calc(50% - 30px);
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  z-index: 1;
+}
+
+.experience-item:nth-child(odd) {
+  left: 0;
+  margin-right: auto; /* Pushes to the left */
+}
+
+.experience-item:nth-child(even) {
+  left: calc(50% + 30px); /* Pushes to the right */
+  margin-left: auto;
+}
+
+
+.experience-item::before {
+  content: '';
+  height: 0;
+  position: absolute;
+  top: 22px;
+  width: 0;
+  z-index: 1;
+  border: medium solid var(--accent-primary);
+}
+
+.experience-item:nth-child(odd)::before {
+  right: -15px;
+  border-width: 10px 0 10px 10px;
+  border-color: transparent transparent transparent var(--accent-primary);
+}
+
+.experience-item:nth-child(even)::before {
+  left: -15px;
+  border-width: 10px 10px 10px 0;
+  border-color: transparent var(--accent-primary) transparent transparent;
+}
+
+.experience-item::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: -40px;
+  background-color: var(--primary-bg);
+  border: 4px solid var(--accent-secondary);
+  top: 15px;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.experience-item:nth-child(even)::after {
+  left: -40px;
+}
+
+
+.experience-item h3 {
+  color: var(--text-primary);
+  font-size: 1.6rem;
+  margin-top: 0;
+}
+
+.company-duration {
+  font-size: 1rem;
+  color: var(--accent-secondary);
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.experience-item ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.experience-item ul li {
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+@media screen and (max-width: 960px) {
+  .experience-timeline::after {
+    left: 20px;
+  }
+
+  .experience-item {
+    width: calc(100% - 50px);
+    padding-left: 40px;
+    padding-right: 15px;
+    left: 50px !important; /* Override inline style */
+    margin-left: 0 !important; /* Override inline style */
+  }
+
+  .experience-item:nth-child(odd),
+  .experience-item:nth-child(even) {
+    left: 50px; /* Align all items to the right of the timeline */
+  }
+
+  .experience-item::before {
+    left: -15px;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent var(--accent-primary) transparent transparent;
+  }
+  
+  .experience-item:nth-child(odd)::before,
+  .experience-item:nth-child(even)::before {
+    left: -15px;
+    right: auto;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent var(--accent-primary) transparent transparent;
+  }
+
+  .experience-item::after {
+    left: -10px; /* Adjust position relative to the new timeline */
+  }
+}
+```
+
+```javascript:src/components/Projects.js
+import React from 'react';
+import './Projects.css';
+
+const projectsData = [
+  {
+    id: 1,
+    title: "SynergyHub - Collaborative Project Management Tool",
+    description: "A dynamic, real-time collaborative platform designed to streamline team workflows. SynergyHub enables users to manage tasks, track project progress, share files securely, and communicate effectively through integrated chat features. Built with a focus on intuitive user experience and robust performance.",
+    technologies: ["React", "Node.js", "Express.js", "WebSocket", "MongoDB", "JWT"],
+    imageUrl: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cHJvamVjdCUyMG1hbmFnZW1lbnR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60",
+    liveLink: "https://github.com/uiygyhj/synergyhub",
+    repoLink: "https://github.com/uiygyhj/synergyhub"
+  },
+  {
+    id: 2,
+    title: "EcoTrack - Environmental Impact Analyzer",
+    description: "An innovative web application empowering users to monitor their carbon footprint and discover sustainable lifestyle alternatives. EcoTrack features interactive data visualizations, personalized eco-friendly recommendations, and a community forum for sharing tips and progress. The backend API processes complex environmental data to provide actionable insights.",
+    technologies: ["Next.js", "Python (Flask)", "PostgreSQL", "Chart.js", "Leaflet.js"],
+    imageUrl: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZWNvbG9neXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
+    liveLink: "https://github.com/uiygyhj/ecotrack",
+    repoLink: "https://github.com/uiygyhj/ecotrack"
+  },
+  {
+    id: 3,
+    title: "PortfolioGen - Dynamic Portfolio Generator",
+    description: "A developer-focused tool that simplifies the creation of professional online portfolios. PortfolioGen allows users to input their resume data or connect to LinkedIn, then automatically generates a customizable, responsive website. It offers multiple modern templates and easy content management through a Firebase backend.",
+    technologies: ["React", "Firebase (Auth & Firestore)", "Material-UI", "Netlify"],
+    imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGRhc2hib2FyZHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
+    liveLink: "https://github.com/uiygyhj/portfoliogen",
+    repoLink: "https://github.com/uiygyhj/portfoliogen"
+  }
+];
+
+const Projects = () => {
+  return (
+    <section id="projects" className="projects-section">
+      <div className="container">
+        <h2 className="section-title">My Projects</h2>
+        <div className="projects-grid">
+          {projectsData.map(project => (
+            <div key={project.id} className="project-card card">
+              <img src={project.imageUrl} alt={project.title} className="project-image" />
+              <div className="project-info">
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+                <div className="project-technologies">
+                  {project.technologies.map(tech => (
+                    <span key={tech} className="tech-tag">{tech}</span>
+                  ))}
+                </div>
+                <div className="project-links">
+                  <a href={project.liveLink} target="_blank" rel="noopener noreferrer" className="button">View Project</a>
+                  <a href={project.repoLink} target="_blank" rel="noopener noreferrer" className="button-outline">View Code</a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Projects;
+```
+
+```css:src/components/Projects.css
+.projects-section {
+  background-color: var(--primary-bg);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 2rem;
+}
+
+.project-card {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.project-info {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.project-info h3 {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.project-info p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.project-technologies {
+  margin-bottom: 1.5rem;
+}
+
+.tech-tag {
+  background-color: var(--secondary-bg);
+  color: var(--accent-secondary);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.project-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.project-links .button,
+.project-links .button-outline {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.button-outline {
+  display: inline-block;
+  background-color: transparent;
+  color: var(--accent-primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border: 2px solid var(--accent-primary);
+  cursor: pointer;
+}
+
+.button-outline:hover {
+  background-color: var(--accent-primary);
+  color: #fff;
+  text-decoration: none;
+}
+```
+
+```javascript:src/components/Education.js
+import React from 'react';
+import './Education.css';
+
+const educationData = [
+  {
+    id: 1,
+    degree: "Master of Science in Computer Science",
+    institution: "Stanford University",
+    duration: "2013 – 2015",
+    details: "Specialization: Software Engineering and Artificial Intelligence. Thesis: 'Scalable Architectures for Real-Time Data Processing.' Graduated with Distinction."
+  },
+  {
+    id: 2,
+    degree: "Bachelor of Science in Information Technology",
+    institution: "Massachusetts Institute of Technology (MIT)",
+    duration: "2009 – 2013",
+    details: "Minor: Design and Human-Computer Interaction. Graduated Summa Cum Laude. Dean's List all semesters."
+  }
+];
+
+const Education = () => {
+  return (
+    <section id="education" className="education-section">
+      <div className="container">
+        <h2 className="section-title">Education</h2>
+        <div className="education-list">
+          {educationData.map(edu => (
+            <div key={edu.id} className="education-item card">
+              <h3>{edu.degree}</h3>
+              <p className="institution-duration"><strong>{edu.institution}</strong> | {edu.duration}</p>
+              <p className="education-details">{edu.details}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Education;
+```
+
+```css:src/components/Education.css
+.education-section {
+  background-color: var(--secondary-bg);
+}
+
+.education-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.education-item {
+  background-color: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.education-item h3 {
+  color: var(--text-primary);
+  font-size: 1.6rem;
+}
+
+.institution-duration {
+  font-size: 1rem;
+  color: var(--accent-secondary);
+  margin-bottom: 0.75rem;
+  font-style: italic;
+}
+
+.education-details {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+```
+
+```javascript:src/components/Contact.js
+import React from 'react';
+import './Contact.css';
+
+const Contact = () => {
+  return (
+    <section id="contact" className="contact-section">
+      <div className="container">
+        <h2 className="section-title">Get In Touch</h2>
+        <div className="contact-content">
+          <p className="contact-intro">
+            I'm always excited to discuss new projects, creative ideas, or opportunities to collaborate. 
+            Feel free to reach out if you'd like to connect or learn more about my work.
+          </p>
+          <div className="contact-details">
+            <div className="contact-item">
+              <h4>Email</h4>
+              <a href="mailto:uiygy.jkhnln@email.com">uiygy.jkhnln@email.com</a>
+            </div>
+            <div className="contact-item">
+              <h4>LinkedIn</h4>
+              <a href="https://linkedin.com/in/uiygyhjkhnln" target="_blank" rel="noopener noreferrer">linkedin.com/in/uiygyhjkhnln</a>
+            </div>
+            <div className="contact-item">
+              <h4>GitHub</h4>
+              <a href="https://github.com/uiygyhj" target="_blank" rel="noopener noreferrer">github.com/uiygyhj</a>
+            </div>
+            <div className="contact-item">
+              <h4>Phone</h4>
+              <p>+1 (555) 123-4567</p>
+            </div>
+          </div>
+          <a href="mailto:uiygy.jkhnln@email.com" className="button contact-button">Send me an Email</a>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Contact;
+```
+
+```css:src/components/Contact.css
+.contact-section {
+  background-color: var(--primary-bg);
+  text-align: center;
+}
+
+.contact-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.contact-intro {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+}
+
+.contact-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  text-align: left;
+}
+
+.contact-item {
+  background-color: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.contact-item h4 {
+  color: var(--accent-primary);
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.contact-item a, .contact-item p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  word-break: break-all;
+}
+
+.contact-item a:hover {
+  color: var(--accent-secondary);
+}
+
+.contact-button {
+  font-size: 1.1rem;
+  padding: 0.8rem 2.5rem;
+}
+
+@media (max-width: 500px) {
+  .contact-details {
+    grid-template-columns: 1fr;
+  }
+  .contact-item {
+    text-align: center;
+  }
+}
+```
+
+```javascript:src/components/Footer.js
+import React from 'react';
+import './Footer.css';
+
+const Footer = () => {
+  const currentYear = new Date().getFullYear();
+  return (
+    <footer className="footer-section">
+      <div className="container">
+        <p>&copy; {currentYear} Uiygy H. Jkhnln. All rights reserved.</p>
+        <p>Crafted with Passion and Precision.</p>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
+```
+
+```css:src/components/Footer.css
+.footer-section {
+  background-color: var(--secondary-bg);
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-section p {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.footer-section p:last-child {
+  margin-bottom: 0;
+}
+```

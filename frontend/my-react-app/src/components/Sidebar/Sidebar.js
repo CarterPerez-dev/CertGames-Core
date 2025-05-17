@@ -286,7 +286,12 @@ const Sidebar = () => {
                       <FaCrown className="premium-crown" />
                     </NavLink>
                   </li>
-                  {/* Added Study Resources to Tools dropdown */}
+                  <li>
+                    <NavLink to="/cybercards" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
+                      <span className="sidebar-link-text">Cyber Cards</span>
+                      <FaCrown className="premium-crown" />
+                    </NavLink>
+                  </li>
                   <li>
                     <NavLink to="/resources" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
                       <span className="sidebar-link-text">Study Resources</span>

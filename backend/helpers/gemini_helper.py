@@ -27,7 +27,7 @@ class GeminiHelper:
         
         logger.info(f"GeminiHelper initialized with model: {self.model}")
     
-    def generate_portfolio(self, resume_text, preferences, max_tokens=30000, temperature=0.1):
+    def generate_portfolio(self, resume_text, preferences, max_tokens=32000, temperature=0.1):
         """
         Generate a complete portfolio website based on resume text and user preferences.
         
@@ -131,7 +131,7 @@ class GeminiHelper:
             logger.error(f"Error fixing code: {str(e)}")
             raise
     
-    def _call_gemini_api(self, prompt, max_tokens=30000, temperature=0.1):
+    def _call_gemini_api(self, prompt, max_tokens=32000, temperature=0.1):
         """Call the Gemini API with given parameters"""
         url = f"{self.base_url}/{self.model}:generateContent?key={self.api_key}"
         
@@ -216,6 +216,8 @@ class GeminiHelper:
         6. Include comments to explain the code structure
         7. Keep the design clean, professional and fully responsive
         8. IMPORTANT Maximize {resume_text} utilization by creatively inventing impressive and relevant content to fill any informational gaps, strictly prohibiting all placeholder text
+        9. DO NOT USE COMMENTS OR WRITE ANY COMMENTS, DOUBLE ENSURE THERE ARE NO PLACEHOLDERS WHATSOEVER
+        10. ENSURE EVERYTHING HAS CORRECT SYNTAX AND NO ERRORS
         
         DEPLOYMENT REQUIREMENTS:
         The code will be deployed to Vercel, so ensure it's compatible with their platform.

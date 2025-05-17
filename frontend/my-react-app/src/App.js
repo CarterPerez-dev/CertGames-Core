@@ -15,8 +15,6 @@ import AngelaPage from './components/pages/angela/AngelaPage';
 import PortfolioPage from './components/pages/Portfolio/PortfolioPage.js';
 
 
-
-
 // Public pages
 import InfoPage from './components/pages/Info/InfoPage';
 import DemosPage from './components/pages/Info/DemosPage';
@@ -61,7 +59,9 @@ import UserProfile from './components/pages/store/UserProfile';
 import LeaderboardPage from './components/pages/store/LeaderboardPage';
 import AchievementPage from './components/pages/store/AchievementPage';
 import SupportAskAnythingPage from './components/pages/store/SupportAskAnythingPage';
-
+import CyberCardsVault from './components/pages/CyberCards/CyberCardsVault';
+import FlashcardStudy from './components/pages/CyberCards/FlashcardStudy';
+import SavedFlashcards from './components/pages/CyberCards/SavedFlashcards';
 
 // Game Pages
 import ThreatHunter from './components/pages/games/ThreatHunter/ThreatHunter';
@@ -336,7 +336,22 @@ function App() {
             <ProtectedRoute requiresPremium={false}> 
               <Resources />
             </ProtectedRoute>
+          }/>          
+          <Route path="/cybercards" element={
+            <ProtectedRoute requiresPremium={false}>
+              <CyberCardsVault />
+            </ProtectedRoute>
           }/>
+          <Route path="/cybercards/vault/:categoryId" element={
+            <ProtectedRoute requiresPremium={false}>
+              <FlashcardStudy />
+            </ProtectedRoute>
+          }/>
+          <Route path="/cybercards/saved" element={
+            <ProtectedRoute requiresPremium={false}>
+              <SavedFlashcards />
+            </ProtectedRoute>
+          }/>                    
           <Route path="/performance" element={
             <ProtectedRoute requiresPremium={false}>
               <StatsPage />

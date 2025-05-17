@@ -17,13 +17,25 @@ from models.test import get_user_by_id
 from helpers.ai_guard import apply_ai_guardrails
 from helpers.rate_limiter import rate_limit
 from helpers.jwt_auth import jwt_required_wrapper
+from mongodb.database import db
 
-deployment_tasks = {}
 portfolio_bp = Blueprint('portfolio', __name__)
 logger = logging.getLogger(__name__)
 
-
 generation_tasks = {}
+
+# Initialize the deployment_tasks collection if it doesn't already have indexes
+def create_deployment_indexes():
+    try:
+        db.deployment_tasks.create_index([("task_id", 1)], unique=True)
+        db.deployment_tasks.create_index([("user_id", 1)])
+        db.deployment_tasks.create_index([("started_at", 1)], expireAfterSeconds=86400)  # Auto-delete after 24 hours
+        logger.info("Created deployment_tasks indexes successfully")
+    except Exception as e:
+        logger.warning(f"Error creating deployment_tasks indexes: {e}")
+
+# Create indexes when module is loaded
+create_deployment_indexes()
 
 @portfolio_bp.route('/generate-stream', methods=['POST'])
 @jwt_required_wrapper
@@ -284,7 +296,6 @@ def fix_portfolio_error():
         return jsonify({"error": f"Failed to fix portfolio: {str(e)}"}), 500
 
 
-
 @portfolio_bp.route('/deploy', methods=['POST'])
 @jwt_required_wrapper
 def deploy_portfolio():
@@ -315,12 +326,13 @@ def deploy_portfolio():
                 logger.info(f"Successfully retrieved stored OAuth token for user {user_id_from_g}.")
             else:
                 # Stored token not found, but user preferred it.
+                # Option 1: Error out, tell them to re-auth or use manual input.
                 logger.warning(f"User {user_id_from_g} opted for OAuth token, but none found in DB.")
                 # If github_token_from_input is also empty, then it's a definite error.
                 if not github_token_from_input:
                     return jsonify({"error": "You opted to use a linked GitHub account, but no token was found. Please re-link your GitHub account or provide a token manually."}), 400
                 else:
-                    # Fallback to input if OAuth token not found but input is present.
+                    # Option 2: Fallback to input if OAuth token not found but input is present.
                     logger.info(f"OAuth token not found for {user_id_from_g}, but a token was provided in the input. Using input token.")
                     github_token_to_use = github_token_from_input
         else:
@@ -363,9 +375,9 @@ def deploy_portfolio():
             "started_at": time.time(),
             "finished_at": None
         })
-        # The background task runner definition remains the same
+        
+        # The background task runner
         def deployment_background_task_runner(app_context, local_task_id, p_user_id, p_id, gh_token, vc_token, port_components):
-            # ... (same as before, uses gh_token passed to it)
             with app_context:
                 try:
                     logger.info(f"Background task {local_task_id} using GitHub token: {'****' + gh_token[-4:] if gh_token else 'None'}")
@@ -429,7 +441,6 @@ def deploy_portfolio():
         logger.exception(f"Error in /deploy route before starting task for user {current_user_for_log}")
         return jsonify({"error": f"Failed to initiate portfolio deployment: {str(e)}"}), 500
 
-
 @portfolio_bp.route('/deploy/status/<task_id>', methods=['GET'])
 @jwt_required_wrapper
 def get_deployment_status_route(task_id):
@@ -480,8 +491,7 @@ def _calculate_deployment_progress(task_info):
     elif elapsed_seconds < 90:
         return 60 + int((elapsed_seconds - 60) * 1)
     else:
-        return 90  
-
+        return 90  # Cap at 90% until complete
 
 @portfolio_bp.route('/list', methods=['GET'])
 @jwt_required_wrapper
@@ -616,33 +626,6 @@ def get_deployment_status(deployment_id):
     except Exception as e:
         logger.exception(f"Error checking deployment status: {str(e)}")
         return jsonify({"error": "Failed to check deployment status"}), 500  
-
-@portfolio_bp.route('/deploy/status/<task_id>', methods=['GET'])
-@jwt_required_wrapper # Or appropriate authentication for this endpoint
-def get_deployment_status_route(task_id):
-    # Ensure deployment_tasks is accessible (e.g., global in this module)
-    task_info = deployment_tasks.get(task_id)
-    
-    if not task_info:
-        return jsonify({"error": "Deployment task not found"}), 404
-
-
-    if str(g.user_id) != str(task_info.get("user_id")):
-        logger.warning(f"User {g.user_id} attempting to access deployment task {task_id} of user {task_info.get('user_id')}")
-        return jsonify({"error": "Access forbidden to this deployment task status"}), 403
-
-    return jsonify({
-        "task_id": task_id,
-        "status": task_info["status"],
-        "result": task_info.get("result"), # Will contain URLs on "completed"
-        "error": task_info.get("error"),   # Will contain error message on "failed"
-        "started_at": task_info.get("started_at"),
-        "finished_at": task_info.get("finished_at"),
-        "portfolio_id": task_info.get("portfolio_id")
-    })
-
-
-
 
 @portfolio_bp.route('/create-file', methods=['POST'])
 @jwt_required_wrapper
@@ -957,6 +940,41 @@ def list_user_portfolios(user_id):
     except Exception as e:
         logger.error(f"Error listing portfolios: {str(e)}")
         return []
+
+def update_portfolio_deployment(user_id, portfolio_id, deployment_url, github_repo):
+    """Update a portfolio's deployment information"""
+    try:
+        from mongodb.database import db
+        
+        logger.info(f"Updating portfolio {portfolio_id} with URL: {deployment_url}")
+        
+        result = db.portfolios.update_one(
+            {
+                "user_id": ObjectId(user_id),
+                "_id": ObjectId(portfolio_id)
+            },
+            {
+                "$set": {
+                    "deployment": {
+                        "deployed": True,
+                        "url": deployment_url,
+                        "github_repo": github_repo
+                    },
+                    "updated_at": time.time()
+                }
+            }
+        )
+        
+        if result.modified_count == 0:
+            logger.warning(f"Failed to update portfolio {portfolio_id} deployment status")
+            return False
+            
+        logger.info(f"Successfully updated portfolio {portfolio_id} deployment status")
+        return True
+        
+    except Exception as e:
+        logger.exception(f"Error updating portfolio deployment: {str(e)}")
+        return False
         
 @portfolio_bp.route('/migrate-portfolios', methods=['POST'])
 @jwt_required_wrapper
@@ -1067,39 +1085,3 @@ def migrate_portfolios():
     except Exception as e:
         logger.exception(f"Error migrating portfolios: {str(e)}")
         return jsonify({"error": f"Error migrating portfolios: {str(e)}"}), 500
-
-
-def update_portfolio_deployment(user_id, portfolio_id, deployment_url, github_repo):
-    """Update a portfolio with deployment information"""
-    from mongodb.database import db
-    
-    try:
-        logger.info(f"Updating portfolio deployment: {portfolio_id} with URL: {deployment_url}")
-        
-        result = db.portfolios.update_one(
-            {
-                "user_id": ObjectId(user_id),
-                "_id": ObjectId(portfolio_id)
-            },
-            {
-                "$set": {
-                    "deployment": {
-                        "deployed": True,
-                        "url": deployment_url,
-                        "github_repo": github_repo
-                    },
-                    "updated_at": time.time()
-                }
-            }
-        )
-        
-        if result.modified_count > 0:
-            logger.info(f"Successfully updated portfolio {portfolio_id} deployment status")
-            return True
-        else:
-            logger.warning(f"No changes made to portfolio {portfolio_id} deployment status")
-            return False
-            
-    except Exception as e:
-        logger.exception(f"Error updating portfolio deployment: {str(e)}")
-        return False

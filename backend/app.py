@@ -51,6 +51,7 @@ from routes.main import api_bp
 from routes.main.leaderboard_routes import public_leaderboard_bp
 from routes.main.newsletter_routes import newsletter_bp
 from routes.main.support_routes import support_bp
+from routes.main.flashcard_routes import flashcard_bp
 
 # Models
 from models.test import create_user, get_user_by_id, update_user_fields
@@ -365,6 +366,7 @@ app.register_blueprint(grc_bp, url_prefix='/grc')
 
 # Main Blueprints
 app.register_blueprint(api_bp, url_prefix='/test')
+app.register_blueprint(flashcard_bp, url_prefix='/flashcards')
 
 # Admin/Main
 app.register_blueprint(cracked_bp, url_prefix="/cracked")
