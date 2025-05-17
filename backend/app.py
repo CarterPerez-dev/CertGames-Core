@@ -366,7 +366,7 @@ app.register_blueprint(grc_bp, url_prefix='/grc')
 
 # Main Blueprints
 app.register_blueprint(api_bp, url_prefix='/test')
-app.register_blueprint(flashcard_bp, url_prefix='/flashcards')
+app.register_blueprint(flashcard_bp, url_prefix='/flashcard')
 
 # Admin/Main
 app.register_blueprint(cracked_bp, url_prefix="/cracked")

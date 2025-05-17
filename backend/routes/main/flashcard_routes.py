@@ -1,5 +1,5 @@
 # backend/routes/main/flashcard_routes.py
-from flask import request, jsonify, g
+from flask import request, jsonify, g, Blueprint
 from mongodb.database import db, mainusers_collection
 from models.test import update_user_xp, update_user_coins, get_user_by_id
 from bson.objectid import ObjectId
@@ -13,6 +13,8 @@ flashcard_categories_collection = db.flashcardCategories
 flashcards_collection = db.flashcards
 saved_flashcards_collection = db.savedFlashcards
 flashcard_progress_collection = db.flashcardProgress
+
+flashcard_bp = Blueprint('flashcard', __name__)
 
 @api_bp.route('/flashcards/categories', methods=['GET'])
 def get_flashcard_categories():
