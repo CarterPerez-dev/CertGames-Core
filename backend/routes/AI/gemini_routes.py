@@ -778,21 +778,22 @@ def update_portfolio_component(user_id, portfolio_id, component_path, code):
         # Log the exact path being used to update the component
         logger.info(f"Updating component at exact path: '{component_path}'")
         
-        # Use dot notation for nested field access but escape dots in the component_path
-        # MongoDB requires dots in field names to be escaped with the form "components.path\.with\.dots"
-        mongo_field_path = f"components.{component_path.replace('.', '\\.')}"
+
+        update_doc = {
+            "$set": {
+                "updated_at": time.time()
+            }
+        }
+        
+        # Add the component to the update document
+        update_doc["$set"][f"components.{component_path}"] = code
         
         update_result = db.portfolios.update_one(
             {
                 "user_id": ObjectId(user_id),
                 "_id": ObjectId(portfolio_id)
             },
-            {
-                "$set": {
-                    mongo_field_path: code,
-                    "updated_at": time.time()
-                }
-            }
+            update_doc
         )
         
         if update_result.matched_count == 0:
