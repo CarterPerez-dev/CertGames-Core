@@ -1,5 +1,5 @@
 // frontend/my-react-app/src/components/pages/CyberCards/FlashcardStudy.js
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -12,31 +12,15 @@ import {
   FaChevronRight,
   FaEye,
   FaTerminal,
-  FaSync,
-  FaCheck,
   FaSpinner,
   FaExclamationTriangle,
   FaVolumeUp,
   FaExchangeAlt,
-  FaStar,
-  FaRegStar,
-  FaKeyboard,
-  FaTimes,
-  FaQuestionCircle,
-  FaCheckCircle,
-  FaTimesCircle,
-  FaInfoCircle
+  FaKeyboard 
 } from 'react-icons/fa';
 import './CyberCards.css';
 
 const LOCAL_STORAGE_PREFIX = 'cyberCards_';
-
-// Tooltip content explaining difficulty ratings
-const DIFFICULTY_EXPLANATIONS = {
-  easy: "You know this well. It will appear less frequently.",
-  medium: "You're familiar with this. It will appear at regular intervals.",
-  hard: "You need to practice this more. It will appear more frequently."
-};
 
 const FlashcardStudy = () => {
   const { categoryId } = useParams();
@@ -56,36 +40,16 @@ const FlashcardStudy = () => {
   const [isReversed, setIsReversed] = useState(() => {
     return localStorage.getItem(`${LOCAL_STORAGE_PREFIX}isReversed_${categoryId}`) === 'true';
   });
-  const [difficulty, setDifficulty] = useState({});
   const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
-  const [showDifficultyTooltip, setShowDifficultyTooltip] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
   const [sessionStats, setSessionStats] = useState({
     started: new Date(),
     cardsReviewed: 0,
     correct: 0,
     incorrect: 0
   });
-  const [lastInteractionTime, setLastInteractionTime] = useState(Date.now());
   
   const { userId } = useSelector((state) => state.user);
   const navigate = useNavigate();
-  
-  const cardRef = useRef(null);
-  const flipTimeoutRef = useRef(null);
-  const speechSynthesisRef = useRef(null);
-  const debounceTimeoutRef = useRef(null);
-  
-  const DEBUG = true; // Set to false in production
-
-  const logDebug = (message, data = null) => {
-    if (!DEBUG) return;
-    if (data) {
-      console.log(`[FlashcardStudy] ${message}`, data);
-    } else {
-      console.log(`[FlashcardStudy] ${message}`);
-    }
-  };
   
   // Load flashcards and saved state
   useEffect(() => {
@@ -93,34 +57,17 @@ const FlashcardStudy = () => {
       try {
         setLoading(true);
         setError(null);
-        logDebug(`Fetching flashcards for category: ${categoryId}`);
         
         // Fetch the flashcards for this category
         const response = await axios.get(`/api/test/flashcards/category/${categoryId}`);
         
         if (response.data.flashcards && response.data.flashcards.length > 0) {
-          logDebug(`Received ${response.data.flashcards.length} flashcards`);
-          
           // Load saved progress from localStorage
           const savedIndex = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}currentIndex_${categoryId}`);
-          const savedProgress = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}progress_${categoryId}`);
-          const savedDifficulty = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}difficulty_${categoryId}`);
           
           // Load or initialize data
           setFlashcards(response.data.flashcards);
           setCurrentIndex(savedIndex ? parseInt(savedIndex, 10) : 0);
-          setProgress(savedProgress ? parseFloat(savedProgress) : 0);
-          
-          // Safely parse saved difficulty
-          if (savedDifficulty) {
-            try {
-              const parsedDifficulty = JSON.parse(savedDifficulty);
-              setDifficulty(parsedDifficulty || {});
-            } catch (e) {
-              logDebug("Error parsing saved difficulty", e);
-              setDifficulty({});
-            }
-          }
           
           // Find the category info from the first flashcard
           const firstCard = response.data.flashcards[0];
@@ -133,16 +80,11 @@ const FlashcardStudy = () => {
           
           // Record this interaction
           if (userId) {
-            try {
-              await axios.post('/api/test/flashcards/record-progress', {
-                userId,
-                categoryId,
-                interactionType: 'viewed'
-              });
-              logDebug("Recorded 'viewed' interaction");
-            } catch (err) {
-              logDebug("Error recording view interaction", err);
-            }
+            axios.post('/api/test/flashcards/record-progress', {
+              userId,
+              categoryId,
+              interactionType: 'viewed'
+            }).catch(() => {});
           }
           
           // Fetch saved cards
@@ -154,19 +96,16 @@ const FlashcardStudy = () => {
                 savedMap[card._id] = true;
               });
               setSavedCards(savedMap);
-              logDebug(`Loaded ${Object.keys(savedMap).length} saved cards`);
             } catch (err) {
-              logDebug("Error fetching saved cards", err);
+              // Continue even if this fails
             }
           }
         } else {
           setError('No flashcards found for this category.');
-          logDebug("No flashcards found for category");
         }
       } catch (err) {
         console.error('Error fetching flashcards:', err);
         setError('Failed to load flashcards. Please try again later.');
-        logDebug("Error in fetchFlashcards", err);
       } finally {
         setLoading(false);
       }
@@ -178,15 +117,9 @@ const FlashcardStudy = () => {
     const handleKeyPress = (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
       
-      // Debounce key presses to prevent rapid-firing
-      if (Date.now() - lastInteractionTime < 300) {
-        return;
-      }
-      setLastInteractionTime(Date.now());
-      
       switch (e.key) {
         case ' ':
-          handleFlip(e);
+          handleFlip();
           break;
         case 'ArrowRight':
           handleNextCard();
@@ -215,7 +148,6 @@ const FlashcardStudy = () => {
         case 'Escape':
           // Close any open modals
           setShowKeyboardShortcuts(false);
-          setShowDifficultyTooltip(false);
           if (flipped) {
             setFlipped(false);
           }
@@ -229,33 +161,22 @@ const FlashcardStudy = () => {
     
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
-      // Clear any pending timeouts
-      if (flipTimeoutRef.current) {
-        clearTimeout(flipTimeoutRef.current);
-      }
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-      }
-      // Stop any speech synthesis
-      if (speechSynthesisRef.current && window.speechSynthesis) {
+      // Ensure speech synthesis is cancelled if active
+      if (window.speechSynthesis) {
         window.speechSynthesis.cancel();
       }
     };
-  }, [categoryId, userId, mode, flipped, lastInteractionTime]);
+  }, [categoryId, userId, mode, flipped]);
   
-  // Reset flipped state when changing cards (with proper timing)
+  // Update progress when changing cards
   useEffect(() => {
-    setFlipped(false);
-    setIsAnimating(false);
-    
     // Save current index to localStorage
     localStorage.setItem(`${LOCAL_STORAGE_PREFIX}currentIndex_${categoryId}`, currentIndex.toString());
     
     // Calculate and save progress
     if (flashcards.length > 0) {
-      const newProgress = (currentIndex / flashcards.length) * 100;
+      const newProgress = ((currentIndex + 1) / flashcards.length) * 100;
       setProgress(newProgress);
-      localStorage.setItem(`${LOCAL_STORAGE_PREFIX}progress_${categoryId}`, newProgress.toString());
     }
     
     // Update session stats
@@ -263,126 +184,65 @@ const FlashcardStudy = () => {
       ...prev,
       cardsReviewed: Math.min(prev.cardsReviewed + 1, flashcards.length)
     }));
-
-    logDebug(`Changed to card index ${currentIndex}`);
   }, [currentIndex, categoryId, flashcards.length]);
   
-  // Save mode preference when it changes
+  // Save mode preference
   useEffect(() => {
     localStorage.setItem(`${LOCAL_STORAGE_PREFIX}mode`, mode);
-    logDebug(`Mode changed to ${mode}`);
   }, [mode]);
   
   // Save reversed state preference
   useEffect(() => {
     localStorage.setItem(`${LOCAL_STORAGE_PREFIX}isReversed_${categoryId}`, isReversed.toString());
-    logDebug(`Reversed state changed to ${isReversed}`);
   }, [isReversed, categoryId]);
   
-  // Save difficulty ratings when they change
-  useEffect(() => {
-    if (Object.keys(difficulty).length > 0) {
-      try {
-        localStorage.setItem(`${LOCAL_STORAGE_PREFIX}difficulty_${categoryId}`, JSON.stringify(difficulty));
-        logDebug(`Saved ${Object.keys(difficulty).length} difficulty ratings`);
-      } catch (err) {
-        logDebug("Error saving difficulty ratings", err);
-      }
+  // Simplified card navigation
+  const handleNextCard = () => {
+    if (flashcards.length === 0) return;
+    
+    setFlipped(false);
+    
+    if (currentIndex < flashcards.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      // Loop back to the first card
+      setCurrentIndex(0);
     }
-  }, [difficulty, categoryId]);
+  };
   
-  // Handle card navigation with debouncing
-  const handleNextCard = useCallback(() => {
-    if (flashcards.length === 0 || isAnimating) return;
+  const handlePreviousCard = () => {
+    if (flashcards.length === 0) return;
     
-    // Prevent rapid clicking
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
+    setFlipped(false);
+    
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    } else {
+      // Loop to the last card
+      setCurrentIndex(flashcards.length - 1);
     }
-    
-    setIsAnimating(true);
-    
-    debounceTimeoutRef.current = setTimeout(() => {
-      if (currentIndex < flashcards.length - 1) {
-        setCurrentIndex(currentIndex + 1);
-      } else {
-        // Loop back to the first card
-        setCurrentIndex(0);
-      }
-      setIsAnimating(false);
-      logDebug("Next card");
-    }, 300);
-  }, [currentIndex, flashcards.length, isAnimating]);
+  };
   
-  const handlePreviousCard = useCallback(() => {
-    if (flashcards.length === 0 || isAnimating) return;
-    
-    // Prevent rapid clicking
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
-    }
-    
-    setIsAnimating(true);
-    
-    debounceTimeoutRef.current = setTimeout(() => {
-      if (currentIndex > 0) {
-        setCurrentIndex(currentIndex - 1);
-      } else {
-        // Loop to the last card
-        setCurrentIndex(flashcards.length - 1);
-      }
-      setIsAnimating(false);
-      logDebug("Previous card");
-    }, 300);
-  }, [currentIndex, flashcards.length, isAnimating]);
-  
-  // Improved flip handling with better event management
-  const handleFlip = useCallback((e) => {
-    // If an event was passed, stop propagation to prevent double-handling
-    if (e) {
-      e.stopPropagation();
-    }
-    
-    // Don't allow rapid flipping that might cause animation issues
-    if (flipTimeoutRef.current || isAnimating) {
-      logDebug("Flip prevented - animation in progress");
-      return;
-    }
-    
-    setIsAnimating(true);
-    setFlipped(prev => !prev);
-    logDebug(`Card flipped to ${!flipped ? 'back' : 'front'}`);
-    
-    // Set a timeout to prevent rapid flipping and allow animations to complete
-    flipTimeoutRef.current = setTimeout(() => {
-      flipTimeoutRef.current = null;
-      setIsAnimating(false);
-    }, 600); // Slightly longer than animation duration
+  // Simple flip handling
+  const handleFlip = () => {
+    setFlipped(!flipped);
     
     // If flipping to show answer, record this interaction
     if (!flipped && userId) {
-      try {
-        axios.post('/api/test/flashcards/record-progress', {
-          userId,
-          categoryId,
-          interactionType: 'answered'
-        })
-        .then(() => logDebug("Recorded 'answered' interaction"))
-        .catch(err => logDebug("Error recording answer interaction", err));
-      } catch (err) {
-        logDebug("Error initiating record progress", err);
-      }
+      axios.post('/api/test/flashcards/record-progress', {
+        userId,
+        categoryId,
+        interactionType: 'answered'
+      }).catch(() => {});
     }
-  }, [flipped, userId, categoryId, isAnimating]);
+  };
   
-  const handleSaveCard = async (e) => {
-    if (e) e.stopPropagation();
+  const handleSaveCard = async () => {
     if (!userId || flashcards.length === 0 || loadingAction) return;
     
     try {
       setLoadingAction(true);
       const cardId = flashcards[currentIndex]._id;
-      logDebug(`Saving/unsaving card ${cardId}`);
       
       const response = await axios.post('/api/test/flashcards/save', {
         userId,
@@ -391,39 +251,35 @@ const FlashcardStudy = () => {
       
       if (response.data.saved) {
         setSavedCards(prev => ({...prev, [cardId]: true}));
-        logDebug("Card saved");
       } else {
         setSavedCards(prev => {
           const updated = {...prev};
           delete updated[cardId];
           return updated;
         });
-        logDebug("Card unsaved");
       }
     } catch (err) {
       console.error('Error saving flashcard:', err);
-      logDebug("Error in handleSaveCard", err);
     } finally {
       setLoadingAction(false);
     }
   };
   
-  const handleShuffle = (e) => {
-    if (e) e.stopPropagation();
-    if (flashcards.length <= 1 || isAnimating) return;
+  const handleShuffle = () => {
+    if (flashcards.length <= 1) return;
     
-    logDebug("Shuffling cards");
     const shuffled = [...flashcards].sort(() => Math.random() - 0.5);
     setFlashcards(shuffled);
     setCurrentIndex(0);
+    setFlipped(false);
   };
   
   const handleModeChange = (newMode) => {
     if (newMode === mode) return;
     
-    logDebug(`Changing mode from ${mode} to ${newMode}`);
     setMode(newMode);
     setCurrentIndex(0);
+    setFlipped(false);
     setStreak(0);
     setSessionStats({
       started: new Date(),
@@ -433,14 +289,10 @@ const FlashcardStudy = () => {
     });
   };
   
-  const handleCorrectAnswer = async (e) => {
-    if (e) e.stopPropagation();
-    if (isAnimating) return;
-    
-    // Increment streak, award XP/coins for streaks
+  const handleCorrectAnswer = () => {
+    // Increment streak
     const newStreak = streak + 1;
     setStreak(newStreak);
-    logDebug(`Correct answer, new streak: ${newStreak}`);
     
     // Update session stats
     setSessionStats(prev => ({
@@ -448,56 +300,12 @@ const FlashcardStudy = () => {
       correct: prev.correct + 1
     }));
     
-    // Update difficulty (mark as easy)
-    if (flashcards[currentIndex]) {
-      const cardId = flashcards[currentIndex]._id;
-      setDifficulty(prev => ({
-        ...prev,
-        [cardId]: 'easy'
-      }));
-      
-      // Also update difficulty on server if logged in
-      if (userId) {
-        try {
-          axios.post('/api/test/flashcards/difficulty', {
-            userId,
-            flashcardId: cardId,
-            categoryId,
-            difficulty: 'easy'
-          })
-          .then(() => logDebug("Saved 'easy' difficulty rating"))
-          .catch(err => logDebug("Error saving difficulty rating", err));
-        } catch (err) {
-          logDebug("Error initiating difficulty save", err);
-        }
-      }
-    }
-    
-    if (newStreak % 5 === 0 && userId) {
-      // Award bonus for every 5 card streak
-      try {
-        axios.post('/api/test/flashcards/record-progress', {
-          userId,
-          categoryId,
-          interactionType: 'streak'
-        })
-        .then(() => logDebug("Recorded streak achievement"))
-        .catch(err => logDebug("Error recording streak", err));
-      } catch (err) {
-        logDebug("Error initiating streak record", err);
-      }
-    }
-    
-    // Add a small delay before moving to next card for better UX
-    setTimeout(() => handleNextCard(), 300);
+    // Move to next card
+    handleNextCard();
   };
   
-  const handleIncorrectAnswer = (e) => {
-    if (e) e.stopPropagation();
-    if (isAnimating) return;
-    
+  const handleIncorrectAnswer = () => {
     // Reset streak
-    logDebug("Incorrect answer, streak reset");
     setStreak(0);
     
     // Update session stats
@@ -506,49 +314,19 @@ const FlashcardStudy = () => {
       incorrect: prev.incorrect + 1
     }));
     
-    // Update difficulty (mark as hard)
-    if (flashcards[currentIndex]) {
-      const cardId = flashcards[currentIndex]._id;
-      setDifficulty(prev => ({
-        ...prev,
-        [cardId]: 'hard'
-      }));
-      
-      // Also update difficulty on server if logged in
-      if (userId) {
-        try {
-          axios.post('/api/test/flashcards/difficulty', {
-            userId,
-            flashcardId: cardId,
-            categoryId,
-            difficulty: 'hard'
-          })
-          .then(() => logDebug("Saved 'hard' difficulty rating"))
-          .catch(err => logDebug("Error saving difficulty rating", err));
-        } catch (err) {
-          logDebug("Error initiating difficulty save", err);
-        }
-      }
-    }
-    
-    // Add a small delay before moving to next card for better UX
-    setTimeout(() => handleNextCard(), 300);
+    // Move to next card
+    handleNextCard();
   };
   
-  const toggleReverseCards = (e) => {
-    if (e) e.stopPropagation();
+  const toggleReverseCards = () => {
     setIsReversed(prev => !prev);
   };
   
-  const handleCompleteSession = async (e) => {
-    if (e) e.stopPropagation();
+  const handleCompleteSession = () => {
     if (!userId) return;
     
-    logDebug("Completing session", sessionStats);
-    
     try {
-      setLoadingAction(true);
-      await axios.post('/api/test/flashcards/record-progress', {
+      axios.post('/api/test/flashcards/record-progress', {
         userId,
         categoryId,
         interactionType: 'completed',
@@ -558,85 +336,27 @@ const FlashcardStudy = () => {
           correct: sessionStats.correct,
           incorrect: sessionStats.incorrect
         }
-      });
+      }).catch(() => {});
       
-      // Small delay before navigating away for better UX
-      setTimeout(() => navigate('/cybercards'), 300);
+      navigate('/cybercards');
     } catch (err) {
-      console.error('Error recording session completion:', err);
-      logDebug("Error in handleCompleteSession", err);
       // Still navigate away even if there was an error
       navigate('/cybercards');
-    } finally {
-      setLoadingAction(false);
     }
   };
   
-  // Speech synthesis with error handling
-  const speakText = (text, e) => {
-    if (e) e.stopPropagation();
-    
-    // Check if speech synthesis is available
-    if (!window.speechSynthesis) {
-      logDebug("Speech synthesis not available");
-      return;
-    }
+  // Simple speech synthesis
+  const speakText = (text) => {
+    if (!window.speechSynthesis) return;
     
     try {
-      // Cancel any ongoing speech
       window.speechSynthesis.cancel();
-      
-      // Create new utterance
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9; // Slightly slower than default
-      
-      // Store reference to cancel if needed
-      speechSynthesisRef.current = utterance;
-      
-      // Speak the text
+      utterance.rate = 0.9;
       window.speechSynthesis.speak(utterance);
-      logDebug("Speaking text", { textLength: text.length });
     } catch (err) {
       console.error("Error with speech synthesis:", err);
-      logDebug("Speech synthesis error", err);
     }
-  };
-  
-  // Improved difficulty handling with better event isolation
-  const setCardDifficulty = (difficultyLevel, e) => {
-    if (e) e.stopPropagation();
-    
-    if (flashcards[currentIndex]) {
-      const cardId = flashcards[currentIndex]._id;
-      setDifficulty(prev => ({
-        ...prev,
-        [cardId]: difficultyLevel
-      }));
-      
-      logDebug(`Set card ${cardId} difficulty to ${difficultyLevel}`);
-      
-      // Also update difficulty on server if logged in
-      if (userId) {
-        try {
-          axios.post('/api/test/flashcards/difficulty', {
-            userId,
-            flashcardId: cardId,
-            categoryId,
-            difficulty: difficultyLevel
-          })
-          .then(() => logDebug(`Saved '${difficultyLevel}' difficulty rating`))
-          .catch(err => logDebug("Error saving difficulty rating", err));
-        } catch (err) {
-          logDebug("Error initiating difficulty save", err);
-        }
-      }
-    }
-  };
-  
-  // Close difficulty tooltip helper
-  const closeDifficultyTooltip = (e) => {
-    if (e) e.stopPropagation();
-    setShowDifficultyTooltip(false);
   };
   
   if (loading) {
@@ -686,7 +406,6 @@ const FlashcardStudy = () => {
   
   const currentCard = flashcards[currentIndex];
   const isSaved = currentCard && savedCards[currentCard._id];
-  const currentDifficulty = currentCard ? difficulty[currentCard._id] : null;
   
   // Determine question and answer based on isReversed state
   const question = isReversed ? currentCard.answer : currentCard.question;
@@ -704,10 +423,7 @@ const FlashcardStudy = () => {
         <div className="cybercards-keyboard-shortcuts">
           <div className="cybercards-keyboard-shortcuts-header">
             <h3><FaKeyboard /> Keyboard Shortcuts</h3>
-            <button onClick={(e) => {
-              e.stopPropagation();
-              setShowKeyboardShortcuts(false);
-            }}>×</button>
+            <button onClick={() => setShowKeyboardShortcuts(false)}>×</button>
           </div>
           <ul>
             <li><strong>Space</strong> - Flip card</li>
@@ -723,29 +439,10 @@ const FlashcardStudy = () => {
         </div>
       )}
       
-      {/* Difficulty tooltip */}
-      {showDifficultyTooltip && (
-        <div className="cybercards-keyboard-shortcuts cybercards-difficulty-help">
-          <div className="cybercards-keyboard-shortcuts-header">
-            <h3><FaInfoCircle /> Difficulty Ratings</h3>
-            <button onClick={closeDifficultyTooltip}>×</button>
-          </div>
-          <ul>
-            <li><strong className="difficulty-hard">Hard</strong> - {DIFFICULTY_EXPLANATIONS.hard}</li>
-            <li><strong className="difficulty-medium">Medium</strong> - {DIFFICULTY_EXPLANATIONS.medium}</li>
-            <li><strong className="difficulty-easy">Easy</strong> - {DIFFICULTY_EXPLANATIONS.easy}</li>
-          </ul>
-          <p className="cybercards-difficulty-note">Rating helps our system prioritize cards you need to practice more.</p>
-        </div>
-      )}
-      
       <div className="cybercards-study-header">
         <button 
           className="cybercards-back-button" 
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate('/cybercards');
-          }}
+          onClick={() => navigate('/cybercards')}
         >
           <FaArrowLeft /> Back to Vaults
         </button>
@@ -771,10 +468,7 @@ const FlashcardStudy = () => {
           </button>
           <button
             className="cybercards-control-button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowKeyboardShortcuts(true);
-            }}
+            onClick={() => setShowKeyboardShortcuts(true)}
             title="Show keyboard shortcuts"
           >
             <FaKeyboard />
@@ -782,28 +476,19 @@ const FlashcardStudy = () => {
           <div className="cybercards-mode-selector">
             <button 
               className={`cybercards-mode-button ${mode === 'study' ? 'active' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleModeChange('study');
-              }}
+              onClick={() => handleModeChange('study')}
             >
               Study
             </button>
             <button 
               className={`cybercards-mode-button ${mode === 'quiz' ? 'active' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleModeChange('quiz');
-              }}
+              onClick={() => handleModeChange('quiz')}
             >
               Quiz
             </button>
             <button 
               className={`cybercards-mode-button ${mode === 'challenge' ? 'active' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleModeChange('challenge');
-              }}
+              onClick={() => handleModeChange('challenge')}
             >
               Challenge
             </button>
@@ -853,9 +538,8 @@ const FlashcardStudy = () => {
         
         <div className="cybercards-flashcard-wrapper">
           <div 
-            ref={cardRef}
-            className={`cybercards-flashcard ${flipped ? 'flipped' : ''} ${currentDifficulty ? `difficulty-${currentDifficulty}` : ''} ${isAnimating ? 'animating' : ''}`}
-            onClick={mode === 'study' && !isAnimating ? handleFlip : undefined}
+            className={`cybercards-flashcard ${flipped ? 'flipped' : ''}`}
+            onClick={mode === 'study' ? handleFlip : undefined}
           >
             <div className="cybercards-flashcard-front">
               <div className="cybercards-flashcard-content">
@@ -865,7 +549,7 @@ const FlashcardStudy = () => {
                 <span className="cybercards-card-hint">
                   {mode === 'study' ? (
                     <>
-                      <FaEye /> {isAnimating ? 'Please wait...' : 'Click to reveal answer'}
+                      <FaEye /> Click to reveal answer
                     </>
                   ) : (
                     <>
@@ -875,7 +559,7 @@ const FlashcardStudy = () => {
                 </span>
                 <button
                   className="cybercards-audio-button"
-                  onClick={(e) => speakText(question, e)}
+                  onClick={() => speakText(question)}
                   title="Read question aloud"
                 >
                   <FaVolumeUp />
@@ -887,62 +571,29 @@ const FlashcardStudy = () => {
                 <p>{answer || 'Answer not available'}</p>
               </div>
               <div className="cybercards-flashcard-footer">
-                {mode === 'study' ? (
-                  <div className="cybercards-rating-buttons">
-                    <button 
-                      className={`cybercards-difficulty-button ${currentDifficulty === 'hard' ? 'active' : ''}`} 
-                      onClick={(e) => setCardDifficulty('hard', e)}
-                      title="Mark as difficult"
-                    >
-                      Hard
-                    </button>
-                    <button 
-                      className={`cybercards-difficulty-button ${currentDifficulty === 'medium' ? 'active' : ''}`} 
-                      onClick={(e) => setCardDifficulty('medium', e)}
-                      title="Mark as medium"
-                    >
-                      Medium
-                    </button>
-                    <button 
-                      className={`cybercards-difficulty-button ${currentDifficulty === 'easy' ? 'active' : ''}`} 
-                      onClick={(e) => setCardDifficulty('easy', e)}
-                      title="Mark as easy"
-                    >
-                      Easy
-                    </button>
-                    <button
-                      className="cybercards-help-button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowDifficultyTooltip(!showDifficultyTooltip);
-                      }}
-                      title="What's this?"
-                    >
-                      <FaQuestionCircle />
-                    </button>
-                    <button
-                      className="cybercards-audio-button"
-                      onClick={(e) => speakText(answer, e)}
-                      title="Read answer aloud"
-                    >
-                      <FaVolumeUp />
-                    </button>
-                  </div>
-                ) : (
+                {mode !== 'study' ? (
                   <div className="cybercards-quiz-buttons">
                     <button 
                       className="cybercards-quiz-button correct"
                       onClick={handleCorrectAnswer}
                     >
-                      <FaCheckCircle /> Correct (1)
+                      Correct (1)
                     </button>
                     <button 
                       className="cybercards-quiz-button incorrect"
                       onClick={handleIncorrectAnswer}
                     >
-                      <FaTimesCircle /> Wrong (2)
+                      Wrong (2)
                     </button>
                   </div>
+                ) : (
+                  <button
+                    className="cybercards-audio-button"
+                    onClick={() => speakText(answer)}
+                    title="Read answer aloud"
+                  >
+                    <FaVolumeUp />
+                  </button>
                 )}
               </div>
             </div>
@@ -953,7 +604,6 @@ const FlashcardStudy = () => {
               className="cybercards-action-button"
               onClick={handlePreviousCard}
               title="Previous card"
-              disabled={isAnimating}
             >
               <FaChevronLeft />
             </button>
@@ -961,7 +611,7 @@ const FlashcardStudy = () => {
             <button 
               className={`cybercards-action-button save ${loadingAction ? 'loading' : ''}`}
               onClick={handleSaveCard}
-              disabled={loadingAction || isAnimating}
+              disabled={loadingAction}
               title="Save/bookmark card"
             >
               {loadingAction ? <FaSpinner className="cybercards-spinner" /> : 
@@ -978,7 +628,6 @@ const FlashcardStudy = () => {
               className="cybercards-action-button"
               onClick={handleNextCard}
               title="Next card"
-              disabled={isAnimating}
             >
               <FaChevronRight />
             </button>
@@ -988,9 +637,8 @@ const FlashcardStudy = () => {
               <button 
                 className="cybercards-reveal-button"
                 onClick={handleFlip}
-                disabled={isAnimating}
               >
-                {isAnimating ? 'Please wait...' : 'Reveal Answer'}
+                Reveal Answer
               </button>
             )}
             
@@ -998,9 +646,8 @@ const FlashcardStudy = () => {
               <button 
                 className="cybercards-reveal-button"
                 onClick={handleFlip}
-                disabled={isAnimating}
               >
-                {isAnimating ? 'Please wait...' : 'Show Question'}
+                Show Question
               </button>
             )}
           </div>
@@ -1032,9 +679,8 @@ const FlashcardStudy = () => {
         <button 
           className="cybercards-complete-button"
           onClick={handleCompleteSession}
-          disabled={loadingAction || isAnimating}
         >
-          {loadingAction ? <FaSpinner className="cybercards-spinner" /> : 'Complete Session'}
+          Complete Session
         </button>
       </div>
     </div>
