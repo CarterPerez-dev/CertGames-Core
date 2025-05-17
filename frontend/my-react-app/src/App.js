@@ -338,17 +338,17 @@ function App() {
             </ProtectedRoute>
           }/>          
           <Route path="/cybercards" element={
-            <ProtectedRoute requiresPremium={false}>
+            <ProtectedRoute requiresPremium={true}>
               <CyberCardsVault />
             </ProtectedRoute>
           }/>
           <Route path="/cybercards/vault/:categoryId" element={
-            <ProtectedRoute requiresPremium={false}>
+            <ProtectedRoute requiresPremium={true}>
               <FlashcardStudy />
             </ProtectedRoute>
           }/>
           <Route path="/cybercards/saved" element={
-            <ProtectedRoute requiresPremium={false}>
+            <ProtectedRoute requiresPremium={true}>
               <SavedFlashcards />
             </ProtectedRoute>
           }/>                    

@@ -1070,7 +1070,7 @@
   align-items: center;
   justify-content: center;
   gap: 15px;
-  margin-top: 20px;
+  margin-top: 100px;
   flex-wrap: wrap;
 }
 
@@ -1108,6 +1108,7 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s;
+  margin-top: 60px;
 }
 
 .cybercards-reveal-button:hover {
@@ -1130,7 +1131,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
+  margin-top: -90px;
   gap: 20px;
 }
 
@@ -1536,7 +1537,6 @@
 .cybercards-reveal-button:active,
 .cybercards-action-button:active {
   transform: scale(0.95);
-  transition: transform 0.1s;
 }
 
 /* Improved tooltip/popup styles */

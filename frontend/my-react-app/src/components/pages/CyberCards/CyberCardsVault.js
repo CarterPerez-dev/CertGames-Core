@@ -19,6 +19,7 @@ import {
   FaSortAmountDown
 } from 'react-icons/fa';
 import './CyberCards.css';
+import SubscriptionErrorHandler from '../../SubscriptionErrorHandler';
 
 const CyberCardsVault = () => {
   const [categories, setCategories] = useState([]);
@@ -31,6 +32,7 @@ const CyberCardsVault = () => {
   const [difficulty, setDifficulty] = useState('all');
   const [userStats, setUserStats] = useState(null);
   const [statsLoading, setStatsLoading] = useState(false);
+  const subscriptionErrorHandler = SubscriptionErrorHandler();
   
   const { userId } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -51,18 +53,25 @@ const CyberCardsVault = () => {
   }, []);
   
   const fetchUserStats = useCallback(async () => {
-    if (!userId) return;
-    
-    try {
-      setStatsLoading(true);
-      const response = await axios.get(`/api/test/flashcards/stats/${userId}`);
-      setUserStats(response.data);
-    } catch (err) {
-      console.error('Error fetching user stats:', err);
-    } finally {
-      setStatsLoading(false);
-    }
-  }, [userId]);
+      if (!userId) return;
+      
+      setStatsLoading(true); // Moved outside try
+      try {
+        const response = await axios.get(`/api/test/flashcards/stats/${userId}`);
+        setUserStats(response.data);
+      } catch (err) {
+        console.error('Error fetching user stats:', err);
+        const errorPayload = err.response ? err.response.data : { error: err.message, type: 'NetworkError' };
+  
+        // Check if this is a subscription error
+        if (subscriptionErrorHandler.handleApiError(errorPayload, 'cybercards')) {
+          setStatsLoading(false); 
+          return; // Exit early
+        }
+      } finally {
+        setStatsLoading(false); 
+      }
+    }, [userId, subscriptionErrorHandler]);
   
   useEffect(() => {
     fetchCategories();
@@ -143,6 +152,7 @@ const CyberCardsVault = () => {
   
   return (
     <div className="cybercards-container">
+      {subscriptionErrorHandler.render()}
       <div className="cybercards-background">
         <div className="cybercards-grid"></div>
         <div className="cybercards-glow"></div>
