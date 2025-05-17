@@ -113,7 +113,8 @@ const Sidebar = () => {
       '/scenariosphere',
       '/grc',
       '/games/threat-hunter',
-      '/games/cipher-challenge'
+      '/games/cipher-challenge',
+      '/portfolio'
     ];
     return premiumPaths.includes(path);
   };
