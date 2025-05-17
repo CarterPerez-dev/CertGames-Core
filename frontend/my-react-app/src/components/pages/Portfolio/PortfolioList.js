@@ -29,16 +29,20 @@ import {
   FaAsterisk,
   FaBahai,
   FaBattleNet,
+  FaTrash,
 } from 'react-icons/fa';
 import './portfolio.css';
 
-const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh }) => {
+const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh, userId }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredPortfolios, setFilteredPortfolios] = useState(portfolios);
   const [sortBy, setSortBy] = useState('date');
   const [sortDirection, setSortDirection] = useState('desc');
   const [filterStatus, setFilterStatus] = useState('all');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [portfolioToDelete, setPortfolioToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Update filtered portfolios when search term, sort options, or portfolios change
   useEffect(() => {
@@ -185,30 +189,67 @@ const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh }) => {
     setFilterStatus(newFilter);
   };
 
-  if (!portfolios || portfolios.length === 0) {
-    return (
-      <div className="portfolio-empty-state">
-        <div className="portfolio-empty-icon">
-          <FaFolderOpen size={50} />
-        </div>
-        <h3>You haven't created any portfolios yet</h3>
-        <p>Go to the 'Create Portfolio' tab to generate your first portfolio.</p>
-        <div className="portfolio-empty-actions">
-          <button className="portfolio-create-first-button">
-            <FaPlus className="button-icon" />
-            <span>Create Your First Portfolio</span>
-          </button>
-          <button className="portfolio-refresh-button" onClick={onRefresh}>
-            <FaSyncAlt className="refresh-icon" />
-            <span>Refresh</span>
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const handleDeletePortfolio = async () => {
+    if (!portfolioToDelete) return;
+    
+    try {
+      setIsDeleting(true);
+      
+      const response = await fetch(`/api/portfolio/${portfolioToDelete}`, {
+        method: 'DELETE',
+        headers: {
+          'X-User-Id': userId
+        }
+      });
+      
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to delete portfolio');
+      }
+      
+      // Close the modal and reset state
+      setShowDeleteConfirmation(false);
+      setPortfolioToDelete(null);
+      
+      // Refresh the portfolios list
+      onRefresh();
+      
+    } catch (err) {
+      console.error('Error deleting portfolio:', err);
+      alert(`Failed to delete portfolio: ${err.message}`);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <div className="portfolio-list-container">
+      {showDeleteConfirmation && (
+        <div className="portfolio-modal">
+          <div className="portfolio-modal-content">
+            <h3>Delete Portfolio</h3>
+            <p>Are you sure you want to delete this portfolio? This action cannot be undone.</p>
+            <div className="portfolio-modal-buttons">
+              <button 
+                className="portfolio-modal-button cancel"
+                onClick={() => {
+                  setShowDeleteConfirmation(false);
+                  setPortfolioToDelete(null);
+                }}
+              >
+                Cancel
+              </button>
+              <button 
+                className="portfolio-modal-button delete"
+                onClick={handleDeletePortfolio}
+                disabled={isDeleting}
+              >
+                {isDeleting ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="portfolio-list-header">
         <h2>My Portfolios</h2>
         <div className="portfolio-list-actions">
@@ -416,6 +457,17 @@ const PortfolioList = ({ portfolios, onSelectPortfolio, onRefresh }) => {
                     <span>View Live</span>
                   </a>
                 )}
+                <button 
+                  className="portfolio-delete-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPortfolioToDelete(portfolio._id);
+                    setShowDeleteConfirmation(true);
+                  }}
+                >
+                  <FaTrash className="delete-icon" />
+                  <span>Delete</span>
+                </button>
               </div>
             </div>
           ))}

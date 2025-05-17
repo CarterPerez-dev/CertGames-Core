@@ -3919,6 +3919,102 @@
   margin-right: 5px;
 }
 
+/* Delete Button Styles */
+.portfolio-delete-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.portfolio-delete-button:hover {
+  background-color: #f1aeb5;
+  border-color: #e88a93;
+}
+
+.portfolio-delete-button .delete-icon {
+  margin-right: 8px;
+}
+
+/* Modal Styles for Delete Confirmation */
+.portfolio-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.portfolio-modal-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 24px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.portfolio-modal-content h3 {
+  margin-top: 0;
+  color: #721c24;
+  display: flex;
+  align-items: center;
+}
+
+.portfolio-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+  gap: 12px;
+}
+
+.portfolio-modal-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.portfolio-modal-button.cancel {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+}
+
+.portfolio-modal-button.cancel:hover {
+  background-color: #e9ecef;
+}
+
+.portfolio-modal-button.delete {
+  background-color: #dc3545;
+  border: 1px solid #dc3545;
+  color: white;
+}
+
+.portfolio-modal-button.delete:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.portfolio-modal-button.delete:disabled {
+  background-color: #e9a3ab;
+  border-color: #e9a3ab;
+  cursor: not-allowed;
+}
+
 /* Responsive adjustments */
 @media (max-width: 767px) {
   .help-section {

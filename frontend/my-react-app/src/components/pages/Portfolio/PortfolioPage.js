@@ -383,11 +383,12 @@ const PortfolioPage = () => {
             {activeTab === 'list' && (
               <PortfolioList
                 portfolios={portfolios}
+                userId={userId}
                 onSelectPortfolio={handleSelectPortfolio}
                 onRefresh={handleRefresh}
               />
             )}
-
+            
             {activeTab === 'preview' && currentPortfolio && (
               <PortfolioPreview
                 portfolio={currentPortfolio}

@@ -542,11 +542,25 @@ def update_portfolio_file():
         if not all([portfolio_id, file_path, content]):
             return jsonify({"error": "Missing required fields"}), 400
         
-        # Update component file
+        # Check if the file exists
+        portfolio = get_portfolio(user_id, portfolio_id)
+        if not portfolio:
+            return jsonify({"error": "Portfolio not found"}), 404
+            
+        components = portfolio.get('components', {})
+        
+        # Make sure the file_path key is preserved exactly as provided
+        # Don't modify the path at all
+        
+        # Update component file - use the exact file_path as provided
         result = update_portfolio_component(user_id, portfolio_id, file_path, content)
         
         if result:
-            return jsonify({"success": True, "message": "File updated successfully"})
+            return jsonify({
+                "success": True, 
+                "message": "File updated successfully",
+                "file_path": file_path
+            })
         else:
             return jsonify({"error": "Failed to update file"}), 500
     
@@ -572,15 +586,19 @@ def create_portfolio_file():
         if not portfolio:
             return jsonify({"error": "Portfolio not found"}), 404
         
-        # Check if file already exists
+        # Check if file already exists - use exact file_path as provided
         components = portfolio.get('components', {})
         if file_path in components:
             return jsonify({"error": "File already exists"}), 400
         
-        # Add new component file
+        # Log the file_path being created to verify it's correct
+        logger.info(f"Creating new file with exact path: {file_path}")
+        
+        # Add new component file - use the exact file_path as provided
         result = update_portfolio_component(user_id, portfolio_id, file_path, content)
         
         if result:
+            # Return the exact file_path that was used
             return jsonify({
                 "success": True, 
                 "message": "File created successfully",
@@ -646,7 +664,46 @@ def delete_portfolio_file():
         logger.exception(f"Error deleting file: {str(e)}")
         return jsonify({"error": f"Error deleting file: {str(e)}"}), 500
 
-
+@portfolio_bp.route('/<portfolio_id>', methods=['DELETE'])
+@jwt_required_wrapper
+def delete_portfolio(portfolio_id):
+    """
+    Delete a portfolio and all its data
+    """
+    try:
+        user_id = g.user_id
+        
+        # Verify the portfolio exists and belongs to the user
+        from mongodb.database import db
+        
+        portfolio = db.portfolios.find_one({
+            "user_id": ObjectId(user_id),
+            "_id": ObjectId(portfolio_id)
+        })
+        
+        if not portfolio:
+            return jsonify({"error": "Portfolio not found"}), 404
+            
+        # Delete the portfolio
+        result = db.portfolios.delete_one({
+            "user_id": ObjectId(user_id),
+            "_id": ObjectId(portfolio_id)
+        })
+        
+        if result.deleted_count == 0:
+            return jsonify({"error": "Failed to delete portfolio"}), 500
+            
+        logger.info(f"Portfolio {portfolio_id} deleted by user {user_id}")
+        
+        return jsonify({
+            "success": True,
+            "message": "Portfolio deleted successfully"
+        })
+        
+    except Exception as e:
+        logger.exception(f"Error deleting portfolio: {str(e)}")
+        return jsonify({"error": f"Failed to delete portfolio: {str(e)}"}), 500
+        
 # Database helper functions
 def save_portfolio(user_id, components, preferences, resume_text=None):
     """Save portfolio to database"""
@@ -713,31 +770,43 @@ def update_portfolio_component(user_id, portfolio_id, component_path, code):
         logger.error(f"Error updating portfolio component: {str(e)}")
         return False
 
-def update_portfolio_deployment(user_id, portfolio_id, deployment_url, github_repo=None):
-    """Update portfolio deployment information"""
+def update_portfolio_component(user_id, portfolio_id, component_path, code):
+    """Update a specific component in the portfolio"""
     from mongodb.database import db
     
     try:
-        db.portfolios.update_one(
+        # Log the exact path being used to update the component
+        logger.info(f"Updating component at exact path: '{component_path}'")
+        
+        # Use dot notation for nested field access but escape dots in the component_path
+        # MongoDB requires dots in field names to be escaped with the form "components.path\.with\.dots"
+        mongo_field_path = f"components.{component_path.replace('.', '\\.')}"
+        
+        update_result = db.portfolios.update_one(
             {
                 "user_id": ObjectId(user_id),
                 "_id": ObjectId(portfolio_id)
             },
             {
                 "$set": {
-                    "deployment.deployed": True,
-                    "deployment.url": deployment_url,
-                    "deployment.github_repo": github_repo,
-                    "deployment.deployed_at": time.time(),
-                    "status": "deployed"
+                    mongo_field_path: code,
+                    "updated_at": time.time()
                 }
             }
         )
         
+        if update_result.matched_count == 0:
+            logger.error(f"No portfolio found with ID {portfolio_id} for user {user_id}")
+            return False
+            
+        if update_result.modified_count == 0:
+            logger.warning(f"Portfolio found but no changes made to component {component_path}")
+            # Still return True as the operation completed successfully
+            
         return True
     
     except Exception as e:
-        logger.error(f"Error updating portfolio deployment: {str(e)}")
+        logger.error(f"Error updating portfolio component: {str(e)}")
         return False
 
 def list_user_portfolios(user_id):

@@ -38,7 +38,7 @@ const CodeEditor = ({ value, language, theme, onChange, onError }) => {
     };
   }, []);
 
-  const handleEditorDidMount = (editor, monaco) => {
+const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
 
     editor.updateOptions({
@@ -50,10 +50,20 @@ const CodeEditor = ({ value, language, theme, onChange, onError }) => {
 
     // Set the editor content safely after mount
     if (value) {
-      // Use model API instead of setValue to prevent errors
-      const model = editor.getModel();
-      if (model) {
-        model.setValue(value);
+      try {
+        // Use setValue directly on the editor instance
+        editor.setValue(value);
+      } catch (error) {
+        console.error("Error setting editor value:", error);
+        // Fallback: try to set model value directly if editor.setValue fails
+        try {
+          const model = editor.getModel();
+          if (model) {
+            model.setValue(value);
+          }
+        } catch (modelError) {
+          console.error("Error setting model value:", modelError);
+        }
       }
     }
 

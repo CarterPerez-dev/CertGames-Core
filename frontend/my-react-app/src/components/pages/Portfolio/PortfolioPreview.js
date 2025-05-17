@@ -158,6 +158,8 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     try {
       setIsSaving(true);
       
+      console.log(`Saving file: ${activeFile} with content length: ${fileContent.length}`);
+      
       const response = await fetch('/api/portfolio/update-file', {
         method: 'POST',
         headers: {
@@ -166,7 +168,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         },
         body: JSON.stringify({
           portfolio_id: portfolio._id,
-          file_path: activeFile,
+          file_path: activeFile,  // Use the full exact path
           content: fileContent
         })
       });
@@ -175,6 +177,9 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to save file');
       }
+      
+      const data = await response.json();
+      console.log("Save response:", data);
       
       // Show success message with animation
       showSuccessMessage("File saved successfully!");
@@ -190,6 +195,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     }
   };
 
+
   const handleDeleteFile = async () => {
     if (!activeFile) {
       setErrorMessage("No file selected");
@@ -200,10 +206,12 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     setShowDeleteConfirmation(true);
   };
 
-  const confirmDeleteFile = async () => {
+const confirmDeleteFile = async () => {
     try {
       setIsDeletingFile(true);
       setShowDeleteConfirmation(false);
+      
+      console.log(`Deleting file: ${activeFile}`);
       
       const response = await fetch('/api/portfolio/delete-file', {
         method: 'POST',
@@ -221,6 +229,9 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to delete file');
       }
+      
+      const data = await response.json();
+      console.log("Delete file response:", data);
       
       // Show success message
       showSuccessMessage("File deleted successfully!");
@@ -242,10 +253,52 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
 
   const refreshFileTree = () => {
     // Force a refresh of the file tree by triggering a re-fetch of the portfolio data
-    setRefreshKey(prevKey => prevKey + 1);
+    console.log("Refreshing file tree...");
+    setIsRefreshing(true);
+    
+    // Fetch updated portfolio data
+    const fetchUpdatedPortfolio = async () => {
+      try {
+        const response = await fetch(`/api/portfolio/${portfolio._id}`, {
+          headers: {
+            'X-User-Id': userId
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch portfolio details');
+        }
+        
+        const data = await response.json();
+        
+        if (data.success && data.portfolio) {
+          console.log("Retrieved updated portfolio data with components:", Object.keys(data.portfolio.components || {}));
+          
+          // Update the component state directly
+          if (data.portfolio.components) {
+            // If activeFile is still in the updated components, update its content
+            if (activeFile && data.portfolio.components[activeFile]) {
+              setFileContent(data.portfolio.components[activeFile]);
+            }
+            
+            // Update the file tree
+            const updatedTree = organizeFilesIntoTree(data.portfolio.components);
+            setFileTree(updatedTree);
+          }
+        }
+      } catch (error) {
+        console.error("Error refreshing file tree:", error);
+      } finally {
+        setIsRefreshing(false);
+        // Force a re-render by incrementing the refreshKey
+        setRefreshKey(prev => prev + 1);
+      }
+    };
+    
+    fetchUpdatedPortfolio();
   };
 
-  const handleCreateFile = async () => {
+const handleCreateFile = async () => {
     try {
       // Validate file path
       if (!newFilePath) {
@@ -285,6 +338,9 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         throw new Error(errorData.error || 'Failed to create file');
       }
       
+      const data = await response.json();
+      console.log("Create file response:", data);
+      
       // Show success message
       showSuccessMessage("File created successfully!");
       
@@ -292,11 +348,13 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       setNewFilePath('');
       setShowNewFileModal(false);
       
-      // Refresh and select the new file
+      // Refresh the file tree and select the new file
+      refreshFileTree();
+      
+      // Wait for file tree to update before selecting the new file
       setTimeout(() => {
-        refreshFileTree();
         handleFileSelect(filePathWithExtension);
-      }, 500);
+      }, 1000);
       
     } catch (err) {
       console.error('Error creating file:', err);
