@@ -1,9 +1,9 @@
-// src/components/pages/Info/BlogPage.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   FaBook, FaSearch, FaCalendarAlt, FaUser, FaTag, FaArrowRight, 
-  FaAward, FaGraduationCap, FaLaptopCode, FaBrain, FaCloudDownloadAlt 
+  FaAward, FaGraduationCap, FaLaptopCode, FaBrain, FaCloudDownloadAlt,
+  FaTerminal
 } from 'react-icons/fa';
 import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
@@ -14,9 +14,257 @@ import security from './images/securityplus.webp';
 import cloudsec from './images/cloudsec.webp';
 import ciss from './images/CISS.webp';
 import game from './images/gamified.webp';
-
+import angela from './images/angela.webp';
 // Enhanced blog post data with added content
 const blogPosts = [
+  {
+    id: 'angela-cli-architecture-design',
+    title: 'The Architecture and Design Principles Behind Angela CLI: Building the First AGI Command Line Intelligence',
+    excerpt: 'A deep dive into the technical architecture, design patterns, and AI integration powering Angela CLI, the world\'s first ambient-intelligence terminal companion.',
+    imageUrl: angela, // You can replace this with an appropriate image when available
+    content: `
+      <p>As the lead architect of Angela CLI, I'm excited to share the technical details behind what we believe is a paradigm shift in command-line interaction. This post explores the architectural decisions, design patterns, and technical challenges we overcame to create the world's first AGI-powered command-line interface that truly understands your development context.</p>
+      
+      <h2>The Vision Behind Angela CLI</h2>
+      <p>Traditional command-line interfaces require users to memorize specific syntax and flags. AI assistants, on the other hand, understand natural language but lack deep integration with development tools and workflows. Angela CLI bridges this gap by creating what we call "ambient intelligence" - an AI that operates within your shell environment, understanding both your intent and your development context.</p>
+      
+      <p>The core philosophy behind Angela lies in several principles:</p>
+      <ul>
+        <li><strong>Contextual Understanding</strong>: Angela builds a comprehensive model of your development environment, including project structure, frameworks, dependencies, and your past actions</li>
+        <li><strong>Multi-Level Abstraction</strong>: You can communicate at any level, from specific commands to high-level goals, and Angela adapts appropriately</li>
+        <li><strong>Progressive Disclosure</strong>: Simple tasks remain simple, while complex capabilities unfold when needed</li>
+        <li><strong>Safety First</strong>: All operations are verified, validated, and rolled back if necessary</li>
+        <li><strong>Learning Over Time</strong>: Angela adapts to your specific patterns and preferences</li>
+      </ul>
+      
+      <h2>Architectural Overview</h2>
+      
+      <p>Angela CLI is built with a modular, event-driven architecture that follows clean architecture principles. The system consists of several core subsystems:</p>
+      
+      <h3>1. Shell Integration Layer</h3>
+      <p>This layer interfaces directly with Bash, Zsh, and Tmux. It includes hooks for command interception, environment tracking, and dynamic prompt integration. We use specialized shell scripts (angela.bash, angela.zsh, angela.tmux) that employ preexec/precmd hooks for monitoring command execution and preserving context across sessions.</p>
+      
+      <p>A key challenge was implementing this in a way that doesn't impact terminal performance. We achieved this with an asynchronous event queue that processes shell events without blocking the main shell experience.</p>
+      
+      <h3>2. Context Management System</h3>
+      <p>Perhaps the most innovative aspect of Angela is its comprehensive context modeling. The context system encompasses:</p>
+      
+      <ul>
+        <li><strong>Project Inference</strong>: Using pattern recognition to identify project types, frameworks, and dependencies</li>
+        <li><strong>File Activity Tracking</strong>: Monitoring file system events to understand which files you're working with</li>
+        <li><strong>Command History Analysis</strong>: Building patterns from your command usage over time</li>
+        <li><strong>Semantic Code Understanding</strong>: Parsing and analyzing code to understand its structure and relationships</li>
+        <li><strong>Session Management</strong>: Maintaining conversation state and entity references</li>
+      </ul>
+      
+      <p>The context system uses the observer pattern extensively, with various sensors publishing events to a central context registry. This allows for lazy loading of context components and ensures that only relevant context is gathered for each interaction.</p>
+      
+      <h3>3. Intent Processing Pipeline</h3>
+      <p>When you ask Angela to do something, your request goes through a sophisticated processing pipeline:</p>
+      
+      <ul>
+        <li><strong>Intent Analysis</strong>: Natural language understanding to extract your core goal</li>
+        <li><strong>Task Planning</strong>: Breaking down complex goals into executable steps</li>
+        <li><strong>Execution Planning</strong>: Determining the optimal way to perform each step</li>
+        <li><strong>Safety Verification</strong>: Assessing the risk and impact of planned operations</li>
+        <li><strong>Interactive Confirmation</strong>: Getting your approval for potentially impactful changes</li>
+        <li><strong>Execution</strong>: Running the operations with proper error handling</li>
+        <li><strong>Feedback</strong>: Presenting results in a clear, actionable format</li>
+      </ul>
+      
+      <p>This pipeline uses the strategy pattern extensively to allow different execution approaches based on the nature of the task and the available context.</p>
+      
+      <h3>4. AI Integration</h3>
+      <p>Angela is powered by Google's Gemini model, accessed through a specialized client that handles prompt engineering, response parsing, and error recovery. The AI integration consists of several components:</p>
+      
+      <ul>
+        <li><strong>GeminiClient</strong>: A wrapper around the Gemini API with automated retries, error handling, and response validation</li>
+        <li><strong>PromptBuilder</strong>: A templating system that constructs prompts with the right context and examples</li>
+        <li><strong>ResponseParser</strong>: A system for extracting structured data from AI responses</li>
+        <li><strong>ConfidenceScorer</strong>: An evaluation system that assesses the reliability of AI-generated suggestions</li>
+        <li><strong>ErrorAnalyzer</strong>: A specialized component that helps diagnose and fix command failures</li>
+      </ul>
+      
+      <p>One of our key innovations is how we manage context windows. Rather than sending all context to the AI, we use a relevance-based filtering system that selects only the most pertinent information for each request, significantly reducing token usage while maintaining accuracy.</p>
+      
+      <h3>5. Safety System</h3>
+      <p>Angela's safety system is comprehensive and multi-layered:</p>
+      
+      <ul>
+        <li><strong>CommandRiskClassifier</strong>: Categorizes operations into risk levels (SAFE, LOW, MEDIUM, HIGH, CRITICAL)</li>
+        <li><strong>CommandValidator</strong>: Checks commands against dangerous patterns and system constraints</li>
+        <li><strong>PreviewGenerator</strong>: Creates impact previews to show users what will happen</li>
+        <li><strong>AdaptiveConfirmation</strong>: Adjusts confirmation requirements based on risk and user history</li>
+        <li><strong>RollbackManager</strong>: Tracks all changes for potential reversal if needed</li>
+      </ul>
+      
+      <p>This system employs the decorator pattern, wrapping the execution engine with various safety checks without modifying its core behavior.</p>
+      
+      <h3>6. Toolchain Integration</h3>
+      <p>Angela interfaces with many developer tools through specialized adapters:</p>
+      
+      <ul>
+        <li><strong>GitIntegration</strong>: For Git operations and repository analysis</li>
+        <li><strong>DockerIntegration</strong>: For container management and Dockerfile generation</li>
+        <li><strong>PackageManagerIntegration</strong>: For dependency management across ecosystems</li>
+        <li><strong>UniversalCLITranslator</strong>: For interacting with arbitrary command-line tools</li>
+      </ul>
+      
+      <p>These integrations follow the adapter pattern, providing a consistent interface across diverse tools while handling their individual quirks and requirements.</p>
+      
+      <h2>Technical Challenges and Solutions</h2>
+      
+      <h3>Challenge 1: Maintaining Context Without Performance Impact</h3>
+      <p>Building a comprehensive understanding of the user's environment could potentially slow down the terminal experience. We solved this with:</p>
+      
+      <ul>
+        <li><strong>Lazy Context Loading</strong>: Context components are initialized only when needed</li>
+        <li><strong>Asynchronous Background Analysis</strong>: Heavy processing happens in separate threads</li>
+        <li><strong>Progressive Refinement</strong>: Context starts simple and becomes more detailed over time</li>
+        <li><strong>Selective Persistence</strong>: Only storing essential information between sessions</li>
+      </ul>
+      
+      <h3>Challenge 2: Handling Natural Language Ambiguity</h3>
+      <p>Natural language is inherently ambiguous, which can be dangerous in a command-line context. Our solution includes:</p>
+      
+      <ul>
+        <li><strong>Interactive Clarification</strong>: Angela asks questions when intent is unclear</li>
+        <li><strong>Contextual Disambiguation</strong>: Using project context to resolve ambiguities</li>
+        <li><strong>Path Resolution</strong>: A specialized system for translating natural language file references</li>
+        <li><strong>Command Confidence Scoring</strong>: Assessing certainty levels before execution</li>
+      </ul>
+      
+      <h3>Challenge 3: Ensuring Robust Error Recovery</h3>
+      <p>When commands fail, users need intelligent assistance to recover. We implemented:</p>
+      
+      <ul>
+        <li><strong>ErrorRecoveryManager</strong>: Analyzes failures and recommends fixes</li>
+        <li><strong>Transaction-Based Operations</strong>: All changes are tracked as reversible transactions</li>
+        <li><strong>Failure Pattern Database</strong>: Common errors and their solutions are learned over time</li>
+        <li><strong>Interactive Recovery Flow</strong>: Guided walkthrough of recovery options</li>
+      </ul>
+      
+      <h2>Implementation Details</h2>
+      
+      <h3>Core Technology Stack</h3>
+      <p>Angela CLI is built with:</p>
+      
+      <ul>
+        <li><strong>Python 3.9+</strong>: For core application logic and AI integration</li>
+        <li><strong>Bash/Zsh Scripts</strong>: For shell integration</li>
+        <li><strong>Typer/Click</strong>: For command-line interface framework</li>
+        <li><strong>Rich</strong>: For beautiful terminal output</li>
+        <li><strong>AsyncIO</strong>: For non-blocking operations</li>
+        <li><strong>Pydantic</strong>: For data validation and settings management</li>
+      </ul>
+      
+      <h3>Key Design Patterns</h3>
+      <p>Several design patterns form the backbone of Angela's architecture:</p>
+      
+      <ul>
+        <li><strong>Service Registry Pattern</strong>: Components register themselves with a central registry for dependency injection</li>
+        <li><strong>Event Bus Pattern</strong>: Decoupled communication between components via events</li>
+        <li><strong>Command Pattern</strong>: Encapsulating operations as objects with execution and rollback capabilities</li>
+        <li><strong>Strategy Pattern</strong>: Different execution strategies based on context</li>
+        <li><strong>Decorator Pattern</strong>: Adding behavior (like safety checks) without modifying core functionality</li>
+        <li><strong>Adapter Pattern</strong>: Providing consistent interfaces to diverse external tools</li>
+        <li><strong>Observer Pattern</strong>: Context components responding to relevant system events</li>
+      </ul>
+      
+      <h3>Module Organization</h3>
+      <p>Angela's codebase is organized into several key modules:</p>
+      
+      <pre><code>angela/
+├── __init__.py
+├── __main__.py
+├── api/                 # Public API interfaces
+├── components/          # Core component implementations
+│   ├── ai/              # AI integration components
+│   ├── cli/             # Command-line interface components
+│   ├── context/         # Context gathering and management
+│   ├── execution/       # Command execution and safety
+│   ├── generation/      # Code generation capabilities
+│   ├── intent/          # Intent understanding and planning
+│   ├── interfaces/      # Abstract interfaces and protocols
+│   ├── monitoring/      # Background monitoring components
+│   ├── review/          # Code review and feedback
+│   ├── safety/          # Safety mechanisms
+│   ├── shell/           # Shell integration
+│   ├── toolchain/       # Tool integrations
+│   ├── utils/           # Utilities
+│   └── workflows/       # Workflow management
+├── config.py            # Configuration management
+├── constants.py         # Global constants
+├── core/                # Core infrastructure
+├── orchestrator.py      # Central coordinator
+└── utils/               # Global utilities</code></pre>
+      
+      <h2>AI Prompt Engineering</h2>
+      
+      <p>A critical aspect of Angela's intelligence is the sophisticated prompt engineering system. We've developed specialized prompt patterns for different operations:</p>
+      
+      <ul>
+        <li><strong>Command Generation Prompts</strong>: Structured to produce precise, safe commands with appropriate flags</li>
+        <li><strong>Task Planning Prompts</strong>: Designed to break down complex goals into logical steps</li>
+        <li><strong>Code Analysis Prompts</strong>: Optimized for understanding code structure and semantics</li>
+        <li><strong>Error Analysis Prompts</strong>: Focused on diagnosing errors and suggesting solutions</li>
+      </ul>
+      
+      <p>Our prompts follow a consistent structure that includes:</p>
+      
+      <ol>
+        <li>System instruction with safety requirements and output format specifications</li>
+        <li>Context section with relevant project information</li>
+        <li>Few-shot examples tailored to the specific task</li>
+        <li>User request with supplementary context</li>
+      </ol>
+      
+      <p>This carefully crafted approach ensures consistent, high-quality responses even for complex requests.</p>
+      
+      <h2>Performance Optimization</h2>
+      
+      <p>We've implemented several optimizations to ensure Angela remains responsive:</p>
+      
+      <ul>
+        <li><strong>Caching</strong>: Frequently used context and AI responses are cached to reduce latency</li>
+        <li><strong>Asynchronous Processing</strong>: Non-critical operations happen in the background</li>
+        <li><strong>Incremental Context Building</strong>: Context is built and refined over time rather than all at once</li>
+        <li><strong>Token Optimization</strong>: Careful management of prompt tokens to reduce API costs</li>
+        <li><strong>Lazy Loading</strong>: Components are instantiated only when needed</li>
+      </ul>
+      
+      <h2>The Future of Angela CLI</h2>
+      
+      <p>As we continue development, several exciting capabilities are on our roadmap:</p>
+      
+      <ul>
+        <li><strong>Enhanced Multi-Tool Orchestration</strong>: Deeper integration across diverse developer tools</li>
+        <li><strong>Local LLM Support</strong>: Option to use on-premise models for enhanced privacy</li>
+        <li><strong>Customizable Learning</strong>: Fine-tuning AI responses based on user preferences</li>
+        <li><strong>Multi-Agent Collaboration</strong>: Specialized AI agents working together on complex tasks</li>
+        <li><strong>Visual Feedback Systems</strong>: Enhanced visualization of operations and results</li>
+        <li><strong>Team Collaboration Features</strong>: Sharing workflows and knowledge across development teams</li>
+      </ul>
+      
+      <h2>Conclusion: Beyond Command-Line Assistants</h2>
+      
+      <p>Angela CLI represents a new paradigm in developer tools - one where the boundary between human intent and machine execution becomes increasingly fluid. By combining deep context awareness with natural language understanding, Angela transforms the terminal from a tool that demands specificity into an intelligent partner that understands your goals.</p>
+      
+      <p>The architectural patterns we've developed for Angela have implications beyond the command line. They point toward a future where development environments become truly intelligent - understanding not just what you're typing, but what you're trying to achieve. This shift from syntax-driven to intent-driven development promises to dramatically improve developer productivity and accessibility.</p>
+      
+      <p>As we continue to refine and extend Angela's capabilities, we're excited to see how this new paradigm will evolve, and how it will change the way developers interact with their tools and environments. The terminal has been largely unchanged for decades - we believe Angela represents the beginning of its next evolutionary leap.</p>
+      
+      <p>We welcome contributions from the community to help realize this vision. If you're interested in ambient intelligence, context-aware AI, or just making developer tools more accessible, check out our GitHub repository and join us in building the future of the command line.</p>
+    `,
+    author: 'Carter Perez, Lead Architect',
+    date: 'May 15, 2025',
+    category: 'Technical Architecture',
+    tags: ['Angela CLI', 'AI Architecture', 'Command Line', 'Gemini', 'Developer Tools'],
+    image: 'angela.webp',
+    icon: <FaTerminal />,
+    readTime: '15 min read',
+    views: '1,245'
+  },
   {
     id: 'comptia-security-plus-exam-tips',
     title: 'Top 10 Tips to Pass the CompTIA Security+ Exam on Your First Try',
@@ -470,6 +718,7 @@ const blogPosts = [
   }
 ];
 
+
 const BlogPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -512,8 +761,8 @@ const BlogPage = () => {
   const blogSchema = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    "name": "CertGames Cybersecurity Blog",
-    "description": "Expert tips, guides, and resources for cybersecurity certification exam preparation and IT security careers.",
+    "name": "CertGames Cybersecurity Blog, CyberExamPrep",
+    "description": "Expert tips, guides, and resources for cybersecurity certification exam preparation and IT security careers. CyberExamPrep",
     "url": "https://certgames.com/blog",
     "publisher": {
       "@type": "Organization",
@@ -543,8 +792,8 @@ const BlogPage = () => {
   return (
     <>
       <SEOHelmet 
-        title="Cybersecurity Certification Blog | Expert Tips & Guides | CertGames"
-        description="Expert tips, guides and resources for CompTIA, CISSP, CEH certification exam preparation. Boost your cybersecurity career with our comprehensive training articles."
+        title="Cybersecurity Certification Blog | Expert Tips & Guides | CertGames, CyberExamPrep"
+        description="Expert tips, guides and resources for CompTIA, CISSP, CEH certification exam preparation. Boost your cybersecurity career with our comprehensive training articles. CyberExamPrep"
         canonicalUrl="/blog"
       />
       <StructuredData data={breadcrumbSchema} />

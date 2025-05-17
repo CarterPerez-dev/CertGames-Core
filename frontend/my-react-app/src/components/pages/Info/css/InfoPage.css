@@ -87,8 +87,8 @@
 
 .animated-grid {
   background-image: 
-    linear-gradient(rgba(0, 208, 132, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 208, 132, 0.1) 1px, transparent 1px);
+    linear-gradient(rgba(0, 208, 132, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 208, 132, 0.2) 1px, transparent 1px);
   background-size: 30px 30px;
   width: 100%;
   height: 100%;
@@ -2315,6 +2315,487 @@
 
 .info-clickable-card:hover::after {
   opacity: 1;
+}
+
+
+/* New styles for the redesigned Gamified Experience section with compact cards */
+.info-feature-compact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.info-feature-compact-card {
+  background: rgba(25, 25, 50, 0.4);
+  border: 1px solid rgba(0, 208, 132, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+  height: 220px;
+  position: relative;
+  cursor: pointer;
+  perspective: 1000px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-feature-compact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(0, 208, 132, 0.15);
+}
+
+.compact-card-front, .compact-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.compact-card-front {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  z-index: 2;
+}
+
+.compact-card-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 15, 35, 0.95);
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+.info-flipped .compact-card-front {
+  transform: rotateY(180deg);
+}
+
+.info-flipped .compact-card-back {
+  transform: rotateY(0);
+}
+
+.compact-card-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 208, 132, 0.1);
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.compact-card-icon .feature-icon {
+  font-size: 1.8rem;
+  color: #00d084;
+}
+
+.compact-card-icon .feature-icon.gold {
+  color: #ffd700;
+}
+
+.compact-card-icon .feature-icon.blue {
+  color: #00b8d4;
+}
+
+.compact-card-icon .feature-icon.purple {
+  color: #9c27b0;
+}
+
+.compact-card-icon .feature-icon.red {
+  color: #ff5f6d;
+}
+
+.compact-card-icon .feature-icon.green {
+  color: #4caf50;
+}
+
+.compact-card-icon .feature-icon.orange {
+  color: #ff9800;
+}
+
+.info-feature-compact-card:hover .compact-card-icon {
+  transform: scale(1.1);
+  background: rgba(0, 208, 132, 0.2);
+}
+
+.info-feature-compact-card h3 {
+  font-size: 1.2rem;
+  margin: 0 0 0.8rem;
+  color: white;
+}
+
+.compact-card-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.3s ease;
+}
+
+.indicator-icon {
+  transition: transform 0.3s ease;
+  font-size: 0.75rem;
+}
+
+.info-feature-compact-card:hover .compact-card-indicator {
+  color: #00d084;
+}
+
+.info-feature-compact-card:hover .indicator-icon {
+  transform: translateX(3px);
+}
+
+.compact-demo-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: white;
+}
+
+.demo-link-icon {
+  font-size: 1.8rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 208, 132, 0.15);
+  border-radius: 50%;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.compact-demo-link:hover .demo-link-icon {
+  transform: scale(1.1);
+  background: rgba(0, 208, 132, 0.25);
+}
+
+/* New styles for tools section cards */
+.info-tools-compact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.info-tool-compact-card {
+  background: rgba(25, 25, 50, 0.4);
+  border: 1px solid rgba(0, 208, 132, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-tool-compact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(0, 208, 132, 0.15);
+}
+
+.tool-compact-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 1.2rem;
+}
+
+.tool-icon {
+  font-size: 1.1rem;
+}
+
+.tool-icon.blue {
+  color: #00b8d4;
+}
+
+.tool-icon.yellow {
+  color: #ffc107;
+}
+
+.tool-icon.green {
+  color: #4caf50;
+}
+
+.tool-icon.pink {
+  color: #e91e63;
+}
+
+.tool-icon.teal {
+  color: #009688;
+}
+
+.tool-icon.orange {
+  color: #ff9800;
+}
+
+.tool-compact-content {
+  flex: 1;
+}
+
+.info-tool-compact-card h3 {
+  font-size: 1.3rem;
+  margin: 0 0 0.8rem;
+  color: white;
+}
+
+.info-tool-compact-card p {
+  font-size: 0.95rem;
+  opacity: 0.8;
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+}
+
+.tool-compact-action {
+  margin-top: auto;
+}
+
+.tool-demo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(0, 208, 132, 0.1);
+  border: 1px solid rgba(0, 208, 132, 0.2);
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.tool-demo-link:hover {
+  background: rgba(0, 208, 132, 0.2);
+  transform: translateY(-2px);
+}
+
+.tool-action-icon {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.tool-demo-link:hover .tool-action-icon {
+  transform: translateX(3px);
+}
+
+/* New styles for the test features section */
+.info-feature-icon-new {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: rgba(0, 208, 132, 0.15);
+  border-radius: 50%;
+  margin-right: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.feature-check-icon, .feature-support-icon {
+  color: #00d084;
+  font-size: 0.9rem;
+}
+
+.info-test-feature:hover .info-feature-icon-new {
+  transform: scale(1.1);
+  background: rgba(0, 208, 132, 0.25);
+}
+
+/* Redesigned pricing section */
+.info-pricing-card-new {
+  display: flex;
+  flex-direction: column;
+  max-width: 550px;
+  margin: 0 auto;
+  background: rgba(25, 25, 50, 0.4);
+  border: 1px solid rgba(0, 208, 132, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-pricing-card-new:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 208, 132, 0.2);
+}
+
+.pricing-card-content {
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+
+.pricing-card-content h3 {
+  font-size: 2.3rem;
+  margin: 0 0 1rem;
+  color: white;
+}
+
+.pricing-value {
+  margin: 2.3rem 0;
+}
+
+.price-amount {
+  font-size: 4.5rem;
+  font-weight: 700;
+  color: #00d084;
+  display: block;
+  margin-bottom: 0.3rem;
+  font-style: italic;
+}
+
+.price-period {
+  font-size: 1.5rem;
+  opacity: 0.7;
+}
+
+.pricing-action-button {
+  display: inline-block;
+  padding: 1.2rem 2.2rem;
+  background: linear-gradient(135deg, #00d084, #00b8d4);
+  color: #0a0a14;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+.pricing-action-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 208, 132, 0.3);
+}
+
+.pricing-note {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-top: 1rem;
+}
+
+.pricing-benefits {
+  padding: 2rem;
+  background: rgba(0, 208, 132, 0.05);
+  border-top: 1px solid rgba(0, 208, 132, 0.1);
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.benefit-bubble {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  background: rgba(0, 208, 132, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.benefit-icon {
+  color: #00d084;
+  font-size: 1.1rem;
+}
+
+.benefit-text {
+  font-size: 0.95rem;
+}
+
+/* Media queries for better mobile responsiveness */
+@media (max-width: 768px) {
+  .info-feature-compact-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+  
+  .info-feature-compact-card {
+    height: 180px;
+  }
+  
+  .compact-card-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .compact-card-icon .feature-icon {
+    font-size: 1.4rem;
+  }
+  
+  .info-feature-compact-card h3 {
+    font-size: 1rem;
+  }
+  
+  .info-tools-compact-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  
+  .benefits-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-feature-compact-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .info-tools-compact-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .info-pricing-card-new {
+    max-width: 90%;
+  }
+  
+  .pricing-card-content {
+    padding: 1.5rem 1rem;
+  }
+  
+  .price-amount {
+    font-size: 2.5rem;
+  }
+  
+  .pricing-action-button {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+  }
+  
+  .pricing-benefits {
+    padding: 1.5rem 1rem;
+  }
+}
+
+/* For even smaller screens */
+@media (max-width: 360px) {
+  .info-feature-compact-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Media Queries for Responsiveness */

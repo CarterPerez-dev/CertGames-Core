@@ -7,6 +7,7 @@ import SEOHelmet from '../../SEOHelmet';
 import StructuredData from '../../StructuredData';
 import { 
   FaApple, 
+  FaFighterJet,
   FaGoogle, 
   FaAppStore, 
   FaPlay, 
@@ -75,6 +76,9 @@ import {
   FaMobile,
   FaHeadset,
   FaNewspaper,
+  FaWindowRestore,
+  FaClock,
+  FaLayerGroup,
 } from 'react-icons/fa';
 import './css/InfoPage.css';
 import apple from './images/apple.svg';
@@ -343,6 +347,38 @@ const faqSchema = {
         "@type": "Answer",
         "text": "Yes, we offer enterprise solutions for teams and organizations. Our enterprise platform includes team management features, progress reporting, and custom learning paths. Contact us for enterprise pricing and options."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "Are the practice questions similar to the real exam questions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, our practice questions are crafted to reflect the style, difficulty, and content coverage of the actual certification exams. We continuously refine our question bank based on feedback from successful test-takers to maintain high relevance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer hands-on labs or practical exercises?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, many of our certification paths include performance-based questions (PBQs) and interactive scenarios that simulate hands-on experiences you'll encounter in the actual exam and real-world environments."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How often is the content updated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We update our content continuously as certification requirements change. For major certification updates, we refresh our entire question bank within two weeks of the official exam changes being published."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a free trial available?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, you can create a free account that gives you limited access to our platform's features and a sample of practice questions for each certification to help you evaluate if CertGames is right for you."
+      }
     }
   ]
 };
@@ -446,7 +482,7 @@ const faqSchema = {
           </div>
         </section>
 
-        {/* Gamified Experience Section */}
+        {/* Gamified Experience Section - REDESIGNED */}
         <section ref={featuresRef} className="info-feature-section info-gamified-section">
           <div className="section-bg-animation">
             <div className="animated-grid"></div>
@@ -459,294 +495,236 @@ const faqSchema = {
             </h2>
             <p>Level up your skills while having fun</p>
           </header>
-          <div className="info-feature-grid">
+          
+          {/* REDESIGNED Feature Cards Grid */}
+          <div className="info-feature-compact-grid">
             <article 
-              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              className="info-feature-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'xp-system')}
               tabIndex="0"
-              role="button"
-              aria-label="XP and level up feature - click to see demo"
             >
-              <div className="card-shine"></div>
-              <div className="info-feature-icon">
-                <FaAward className="info-exp-icon" color="#FFD700" aria-hidden="true" />
-              </div>
-              <h3>Earn XP & Level Up</h3>
-              <p>Answer questions correctly to gain experience points and climb the ranks from rookie to elite hacker.</p>
-              <div className="feature-progress">
-                <span className="progress-text">Level 99</span>
-              </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaPlay className="info-demo-icon" aria-hidden="true" />
-                    <span>Watch XP System Demo</span>
-                  </Link>
+              <div className="compact-card-front">
+                <div className="compact-card-icon">
+                  <FaAward className="feature-icon" />
+                </div>
+                <h3>XP & Level Up</h3>
+                <div className="compact-card-indicator">
+                  <span>View Demo</span>
+                  <FaChevronRight className="indicator-icon" />
                 </div>
               </div>
+              <div className="compact-card-back">
+                <Link to="/demos" className="compact-demo-link">
+                  <FaPlay className="demo-link-icon" />
+                  <span>Watch Demo</span>
+                </Link>
+              </div>
             </article>
+            
             <article 
-              className="info-feature-card info-animate-on-scroll info-clickable-card" 
+              className="info-feature-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'coins-system')}
               tabIndex="0"
-              role="button"
-              aria-label="Collect coins feature - click to see demo"
             >
-              <div className="card-shine"></div>
-              <div className="info-feature-icon">
-                <FaCoins className="info-coins-icon" color="#FFD700" aria-hidden="true" />
-              </div>
-              <h3>Collect Coins</h3>
-              <p>Earn virtual currency by completing tests and daily challenges to unlock exclusive avatars and boosts.</p>
-              <div className="feature-coins">
-                <span className="coins-count">1,250 coins</span>
-              </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaPlay className="info-demo-icon" aria-hidden="true" />
-                    <span>Watch Coins System Demo</span>
-                  </Link>
+              <div className="compact-card-front">
+                <div className="compact-card-icon">
+                  <FaCoins className="feature-icon gold" />
+                </div>
+                <h3>Collect Coins</h3>
+                <div className="compact-card-indicator">
+                  <span>View Demo</span>
+                  <FaChevronRight className="indicator-icon" />
                 </div>
               </div>
+              <div className="compact-card-back">
+                <Link to="/demos" className="compact-demo-link">
+                  <FaPlay className="demo-link-icon" />
+                  <span>Watch Demo</span>
+                </Link>
+              </div>
             </article>
+            
             <article 
-              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              className="info-feature-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'achievements')}
               tabIndex="0"
-              role="button"
-              aria-label="Achievements feature - click to see demo"
             >
-              <div className="card-shine"></div>
-              <div className="info-feature-icon">
-                <FaTrophy className="info-trophy-icon" color="#FFD700" aria-hidden="true" />
-              </div>
-              <h3>Unlock Achievements</h3>
-              <p>Complete special tasks to earn badges and trophies that showcase your growing expertise.</p>
-              <div className="feature-achievements">
-                <span className="achievement-badge">12/50 Unlocked</span>
-              </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaPlay className="info-demo-icon" aria-hidden="true" />
-                    <span>Watch Achievements Demo</span>
-                  </Link>
+              <div className="compact-card-front">
+                <div className="compact-card-icon">
+                  <FaTrophy className="feature-icon gold" />
+                </div>
+                <h3>Achievements</h3>
+                <div className="compact-card-indicator">
+                  <span>View Demo</span>
+                  <FaChevronRight className="indicator-icon" />
                 </div>
               </div>
+              <div className="compact-card-back">
+                <Link to="/demos" className="compact-demo-link">
+                  <FaPlay className="demo-link-icon" />
+                  <span>Watch Demo</span>
+                </Link>
+              </div>
             </article>
+            
             <article 
-              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              className="info-feature-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'leaderboards')}
               tabIndex="0"
-              role="button"
-              aria-label="Leaderboards feature - click to see demo"
             >
-              <div className="card-shine"></div>
-              <div className="info-feature-icon">
-                <FaChartBar className="info-leaderboard-icon" color="#4285F4" aria-hidden="true" />
-              </div>
-              <h3>Compete on Leaderboards</h3>
-              <p>See how you rank against other cybersecurity enthusiasts and strive to climb to the top.</p>
-              <div className="feature-rank">
-                <span className="rank-badge">Top 10%</span>
-              </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/public-leaderboard" className="info-demo-link">
-                    <FaExternalLinkAlt className="info-demo-icon" aria-hidden="true" />
-                    <span>View Current Leaderboard</span>
-                  </Link>
+              <div className="compact-card-front">
+                <div className="compact-card-icon">
+                  <FaChartBar className="feature-icon blue" />
+                </div>
+                <h3>Leaderboards</h3>
+                <div className="compact-card-indicator">
+                  <span>View Demo</span>
+                  <FaChevronRight className="indicator-icon" />
                 </div>
               </div>
+              <div className="compact-card-back">
+                <Link to="/public-leaderboard" className="compact-demo-link">
+                  <FaExternalLinkAlt className="demo-link-icon" />
+                  <span>View Leaderboard</span>
+                </Link>
+              </div>
             </article>
+            
             <article 
-              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              className="info-feature-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'themes')}
               tabIndex="0"
-              role="button"
-              aria-label="Customization feature - click to see demo"
             >
-              <div className="card-shine"></div>
-              <div className="info-feature-icon">
-                <FaPalette className="info-theme-icon" color="#9c27b0" aria-hidden="true" />
-              </div>
-              <h3>Customize Your Experience</h3>
-              <p>Choose from multiple themes and personalize your learning environment to suit your style.</p>
-              <div className="feature-theme-preview">
-                <div className="theme-dots">
-                  <span className="theme-dot dark active"></span>
-                  <span className="theme-dot light"></span>
-                  <span className="theme-dot blue"></span>
+              <div className="compact-card-front">
+                <div className="compact-card-icon">
+                  <FaPalette className="feature-icon purple" />
+                </div>
+                <h3>Customize UI</h3>
+                <div className="compact-card-indicator">
+                  <span>View Demo</span>
+                  <FaChevronRight className="indicator-icon" />
                 </div>
               </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaPlay className="info-demo-icon" aria-hidden="true" />
-                    <span>Watch Theme Customization Demo</span>
-                  </Link>
-                </div>
+              <div className="compact-card-back">
+                <Link to="/demos" className="compact-demo-link">
+                  <FaPlay className="demo-link-icon" />
+                  <span>Watch Demo</span>
+                </Link>
               </div>
             </article>
+            
             <article 
-              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              className="info-feature-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'mobile')}
               tabIndex="0"
-              role="button"
-              aria-label="Mobile learning feature - click to see demo"
             >
-              <div className="card-shine"></div>
-              <div className="info-feature-icon">
-                <FaMobile className="info-mobile-icon" color="#4285F4" aria-hidden="true" />
-              </div>
-              <h3>Learn Anywhere</h3>
-              <p>Access all features on desktop, mobile browsers, and our dedicated iOS app for learning on the go.</p>
-              <div className="feature-platforms">
-                <FaApple className="platform-icon" />
-              </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaPlay className="info-demo-icon" aria-hidden="true" />
-                    <span>Watch Mobile App Demo</span>
-                  </Link>
+              <div className="compact-card-front">
+                <div className="compact-card-icon">
+                  <FaMobile className="feature-icon blue" />
                 </div>
+                <h3>Learn Anywhere</h3>
+                <div className="compact-card-indicator">
+                  <span>View Demo</span>
+                  <FaChevronRight className="indicator-icon" />
+                </div>
+              </div>
+              <div className="compact-card-back">
+                <Link to="/demos" className="compact-demo-link">
+                  <FaPlay className="demo-link-icon" />
+                  <span>Watch Demo</span>
+                </Link>
               </div>
             </article>
             
-            {/* NEW CARD: Cipher Challenge */}
             <article 
-              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              className="info-feature-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'cipher-challenge')}
               tabIndex="0"
-              role="button"
-              aria-label="Cipher Challenge game - click to see demo"
             >
-              <div className="card-shine"></div>
-              <div className="info-feature-icon">
-                <FaKey className="info-cipher-icon" color="#FF6B6B" aria-hidden="true" />
-              </div>
-              <h3>Cipher Challenge</h3>
-              <p>Test your cryptography skills by decoding various cipher types from Caesar to Vigenère in increasingly difficult levels.</p>
-              <div className="feature-game-badge">
-                <span className="game-badge">Cryptography Game</span>
-              </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaExternalLinkAlt className="info-demo-icon" aria-hidden="true" />
-                    <span>View Cipher Challenge Preview</span>
-                  </Link>
+              <div className="compact-card-front">
+                <div className="compact-card-icon">
+                  <FaKey className="feature-icon red" />
                 </div>
+                <h3>Cipher Challenge</h3>
+                <div className="compact-card-indicator">
+                  <span>View Demo</span>
+                  <FaChevronRight className="indicator-icon" />
+                </div>
+              </div>
+              <div className="compact-card-back">
+                <Link to="/demos" className="compact-demo-link">
+                  <FaExternalLinkAlt className="demo-link-icon" />
+                  <span>View Preview</span>
+                </Link>
               </div>
             </article>
             
-            {/* NEW CARD: Incident Responder */}
             <article 
-              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              className="info-feature-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'incident')}
               tabIndex="0"
-              role="button"
-              aria-label="Incident Responder game - click to see demo"
             >
-              <div className="card-shine"></div>
-              <div className="info-feature-icon">
-                <FaShieldAlt className="info-incident-icon" color="#4CAF50" aria-hidden="true" />
-              </div>
-              <h3>Incident Responder</h3>
-              <p>Test your cybersecurity incident response skills in realistic scenarios with branching decision paths and consequences.</p>
-              <div className="feature-game-badge">
-                <span className="game-badge">Security Response Game</span>
-              </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaPlay className="info-demo-icon" aria-hidden="true" />
-                    <span>Watch Incident Responder Demo</span>
-                  </Link>
+              <div className="compact-card-front">
+                <div className="compact-card-icon">
+                  <FaShieldAlt className="feature-icon green" />
                 </div>
+                <h3>Incident Responder</h3>
+                <div className="compact-card-indicator">
+                  <span>View Demo</span>
+                  <FaChevronRight className="indicator-icon" />
+                </div>
+              </div>
+              <div className="compact-card-back">
+                <Link to="/demos" className="compact-demo-link">
+                  <FaPlay className="demo-link-icon" />
+                  <span>Watch Demo</span>
+                </Link>
               </div>
             </article>
             
-            {/* NEW CARD: Threat Hunter */}
             <article 
-              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              className="info-feature-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'threat-hunter')}
               tabIndex="0"
-              role="button"
-              aria-label="Threat Hunter game - click to see demo"
             >
-              <div className="card-shine"></div>
-              <div className="info-feature-icon">
-                <FaSearch className="info-threat-icon" color="#3F51B5" aria-hidden="true" />
-              </div>
-              <h3>Threat Hunter</h3>
-              <p>Analyze logs, identify suspicious patterns, and detect security threats in timed log analysis scenarios.</p>
-              <div className="feature-game-badge">
-                <span className="game-badge">Log Analysis Game</span>
-              </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaPlay className="info-demo-icon" aria-hidden="true" />
-                    <span>Watch Threat Hunter Demo</span>
-                  </Link>
+              <div className="compact-card-front">
+                <div className="compact-card-icon">
+                  <FaSearch className="feature-icon blue" />
                 </div>
+                <h3>Threat Hunter</h3>
+                <div className="compact-card-indicator">
+                  <span>View Demo</span>
+                  <FaChevronRight className="indicator-icon" />
+                </div>
+              </div>
+              <div className="compact-card-back">
+                <Link to="/demos" className="compact-demo-link">
+                  <FaPlay className="demo-link-icon" />
+                  <span>Watch Demo</span>
+                </Link>
               </div>
             </article>
             
-            {/* NEW CARD: Phishing Phrenzy */}
             <article 
-              className="info-feature-card info-animate-on-scroll info-clickable-card"
+              className="info-feature-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'phishing')}
               tabIndex="0"
-              role="button"
-              aria-label="Phishing Phrenzy game - click to see demo"
             >
-              <div className="card-shine"></div>
-              <div className="info-feature-icon">
-                <FaExclamationTriangle className="info-phishing-icon" color="#FF9800" aria-hidden="true" />
-              </div>
-              <h3>Phishing Phrenzy</h3>
-              <p>Quickly identify phishing attempts from legitimate messages before time runs out in this fast-paced security awareness game.</p>
-              <div className="feature-game-badge">
-                <span className="game-badge">Security Awareness Game</span>
-              </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaPlay className="info-demo-icon" aria-hidden="true" />
-                    <span>Watch Phishing Phrenzy Demo</span>
-                  </Link>
+              <div className="compact-card-front">
+                <div className="compact-card-icon">
+                  <FaExclamationTriangle className="feature-icon orange" />
+                </div>
+                <h3>Phishing Phrenzy</h3>
+                <div className="compact-card-indicator">
+                  <span>View Demo</span>
+                  <FaChevronRight className="indicator-icon" />
                 </div>
               </div>
-            </article>
-            
-            {/* NEW CARD: Performance Dashboard */}
-            <article 
-              className="info-feature-card info-animate-on-scroll info-clickable-card"
-              onClick={(e) => handleCardClick(e, 'stats-dashboard')}
-              tabIndex="0"
-              role="button"
-              aria-label="Performance Dashboard - click to see demo"
-            >
-              <div className="card-shine"></div>
-              <div className="info-feature-icon">
-                <FaChartLine className="info-stats-icon" color="#5E35B1" aria-hidden="true" />
-              </div>
-              <h3>Performance Dashboard</h3>
-              <p>Track your progress with detailed analytics on test performance, skill improvements, and certification readiness scores.</p>
-              <div className="feature-gauge">
-                <span className="gauge-label">Readiness Analytics</span>
-              </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaExternalLinkAlt className="info-demo-icon" aria-hidden="true" />
-                    <span>View Stats Dashboard Preview</span>
-                  </Link>
-                </div>
+              <div className="compact-card-back">
+                <Link to="/demos" className="compact-demo-link">
+                  <FaPlay className="demo-link-icon" />
+                  <span>Watch Demo</span>
+                </Link>
               </div>
             </article>
           </div>
@@ -784,35 +762,51 @@ const faqSchema = {
           <div className="info-test-features info-animate-on-scroll">
             <div className="info-test-features-list">
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                <span className="info-feature-icon-new">
+                  <FaFileAlt className="feature-check-icon" />
+                </span>
                 <span>Performance-Based Questions (PBQs)</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                <span className="info-feature-icon-new">
+                  <FaLaptopCode className="feature-check-icon" />
+                </span>
                 <span>Realistic Exam Simulations</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                <span className="info-feature-icon-new">
+                  <FaBook className="feature-check-icon" />
+                </span>
                 <span>Detailed Explanations</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                <span className="info-feature-icon-new">
+                  <FaChartLine className="feature-check-icon" />
+                </span>
                 <span>Difficulty Progression System</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                <span className="info-feature-icon-new">
+                  <FaLayerGroup className="feature-check-icon" />
+                </span>
                 <span>Customizable Test Lengths</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                <span className="info-feature-icon-new">
+                  <FaRegLightbulb className="feature-check-icon" />
+                </span>
                 <span>Memorable Exam Tips</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                <span className="info-feature-icon-new">
+                  <FaDatabase className="feature-check-icon" />
+                </span>
                 <span>Progress Tracking & Analytics</span>
               </div>
               <div className="info-test-feature">
-                <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                <span className="info-feature-icon-new">
+                  <FaClock className="feature-check-icon" />
+                </span>
                 <span>Exam Mode with Timed Sessions</span>
               </div>
             </div>
@@ -970,7 +964,7 @@ const faqSchema = {
           </div>
         </section>
 
-        {/* Interactive Tools Section */}
+        {/* Interactive Tools Section - UPDATED WITH NEW TOOLS */}
         <section ref={toolsRef} className="info-feature-section info-tools-section">
           <div className="section-bg-animation">
             <div className="animated-waves"></div>
@@ -982,107 +976,129 @@ const faqSchema = {
             </h2>
             <p>Unique tools to boost your cybersecurity understanding</p>
           </header>
-          <div className="info-tools-grid">
+          <div className="info-tools-compact-grid">
             <article 
-              className="info-tool-card info-animate-on-scroll info-clickable-card"
+              className="info-tool-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'scenario-sphere')}
               tabIndex="0"
-              role="button"
-              aria-label="ScenarioSphere tool - click to see demo"
             >
-              <div className="card-shine"></div>
               <div className="tool-badge">Most Popular</div>
-              <h3>
-                <span className="info-tool-icon" aria-hidden="true"><FaSearch color="#4285F4" /></span>
-                ScenarioSphere
-              </h3>
-              <p>Immerse yourself in realistic security scenarios with detailed storylines. Tackle simulated cyberattacks to build your incident response skills.</p>
-              <div className="tool-usage-indicator">
-                <div className="indicator-bar"></div>
+              <div className="tool-compact-icon">
+                <FaSearch className="tool-icon blue" />
               </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaPlay className="info-demo-icon" aria-hidden="true" />
-                    <span>Watch ScenarioSphere Demo</span>
-                  </Link>
-                </div>
+              <div className="tool-compact-content">
+                <h3>ScenarioSphere</h3>
+                <p>Immerse in realistic security scenarios with detailed storylines.</p>
+              </div>
+              <div className="tool-compact-action">
+                <Link to="/demos" className="tool-demo-link">
+                  <FaPlay className="tool-action-icon" />
+                  <span>Watch Demo</span>
+                </Link>
               </div>
             </article>
+            
             <article 
-              className="info-tool-card info-animate-on-scroll info-clickable-card"
+              className="info-tool-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'analogy-hub')}
               tabIndex="0"
-              role="button"
-              aria-label="Analogy Hub tool - click to see demo"
             >
-              <div className="card-shine"></div>
-              <h3>
-                <span className="info-tool-icon" aria-hidden="true"><FaLightbulb color="#FFC107" /></span>
-                Analogy Hub
-              </h3>
-              <p>Complex concepts made simple through custom analogies. Compare security concepts using memorable examples to reinforce your learning.</p>
-              <div className="tool-usage-indicator">
-                <div className="indicator-bar" style={{width: "70%"}}></div>
+              <div className="tool-compact-icon">
+                <FaLightbulb className="tool-icon yellow" />
               </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaPlay className="info-demo-icon" aria-hidden="true" />
-                    <span>Watch Analogy Hub Demo</span>
-                  </Link>
-                </div>
+              <div className="tool-compact-content">
+                <h3>Analogy Hub</h3>
+                <p>Complex concepts simplified through custom memorable analogies.</p>
+              </div>
+              <div className="tool-compact-action">
+                <Link to="/demos" className="tool-demo-link">
+                  <FaPlay className="tool-action-icon" />
+                  <span>Watch Demo</span>
+                </Link>
               </div>
             </article>
+            
             <article 
-              className="info-tool-card info-animate-on-scroll info-clickable-card"
+              className="info-tool-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'grc-wizard')}
               tabIndex="0"
-              role="button"
-              aria-label="GRC Wizard tool - click to see demo"
             >
-              <div className="card-shine"></div>
-              <h3>
-                <span className="info-tool-icon" aria-hidden="true"><FaClipboardList color="#4CAF50" /></span>
-                GRC Wizard
-              </h3>
-              <p>Master governance, risk, and compliance topics with custom generated questions across multiple categories and difficulty levels.</p>
-              <div className="tool-usage-indicator">
-                <div className="indicator-bar" style={{width: "65%"}}></div>
+              <div className="tool-compact-icon">
+                <FaClipboardList className="tool-icon green" />
               </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaPlay className="info-demo-icon" aria-hidden="true" />
-                    <span>Watch GRC Wizard Demo</span>
-                  </Link>
-                </div>
+              <div className="tool-compact-content">
+                <h3>GRC Wizard</h3>
+                <p>Master governance, risk, and compliance topics with custom questions.</p>
+              </div>
+              <div className="tool-compact-action">
+                <Link to="/demos" className="tool-demo-link">
+                  <FaPlay className="tool-action-icon" />
+                  <span>Watch Demo</span>
+                </Link>
               </div>
             </article>
+            
             <article 
-              className="info-tool-card info-animate-on-scroll info-clickable-card"
+              className="info-tool-compact-card info-animate-on-scroll"
               onClick={(e) => handleCardClick(e, 'xploitcraft')}
               tabIndex="0"
-              role="button"
-              aria-label="XploitCraft tool - click to see demo"
             >
-              <div className="card-shine"></div>
               <div className="tool-badge">New</div>
-              <h3>
-                <span className="info-tool-icon" aria-hidden="true"><FaCode color="#E91E63" /></span>
-                XploitCraft
-              </h3>
-              <p>Learn about exploitation techniques through educational code examples with detailed explanations for real world understanding.</p>
-              <div className="tool-usage-indicator">
-                <div className="indicator-bar" style={{width: "85%"}}></div>
+              <div className="tool-compact-icon">
+                <FaCode className="tool-icon pink" />
               </div>
-              <div className="info-card-flip">
-                <div className="info-demo-preview">
-                  <Link to="/demos" className="info-demo-link">
-                    <FaPlay className="info-demo-icon" aria-hidden="true" />
-                    <span>Watch XploitCraft Demo</span>
-                  </Link>
-                </div>
+              <div className="tool-compact-content">
+                <h3>XploitCraft</h3>
+                <p>Learn exploitation techniques through educational code examples.</p>
+              </div>
+              <div className="tool-compact-action">
+                <Link to="/demos" className="tool-demo-link">
+                  <FaPlay className="tool-action-icon" />
+                  <span>Watch Demo</span>
+                </Link>
+              </div>
+            </article>
+            
+            {/* New Tool: Portfolio Generator */}
+            <article 
+              className="info-tool-compact-card info-animate-on-scroll"
+              onClick={(e) => handleCardClick(e, 'portfolio-generator')}
+              tabIndex="0"
+            >
+              <div className="tool-badge">New</div>
+              <div className="tool-compact-icon">
+                <FaWindowRestore className="tool-icon teal" />
+              </div>
+              <div className="tool-compact-content">
+                <h3>Portfolio Generator</h3>
+                <p>Create your professional cybersecurity portfolio in minutes.</p>
+              </div>
+              <div className="tool-compact-action">
+                <Link to="/demos" className="tool-demo-link">
+                  <FaExternalLinkAlt className="tool-action-icon" />
+                  <span>Try It Out</span>
+                </Link>
+              </div>
+            </article>
+            
+            {/* New Tool: Cyber Flashcards */}
+            <article 
+              className="info-tool-compact-card info-animate-on-scroll"
+              onClick={(e) => handleCardClick(e, 'cyber-flashcards')}
+              tabIndex="0"
+            >
+              <div className="tool-compact-icon">
+                <FaLayerGroup className="tool-icon orange" />
+              </div>
+              <div className="tool-compact-content">
+                <h3>Cyber Flashcards</h3>
+                <p>Master key concepts with our interactive flashcard system.</p>
+              </div>
+              <div className="tool-compact-action">
+                <Link to="/demos" className="tool-demo-link">
+                  <FaExternalLinkAlt className="tool-action-icon" />
+                  <span>Browse Cards</span>
+                </Link>
               </div>
             </article>
           </div>
@@ -1210,23 +1226,33 @@ const faqSchema = {
               <h3>Your Personal Cybersecurity Tutor</h3>
               <ul className="info-support-features">
                 <li>
-                  <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                  <span className="info-feature-icon-new">
+                    <FaComment className="feature-support-icon" />
+                  </span>
                   <span>Ask questions about any certification topic</span>
                 </li>
                 <li>
-                  <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                  <span className="info-feature-icon-new">
+                    <FaBrain className="feature-support-icon" />
+                  </span>
                   <span>Get help with difficult concepts</span>
                 </li>
                 <li>
-                  <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                  <span className="info-feature-icon-new">
+                    <FaBook className="feature-support-icon" />
+                  </span>
                   <span>Receive customized study advice</span>
                 </li>
                 <li>
-                  <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                  <span className="info-feature-icon-new">
+                    <FaClock className="feature-support-icon" />
+                  </span>
                   <span>Average response time: 3 hours</span>
                 </li>
                 <li>
-                  <span className="info-check-icon" aria-hidden="true"><FaCheck color="#4CAF50" /></span>
+                  <span className="info-feature-icon-new">
+                    <FaGem className="feature-support-icon" />
+                  </span>
                   <span>Technical assistance with platform features</span>
                 </li>
               </ul>
@@ -1349,48 +1375,72 @@ const faqSchema = {
           </div>
         </section>
 
+        {/* REDESIGNED Get Started Section */}
         <section ref={pricingRef} className="info-pricing-section">
           <div className="section-bg-animation">
-            <div className="animated-gradient"></div>
+            <div className="animated-grid"></div> {/* Using the same grid background as gamified section */}
+            <div className="floating-particles"></div>
           </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
-              <span className="info-section-icon" aria-hidden="true"><FaRocket color="#9C27B0" /></span>
+              <span className="info-section-icon" aria-hidden="true"><FaSpider color="#4806ba" /></span>
               Get Started Today 
             </h2>
             <p>Create your free account and begin your cybersecurity journey</p>
           </header>
           
-          <div className="info-pricing-card info-animate-on-scroll">
-            <h3 className="info-plan-name">Create Free Account</h3>
-            <div className="info-cta-content">
-              <div className="info-features-list">
-                <div className="info-feature-item">
-                  <FaCheck className="info-feature-icon" />
-                  <span><strong>13,000+</strong> Practice Questions</span>
+          {/* REDESIGNED Pricing Card */}
+          <div className="info-pricing-card-new info-animate-on-scroll">
+            <div className="pricing-card-content">
+              <h3>Start Your Certification Journey</h3>
+              <div className="pricing-value">
+                <span className="price-amount">Free</span>
+                <span className="price-period">to get started</span>
+              </div>
+              <Link to="/register" className="pricing-action-button">
+                Create Your Free Account
+              </Link>
+              <p className="pricing-note">Upgrade anytime for full access to all features</p>
+            </div>
+
+            <div className="pricing-benefits">
+              <div className="benefits-grid">
+                <div className="benefit-item">
+                  <div className="benefit-bubble">
+                    <FaClipboardList className="benefit-icon" />
+                  </div>
+                  <div className="benefit-text">
+                    <span>13,000+ Practice Questions</span>
+                  </div>
                 </div>
-                <div className="info-feature-item">
-                  <FaCheck className="info-feature-icon" />
-                  <span><strong>12</strong> Certification Paths</span>
+                
+                <div className="benefit-item">
+                  <div className="benefit-bubble">
+                    <FaGraduationCap className="benefit-icon" />
+                  </div>
+                  <div className="benefit-text">
+                    <span>12 Certification Paths</span>
+                  </div>
                 </div>
-                <div className="info-feature-item">
-                  <FaCheck className="info-feature-icon" />
-                  <span>Interactive Learning Tools</span>
+                
+                <div className="benefit-item">
+                  <div className="benefit-bubble">
+                    <FaTools className="benefit-icon" />
+                  </div>
+                  <div className="benefit-text">
+                    <span>Interactive Learning Tools</span>
+                  </div>
                 </div>
-                <div className="info-feature-item">
-                  <FaCheck className="info-feature-icon" />
-                  <span>Gamified Learning Experience</span>
-                </div>
-                <div className="info-feature-item">
-                  <FaCheck className="info-feature-icon" />
-                  <span>Mobile & iOS App Access</span>
+                
+                <div className="benefit-item">
+                  <div className="benefit-bubble">
+                    <FaGamepad className="benefit-icon" />
+                  </div>
+                  <div className="benefit-text">
+                    <span>Gamified Experience</span>
+                  </div>
                 </div>
               </div>
-              
-              <Link to="/register" className="info-button info-cta-button spotlight-effect">
-                Start Your Cybersecurity Journey Today!
-              </Link>
-              <p className="info-pricing-note">No credit card required. Access premium features with subscription.</p>
             </div>
           </div>
         </section>
@@ -1462,7 +1512,7 @@ const faqSchema = {
           </div>
         </section>
 
-        {/* FAQ Section */}
+        {/* FAQ Section - UPDATED WITH 4 ADDITIONAL QUESTIONS */}
         <section className="info-faq-section">
           <div className="section-bg-animation">
             <div className="animated-bubbles"></div>
@@ -1499,6 +1549,27 @@ const faqSchema = {
             <article className="info-faq-item info-animate-on-scroll">
               <h3 className="info-faq-question">What if I need help with a specific concept?</h3>
               <p className="info-faq-answer">Our 24/7 "Ask Anything" support feature allows you to ask any certification-related question, test question, exam questions, study advice, and whatever you might need help with, you will receive a thorough, personalized answer from our expert team who have passed all certifications listed, typically within 3 hours.</p>
+            </article>
+            
+            {/* NEW FAQ QUESTIONS */}
+            <article className="info-faq-item info-animate-on-scroll">
+              <h3 className="info-faq-question">Are the practice questions similar to the real exam questions?</h3>
+              <p className="info-faq-answer">Yes, our practice questions are carefully crafted to reflect the style, difficulty level, and content coverage of the actual certification exams. We continuously refine our question bank based on feedback from successful test-takers to ensure it remains highly relevant to the current exam versions.</p>
+            </article>
+            
+            <article className="info-faq-item info-animate-on-scroll">
+              <h3 className="info-faq-question">Do you offer hands-on labs or practical exercises?</h3>
+              <p className="info-faq-answer">Yes, many of our certification paths include performance-based questions (PBQs) and interactive scenarios that simulate the hands-on experiences you'll encounter in the actual exam and real-world environments. These practical exercises help develop the applied skills necessary for success both in the exam and your cybersecurity career.</p>
+            </article>
+            
+            <article className="info-faq-item info-animate-on-scroll">
+              <h3 className="info-faq-question">How often is your content updated?</h3>
+              <p className="info-faq-answer">We update our content continuously as certification requirements change. For major certification updates, we refresh our entire question bank within two weeks of the official exam changes being published. Our team of subject matter experts constantly monitors industry developments to ensure our practice materials reflect the latest standards.</p>
+            </article>
+            
+            <article className="info-faq-item info-animate-on-scroll">
+              <h3 className="info-faq-question">Is there a free trial available?</h3>
+              <p className="info-faq-answer">Yes, you can create a free account that gives you limited access to our platform's features and a sample of practice questions for each certification to help you evaluate if CertGames is right for you. You can explore the interface, experience our gamification elements, and even try some of our interactive learning tools before deciding to subscribe.</p>
             </article>
             
             <div className="info-more-questions">

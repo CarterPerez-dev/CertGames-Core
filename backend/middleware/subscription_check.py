@@ -81,7 +81,7 @@ def check_subscription_middleware():
             '/cipher',
             '/threat-hunter',
             '/portfolio',  
-            'flashcard;,
+            '/flashcard',
         ]
         
         # Routes for limited access (free users with usage tracking)

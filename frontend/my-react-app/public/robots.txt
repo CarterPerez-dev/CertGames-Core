@@ -5,6 +5,9 @@ Allow: /exams
 Allow: /blog
 Allow: /public-leaderboard
 Allow: /demos
+Allow: /angela
+Allow: /commits
+Allow: /portfolio
 
 Disallow: /.env
 Disallow: /api/
