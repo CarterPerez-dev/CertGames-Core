@@ -283,8 +283,7 @@ def fix_portfolio_error():
         logger.exception(f"Error fixing portfolio: {str(e)}")
         return jsonify({"error": f"Failed to fix portfolio: {str(e)}"}), 500
 
-# backend/routes/AI/gemini_routes.py
-# ... (imports as before, including get_github_token_for_user from models.test) ...
+
 
 @portfolio_bp.route('/deploy', methods=['POST'])
 @jwt_required_wrapper
@@ -438,41 +437,42 @@ def list_portfolios():
 
 @portfolio_bp.route('/<portfolio_id>', methods=['GET'])
 @jwt_required_wrapper
-def get_portfolio_by_id(portfolio_id):
-    """
-    Get a specific portfolio by ID
-    """
+def get_portfolio(user_id, portfolio_id):
+    """Get portfolio from database and format it for the frontend"""
+    from mongodb.database import db
+    
     try:
-        user_id = g.user_id
-        
-        # Validate the portfolio_id is a valid ObjectId
-        try:
-            portfolio_obj_id = ObjectId(portfolio_id)
-        except Exception as e:
-            logger.error(f"Invalid portfolio ID format: {portfolio_id}")
-            return jsonify({"error": f"Invalid portfolio ID format: {str(e)}"}), 400
-        
-        # Get the portfolio from the database
-        portfolio = get_portfolio(user_id, portfolio_obj_id)
-        if not portfolio:
-            return jsonify({"error": "Portfolio not found"}), 404
-        
-        # Check if the portfolio has components
-        if not portfolio.get('components'):
-            logger.warning(f"Portfolio {portfolio_id} has no components")
-            return jsonify({"error": "Portfolio has no components"}), 500
-            
-        component_count = len(portfolio.get('components', {}))
-        logger.info(f"Returning portfolio {portfolio_id} with {component_count} components")
-        
-        return jsonify({
-            "success": True,
-            "portfolio": portfolio
+        portfolio = db.portfolios.find_one({
+            "user_id": ObjectId(user_id),
+            "_id": ObjectId(portfolio_id)
         })
         
+        if portfolio:
+            portfolio["_id"] = str(portfolio["_id"])
+            portfolio["user_id"] = str(portfolio["user_id"])
+            
+            # If the portfolio uses the new structure, convert it back to the format expected by frontend
+            if "components_array" in portfolio and isinstance(portfolio["components_array"], list):
+                # Convert array back to dict for the frontend
+                components_dict = {}
+                for component in portfolio["components_array"]:
+                    if "path" in component and "content" in component:
+                        components_dict[component["path"]] = component["content"]
+                
+                portfolio["components"] = components_dict
+            
+            # If there's no components dict but there is components_array, create a components dict
+            elif "components" not in portfolio and "components_array" in portfolio:
+                portfolio["components"] = {}
+                for component in portfolio["components_array"]:
+                    if "path" in component and "content" in component:
+                        portfolio["components"][component["path"]] = component["content"]
+        
+        return portfolio
+    
     except Exception as e:
-        logger.exception(f"Error getting portfolio: {str(e)}")
-        return jsonify({"error": "Failed to get portfolio"}), 500
+        logger.error(f"Error getting portfolio: {str(e)}")
+        return None
 
 
 @portfolio_bp.route('/deployment-status/<deployment_id>', methods=['GET'])
@@ -621,12 +621,12 @@ def delete_portfolio_file():
         if not portfolio:
             return jsonify({"error": "Portfolio not found"}), 404
         
-        # Check if file exists
+        # Check if file exists in components
         components = portfolio.get('components', {})
         if file_path not in components:
             return jsonify({"error": "File not found"}), 404
         
-        # Delete file
+        # Delete file from the components_array
         from mongodb.database import db
         
         result = db.portfolios.update_one(
@@ -635,8 +635,8 @@ def delete_portfolio_file():
                 "_id": ObjectId(portfolio_id)
             },
             {
-                "$unset": {
-                    f"components.{file_path}": ""
+                "$pull": {
+                    "components_array": {"path": file_path}
                 },
                 "$set": {
                     "updated_at": time.time()
@@ -644,7 +644,20 @@ def delete_portfolio_file():
             }
         )
         
-        if result.modified_count == 0:
+        # Also remove from old components structure for compatibility
+        result2 = db.portfolios.update_one(
+            {
+                "user_id": ObjectId(user_id),
+                "_id": ObjectId(portfolio_id)
+            },
+            {
+                "$unset": {
+                    f"components.{file_path}": ""
+                }
+            }
+        )
+        
+        if result.modified_count == 0 and result2.modified_count == 0:
             return jsonify({"error": "Failed to delete file"}), 500
         
         return jsonify({
@@ -655,7 +668,6 @@ def delete_portfolio_file():
     except Exception as e:
         logger.exception(f"Error deleting file: {str(e)}")
         return jsonify({"error": f"Error deleting file: {str(e)}"}), 500
-
 @portfolio_bp.route('/<portfolio_id>', methods=['DELETE'])
 @jwt_required_wrapper
 def delete_portfolio(portfolio_id):
@@ -701,9 +713,18 @@ def save_portfolio(user_id, components, preferences, resume_text=None):
     """Save portfolio to database"""
     from mongodb.database import db
     
+    # Convert the components dict to an array of objects
+    components_array = []
+    for path, content in components.items():
+        components_array.append({
+            "path": path,
+            "content": content
+        })
+    
     portfolio_doc = {
         "user_id": ObjectId(user_id),
-        "components": components,
+        "components_array": components_array,  # Store as array
+        "components": components,  # Keep the old structure for backward compatibility
         "preferences": preferences,
         "resume_text": resume_text,  
         "created_at": time.time(),
@@ -718,74 +739,72 @@ def save_portfolio(user_id, components, preferences, resume_text=None):
     result = db.portfolios.insert_one(portfolio_doc)
     return result.inserted_id
 
-def get_portfolio(user_id, portfolio_id):
-    """Get portfolio from database"""
-    from mongodb.database import db
-    
-    try:
-        portfolio = db.portfolios.find_one({
-            "user_id": ObjectId(user_id),
-            "_id": ObjectId(portfolio_id)
-        })
-        
-        if portfolio:
-            portfolio["_id"] = str(portfolio["_id"])
-            portfolio["user_id"] = str(portfolio["user_id"])
-        
-        return portfolio
-    
-    except Exception as e:
-        logger.error(f"Error getting portfolio: {str(e)}")
-        return None
-
-
 
 def update_portfolio_component(user_id, portfolio_id, component_path, code):
     """Update a specific component in the portfolio or create it if it doesn't exist."""
     from mongodb.database import db
     
     try:
-
         logger.info(f"Attempting to update/create component. User: {user_id}, Portfolio: {portfolio_id}, Path: '{component_path}', Code (first 50 chars): '{str(code)[:50]}...'")
-
 
         if not isinstance(component_path, str):
             logger.error(f"component_path is not a string: {type(component_path)}. Value: {component_path}")
             return False
+            
         component_path = component_path.strip()
         if not component_path:
             logger.error("component_path is empty after stripping.")
             return False
 
-
-        mongo_key_path = f"components.{component_path}"
+        # Check if component already exists
+        portfolio = db.portfolios.find_one({
+            "user_id": ObjectId(user_id),
+            "_id": ObjectId(portfolio_id),
+            "components_array": {"$elemMatch": {"path": component_path}}
+        })
         
-        logger.info(f"Constructed MongoDB key path for update: '{mongo_key_path}'")
-
-        update_doc = {
-            "$set": {
-                mongo_key_path: code,  # Use the constructed path to set the code
-                "updated_at": time.time()
-            }
-        }
-        
-        logger.debug(f"MongoDB update document: {json.dumps(update_doc, default=str)}") 
-
-        update_result = db.portfolios.update_one(
-            {
-                "user_id": ObjectId(user_id),
-                "_id": ObjectId(portfolio_id)
-            },
-            update_doc
-
-        )
+        if portfolio:
+            # Update existing component
+            logger.info(f"Updating existing component '{component_path}'")
+            update_result = db.portfolios.update_one(
+                {
+                    "user_id": ObjectId(user_id),
+                    "_id": ObjectId(portfolio_id),
+                    "components_array.path": component_path
+                },
+                {
+                    "$set": {
+                        "components_array.$.content": code,
+                        "updated_at": time.time()
+                    }
+                }
+            )
+        else:
+            # Add new component
+            logger.info(f"Adding new component '{component_path}'")
+            update_result = db.portfolios.update_one(
+                {
+                    "user_id": ObjectId(user_id),
+                    "_id": ObjectId(portfolio_id)
+                },
+                {
+                    "$push": {
+                        "components_array": {
+                            "path": component_path,
+                            "content": code
+                        }
+                    },
+                    "$set": {
+                        "updated_at": time.time()
+                    }
+                }
+            )
         
         if update_result.matched_count == 0:
             logger.error(f"No portfolio found with ID {portfolio_id} for user {user_id}. Cannot update component.")
             return False
 
-        logger.info(f"Update result for component '{mongo_key_path}': Matched: {update_result.matched_count}, Modified: {update_result.modified_count}, UpsertedId: {update_result.upserted_id}")
-
+        logger.info(f"Update result for component '{component_path}': Matched: {update_result.matched_count}, Modified: {update_result.modified_count}, UpsertedId: {update_result.upserted_id}")
 
         return True
     
@@ -821,4 +840,52 @@ def list_user_portfolios(user_id):
         logger.error(f"Error listing portfolios: {str(e)}")
         return []
         
-
+@portfolio_bp.route('/migrate-portfolios', methods=['POST'])
+@jwt_required_wrapper
+def migrate_portfolios():
+    """Admin-only route to migrate existing portfolios to the new structure"""
+    try:
+        user_id = g.user_id
+        
+        # Check if admin
+        from mongodb.database import db
+        user = db.mainusers.find_one({"_id": ObjectId(user_id)})
+        if not user or user.get('username') != 'admin':
+            return jsonify({"error": "Unauthorized"}), 403
+        
+        # Find all portfolios that don't have components_array
+        portfolios = db.portfolios.find({"components_array": {"$exists": False}})
+        migrated_count = 0
+        
+        for portfolio in portfolios:
+            components = portfolio.get('components', {})
+            components_array = []
+            
+            for path, content in components.items():
+                components_array.append({
+                    "path": path,
+                    "content": content
+                })
+            
+            # Update the portfolio with the new array structure
+            result = db.portfolios.update_one(
+                {"_id": portfolio["_id"]},
+                {
+                    "$set": {
+                        "components_array": components_array,
+                        "migration_date": time.time()
+                    }
+                }
+            )
+            
+            if result.modified_count > 0:
+                migrated_count += 1
+        
+        return jsonify({
+            "success": True,
+            "message": f"Migration completed. {migrated_count} portfolios updated."
+        })
+        
+    except Exception as e:
+        logger.exception(f"Error migrating portfolios: {str(e)}")
+        return jsonify({"error": f"Error migrating portfolios: {str(e)}"}), 500

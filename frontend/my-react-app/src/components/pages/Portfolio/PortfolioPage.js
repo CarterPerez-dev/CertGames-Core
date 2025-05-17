@@ -86,6 +86,22 @@ const PortfolioPage = () => {
     }
   };
 
+  const runMigration = async () => {
+    try {
+      const response = await fetch('/api/portfolio/migrate-portfolios', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-User-Id': userId  // From your Redux state or props
+        }
+      });
+      const data = await response.json();
+      alert(`Migration ${data.success ? 'successful' : 'failed'}: ${data.message}`);
+    } catch (error) {
+      alert('Migration error: ' + error.message);
+    }
+  };
+  
   const handleRefresh = () => {
     console.log("Manual refresh triggered");
     fetchPortfolios();
@@ -312,6 +328,7 @@ const PortfolioPage = () => {
                   <div className={`generation-step ${loadingProgress > 95 ? 'active' : ''}`}>
                     <div className="step-icon">🚀</div>
                     <div className="step-text">Finalizing Portfolio</div>
+                    <button onClick={runMigration}>Migrate Portfolio Data</button>
                     {loadingProgress > 95 && <div className="step-check">✓</div>}
                   </div>
                 </div>
