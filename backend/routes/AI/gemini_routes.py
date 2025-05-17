@@ -176,8 +176,7 @@ def get_generation_status():
                     "duration": duration
                 })
         
-        # If not in task tracker, check the database (fallback for server restarts)
-        # Look for portfolios created in the last 10 minutes
+
         cutoff_time = time.time() - (10 * 60)  # 10 minutes ago
         
         from mongodb.database import db
@@ -337,8 +336,7 @@ def deploy_portfolio():
                 logger.error(f"GitHub token not provided in input, and OAuth not selected by user {user_id_from_g}.")
                 return jsonify({"error": "GitHub token is required. Please provide it in the input field or link your GitHub account."}), 400
 
-        # At this point, github_token_to_use should be populated if a valid path was taken.
-        # Final check for missing tokens before proceeding.
+
         if not all([portfolio_id_req, github_token_to_use, vercel_token]):
             missing = []
             if not portfolio_id_req: missing.append("portfolio_id")
@@ -347,11 +345,11 @@ def deploy_portfolio():
             logger.error(f"Deployment pre-check failed for user {user_id_from_g}. Missing: {', '.join(missing)}")
             return jsonify({"error": f"Missing required fields: {', '.join(missing)}"}), 400
 
-        # Now, use 'github_token_to_use' for the rest of the deployment process.
+
         
-        # ... (get_portfolio, check components, create task_id, setup deployment_tasks dictionary as before) ...
+
         portfolio = get_portfolio(user_id_from_g, portfolio_id_req)
-        # ... (null checks for portfolio and components)
+
 
         portfolio_components = portfolio.get('components', {})
         if not portfolio_components:
@@ -527,46 +525,7 @@ def get_deployment_status_route(task_id):
     })
 
 
-# In backend/routes/AI/gemini_routes.py
 
-@portfolio_bp.route('/update-file', methods=['POST'])
-@jwt_required_wrapper
-def update_portfolio_file():
-    try:
-        data = request.get_json()
-        user_id = g.user_id
-        portfolio_id = data.get('portfolio_id')
-        file_path = data.get('file_path')
-        content = data.get('content')
-        
-        if not all([portfolio_id, file_path, content]):
-            return jsonify({"error": "Missing required fields"}), 400
-        
-        # Check if the file exists
-        portfolio = get_portfolio(user_id, portfolio_id)
-        if not portfolio:
-            return jsonify({"error": "Portfolio not found"}), 404
-            
-        components = portfolio.get('components', {})
-        
-        # Make sure the file_path key is preserved exactly as provided
-        # Don't modify the path at all
-        
-        # Update component file - use the exact file_path as provided
-        result = update_portfolio_component(user_id, portfolio_id, file_path, content)
-        
-        if result:
-            return jsonify({
-                "success": True, 
-                "message": "File updated successfully",
-                "file_path": file_path
-            })
-        else:
-            return jsonify({"error": "Failed to update file"}), 500
-    
-    except Exception as e:
-        logger.exception(f"Error updating file: {str(e)}")
-        return jsonify({"error": f"Error updating file: {str(e)}"}), 500
 
 @portfolio_bp.route('/create-file', methods=['POST'])
 @jwt_required_wrapper
@@ -575,41 +534,74 @@ def create_portfolio_file():
         data = request.get_json()
         user_id = g.user_id
         portfolio_id = data.get('portfolio_id')
-        file_path = data.get('file_path')
+        file_path = data.get('file_path', '').strip() # Add strip
         content = data.get('content')
         
-        if not all([portfolio_id, file_path, content]):
-            return jsonify({"error": "Missing required fields"}), 400
+        if not all([portfolio_id, file_path, content is not None]): # check content is not None
+            logger.error(f"Create file missing fields: portfolio_id={portfolio_id}, file_path='{file_path}', content_present={content is not None}")
+            return jsonify({"error": "Missing required fields (portfolio_id, file_path, content)"}), 400
         
         # Get portfolio
-        portfolio = get_portfolio(user_id, portfolio_id)
+        portfolio = get_portfolio(user_id, portfolio_id) # Ensure get_portfolio handles string IDs
         if not portfolio:
             return jsonify({"error": "Portfolio not found"}), 404
         
         # Check if file already exists - use exact file_path as provided
         components = portfolio.get('components', {})
-        if file_path in components:
-            return jsonify({"error": "File already exists"}), 400
-        
-        # Log the file_path being created to verify it's correct
-        logger.info(f"Creating new file with exact path: {file_path}")
-        
-        # Add new component file - use the exact file_path as provided
+        if file_path in components: # This check is against keys that might already be extensionless if error persisted
+            logger.warning(f"File '{file_path}' already exists in components for portfolio {portfolio_id}.")
+            # Depending on desired behavior, you might allow overwrite or return error
+            # For now, let's assume an update is fine, or it's a new file.
+            # return jsonify({"error": "File already exists"}), 400 
+
+        logger.info(f"Calling update_portfolio_component for CREATE: User: {user_id}, Portfolio: {portfolio_id}, Path: '{file_path}'")
         result = update_portfolio_component(user_id, portfolio_id, file_path, content)
         
         if result:
-            # Return the exact file_path that was used
             return jsonify({
                 "success": True, 
-                "message": "File created successfully",
-                "file_path": file_path
+                "message": "File created/updated successfully",
+                "file_path": file_path # Return the exact path used
             })
         else:
-            return jsonify({"error": "Failed to create file"}), 500
+            return jsonify({"error": "Failed to create/update file"}), 500
     
     except Exception as e:
         logger.exception(f"Error creating file: {str(e)}")
         return jsonify({"error": f"Error creating file: {str(e)}"}), 500
+
+# In your /update-file route:
+@portfolio_bp.route('/update-file', methods=['POST'])
+@jwt_required_wrapper
+def update_portfolio_file():
+    try:
+        data = request.get_json()
+        user_id = g.user_id
+        portfolio_id = data.get('portfolio_id')
+        file_path = data.get('file_path', '').strip() # Add strip
+        content = data.get('content')
+        
+        if not all([portfolio_id, file_path, content is not None]): # check content is not None
+            logger.error(f"Update file missing fields: portfolio_id={portfolio_id}, file_path='{file_path}', content_present={content is not None}")
+            return jsonify({"error": "Missing required fields (portfolio_id, file_path, content)"}), 400
+        
+
+        
+        logger.info(f"Calling update_portfolio_component for UPDATE: User: {user_id}, Portfolio: {portfolio_id}, Path: '{file_path}'")
+        result = update_portfolio_component(user_id, portfolio_id, file_path, content)
+        
+        if result:
+            return jsonify({
+                "success": True, 
+                "message": "File updated successfully",
+                "file_path": file_path # Return the exact path used
+            })
+        else:
+            return jsonify({"error": "Failed to update file"}), 500
+    
+    except Exception as e:
+        logger.exception(f"Error updating file: {str(e)}")
+        return jsonify({"error": f"Error updating file: {str(e)}"}), 500
 
 
 @portfolio_bp.route('/delete-file', methods=['POST'])
@@ -746,68 +738,59 @@ def get_portfolio(user_id, portfolio_id):
         logger.error(f"Error getting portfolio: {str(e)}")
         return None
 
-def update_portfolio_component(user_id, portfolio_id, component_path, code):
-    """Update a specific component in the portfolio"""
-    from mongodb.database import db
-    
-    try:
-        db.portfolios.update_one(
-            {
-                "user_id": ObjectId(user_id),
-                "_id": ObjectId(portfolio_id)
-            },
-            {
-                "$set": {
-                    f"components.{component_path}": code,
-                    "updated_at": time.time()
-                }
-            }
-        )
-        
-        return True
-    
-    except Exception as e:
-        logger.error(f"Error updating portfolio component: {str(e)}")
-        return False
+
 
 def update_portfolio_component(user_id, portfolio_id, component_path, code):
-    """Update a specific component in the portfolio"""
+    """Update a specific component in the portfolio or create it if it doesn't exist."""
     from mongodb.database import db
     
     try:
-        # Log the exact path being used to update the component
-        logger.info(f"Updating component at exact path: '{component_path}'")
+
+        logger.info(f"Attempting to update/create component. User: {user_id}, Portfolio: {portfolio_id}, Path: '{component_path}', Code (first 50 chars): '{str(code)[:50]}...'")
+
+
+        if not isinstance(component_path, str):
+            logger.error(f"component_path is not a string: {type(component_path)}. Value: {component_path}")
+            return False
+        component_path = component_path.strip()
+        if not component_path:
+            logger.error("component_path is empty after stripping.")
+            return False
+
+
+        mongo_key_path = f"components.{component_path}"
         
+        logger.info(f"Constructed MongoDB key path for update: '{mongo_key_path}'")
 
         update_doc = {
             "$set": {
+                mongo_key_path: code,  # Use the constructed path to set the code
                 "updated_at": time.time()
             }
         }
         
-        # Add the component to the update document
-        update_doc["$set"][f"components.{component_path}"] = code
-        
+        logger.debug(f"MongoDB update document: {json.dumps(update_doc, default=str)}") 
+
         update_result = db.portfolios.update_one(
             {
                 "user_id": ObjectId(user_id),
                 "_id": ObjectId(portfolio_id)
             },
             update_doc
+
         )
         
         if update_result.matched_count == 0:
-            logger.error(f"No portfolio found with ID {portfolio_id} for user {user_id}")
+            logger.error(f"No portfolio found with ID {portfolio_id} for user {user_id}. Cannot update component.")
             return False
-            
-        if update_result.modified_count == 0:
-            logger.warning(f"Portfolio found but no changes made to component {component_path}")
-            # Still return True as the operation completed successfully
-            
+
+        logger.info(f"Update result for component '{mongo_key_path}': Matched: {update_result.matched_count}, Modified: {update_result.modified_count}, UpsertedId: {update_result.upserted_id}")
+
+
         return True
     
     except Exception as e:
-        logger.error(f"Error updating portfolio component: {str(e)}")
+        logger.exception(f"Error in update_portfolio_component (Path: '{component_path}'): {str(e)}")
         return False
 
 def list_user_portfolios(user_id):

@@ -205,6 +205,7 @@ class GeminiHelper:
            - src/App.js - Main application component
            - src/index.js - Entry point
            - src/index.css - Global styles
+           - src/App.css - Any App.css styles if needed
            - src/reportWebVitals.js - defualt reportWebVitals file, and the dependency added to package.json
            - public/index.html - HTML template
            - package.json - Dependencies
@@ -244,6 +245,9 @@ class GeminiHelper:
         ```css:src/index.css
         [Complete index.css file with global styles]
         ```
+        ```css:src/App.css
+        [Complete App.css file with App styles if needed]
+        ```        
         
         ```javascript:src/reportWebVitals.js
         [Complete reportWebVitals.js file]
@@ -353,12 +357,13 @@ class GeminiHelper:
             'src/index.js': r'```(?:javascript:src/index\.js|src/index\.js|js:src/index\.js|javascript)\s*([\s\S]*?)```',
             'src/index.css': r'```(?:css:src/index\.css|src/index\.css|css)\s*([\s\S]*?)```',
             'src/App.js': r'```(?:javascript:src/App\.js|src/App\.js|js:src/App\.js)\s*([\s\S]*?)```',
+            'src/App.css': r'```(?:css:src/App\.css|src/App\.css|css)\s*([\s\S]*?)```',
             'src/reportWebVitals.js': r'```(?:javascript:src/reportWebVitals\.js|src/reportWebVitals\.js|js:src/reportWebVitals\.js)\s*([\s\S]*?)```',
         }
         
         # More flexible patterns for component files
         component_pattern = r'```(?:javascript|js)(?::)?src/components/([a-zA-Z0-9_-]+)\.js\s*([\s\S]*?)```'
-    
+ 
         # Fallback pattern if the more specific one doesn't find matches
         component_fallback_pattern = r'```(?:javascript|js)\s*(?:\/\/|#)\s*src\/components\/([a-zA-Z0-9_-]+)\.js\s*([\s\S]*?)```'
         nested_component_pattern = r'```(?:javascript|js)(?::)?src/components/([a-zA-Z0-9_-]+)/\1\.js\s*([\s\S]*?)```'

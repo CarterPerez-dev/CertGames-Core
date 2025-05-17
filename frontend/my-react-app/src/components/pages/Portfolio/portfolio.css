@@ -3776,6 +3776,7 @@
   max-width: 500px;
   box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
   animation: modalSlideIn 0.3s ease;
+  color: #000;
 }
 
 @keyframes modalSlideIn {
@@ -3883,7 +3884,7 @@
 }
 
 .delete-confirmation-message {
-  color: var(--portfolio-text) !important;
+  color: #000;
   margin-bottom: 25px;
   line-height: 1.6;
 }
