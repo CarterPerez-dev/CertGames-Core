@@ -229,6 +229,7 @@ const PortfolioPage = () => {
       <div className="portfolio-page-header">
         <div className="portfolio-page-title-section">
           <h1 className="portfolio-page-title">Portfolio Creator</h1>
+          <button onClick={runMigration}>Migrate Portfolio Data</button>
           <p className="portfolio-page-subtitle">Build a professional portfolio to showcase your skills and experience</p>
         </div>
         
@@ -328,7 +329,6 @@ const PortfolioPage = () => {
                   <div className={`generation-step ${loadingProgress > 95 ? 'active' : ''}`}>
                     <div className="step-icon">🚀</div>
                     <div className="step-text">Finalizing Portfolio</div>
-                    <button onClick={runMigration}>Migrate Portfolio Data</button>
                     {loadingProgress > 95 && <div className="step-check">✓</div>}
                   </div>
                 </div>

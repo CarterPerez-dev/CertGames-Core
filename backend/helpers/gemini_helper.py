@@ -205,7 +205,7 @@ class GeminiHelper:
            - src/App.js - Main application component
            - src/index.js - Entry point
            - src/index.css - Global styles
-           - src/App.css - add App.css BUT MAKE SURE THIS FILE IS EMPTY
+           - src/App.css - add App.css BUT MAKE SURE THIS FILE IS EMPTY, ENSURE IT HAS NO CODE INSIDE OF IT, IT MUST BE EMPTY
            - src/reportWebVitals.js - defualt reportWebVitals file, and the dependency added to package.json
            - public/index.html - HTML template
            - package.json - Dependencies
@@ -246,7 +246,7 @@ class GeminiHelper:
         [Complete index.css file with global styles]
         ```
         ```css:src/App.css
-        [Complete App.css file EMPTY]
+        [Complete App.css file EMPTY, RETURN AN EMPTY App.css with NO CODE]
         ```        
         
         ```javascript:src/reportWebVitals.js

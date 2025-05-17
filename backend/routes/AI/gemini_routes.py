@@ -437,41 +437,89 @@ def list_portfolios():
 
 @portfolio_bp.route('/<portfolio_id>', methods=['GET'])
 @jwt_required_wrapper
+def get_portfolio_route(portfolio_id):
+    """Route to get portfolio from database"""
+    try:
+        user_id = g.user_id
+        logger.info(f"Fetching portfolio {portfolio_id} for user {user_id}")
+        
+        portfolio = get_portfolio(user_id, portfolio_id)
+        
+        if not portfolio:
+            logger.error(f"Portfolio {portfolio_id} not found or could not be retrieved")
+            return jsonify({"error": "Portfolio not found"}), 404
+            
+        # Check if the portfolio has components
+        if "components" not in portfolio or not portfolio["components"]:
+            logger.error(f"Portfolio {portfolio_id} has no components dict")
+            
+            # Check if it has components_array but conversion failed
+            if "components_array" in portfolio:
+                logger.info(f"Portfolio has components_array with {len(portfolio.get('components_array', []))} items")
+                
+                # Try to convert again
+                components_dict = {}
+                for component in portfolio.get("components_array", []):
+                    if isinstance(component, dict) and "path" in component and "content" in component:
+                        components_dict[component["path"]] = component["content"]
+                    else:
+                        logger.error(f"Invalid component in array: {component}")
+                        
+                portfolio["components"] = components_dict
+                logger.info(f"Re-converted components_array to components dict with {len(components_dict)} items")
+            
+        return jsonify({"success": True, "portfolio": portfolio})
+        
+    except Exception as e:
+        logger.exception(f"Error in get_portfolio_route: {str(e)}")
+        return jsonify({"error": f"Failed to fetch portfolio: {str(e)}"}), 500
+
 def get_portfolio(user_id, portfolio_id):
     """Get portfolio from database and format it for the frontend"""
     from mongodb.database import db
     
     try:
+        logger.info(f"DB query for portfolio {portfolio_id}, user {user_id}")
+        
         portfolio = db.portfolios.find_one({
             "user_id": ObjectId(user_id),
             "_id": ObjectId(portfolio_id)
         })
         
-        if portfolio:
-            portfolio["_id"] = str(portfolio["_id"])
-            portfolio["user_id"] = str(portfolio["user_id"])
+        if not portfolio:
+            logger.error(f"No portfolio found with ID {portfolio_id} for user {user_id}")
+            return None
             
-            # If the portfolio uses the new structure, convert it back to the format expected by frontend
-            if "components_array" in portfolio and isinstance(portfolio["components_array"], list):
-                # Convert array back to dict for the frontend
-                components_dict = {}
-                for component in portfolio["components_array"]:
-                    if "path" in component and "content" in component:
-                        components_dict[component["path"]] = component["content"]
-                
-                portfolio["components"] = components_dict
+        logger.info(f"Found portfolio: {portfolio_id}. Converting...")
+        
+        # Convert ObjectIds to strings
+        portfolio["_id"] = str(portfolio["_id"])
+        portfolio["user_id"] = str(portfolio["user_id"])
+        
+        # Check what data structure we have
+        has_components = "components" in portfolio
+        has_components_array = "components_array" in portfolio
+        
+        logger.info(f"Portfolio {portfolio_id} has_components: {has_components}, has_components_array: {has_components_array}")
+        
+        if has_components_array:
+            logger.info(f"Components array length: {len(portfolio['components_array'])}")
             
-            # If there's no components dict but there is components_array, create a components dict
-            elif "components" not in portfolio and "components_array" in portfolio:
-                portfolio["components"] = {}
-                for component in portfolio["components_array"]:
-                    if "path" in component and "content" in component:
-                        portfolio["components"][component["path"]] = component["content"]
+            # Convert array to dict for the frontend
+            components_dict = {}
+            for component in portfolio["components_array"]:
+                if isinstance(component, dict) and "path" in component and "content" in component:
+                    components_dict[component["path"]] = component["content"]
+                else:
+                    logger.warning(f"Invalid component in array: {component}")
+            
+            portfolio["components"] = components_dict
+            logger.info(f"Converted components_array to dict with {len(components_dict)} entries")
         
         return portfolio
     
     except Exception as e:
-        logger.error(f"Error getting portfolio: {str(e)}")
+        logger.exception(f"Error getting portfolio {portfolio_id}: {str(e)}")
         return None
 
 
@@ -845,45 +893,105 @@ def list_user_portfolios(user_id):
 def migrate_portfolios():
     """Admin-only route to migrate existing portfolios to the new structure"""
     try:
+        data = request.get_json() or {}
         user_id = g.user_id
+        specific_portfolio_id = data.get('portfolio_id')  # Optional specific portfolio
         
-        # Check if admin
+        # Check if admin or allow for specific portfolio owner
         from mongodb.database import db
-        user = db.mainusers.find_one({"_id": ObjectId(user_id)})
-        if not user or user.get('username') != 'admin':
-            return jsonify({"error": "Unauthorized"}), 403
         
-        # Find all portfolios that don't have components_array
-        portfolios = db.portfolios.find({"components_array": {"$exists": False}})
+        if specific_portfolio_id:
+            # Allow portfolio owner to migrate their own portfolio
+            portfolio = db.portfolios.find_one({"_id": ObjectId(specific_portfolio_id)})
+            if not portfolio or str(portfolio.get("user_id")) != str(user_id):
+                return jsonify({"error": "Unauthorized"}), 403
+                
+            portfolios = [portfolio]  # Only migrate this specific one
+            logger.info(f"Migrating specific portfolio: {specific_portfolio_id}")
+        else:
+            # Admin-only for bulk migration
+            user = db.mainusers.find_one({"_id": ObjectId(user_id)})
+            if not user or user.get('username') != 'admin':
+                return jsonify({"error": "Unauthorized"}), 403
+            
+            # Find all portfolios that don't have components_array
+            portfolios = list(db.portfolios.find({"components_array": {"$exists": False}}))
+            logger.info(f"Found {len(portfolios)} portfolios to migrate")
+        
         migrated_count = 0
+        error_count = 0
+        skipped_count = 0
         
         for portfolio in portfolios:
-            components = portfolio.get('components', {})
-            components_array = []
-            
-            for path, content in components.items():
-                components_array.append({
-                    "path": path,
-                    "content": content
-                })
-            
-            # Update the portfolio with the new array structure
-            result = db.portfolios.update_one(
-                {"_id": portfolio["_id"]},
-                {
-                    "$set": {
-                        "components_array": components_array,
-                        "migration_date": time.time()
+            try:
+                components = portfolio.get('components', {})
+                
+                if not components:
+                    logger.warning(f"Portfolio {portfolio['_id']} has no components, skipping")
+                    skipped_count += 1
+                    continue
+                
+                # Convert to array structure
+                components_array = []
+                for path, content in components.items():
+                    components_array.append({
+                        "path": path,
+                        "content": content
+                    })
+                
+                # Update the portfolio with the new array structure
+                result = db.portfolios.update_one(
+                    {"_id": portfolio["_id"]},
+                    {
+                        "$set": {
+                            "components_array": components_array,
+                            "migration_date": time.time()
+                        }
                     }
-                }
-            )
+                )
+                
+                if result.modified_count > 0:
+                    migrated_count += 1
+                    logger.info(f"Successfully migrated portfolio {portfolio['_id']} with {len(components_array)} components")
+                else:
+                    skipped_count += 1
+                    logger.warning(f"No changes made to portfolio {portfolio['_id']}")
             
-            if result.modified_count > 0:
-                migrated_count += 1
+            except Exception as e:
+                error_count += 1
+                logger.exception(f"Error migrating portfolio {portfolio.get('_id')}: {str(e)}")
+        
+        # Add a debug option to inspect a portfolio
+        if specific_portfolio_id:
+            # Fetch the updated portfolio to verify
+            updated = db.portfolios.find_one({"_id": ObjectId(specific_portfolio_id)})
+            if updated:
+                # Convert ObjectIds to strings for logging
+                updated["_id"] = str(updated["_id"])
+                updated["user_id"] = str(updated["user_id"])
+                
+                has_components = "components" in updated
+                has_array = "components_array" in updated
+                
+                comps_len = len(updated.get("components", {}))
+                array_len = len(updated.get("components_array", []))
+                
+                logger.info(f"Verification: Portfolio has components: {has_components} ({comps_len} items)")
+                logger.info(f"Verification: Portfolio has components_array: {has_array} ({array_len} items)")
+                
+                # Return detailed info about the specific migrated portfolio
+                return jsonify({
+                    "success": True,
+                    "message": f"Migration completed for portfolio {specific_portfolio_id}",
+                    "has_components": has_components,
+                    "components_count": comps_len,
+                    "has_components_array": has_array,
+                    "components_array_count": array_len
+                })
         
         return jsonify({
             "success": True,
-            "message": f"Migration completed. {migrated_count} portfolios updated."
+            "message": f"Migration completed. {migrated_count} portfolios updated, {skipped_count} skipped, {error_count} errors."
         })
         
     except Exception as e:
