@@ -2,6 +2,7 @@ import pytz
 from datetime import datetime
 from bson import ObjectId
 from flask import Blueprint, request, session, jsonify, g, current_app
+from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
 import time
 
 from mongodb.database import db
@@ -13,9 +14,19 @@ support_bp = Blueprint('support', __name__, url_prefix='/support')
 ################################################################
 def get_user_id_fallback():
     """
-    Returns the userId from Flask session if available,
-    otherwise falls back to the 'X-User-Id' header (or JSON).
+    Returns the userId from JWT first, then Flask session if available,
+    otherwise falls back to the 'X-User-Id' header.
     """
+    # Try to get user ID from JWT first
+    try:
+        verify_jwt_in_request(optional=True)
+        user_id = get_jwt_identity()
+        if user_id:
+            return user_id
+    except Exception:
+        pass
+        
+    # Fall back to session
     user_id = session.get("userId")
     if not user_id:
         # ## ADDED: Fallback to X-User-Id
@@ -272,5 +283,3 @@ def user_close_specific_thread(thread_id):
     }, room=str(thread["_id"]))
 
     return jsonify({"message": "Thread closed"}), 200
-
-

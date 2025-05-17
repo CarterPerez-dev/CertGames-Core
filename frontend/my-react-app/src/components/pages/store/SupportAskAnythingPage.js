@@ -113,12 +113,16 @@ function SupportAskAnythingPage() {
     // Initialize socket if not already done
     if (!socket) {
       console.log('Initializing Socket.IO for support chat...');
+      const token = localStorage.getItem('accessToken');
       socket = io(window.location.origin, {
         path: '/api/socket.io',
         transports: ['websocket'],
         reconnection: true,
         reconnectionAttempts: 5,
-        reconnectionDelay: 1000
+        reconnectionDelay: 1000,
+        auth: {
+          token: token 
+        }
       });
     }
     
