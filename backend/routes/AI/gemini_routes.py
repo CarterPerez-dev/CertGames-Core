@@ -997,3 +997,39 @@ def migrate_portfolios():
     except Exception as e:
         logger.exception(f"Error migrating portfolios: {str(e)}")
         return jsonify({"error": f"Error migrating portfolios: {str(e)}"}), 500
+
+
+def update_portfolio_deployment(user_id, portfolio_id, deployment_url, github_repo):
+    """Update a portfolio with deployment information"""
+    from mongodb.database import db
+    
+    try:
+        logger.info(f"Updating portfolio deployment: {portfolio_id} with URL: {deployment_url}")
+        
+        result = db.portfolios.update_one(
+            {
+                "user_id": ObjectId(user_id),
+                "_id": ObjectId(portfolio_id)
+            },
+            {
+                "$set": {
+                    "deployment": {
+                        "deployed": True,
+                        "url": deployment_url,
+                        "github_repo": github_repo
+                    },
+                    "updated_at": time.time()
+                }
+            }
+        )
+        
+        if result.modified_count > 0:
+            logger.info(f"Successfully updated portfolio {portfolio_id} deployment status")
+            return True
+        else:
+            logger.warning(f"No changes made to portfolio {portfolio_id} deployment status")
+            return False
+            
+    except Exception as e:
+        logger.exception(f"Error updating portfolio deployment: {str(e)}")
+        return False

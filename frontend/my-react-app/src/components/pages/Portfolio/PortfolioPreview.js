@@ -141,6 +141,9 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       setIsFixingError(false);
       if (onFixError) onFixError(false);
       
+      // Update the actual file in portfolio
+      await handleSaveFile();
+      
     } catch (err) {
       console.error('Error fixing code:', err);
       setErrorMessage(`Failed to fix the error: ${err.message}. Please try again.`);
@@ -185,7 +188,10 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       showSuccessMessage("File saved successfully!");
       
       // Force refresh of the file tree to ensure everything is updated
-      refreshFileTree();
+      // Wait a moment to ensure DB updates are complete
+      setTimeout(() => {
+        refreshFileTree();
+      }, 500);
       
     } catch (err) {
       console.error('Error saving file:', err);
@@ -240,8 +246,10 @@ const confirmDeleteFile = async () => {
       setActiveFile(null);
       setFileContent('');
       
-      // Refresh file tree
-      refreshFileTree();
+      // Wait a moment then refresh
+      setTimeout(() => {
+        refreshFileTree();
+      }, 500);
       
     } catch (err) {
       console.error('Error deleting file:', err);
@@ -251,51 +259,46 @@ const confirmDeleteFile = async () => {
     }
   };
 
-  const refreshFileTree = () => {
+  const refreshFileTree = async () => {
     // Force a refresh of the file tree by triggering a re-fetch of the portfolio data
     console.log("Refreshing file tree...");
     setIsRefreshing(true);
     
-    // Fetch updated portfolio data
-    const fetchUpdatedPortfolio = async () => {
-      try {
-        const response = await fetch(`/api/portfolio/${portfolio._id}`, {
-          headers: {
-            'X-User-Id': userId
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch portfolio details');
+    try {
+      const response = await fetch(`/api/portfolio/${portfolio._id}`, {
+        headers: {
+          'X-User-Id': userId
         }
-        
-        const data = await response.json();
-        
-        if (data.success && data.portfolio) {
-          console.log("Retrieved updated portfolio data with components:", Object.keys(data.portfolio.components || {}));
-          
-          // Update the component state directly
-          if (data.portfolio.components) {
-            // If activeFile is still in the updated components, update its content
-            if (activeFile && data.portfolio.components[activeFile]) {
-              setFileContent(data.portfolio.components[activeFile]);
-            }
-            
-            // Update the file tree
-            const updatedTree = organizeFilesIntoTree(data.portfolio.components);
-            setFileTree(updatedTree);
-          }
-        }
-      } catch (error) {
-        console.error("Error refreshing file tree:", error);
-      } finally {
-        setIsRefreshing(false);
-        // Force a re-render by incrementing the refreshKey
-        setRefreshKey(prev => prev + 1);
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch portfolio details');
       }
-    };
-    
-    fetchUpdatedPortfolio();
+      
+      const data = await response.json();
+      
+      if (data.success && data.portfolio) {
+        console.log("Retrieved updated portfolio data with components:", Object.keys(data.portfolio.components || {}));
+        
+        // Update the component state directly
+        if (data.portfolio.components) {
+          // If activeFile is still in the updated components, update its content
+          if (activeFile && data.portfolio.components[activeFile]) {
+            setFileContent(data.portfolio.components[activeFile]);
+          }
+          
+          // Update the file tree
+          const updatedTree = organizeFilesIntoTree(data.portfolio.components);
+          setFileTree(updatedTree);
+        }
+      }
+    } catch (error) {
+      console.error("Error refreshing file tree:", error);
+    } finally {
+      setIsRefreshing(false);
+      // Force a re-render by incrementing the refreshKey
+      setRefreshKey(prev => prev + 1);
+    }
   };
 
 const handleCreateFile = async () => {
@@ -348,13 +351,15 @@ const handleCreateFile = async () => {
       setNewFilePath('');
       setShowNewFileModal(false);
       
-      // Refresh the file tree and select the new file
-      refreshFileTree();
-      
-      // Wait for file tree to update before selecting the new file
+      // Wait a moment then refresh and select the new file
       setTimeout(() => {
-        handleFileSelect(filePathWithExtension);
-      }, 1000);
+        refreshFileTree();
+        
+        // Select the new file after refresh
+        setTimeout(() => {
+          handleFileSelect(filePathWithExtension);
+        }, 300);
+      }, 500);
       
     } catch (err) {
       console.error('Error creating file:', err);
@@ -531,7 +536,7 @@ const handleCreateFile = async () => {
           
           <div className="help-question">
             <h4>How do I edit my portfolio?</h4>
-            <p>Use the Code Editor tab to edit any file. Changes are saved automatically. If you encounter errors, the Auto-Fix feature can help resolve common issues.</p>
+            <p>Use the Code Editor tab to edit any file. Click the Save button after making changes. If you encounter errors, the Auto-Fix feature can help resolve common issues.</p>
           </div>
           
           <div className="help-question">
@@ -556,8 +561,8 @@ const handleCreateFile = async () => {
             <li>Use the search function to quickly find files</li>
             <li>Check App.js to understand the structure of your portfolio</li>
             <li>CSS files control the appearance - look there to change colors, spacing, etc.</li>
+            <li>Remember to click the Save button after making changes</li>
             <li>If you break something, don't worry! Use the Auto-Fix feature or revert your changes</li>
-            <li>Remember to save your changes before deploying</li>
           </ul>
         </div>
         

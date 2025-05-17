@@ -208,6 +208,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
       // Start polling for task status
       const pollDeploymentStatus = async () => {
         try {
+          console.log("Checking portfolio status");
           const statusResponse = await fetch(`/api/portfolio/deploy/status/${taskId}`, {
             headers: {
               'X-User-Id': userId
@@ -222,10 +223,9 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
           console.log("Deployment status:", statusData);
           
           if (statusData.status === 'completed') {
-            // Deployment completed successfully
             console.log("Deployment completed successfully");
             
-            // Set to stage 4 (final stage)
+            // Set to final stage
             setDeploymentStage(4);
             
             // Wait a moment before showing the success screen
@@ -249,16 +249,7 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
             throw new Error(statusData.error || 'Deployment failed');
             
           } else {
-            // Deployment still in progress
-            // Update the stage based on time elapsed
-            if (statusData.started_at) {
-              const elapsedTime = Date.now() / 1000 - statusData.started_at;
-              if (elapsedTime > 60 && deploymentStage < 3) {
-                setDeploymentStage(3); // Show stage 3 after 1 minute
-              }
-            }
-            
-            // Continue polling
+            // Deployment still in progress - continue polling
             setTimeout(pollDeploymentStatus, 5000);
           }
           

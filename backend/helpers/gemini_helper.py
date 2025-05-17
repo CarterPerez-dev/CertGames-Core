@@ -205,7 +205,7 @@ class GeminiHelper:
            - src/App.js - Main application component
            - src/index.js - Entry point
            - src/index.css - Global styles
-           - src/App.css - add App.css BUT MAKE SURE THIS FILE IS EMPTY, ENSURE IT HAS NO CODE INSIDE OF IT, IT MUST BE EMPTY
+           - - src/App.css - THIS FILE MUST BE COMPLETELY EMPTY WITH NO CODE WHATSOEVER
            - src/reportWebVitals.js - defualt reportWebVitals file, and the dependency added to package.json
            - public/index.html - HTML template
            - package.json - Dependencies
@@ -338,6 +338,11 @@ class GeminiHelper:
             if not portfolio_components:
                 logger.error("Failed to extract components from generated text")
                 raise ValueError("Could not parse portfolio components from API response")
+            
+            if "src/App.css" in portfolio_components:
+                portfolio_components["src/App.css"] = ""
+                logger.info("Ensuring App.css is empty as required")             
+            
             
             return portfolio_components
             
