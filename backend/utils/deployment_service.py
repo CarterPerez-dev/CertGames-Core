@@ -219,7 +219,7 @@ class DeploymentService:
         headers = {"Authorization": f"Bearer {vercel_token}"}
         start_time = time.time()
         last_ready_state = "UNKNOWN"
-
+    
         while (time.time() - start_time) < timeout:
             url = f"{self.vercel_api_url}/v13/deployments/{deployment_uid}"
             try:
@@ -232,7 +232,7 @@ class DeploymentService:
                 logger.error(f"Request error checking Vercel status for {deployment_uid}: {req_err}. Retrying...")
                 time.sleep(5)
                 continue
-
+    
             if response.status_code != 200:
                 logger.error(f"Failed to check Vercel deployment status for {deployment_uid}: {response.status_code} - {response.text}. Retrying...")
                 time.sleep(5) 
@@ -249,7 +249,7 @@ class DeploymentService:
             last_ready_state = ready_state
             
             logger.debug(f"Deployment {deployment_uid} readyState: {ready_state}. Details: {json.dumps(deployment_data)[:200]}...")
-
+    
             if ready_state == 'READY':
                 deployed_url = deployment_data.get('url')
                 if not deployed_url:
@@ -259,27 +259,27 @@ class DeploymentService:
                 full_url = deployed_url if deployed_url.startswith("https://") or deployed_url.startswith("http://") else f"https://{deployed_url}"
                 logger.info(f"Deployment {deployment_uid} is READY. URL: {full_url}")
                 return full_url
-        elif ready_state in ['ERROR', 'CANCELED']:
-            error_details = deployment_data.get('error', {})
-            error_message = error_details.get('message', 'Unknown Vercel deployment error.')
-            
-            # Try to get more detailed error information
-            build_logs = None
-            try:
-                # Look for build logs in the deployment data
-                if 'builds' in deployment_data and len(deployment_data['builds']) > 0:
-                    build = deployment_data['builds'][0]
-                    if 'error' in build:
-                        build_logs = build.get('error')
-            except Exception as e:
-                logger.error(f"Error extracting build logs: {str(e)}")
+            elif ready_state in ['ERROR', 'CANCELED']:
+                error_details = deployment_data.get('error', {})
+                error_message = error_details.get('message', 'Unknown Vercel deployment error.')
                 
-            # Log everything we can find about the error
-            logger.error(f"Vercel deployment {deployment_uid} failed. Error: {error_message}")
-            if build_logs:
-                logger.error(f"Build logs: {build_logs}")
-            
-            raise Exception(f"Vercel deployment {ready_state}: {error_message} - Check build logs for details.")
+                # Try to get more detailed error information
+                build_logs = None
+                try:
+                    # Look for build logs in the deployment data
+                    if 'builds' in deployment_data and len(deployment_data['builds']) > 0:
+                        build = deployment_data['builds'][0]
+                        if 'error' in build:
+                            build_logs = build.get('error')
+                except Exception as e:
+                    logger.error(f"Error extracting build logs: {str(e)}")
+                    
+                # Log everything we can find about the error
+                logger.error(f"Vercel deployment {deployment_uid} failed. Error: {error_message}")
+                if build_logs:
+                    logger.error(f"Build logs: {build_logs}")
+                
+                raise Exception(f"Vercel deployment {ready_state}: {error_message} - Check build logs for details.")
             
             logger.info(f"Deployment {deployment_uid} current state: {ready_state}. Waiting...")
             time.sleep(10) 

@@ -461,10 +461,10 @@
   align-items: center;
   justify-content: center;
   padding: 12px 24px;
-  background-color: #171515;
-  border: 1px solid #343434;
+  background-color: transparent;
+  border: 1px solid #fff;
   border-radius: 5px;
-  color: white;
+  color: #ffd700;
   font-family: 'VT323', 'Press Start 2P', monospace;
   font-size: 16px;
   cursor: pointer;
@@ -932,9 +932,10 @@
 
 .angela-about-text p {
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.8;
   margin-bottom: 15px;
   opacity: 0.9;
+  color: #fff;
 }
 
 .angela-about-buttons {
@@ -990,7 +991,7 @@
 
 /* Footer */
 .angela-footer {
-  padding: 50px 20px;
+  padding:20px 20px;
   background-color: rgba(0, 0, 0, 0.7);
   border-top: 1px solid rgba(0, 255, 150, 0.2);
   position: relative;
@@ -1037,6 +1038,7 @@
 .angela-footer-attribution {
   font-size: 14px;
   opacity: 0.7;
+  font-style: italic;
 }
 
 .angela-warning-banner {
@@ -1111,7 +1113,7 @@
 
 .angela-about-status-content p {
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.8;
   opacity: 0.9;
   margin-bottom: 20px;
 }
@@ -1119,19 +1121,19 @@
 .angela-about-status-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 30px;
 }
 
 .angela-status-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 18px;
+  padding: 17px 18px;
   background-color: rgba(0, 255, 150, 0.1);
   border: 1px solid rgba(0, 255, 150, 0.3);
   border-radius: 5px;
   color: #00ff96;
-  font-size: 15px;
+  font-size: 17px;
   text-decoration: none;
   transition: all 0.3s ease;
 }

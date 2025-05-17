@@ -1,7 +1,6 @@
-// frontend/my-react-app/src/components/pages/Portfolio/PortfolioPreview.js
 import React, { useState, useEffect, useRef } from 'react';
 import CodeEditor from './CodeEditor';
-import { FaCode, FaInfo, FaFile, FaFolder, FaExclamationTriangle, FaWrench, FaCopy, FaSync, FaCheck, FaQuestionCircle, FaInfoCircle, FaListAlt, FaLightbulb, FaGithub } from 'react-icons/fa';
+import { FaCode, FaInfo, FaFile, FaFolder, FaExclamationTriangle, FaWrench, FaCopy, FaSync, FaCheck, FaQuestionCircle, FaInfoCircle, FaListAlt, FaLightbulb, FaGithub, FaSave, FaPlus } from 'react-icons/fa';
 import './portfolio.css';
 
 const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
@@ -13,6 +12,10 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
   const [fileTree, setFileTree] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [showNewFileModal, setShowNewFileModal] = useState(false);
+  const [newFilePath, setNewFilePath] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   // Process portfolio data when it changes
   useEffect(() => {
@@ -153,8 +156,6 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     }
   };
 
-
-  
   const handleSaveFile = async (filePath, content) => {
     try {
       setIsSaving(true);
@@ -186,7 +187,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       setIsSaving(false);
     }
   };
-  
+
   const handleCreateFile = async (filePath) => {
     try {
       if (!filePath) {
@@ -380,135 +381,134 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
   };
 
   // FAQ/Help content for the Help tab
-    const renderHelpContent = () => {
-      return (
-        <div className="portfolio-help-content">
-          <div className="help-section">
-            <h3><FaInfoCircle /> About Your Portfolio</h3>
-            <p>This is your generated portfolio project. You can view and edit all the code files in the Code Editor tab. Here are some answers to common questions:</p>
-          </div>
+  const renderHelpContent = () => {
+    return (
+      <div className="portfolio-help-content">
+        <div className="help-section">
+          <h3><FaInfoCircle /> About Your Portfolio</h3>
+          <p>This is your generated portfolio project. You can view and edit all the code files in the Code Editor tab. Here are some answers to common questions:</p>
+        </div>
+        
+        <div className="help-section">
+          <h3><FaQuestionCircle /> Frequently Asked Questions</h3>
           
-          <div className="help-section">
-            <h3><FaQuestionCircle /> Frequently Asked Questions</h3>
-            
-            <div className="help-question">
-              <h4>What files make up my portfolio?</h4>
-              <p>Your portfolio consists of:</p>
-              <ul>
-                <li><strong>public/index.html</strong> - The main HTML template</li>
-                <li><strong>src/index.js</strong> - The entry point for React</li>
-                <li><strong>src/App.js</strong> - The main React component</li>
-                <li><strong>src/components/</strong> - Individual UI components</li>
-                <li><strong>*.css files</strong> - Styling for your components</li>
-              </ul>
-            </div>
-            
-            <div className="help-question">
-              <h4>How do I edit my portfolio?</h4>
-              <p>Use the Code Editor tab to edit any file. Changes are saved automatically. If you encounter errors, the Auto-Fix feature can help resolve common issues.</p>
-            </div>
-            
-            <div className="help-question">
-              <h4>How do I view my portfolio?</h4>
-              <p>To see your portfolio, you'll need to deploy it using the Deploy tab. After deployment, you'll receive a live URL to share with others.</p>
-            </div>
-            
-            <div className="help-question">
-              <h4>What if I want to change my portfolio content?</h4>
-              <p>Edit the text directly in the components. For example, to change your personal information, find the component that displays it (often in a file like About.js or Home.js) and update the text.</p>
-            </div>
-            
-            <div className="help-question">
-              <h4>Can I add more pages or sections?</h4>
-              <p>Yes! You can create new components in the src/components folder and import them in your App.js or other existing components.</p>
-            </div>
-          </div>
-          
-          <div className="help-section">
-            <h3><FaLightbulb /> Tips for Editing</h3>
+          <div className="help-question">
+            <h4>What files make up my portfolio?</h4>
+            <p>Your portfolio consists of:</p>
             <ul>
-              <li>Use the search function to quickly find files</li>
-              <li>Check App.js to understand the structure of your portfolio</li>
-              <li>CSS files control the appearance - look there to change colors, spacing, etc.</li>
-              <li>If you break something, don't worry! Use the Auto-Fix feature or revert your changes</li>
-              <li>Remember to save your changes before deploying</li>
+              <li><strong>public/index.html</strong> - The main HTML template</li>
+              <li><strong>src/index.js</strong> - The entry point for React</li>
+              <li><strong>src/App.js</strong> - The main React component</li>
+              <li><strong>src/components/</strong> - Individual UI components</li>
+              <li><strong>*.css files</strong> - Styling for your components</li>
             </ul>
           </div>
           
-          <div className="help-section">
-            <h3><FaListAlt /> Common Tasks</h3>
-            <div className="common-tasks">
-              <div className="task-item">
-                <h4>Changing Colors</h4>
-                <p>Look for CSS variables (often in index.css) or color values like #ffffff or rgb(0,0,0) in CSS files.</p>
-              </div>
-              
-              <div className="task-item">
-                <h4>Updating Your Information</h4>
-                <p>Search for placeholder text in component files (like "John Doe" or "Lorem ipsum") and replace with your info.</p>
-              </div>
-              
-              <div className="task-item">
-                <h4>Adding Projects</h4>
-                <p>Find the projects component and add new project entries following the existing pattern.</p>
-              </div>
-              
-              <div className="task-item">
-                <h4>Fixing Layout Issues</h4>
-                <p>Check the CSS files for the component with layout problems. Look for properties like margin, padding, display, and flex.</p>
-              </div>
-            </div>
+          <div className="help-question">
+            <h4>How do I edit my portfolio?</h4>
+            <p>Use the Code Editor tab to edit any file. Changes are saved automatically. If you encounter errors, the Auto-Fix feature can help resolve common issues.</p>
           </div>
           
-          {/* New Deployment Documentation Section */}
-          <div className="help-section deployment-docs">
-            <h3><FaGithub /> Deploying Your Portfolio</h3>
-            
-            <div className="deployment-help-section">
-              <h3>How to Deploy Your Portfolio</h3>
-              <ol className="deployment-steps">
-                <li>
-                  <strong>Step 1: Create a GitHub Token</strong>
-                  <p>Visit <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener noreferrer">GitHub Token Settings</a> to create a new token with 'repo' and 'workflow' permissions.</p>
-                </li>
-                <li>
-                  <strong>Step 2: Create a Vercel Token</strong>
-                  <p>Visit <a href="https://vercel.com/account/tokens" target="_blank" rel="noopener noreferrer">Vercel Token Settings</a> to create a new token with full account permissions.</p>
-                </li>
-                <li>
-                  <strong>Step 3: Enter Your Tokens</strong>
-                  <p>Enter both tokens in the form on the Deploy tab and click "Deploy Portfolio".</p>
-                </li>
-                <li>
-                  <strong>Step 4: Wait for Deployment</strong>
-                  <p>The deployment process takes approximately 2-5 minutes. Do not close the window during deployment.</p>
-                </li>
-              </ol>
+          <div className="help-question">
+            <h4>How do I view my portfolio?</h4>
+            <p>To see your portfolio, you'll need to deploy it using the Deploy tab. After deployment, you'll receive a live URL to share with others.</p>
+          </div>
+          
+          <div className="help-question">
+            <h4>What if I want to change my portfolio content?</h4>
+            <p>Edit the text directly in the components. For example, to change your personal information, find the component that displays it (often in a file like About.js or Home.js) and update the text.</p>
+          </div>
+          
+          <div className="help-question">
+            <h4>Can I add more pages or sections?</h4>
+            <p>Yes! You can create new components in the src/components folder and import them in your App.js or other existing components.</p>
+          </div>
+        </div>
+        
+        <div className="help-section">
+          <h3><FaLightbulb /> Tips for Editing</h3>
+          <ul>
+            <li>Use the search function to quickly find files</li>
+            <li>Check App.js to understand the structure of your portfolio</li>
+            <li>CSS files control the appearance - look there to change colors, spacing, etc.</li>
+            <li>If you break something, don't worry! Use the Auto-Fix feature or revert your changes</li>
+            <li>Remember to save your changes before deploying</li>
+          </ul>
+        </div>
+        
+        <div className="help-section">
+          <h3><FaListAlt /> Common Tasks</h3>
+          <div className="common-tasks">
+            <div className="task-item">
+              <h4>Changing Colors</h4>
+              <p>Look for CSS variables (often in index.css) or color values like #ffffff or rgb(0,0,0) in CSS files.</p>
             </div>
             
-            <div className="deployment-troubleshooting">
-              <h3>Troubleshooting</h3>
-              <div className="troubleshooting-item">
-                <h4>Invalid Token Error</h4>
-                <p>Make sure your tokens have the correct permissions and have not expired. When creating a GitHub token, ensure it has the 'repo' and 'workflow' permissions.</p>
-              </div>
-              <div className="troubleshooting-item">
-                <h4>Deployment Failed</h4>
-                <p>Check your portfolio code for errors. Common issues include invalid imports or syntax errors. Use the Code Editor to fix issues before deploying.</p>
-              </div>
-              <div className="troubleshooting-item">
-                <h4>GitHub Rate Limit Exceeded</h4>
-                <p>GitHub has rate limits for API calls. If you receive this error, wait an hour before trying again.</p>
-              </div>
-              <div className="troubleshooting-item">
-                <h4>Deployment Stuck</h4>
-                <p>If deployment appears stuck for more than 10 minutes, try refreshing the page and starting the deployment process again.</p>
-              </div>
+            <div className="task-item">
+              <h4>Updating Your Information</h4>
+              <p>Search for placeholder text in component files (like "John Doe" or "Lorem ipsum") and replace with your info.</p>
+            </div>
+            
+            <div className="task-item">
+              <h4>Adding Projects</h4>
+              <p>Find the projects component and add new project entries following the existing pattern.</p>
+            </div>
+            
+            <div className="task-item">
+              <h4>Fixing Layout Issues</h4>
+              <p>Check the CSS files for the component with layout problems. Look for properties like margin, padding, display, and flex.</p>
             </div>
           </div>
         </div>
-      );
-    };
+        
+        <div className="help-section deployment-docs">
+          <h3><FaGithub /> Deploying Your Portfolio</h3>
+          
+          <div className="deployment-help-section">
+            <h3>How to Deploy Your Portfolio</h3>
+            <ol className="deployment-steps">
+              <li>
+                <strong>Step 1: Create a GitHub Token</strong>
+                <p>Visit <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener noreferrer">GitHub Token Settings</a> to create a new token with 'repo' and 'workflow' permissions.</p>
+              </li>
+              <li>
+                <strong>Step 2: Create a Vercel Token</strong>
+                <p>Visit <a href="https://vercel.com/account/tokens" target="_blank" rel="noopener noreferrer">Vercel Token Settings</a> to create a new token with full account permissions.</p>
+              </li>
+              <li>
+                <strong>Step 3: Enter Your Tokens</strong>
+                <p>Enter both tokens in the form on the Deploy tab and click "Deploy Portfolio".</p>
+              </li>
+              <li>
+                <strong>Step 4: Wait for Deployment</strong>
+                <p>The deployment process takes approximately 2-5 minutes. Do not close the window during deployment.</p>
+              </li>
+            </ol>
+          </div>
+          
+          <div className="deployment-troubleshooting">
+            <h3>Troubleshooting</h3>
+            <div className="troubleshooting-item">
+              <h4>Invalid Token Error</h4>
+              <p>Make sure your tokens have the correct permissions and have not expired. When creating a GitHub token, ensure it has the 'repo' and 'workflow' permissions.</p>
+            </div>
+            <div className="troubleshooting-item">
+              <h4>Deployment Failed</h4>
+              <p>Check your portfolio code for errors. Common issues include invalid imports or syntax errors. Use the Code Editor to fix issues before deploying.</p>
+            </div>
+            <div className="troubleshooting-item">
+              <h4>GitHub Rate Limit Exceeded</h4>
+              <p>GitHub has rate limits for API calls. If you receive this error, wait an hour before trying again.</p>
+            </div>
+            <div className="troubleshooting-item">
+              <h4>Deployment Stuck</h4>
+              <p>If deployment appears stuck for more than 10 minutes, try refreshing the page and starting the deployment process again.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   if (!portfolio) {
     return (
@@ -595,8 +595,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                       <FaCopy className="action-icon" />
                       <span>Copy</span>
                     </button>
-                  </div>      
-                  <div className="portfolio-editor-actions">
+                    
                     <button 
                       className="portfolio-editor-action-btn"
                       onClick={() => {
@@ -616,33 +615,34 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                       <span>New File</span>
                     </button>
                   </div>
-                  
-                  {/* New File Modal */}
-                  {showNewFileModal && (
-                    <div className="portfolio-modal">
-                      <div className="portfolio-modal-content">
-                        <h3>Create New File</h3>
-                        <input 
-                          type="text" 
-                          placeholder="File path (e.g., src/components/NewComponent.js)"
-                          value={newFilePath}
-                          onChange={(e) => setNewFilePath(e.target.value)}
-                        />
-                        <div className="portfolio-modal-buttons">
-                          <button onClick={() => setShowNewFileModal(false)}>Cancel</button>
-                          <button 
-                            onClick={() => {
-                              handleCreateFile(newFilePath);
-                              setShowNewFileModal(false);
-                            }}
-                          >
-                            Create
-                          </button>
-                        </div>
+                </div>
+                
+                {/* New File Modal */}
+                {showNewFileModal && (
+                  <div className="portfolio-modal">
+                    <div className="portfolio-modal-content">
+                      <h3>Create New File</h3>
+                      <input 
+                        type="text" 
+                        placeholder="File path (e.g., src/components/NewComponent.js)"
+                        value={newFilePath}
+                        onChange={(e) => setNewFilePath(e.target.value)}
+                      />
+                      <div className="portfolio-modal-buttons">
+                        <button onClick={() => setShowNewFileModal(false)}>Cancel</button>
+                        <button 
+                          onClick={() => {
+                            handleCreateFile(newFilePath);
+                            setShowNewFileModal(false);
+                          }}
+                        >
+                          Create
+                        </button>
                       </div>
                     </div>
-                  )}         
-            
+                  </div>
+                )}
+                
                 <CodeEditor
                   value={fileContent}
                   language={getFileLanguage(activeFile)}

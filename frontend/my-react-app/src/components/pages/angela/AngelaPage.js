@@ -7,7 +7,7 @@ import {
   FaStar, FaCode, FaLaptopCode, FaUserSecret, FaTools, 
   FaRocket, FaBrain, FaNetworkWired, FaUserPlus, FaRegLightbulb,
   FaExclamationTriangle, FaCodeBranch, FaBook, FaHistory,
-  FaBug, FaFileAlt, FaShieldAlt, FaBullseye
+  FaBug, FaFileAlt, FaShieldAlt, FaSpider, FaFighterJet
 } from 'react-icons/fa';
 import './AngelaCLI.css';
 import './ParticleEffect.css'; // Keep the CSS for grid styling
@@ -147,7 +147,7 @@ const AngelaPage = () => {
       description: "Seamless integration with Git, Docker, package managers, and cloud CLIs - all accessible through natural language."
     },
     {
-      icon: <FaRocket />,
+      icon: <FaFighterJet />,
       title: "Multi-Step Operations",
       description: "Decompose complex goals into actionable steps with smart planning, execution, and error recovery capabilities."
     },
@@ -425,7 +425,7 @@ const AngelaPage = () => {
           <span>ANGELA-CLI</span>
         </div>
         <div className="angela-nav-links">
-          <button onClick={() => scrollToSection(octocatRef)} className={activeSection === 'octocat' ? 'active' : ''}>Octocat</button>
+          <button onClick={() => scrollToSection(octocatRef)} className={activeSection === 'octocat' ? 'active' : ''}>Hologram</button>
           <button onClick={() => scrollToSection(featuresRef)} className={activeSection === 'features' ? 'active' : ''}>Features</button>
           <button onClick={() => scrollToSection(installRef)} className={activeSection === 'install' ? 'active' : ''}>Install</button>
           <button onClick={() => scrollToSection(demoRef)} className={activeSection === 'demo' ? 'active' : ''}>Demo</button>
@@ -464,7 +464,7 @@ const AngelaPage = () => {
           <div className="angela-stats">
             <div className="angela-stat">
               <span className="angela-stat-value">8x</span>
-              <span className="angela-stat-label">Faster CLI</span>
+              <span className="angela-stat-label">Intelligence</span>
             </div>
             <div className="angela-stat">
               <span className="angela-stat-value">AGI</span>
@@ -796,7 +796,7 @@ const AngelaPage = () => {
               <p>Angela CLI is currently <strong>under active development</strong> and seeking contributors! The core architecture is in place, but we're working to fully implement and refine all planned features. Check out our GitHub repositories for the latest progress, roadmap, and opportunities to contribute.</p>
               <div className="angela-about-status-links">
                 <a href="https://github.com/CarterPerez-dev/angela-cli/edit/main/README.MD" target="_blank" rel="noopener noreferrer" className="angela-status-button">
-                  <FaBullseye className="angela-btn-icon" /> Project Roadmap
+                  <FaSpider className="angela-btn-icon" /> Project Roadmap
                 </a>
                 <a href="https://github.com/CarterPerez-dev/angela-cli/blob/main/docs/source/contributing.rst" target="_blank" rel="noopener noreferrer" className="angela-status-button">
                   <FaUserPlus className="angela-btn-icon" /> Contributing Guide
@@ -819,12 +819,12 @@ const AngelaPage = () => {
           </div>
           <div className="angela-footer-links">
             <a href="https://github.com/CarterPerez-dev/angela-cli" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="https://github.com/CarterPerez-dev/angela-cli/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+            <a href="https://certgames.com/contact" target="_blank" rel="noopener noreferrer">Contact</a>
             <a href="https://github.com/CarterPerez-dev/angela-cli/issues" target="_blank" rel="noopener noreferrer">Report Issues</a>
             <a href="https://github.com/CarterPerez-dev/angela-cli/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contribute</a>
           </div>
           <div className="angela-footer-attribution">
-            Built with ❤️ by the Angela CLI Team
+           2025 | Built with ❤️ by ®CertGames | ®AngelaMos
           </div>
         </div>
       </footer>
