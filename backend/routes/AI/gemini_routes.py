@@ -593,6 +593,60 @@ def create_portfolio_file():
         logger.exception(f"Error creating file: {str(e)}")
         return jsonify({"error": f"Error creating file: {str(e)}"}), 500
 
+
+@portfolio_bp.route('/delete-file', methods=['POST'])
+@jwt_required_wrapper
+def delete_portfolio_file():
+    try:
+        data = request.get_json()
+        user_id = g.user_id
+        portfolio_id = data.get('portfolio_id')
+        file_path = data.get('file_path')
+        
+        if not all([portfolio_id, file_path]):
+            return jsonify({"error": "Missing required fields"}), 400
+        
+        # Get portfolio
+        portfolio = get_portfolio(user_id, portfolio_id)
+        if not portfolio:
+            return jsonify({"error": "Portfolio not found"}), 404
+        
+        # Check if file exists
+        components = portfolio.get('components', {})
+        if file_path not in components:
+            return jsonify({"error": "File not found"}), 404
+        
+        # Delete file
+        from mongodb.database import db
+        
+        result = db.portfolios.update_one(
+            {
+                "user_id": ObjectId(user_id),
+                "_id": ObjectId(portfolio_id)
+            },
+            {
+                "$unset": {
+                    f"components.{file_path}": ""
+                },
+                "$set": {
+                    "updated_at": time.time()
+                }
+            }
+        )
+        
+        if result.modified_count == 0:
+            return jsonify({"error": "Failed to delete file"}), 500
+        
+        return jsonify({
+            "success": True, 
+            "message": "File deleted successfully"
+        })
+    
+    except Exception as e:
+        logger.exception(f"Error deleting file: {str(e)}")
+        return jsonify({"error": f"Error deleting file: {str(e)}"}), 500
+
+
 # Database helper functions
 def save_portfolio(user_id, components, preferences, resume_text=None):
     """Save portfolio to database"""

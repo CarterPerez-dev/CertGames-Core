@@ -193,30 +193,84 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
         throw new Error(errorData.error || 'Deployment failed');
       }
       
+      const data = await response.json();
+      
+      if (!data.task_id) {
+        throw new Error('No task ID returned from deployment request');
+      }
+      
+      const taskId = data.task_id;
+      console.log(`Deployment task started: ${taskId}`);
+      
       // Show stage 2: Creating Repository
       setDeploymentStage(2);
       
-      // Add a delay to simulate the process steps
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // Start polling for task status
+      const pollDeploymentStatus = async () => {
+        try {
+          const statusResponse = await fetch(`/api/portfolio/deploy/status/${taskId}`, {
+            headers: {
+              'X-User-Id': userId
+            }
+          });
+          
+          if (!statusResponse.ok) {
+            throw new Error('Failed to check deployment status');
+          }
+          
+          const statusData = await statusResponse.json();
+          console.log("Deployment status:", statusData);
+          
+          if (statusData.status === 'completed') {
+            // Deployment completed successfully
+            console.log("Deployment completed successfully");
+            
+            // Set to stage 4 (final stage)
+            setDeploymentStage(4);
+            
+            // Wait a moment before showing the success screen
+            setTimeout(() => {
+              setDeploymentInProgress(false);
+              if (statusData.result && statusData.result.deployment_url) {
+                onDeploymentComplete({
+                  deployment_url: statusData.result.deployment_url,
+                  github_repo: statusData.result.github_repo
+                });
+              } else {
+                throw new Error('No deployment URL in completed result');
+              }
+            }, 1000);
+            
+            return;
+            
+          } else if (statusData.status === 'failed') {
+            // Deployment failed
+            console.error("Deployment failed:", statusData.error);
+            throw new Error(statusData.error || 'Deployment failed');
+            
+          } else {
+            // Deployment still in progress
+            // Update the stage based on time elapsed
+            if (statusData.started_at) {
+              const elapsedTime = Date.now() / 1000 - statusData.started_at;
+              if (elapsedTime > 60 && deploymentStage < 3) {
+                setDeploymentStage(3); // Show stage 3 after 1 minute
+              }
+            }
+            
+            // Continue polling
+            setTimeout(pollDeploymentStatus, 5000);
+          }
+          
+        } catch (error) {
+          console.error('Error checking deployment status:', error);
+          setDeploymentInProgress(false);
+          onError(error.message || 'Failed to check deployment status');
+        }
+      };
       
-      // Show stage 3: Configuring Hosting
-      setDeploymentStage(3);
-      
-      // Add another delay
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      const data = await response.json();
-      console.log("Deployment successful:", data);
-                     
-      // Validate the deployment URL exists
-      if (!data || !data.deployment_url) {
-        onError("Deployment didn't return a valid URL. Please try again.");
-        setDeploymentInProgress(false);
-        return;
-      }
-      
-      setDeploymentInProgress(false);
-      onDeploymentComplete(data);
+      // Start polling
+      pollDeploymentStatus();
       
     } catch (err) {
       console.error('Error deploying portfolio:', err);

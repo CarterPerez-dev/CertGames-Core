@@ -205,7 +205,7 @@ class GeminiHelper:
            - src/App.js - Main application component
            - src/index.js - Entry point
            - src/index.css - Global styles
-           - src/reportWebVitals.js - defualt reportWebVitals
+           - src/reportWebVitals.js - defualt reportWebVitals file, and the dependency added to package.json
            - public/index.html - HTML template
            - package.json - Dependencies
            - Component files for each section (About, Projects, Skills, Contact, etc.)
@@ -230,7 +230,7 @@ class GeminiHelper:
         ```
         
         ```package.json
-        [Complete package.json file with all necessary dependencies]
+        [Complete package.json file with all necessary dependencies including web-vitals]
         ```
         
         ```html:public/index.html

@@ -3708,6 +3708,217 @@
   border-left: 4px solid #4caf50;
 }
 
+.portfolio-success-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(46, 187, 119, 0.95);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  z-index: 1000;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  animation: slideInRight 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
+  max-width: 80%;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.success-icon {
+  font-size: 1.2rem;
+  color: white;
+}
+
+/* Modal styling */
+.portfolio-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.portfolio-modal-content {
+  background: var(--portfolio-bg-card);
+  border-radius: 10px;
+  padding: 25px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.portfolio-modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: var(--portfolio-text);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.portfolio-modal-content .modal-description {
+  color: var(--portfolio-text-secondary);
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.portfolio-modal-input {
+  width: 100%;
+  padding: 12px 15px;
+  background: var(--portfolio-input-bg);
+  border: 1px solid var(--portfolio-border);
+  border-radius: 8px;
+  color: var(--portfolio-text);
+  font-size: 16px;
+  margin-bottom: 20px;
+  transition: all 0.2s;
+}
+
+.portfolio-modal-input:focus {
+  outline: none;
+  border-color: var(--portfolio-primary);
+  box-shadow: 0 0 0 2px rgba(101, 67, 204, 0.2);
+}
+
+.portfolio-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.portfolio-modal-button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.portfolio-modal-button.cancel {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--portfolio-text);
+  border: 1px solid var(--portfolio-border);
+}
+
+.portfolio-modal-button.cancel:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.portfolio-modal-button.create {
+  background: var(--portfolio-primary);
+  color: white;
+  border: none;
+}
+
+.portfolio-modal-button.create:hover {
+  background: var(--portfolio-primary-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(101, 67, 204, 0.3);
+}
+
+.portfolio-modal-button.delete {
+  background: #e53935;
+  color: white;
+  border: none;
+}
+
+.portfolio-modal-button.delete:hover {
+  background: #f44336;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+/* Delete confirmation styles */
+.delete-confirmation-title {
+  color: #f44336 !important;
+}
+
+.delete-warning-icon {
+  color: #f44336;
+  font-size: 1.4rem;
+}
+
+.delete-confirmation-message {
+  color: var(--portfolio-text) !important;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+/* Button animations and states */
+.portfolio-editor-action-btn.saving,
+.portfolio-editor-action-btn.deleting {
+  background: var(--portfolio-primary) !important;
+  color: white !important;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.action-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+  margin-right: 5px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 767px) {
   .help-section {

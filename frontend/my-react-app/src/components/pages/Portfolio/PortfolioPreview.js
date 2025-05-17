@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CodeEditor from './CodeEditor';
-import { FaCode, FaInfo, FaFile, FaFolder, FaExclamationTriangle, FaWrench, FaCopy, FaSync, FaCheck, FaQuestionCircle, FaInfoCircle, FaListAlt, FaLightbulb, FaGithub, FaSave, FaPlus } from 'react-icons/fa';
+import { FaCode, FaInfo, FaFile, FaFolder, FaExclamationTriangle, FaWrench, FaCopy, FaSync, FaCheck, FaQuestionCircle, FaInfoCircle, FaListAlt, FaLightbulb, FaGithub, FaSave, FaPlus, FaTrash, FaExclamationCircle as FaExclamationCircleAlt } from 'react-icons/fa';
 import './portfolio.css';
 
 const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
@@ -16,6 +16,9 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
   const [newFilePath, setNewFilePath] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [isDeletingFile, setIsDeletingFile] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0); // Used to force re-render
 
   // Process portfolio data when it changes
   useEffect(() => {
@@ -47,7 +50,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         }
       }
     }
-  }, [portfolio]);
+  }, [portfolio, refreshKey]);
 
   // Organize files into directory structure
   const organizeFilesIntoTree = (components) => {
@@ -95,17 +98,6 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     
     console.log(`Updating content for file: ${activeFile}`);
     setFileContent(newContent);
-    
-    // Update the portfolio object locally
-    if (portfolio && portfolio.components) {
-      const updatedComponents = {
-        ...portfolio.components,
-        [activeFile]: newContent
-      };
-      
-      // Add log for file update
-      console.log(`Updated content for ${activeFile}`);
-    }
   };
 
   const handleFixError = async () => {
@@ -144,6 +136,7 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
       // Update the file content with the fixed code
       setFileContent(data.fixed_code);
       setErrorMessage(null);
+      showSuccessMessage("Error fixed successfully!");
       
       setIsFixingError(false);
       if (onFixError) onFixError(false);
@@ -156,7 +149,12 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     }
   };
 
-  const handleSaveFile = async (filePath, content) => {
+  const handleSaveFile = async () => {
+    if (!activeFile || !fileContent) {
+      setErrorMessage("No file selected or content is empty");
+      return;
+    }
+    
     try {
       setIsSaving(true);
       
@@ -168,32 +166,106 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         },
         body: JSON.stringify({
           portfolio_id: portfolio._id,
-          file_path: filePath,
-          content: content
+          file_path: activeFile,
+          content: fileContent
         })
       });
       
       if (!response.ok) {
-        throw new Error('Failed to save file');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save file');
       }
       
-      // Show success message
-      setSuccessMessage('File saved successfully');
-      setTimeout(() => setSuccessMessage(null), 3000);
+      // Show success message with animation
+      showSuccessMessage("File saved successfully!");
+      
+      // Force refresh of the file tree to ensure everything is updated
+      refreshFileTree();
       
     } catch (err) {
+      console.error('Error saving file:', err);
       setErrorMessage('Error saving file: ' + err.message);
     } finally {
       setIsSaving(false);
     }
   };
 
-  const handleCreateFile = async (filePath) => {
+  const handleDeleteFile = async () => {
+    if (!activeFile) {
+      setErrorMessage("No file selected");
+      return;
+    }
+    
+    // First show confirmation
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDeleteFile = async () => {
     try {
-      if (!filePath) {
+      setIsDeletingFile(true);
+      setShowDeleteConfirmation(false);
+      
+      const response = await fetch('/api/portfolio/delete-file', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-User-Id': userId
+        },
+        body: JSON.stringify({
+          portfolio_id: portfolio._id,
+          file_path: activeFile
+        })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete file');
+      }
+      
+      // Show success message
+      showSuccessMessage("File deleted successfully!");
+      
+      // Clear active file and content
+      setActiveFile(null);
+      setFileContent('');
+      
+      // Refresh file tree
+      refreshFileTree();
+      
+    } catch (err) {
+      console.error('Error deleting file:', err);
+      setErrorMessage('Error deleting file: ' + err.message);
+    } finally {
+      setIsDeletingFile(false);
+    }
+  };
+
+  const refreshFileTree = () => {
+    // Force a refresh of the file tree by triggering a re-fetch of the portfolio data
+    setRefreshKey(prevKey => prevKey + 1);
+  };
+
+  const handleCreateFile = async () => {
+    try {
+      // Validate file path
+      if (!newFilePath) {
         setErrorMessage('File path is required');
         return;
       }
+      
+      // Ensure the file path has an extension
+      let filePathWithExtension = newFilePath;
+      if (!filePathWithExtension.includes('.')) {
+        // Default to .js if no extension is provided
+        filePathWithExtension = `${filePathWithExtension}.js`;
+      }
+      
+      // Ensure path starts with src/ if no directory is specified
+      if (!filePathWithExtension.includes('/')) {
+        filePathWithExtension = `src/${filePathWithExtension}`;
+      }
+      
+      console.log(`Creating new file: ${filePathWithExtension}`);
       
       const response = await fetch('/api/portfolio/create-file', {
         method: 'POST',
@@ -203,46 +275,38 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         },
         body: JSON.stringify({
           portfolio_id: portfolio._id,
-          file_path: filePath,
-          content: '// New file created'
+          file_path: filePathWithExtension,
+          content: '// New file created\n// Start coding here\n\n'
         })
       });
       
       if (!response.ok) {
-        throw new Error('Failed to create file');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create file');
       }
       
-      // Update the file tree and select the new file
-      const data = await response.json();
+      // Show success message
+      showSuccessMessage("File created successfully!");
       
-      // Update the local file tree
-      setFileTree(prevTree => {
-        const newTree = {...prevTree};
-        // Add the new file to the tree (simplified - would need more logic for nested paths)
-        const fileName = filePath.split('/').pop();
-        const dirPath = filePath.substring(0, filePath.lastIndexOf('/'));
-        
-        // Create directory structure if needed
-        let currentLevel = newTree;
-        dirPath.split('/').forEach(part => {
-          if (!currentLevel[part]) {
-            currentLevel[part] = { __isDir: true };
-          }
-          currentLevel = currentLevel[part];
-        });
-        
-        // Add the file
-        currentLevel[fileName] = { __filePath: filePath };
-        
-        return newTree;
-      });
+      // Clear the input and close the modal
+      setNewFilePath('');
+      setShowNewFileModal(false);
       
-      // Select the new file
-      handleFileSelect(filePath);
+      // Refresh and select the new file
+      setTimeout(() => {
+        refreshFileTree();
+        handleFileSelect(filePathWithExtension);
+      }, 500);
       
     } catch (err) {
+      console.error('Error creating file:', err);
       setErrorMessage('Error creating file: ' + err.message);
     }
+  };
+
+  const showSuccessMessage = (message) => {
+    setSuccessMessage(message);
+    setTimeout(() => setSuccessMessage(null), 3000);
   };
 
   const getFileIcon = (filePath) => {
@@ -263,7 +327,10 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
     if (filePath.endsWith('.json')) return 'json';
     if (filePath.endsWith('.svg')) return 'xml';
     if (filePath.endsWith('.md')) return 'markdown';
-    return 'plaintext';
+    
+    // Default to JavaScript if no extension
+    // This helps prevent editor errors when file lacks extension
+    return 'javascript';
   };
 
   // Filter files based on search query
@@ -524,6 +591,14 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
 
   return (
     <div className="portfolio-preview-container">
+      {/* Success Message Notification */}
+      {successMessage && (
+        <div className="portfolio-success-notification">
+          <FaCheck className="success-icon" />
+          <span>{successMessage}</span>
+        </div>
+      )}
+      
       <div className="portfolio-preview-header">
         <h2>Portfolio Editor</h2>
         <div className="portfolio-preview-tabs">
@@ -577,34 +652,50 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                   </div>
                   <div className="portfolio-editor-actions">
                     <button 
+                      className={`portfolio-editor-action-btn ${isSaving ? 'saving' : ''}`}
+                      onClick={handleSaveFile}
+                      disabled={isSaving}
+                    >
+                      {isSaving ? (
+                        <>
+                          <span className="action-spinner"></span>
+                          <span>Saving...</span>
+                        </>
+                      ) : (
+                        <>
+                          <FaSave className="action-icon" />
+                          <span>Save</span>
+                        </>
+                      )}
+                    </button>
+                    
+                    <button 
                       className="portfolio-editor-action-btn"
                       onClick={() => {
                         navigator.clipboard.writeText(fileContent);
-                        // Show a brief "Copied!" message
-                        const tempBtn = document.getElementById('copy-button');
-                        if (tempBtn) {
-                          const originalText = tempBtn.innerHTML;
-                          tempBtn.innerHTML = '<span class="copied-icon">✓</span> Copied!';
-                          setTimeout(() => {
-                            tempBtn.innerHTML = originalText;
-                          }, 2000);
-                        }
+                        showSuccessMessage("Copied to clipboard!");
                       }}
-                      id="copy-button"
                     >
                       <FaCopy className="action-icon" />
                       <span>Copy</span>
                     </button>
                     
                     <button 
-                      className="portfolio-editor-action-btn"
-                      onClick={() => {
-                        // Save the current file
-                        handleSaveFile(activeFile, fileContent);
-                      }}
+                      className={`portfolio-editor-action-btn ${isDeletingFile ? 'deleting' : ''}`}
+                      onClick={handleDeleteFile}
+                      disabled={isDeletingFile}
                     >
-                      <FaSave className="action-icon" />
-                      <span>Save</span>
+                      {isDeletingFile ? (
+                        <>
+                          <span className="action-spinner"></span>
+                          <span>Deleting...</span>
+                        </>
+                      ) : (
+                        <>
+                          <FaTrash className="action-icon" />
+                          <span>Delete</span>
+                        </>
+                      )}
                     </button>
                     
                     <button 
@@ -617,33 +708,8 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
                   </div>
                 </div>
                 
-                {/* New File Modal */}
-                {showNewFileModal && (
-                  <div className="portfolio-modal">
-                    <div className="portfolio-modal-content">
-                      <h3>Create New File</h3>
-                      <input 
-                        type="text" 
-                        placeholder="File path (e.g., src/components/NewComponent.js)"
-                        value={newFilePath}
-                        onChange={(e) => setNewFilePath(e.target.value)}
-                      />
-                      <div className="portfolio-modal-buttons">
-                        <button onClick={() => setShowNewFileModal(false)}>Cancel</button>
-                        <button 
-                          onClick={() => {
-                            handleCreateFile(newFilePath);
-                            setShowNewFileModal(false);
-                          }}
-                        >
-                          Create
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
                 <CodeEditor
+                  key={activeFile} // Important: This helps prevent editor errors when switching files
                   value={fileContent}
                   language={getFileLanguage(activeFile)}
                   theme="vs-dark"
@@ -690,6 +756,69 @@ const PortfolioPreview = ({ portfolio, userId, onFixError }) => {
         </div>
       ) : (
         renderHelpContent()
+      )}
+      
+      {/* New File Modal */}
+      {showNewFileModal && (
+        <div className="portfolio-modal">
+          <div className="portfolio-modal-content">
+            <h3>Create New File</h3>
+            <p className="modal-description">Enter the file path and name with extension (e.g., src/components/NewComponent.js)</p>
+            <input 
+              type="text" 
+              className="portfolio-modal-input"
+              placeholder="src/components/MyComponent.js"
+              value={newFilePath}
+              onChange={(e) => setNewFilePath(e.target.value)}
+              autoFocus
+            />
+            <div className="portfolio-modal-buttons">
+              <button 
+                className="portfolio-modal-button cancel"
+                onClick={() => setShowNewFileModal(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="portfolio-modal-button create"
+                onClick={handleCreateFile}
+              >
+                Create File
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirmation && (
+        <div className="portfolio-modal">
+          <div className="portfolio-modal-content">
+            <h3 className="delete-confirmation-title">
+              <FaExclamationCircleAlt className="delete-warning-icon" />
+              Delete File
+            </h3>
+            <p className="delete-confirmation-message">
+              Are you sure you want to delete <strong>{activeFile}</strong>?
+              <br />
+              This action cannot be undone.
+            </p>
+            <div className="portfolio-modal-buttons">
+              <button 
+                className="portfolio-modal-button cancel"
+                onClick={() => setShowDeleteConfirmation(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="portfolio-modal-button delete"
+                onClick={confirmDeleteFile}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
