@@ -31,6 +31,17 @@ const DevChronicle = () => {
 
   return (
     <div className="devchronicle-container">
+      {/* Background elements, similar to login/register pages */}
+      <div className="devchronicle-background">
+        <div className="devchronicle-grid"></div>
+        <div className="devchronicle-particles">
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className="devchronicle-particle"></div>
+          ))}
+        </div>
+        <div className="devchronicle-glow"></div>
+      </div>
+
       <header className="devchronicle-header">
         <div className="devchronicle-title-container">
           <h1 className="devchronicle-title">Git Commits</h1>

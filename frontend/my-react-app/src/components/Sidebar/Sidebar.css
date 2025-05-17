@@ -104,7 +104,7 @@ body, html {
 
 /* Standard Link */
 .sidebar-link {
-  color: var(--sidebar-text);
+  color: #fff;
   text-decoration: none;
   font-weight: bold;
   transition: all 0.2s ease;

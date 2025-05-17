@@ -18,8 +18,8 @@ class RateLimiter:
         'analogy': {'calls': 25, 'period': 3600},  # 15 calls per hour
         'scenario': {'calls': 18, 'period': 3600},  # 10 calls per hour
         'grc': {'calls': 30, 'period': 3600},      # 20 calls per hour
-        'portfolio': {'calls': 50, 'period': 3600}, # 15 calls per hour
-        'fix-error': {'calls': 50, 'period': 3600}, # 15 calls per hour
+        'portfolio': {'calls': 15, 'period': 3600}, # 15 calls per hour
+        'fix-error': {'calls': 15, 'period': 3600}, # 15 calls per hour
     }
     
     def __init__(self, limiter_type=None):

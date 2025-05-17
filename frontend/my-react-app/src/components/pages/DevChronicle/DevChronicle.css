@@ -22,18 +22,122 @@
   }
 }
 
-/* Background effects */
-.devchronicle-container::before {
-  content: '';
+/* Background elements, similar to login/register */
+.devchronicle-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.devchronicle-grid {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 20% 30%, rgba(var(--theme-accent-rgb, 101, 67, 204), 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(var(--theme-accent-rgb, 101, 67, 204), 0.1) 0%, transparent 60%);
+    linear-gradient(rgba(var(--theme-accent-rgb, 101, 67, 204), 0.4) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--theme-accent-rgb, 101, 67, 204), 0.3) 1px, transparent 1px);
+  background-size: 40px 40px;
   z-index: -1;
+  opacity: 0.4;
+  animation: devchronicle-grid-fade 3s ease-in-out infinite alternate;
+}
+
+@keyframes devchronicle-grid-fade {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.devchronicle-glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--theme-accent-rgb, 101, 67, 204), 0.5) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  filter: blur(100px);
+  opacity: 0.6;
+  z-index: -1;
+  animation: devchronicle-glow-pulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes devchronicle-glow-pulse {
+  0% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+/* Particles system */
+.devchronicle-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+.devchronicle-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--profile-accent, #6543cc);
+  border-radius: 50%;
+  animation: devchronicle-float 8s infinite linear;
+  opacity: 0.6;
+}
+
+.devchronicle-particle:nth-child(odd) {
+  background: var(--profile-accent-secondary, #ff4c8b);
+}
+
+.devchronicle-particle:nth-child(1) { top: 10%; left: 10%; animation-duration: 15s; }
+.devchronicle-particle:nth-child(2) { top: 20%; left: 80%; animation-duration: 18s; }
+.devchronicle-particle:nth-child(3) { top: 30%; left: 20%; animation-duration: 12s; }
+.devchronicle-particle:nth-child(4) { top: 40%; left: 90%; animation-duration: 20s; }
+.devchronicle-particle:nth-child(5) { top: 50%; left: 30%; animation-duration: 14s; }
+.devchronicle-particle:nth-child(6) { top: 60%; left: 70%; animation-duration: 19s; }
+.devchronicle-particle:nth-child(7) { top: 70%; left: 40%; animation-duration: 16s; }
+.devchronicle-particle:nth-child(8) { top: 80%; left: 60%; animation-duration: 13s; }
+.devchronicle-particle:nth-child(9) { top: 90%; left: 50%; animation-duration: 17s; }
+.devchronicle-particle:nth-child(10) { top: 15%; left: 35%; animation-duration: 22s; }
+.devchronicle-particle:nth-child(11) { top: 25%; left: 75%; animation-duration: 19s; }
+.devchronicle-particle:nth-child(12) { top: 35%; left: 15%; animation-duration: 14s; }
+.devchronicle-particle:nth-child(13) { top: 45%; left: 85%; animation-duration: 21s; }
+.devchronicle-particle:nth-child(14) { top: 55%; left: 25%; animation-duration: 13s; }
+.devchronicle-particle:nth-child(15) { top: 65%; left: 65%; animation-duration: 18s; }
+.devchronicle-particle:nth-child(16) { top: 75%; left: 45%; animation-duration: 15s; }
+.devchronicle-particle:nth-child(17) { top: 85%; left: 55%; animation-duration: 12s; }
+.devchronicle-particle:nth-child(18) { top: 5%; left: 95%; animation-duration: 23s; }
+.devchronicle-particle:nth-child(19) { top: 95%; left: 5%; animation-duration: 24s; }
+.devchronicle-particle:nth-child(20) { top: 50%; left: 50%; animation-duration: 20s; }
+
+@keyframes devchronicle-float {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-40px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(0) rotate(360deg);
+  }
 }
 
 /* Header styles */
@@ -45,6 +149,7 @@
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
+  z-index: 1;
 }
 
 .devchronicle-title-container {
@@ -222,6 +327,8 @@
   border: 1px solid var(--profile-border, #2a2c3d);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .devchronicle-section:hover {
@@ -309,6 +416,8 @@
   text-align: center;
   border: 1px solid rgba(var(--theme-accent-rgb, 101, 67, 204), 0.2);
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .devchronicle-game-card:hover {
@@ -350,6 +459,7 @@
   padding-top: 30px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
+  z-index: 1;
 }
 
 .devchronicle-pulse-small {
@@ -519,31 +629,29 @@
   }
 }
 
-/* Style customizations for the different themes */
-:root[data-theme="blue"] .devchronicle-container::before,
-:root[data-theme="red"] .devchronicle-container::before,
-:root[data-theme="green"] .devchronicle-container::before,
-:root[data-theme="teal"] .devchronicle-container::before,
-:root[data-theme="dark"] .devchronicle-container::before,
-:root[data-theme="orange"] .devchronicle-container::before,
-:root[data-theme="pink"] .devchronicle-container::before,
-:root[data-theme="gold"] .devchronicle-container::before,
-:root[data-theme="cyan"] .devchronicle-container::before,
-:root[data-theme="neon"] .devchronicle-container::before,
-:root[data-theme="navy"] .devchronicle-container::before,
-:root[data-theme="indigo"] .devchronicle-container::before,
-:root[data-theme="violet"] .devchronicle-container::before,
-:root[data-theme="magenta"] .devchronicle-container::before,
-:root[data-theme="crimson"] .devchronicle-container::before,
-:root[data-theme="amber"] .devchronicle-container::before,
-:root[data-theme="lime"] .devchronicle-container::before,
-:root[data-theme="emerald"] .devchronicle-container::before,
-:root[data-theme="turquoise"] .devchronicle-container::before,
-:root[data-theme="sky"] .devchronicle-container::before,
-:root[data-theme="midnight"] .devchronicle-container::before,
-:root[data-theme="chocolate"] .devchronicle-container::before,
-:root[data-theme="silver"] .devchronicle-container::before {
-  background-image: 
-    radial-gradient(circle at 20% 30%, rgba(var(--theme-accent-rgb, 101, 67, 204), 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(var(--theme-accent-rgb, 101, 67, 204), 0.1) 0%, transparent 60%);
+/* Theme compatibility - ensure theme variables are properly used */
+:root[data-theme="blue"] .devchronicle-background,
+:root[data-theme="red"] .devchronicle-background,
+:root[data-theme="green"] .devchronicle-background,
+:root[data-theme="teal"] .devchronicle-background,
+:root[data-theme="dark"] .devchronicle-background,
+:root[data-theme="orange"] .devchronicle-background,
+:root[data-theme="pink"] .devchronicle-background,
+:root[data-theme="gold"] .devchronicle-background,
+:root[data-theme="cyan"] .devchronicle-background,
+:root[data-theme="neon"] .devchronicle-background,
+:root[data-theme="navy"] .devchronicle-background,
+:root[data-theme="indigo"] .devchronicle-background,
+:root[data-theme="violet"] .devchronicle-background,
+:root[data-theme="magenta"] .devchronicle-background,
+:root[data-theme="crimson"] .devchronicle-background,
+:root[data-theme="amber"] .devchronicle-background,
+:root[data-theme="lime"] .devchronicle-background,
+:root[data-theme="emerald"] .devchronicle-background,
+:root[data-theme="turquoise"] .devchronicle-background,
+:root[data-theme="sky"] .devchronicle-background,
+:root[data-theme="midnight"] .devchronicle-background,
+:root[data-theme="chocolate"] .devchronicle-background,
+:root[data-theme="silver"] .devchronicle-background {
+  /* Additional theme-specific overrides for background elements would go here if needed */
 }

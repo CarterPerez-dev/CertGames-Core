@@ -747,7 +747,7 @@ const PortfolioForm = ({ userId, onGenerationStart, onGenerationComplete, onErro
             <FaPencilAlt className="form-header-icon" />
             <h2>Add Your Resume Content</h2>
             <p className="form-header-description">
-              Provide your resume text to generate a personalized portfolio that showcases your experience and skills
+              Provide your resume text to generate a personalized portfolio that showcases your experience and skills **THE MORE INFO YOU ADD, THE BETTER THE PORTFOLIO**
             </p>
           </div>
           

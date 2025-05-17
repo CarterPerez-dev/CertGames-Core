@@ -314,6 +314,7 @@
   font-weight: 600;
   transition: all 0.2s;
   min-width: max-content; 
+  border: 1px solid var(--profile-accent);
 }
 
 .profile-tab:hover {

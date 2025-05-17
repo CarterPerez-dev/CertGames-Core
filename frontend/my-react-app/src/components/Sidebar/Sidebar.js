@@ -146,7 +146,7 @@ const Sidebar = () => {
               <li>
                 <NavLink to="/profile" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
                   {getIcon('/profile')}
-                  <span className="sidebar-link-text">♘-Profile</span>
+                  <span className="sidebar-link-text">~Profile</span>
                 </NavLink>
               </li>
               
@@ -154,20 +154,20 @@ const Sidebar = () => {
               <li>
                 <NavLink to="/performance" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
                   {getIcon('/performance')}
-                  <span className="sidebar-link-text">♘-Stats</span>
+                  <span className="sidebar-link-text">~Stats</span>
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/commits" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
                   {getIcon('/commits')}
-                  <span className="sidebar-link-text">♘-Git</span>
+                  <span className="sidebar-link-text">~Git</span>
                 </NavLink>
               </li>              
               {/* Support (renamed from Questions) */}
               <li>
                 <NavLink to="/my-support" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
                   {getIcon('/my-support')}
-                  <span className="sidebar-link-text">♘-Support</span>
+                  <span className="sidebar-link-text">~Support</span>
                 </NavLink>
               </li>
               

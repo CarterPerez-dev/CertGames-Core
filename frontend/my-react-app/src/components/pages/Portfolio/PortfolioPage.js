@@ -228,7 +228,7 @@ const PortfolioPage = () => {
       {subscriptionErrorHandler.render()}
       <div className="portfolio-page-header">
         <div className="portfolio-page-title-section">
-          <h1 className="portfolio-page-title">Portfolio Creator</h1>
+          <h1 className="portfolio-page-title">Portfolio Creator BETA</h1>
           <p className="portfolio-page-subtitle">Build a professional portfolio to showcase your skills and experience</p>
         </div>
         
