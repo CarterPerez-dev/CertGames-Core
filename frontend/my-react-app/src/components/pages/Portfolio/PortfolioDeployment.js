@@ -127,33 +127,37 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
   };
 
   const handleDeploy = async (e) => {
-    e.preventDefault();
-    
-    // Validate inputs
-    if (showTokenFields) {
-      if (githubTokenSource === 'manual' && !githubToken) {
-        onError('Please provide a GitHub token or use GitHub OAuth');
-        return;
-      }
+      e.preventDefault();
       
-      if (!vercelToken) {
-        onError('Please provide a Vercel token');
-        return;
-      }
-    }
-    
-    try {
-      console.log("Starting deployment process");
-      onDeploymentStart();
-      setDeploymentInProgress(true);
-      setDeploymentStage(0);
-      
-      // Add validation for token formats
-      if (githubTokenSource === 'manual') {
-        if (githubToken.length < 36 || !githubToken.match(/^gh[ps]_[A-Za-z0-9_]{36,}$/)) {
-          throw new Error('Invalid GitHub token format. Please ensure you are using a valid Personal Access Token.');
+      // Validate inputs
+      if (showTokenFields) {
+        if (githubTokenSource === 'manual' && !githubToken) {
+          onError('Please provide a GitHub token or use GitHub OAuth');
+          return;
+        }
+        
+        if (!vercelToken) {
+          onError('Please provide a Vercel token');
+          return;
         }
       }
+      
+      try {
+        console.log("Starting deployment process");
+        onDeploymentStart();
+        setDeploymentInProgress(true);
+        setDeploymentStage(0);
+        
+
+        const startTimeMs = Date.now() / 1000;
+        window.failureCount = 0; 
+        
+        // Add validation for token formats
+        if (githubTokenSource === 'manual') {
+          if (githubToken.length < 36 || !githubToken.match(/^gh[ps]_[A-Za-z0-9_]{36,}$/)) {
+            throw new Error('Invalid GitHub token format. Please ensure you are using a valid Personal Access Token.');
+          }
+        }
       
       if (vercelToken.length < 24) {
         throw new Error('Invalid Vercel token format. Please ensure you are using a valid API token.');
@@ -207,69 +211,153 @@ const PortfolioDeployment = ({ portfolio, userId, onDeploymentStart, onDeploymen
       
       // Start polling for task status
       const pollDeploymentStatus = async () => {
+        // Keep track of consecutive failures
+        if (!window.failureCount) window.failureCount = 0;
+        
         try {
-          console.log("Checking portfolio status");
+          // Update UI based on time even if status checks fail
+          if (deploymentStage < 3 && (Date.now() / 1000) - startTimeMs > 60) {
+            setDeploymentStage(3);
+          }
+          
           const statusResponse = await fetch(`/api/portfolio/deploy/status/${taskId}`, {
             headers: {
               'X-User-Id': userId
             }
           });
           
-          if (!statusResponse.ok) {
-            throw new Error('Failed to check deployment status');
-          }
-          
-          const statusData = await statusResponse.json();
-          console.log("Deployment status:", statusData);
-          
-          if (statusData.status === 'completed') {
-            console.log("Deployment completed successfully");
+          // Reset failure count on success
+          if (statusResponse.ok) {
+            window.failureCount = 0;
             
-            // Set to final stage
-            setDeploymentStage(4);
+            const statusData = await statusResponse.json();
+            console.log("Deployment status:", statusData);
             
-            // Wait a moment before showing the success screen
-            setTimeout(() => {
-              setDeploymentInProgress(false);
-              if (statusData.result && statusData.result.deployment_url) {
-                onDeploymentComplete({
-                  deployment_url: statusData.result.deployment_url,
-                  github_repo: statusData.result.github_repo
-                });
-              } else {
-                throw new Error('No deployment URL in completed result');
+            // Update progress if available, otherwise use time-based estimate
+            if (statusData.progress) {
+              setProgress(statusData.progress);
+            }
+            
+            if (statusData.status === 'completed') {
+              // Deployment completed successfully
+              console.log("Deployment completed successfully");
+              
+              // Set to final stage
+              setDeploymentStage(4);
+              setProgress(100);
+              
+              // Wait a moment before showing the success screen
+              setTimeout(() => {
+                setDeploymentInProgress(false);
+                if (statusData.result && statusData.result.deployment_url) {
+                  onDeploymentComplete({
+                    deployment_url: statusData.result.deployment_url,
+                    github_repo: statusData.result.github_repo
+                  });
+                } else {
+                  // Fallback to checking portfolios list if URL is missing
+                  checkForDeployedPortfolio();
+                }
+              }, 1000);
+              
+              return;
+              
+            } else if (statusData.status === 'failed') {
+              // Deployment failed
+              console.error("Deployment failed:", statusData.error);
+              throw new Error(statusData.error || 'Deployment failed');
+              
+            } else {
+              // Deployment still in progress - update the stage based on time elapsed
+              if (statusData.started_at) {
+                const elapsedTime = Date.now() / 1000 - statusData.started_at;
+                if (elapsedTime > 80 && deploymentStage < 3) {
+                  setDeploymentStage(3); // Show stage 3 after 1 minute
+                }
               }
-            }, 1000);
-            
-            return;
-            
-          } else if (statusData.status === 'failed') {
-            // Deployment failed
-            console.error("Deployment failed:", statusData.error);
-            throw new Error(statusData.error || 'Deployment failed');
-            
+              
+              // Continue polling
+              setTimeout(pollDeploymentStatus, 5000);
+            }
           } else {
-            // Deployment still in progress - continue polling
+            // Status check failed - increment failure counter
+            window.failureCount++;
+            
+            if (window.failureCount > 3) {
+              console.warn(`Status check failed ${window.failureCount} times. Continuing to wait for deployment.`);
+              
+              // After several failures, switch to checking for portfolio completion instead
+              if (window.failureCount % 3 === 0) {
+                checkForDeployedPortfolio();
+                return;
+              }
+            }
+            
+            // Continue polling even after error - deployment might still be in progress
+            console.warn("Status check failed, but deployment may still be in progress. Retrying...");
             setTimeout(pollDeploymentStatus, 5000);
           }
           
         } catch (error) {
           console.error('Error checking deployment status:', error);
-          setDeploymentInProgress(false);
-          onError(error.message || 'Failed to check deployment status');
+          window.failureCount++;
+          
+          // After a few failures, try checking portfolios list
+          if (window.failureCount > 3) {
+            console.warn("Too many errors checking status. Switching to portfolio list polling.");
+            checkForDeployedPortfolio();
+            return;
+          }
+          
+          // Keep polling despite errors - don't give up on the deployment!
+          setTimeout(pollDeploymentStatus, 5000);
         }
       };
       
-      // Start polling
-      pollDeploymentStatus();
+  const checkForDeployedPortfolio = async () => {
+    try {
+      console.log("Checking portfolios list for deployment completion...");
+      const listResponse = await fetch('/api/portfolio/list', {
+        headers: { 'X-User-Id': userId }
+      });
       
-    } catch (err) {
-      console.error('Error deploying portfolio:', err);
-      setDeploymentInProgress(false);
-      onError(err.message || 'Deployment failed. Please try again.');
+      if (listResponse.ok) {
+        const data = await listResponse.json();
+        
+        if (data.portfolios && Array.isArray(data.portfolios)) {
+          // Find the current portfolio in the list
+          const currentPortfolio = data.portfolios.find(p => p._id === portfolio._id);
+          
+          if (currentPortfolio && currentPortfolio.deployment && currentPortfolio.deployment.deployed) {
+            console.log("Found deployed portfolio in portfolio list!");
+            
+            // Portfolio is deployed!
+            setDeploymentStage(4);
+            setProgress(100);
+            
+            setTimeout(() => {
+              setDeploymentInProgress(false);
+              onDeploymentComplete({
+                deployment_url: currentPortfolio.deployment.url,
+                github_repo: currentPortfolio.deployment.github_repo
+              });
+            }, 1000);
+            
+            return;
+          }
+        }
+      }
+      
+      // If we didn't find a deployed portfolio, keep waiting
+      console.log("Portfolio not yet deployed. Will check again in 10 seconds...");
+      setTimeout(checkForDeployedPortfolio, 10000);
+      
+    } catch (error) {
+      console.error("Error checking portfolio list:", error);
+      // Try again later
+      setTimeout(checkForDeployedPortfolio, 10000);
     }
   };
-
 
 
   const copyToClipboard = (text) => {
