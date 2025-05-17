@@ -1,4 +1,3 @@
-// Enhanced PortfolioPage Component
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import './portfolio.css';
@@ -388,7 +387,7 @@ const PortfolioPage = () => {
                 onRefresh={handleRefresh}
               />
             )}
-            
+
             {activeTab === 'preview' && currentPortfolio && (
               <PortfolioPreview
                 portfolio={currentPortfolio}
@@ -443,4 +442,5 @@ const PortfolioPage = () => {
     </div>
   );
 };
+
 export default PortfolioPage;
